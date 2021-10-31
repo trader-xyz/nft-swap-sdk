@@ -34,7 +34,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "nft-swap",
+  "name": "@traderxyz/nft-swap-sdk",
   "author": "johnrjj",
   "module": "dist/nft-swap.esm.js",
   "size-limit": [
