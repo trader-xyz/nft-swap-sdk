@@ -1,2 +1,2 @@
-import { NftSwap, SwappableAsset } from './NftSwap'
-export { NftSwap, SwappableAsset }
+import { NftSwap, SwappableAsset } from './NftSwap';
+export { NftSwap, SwappableAsset };

@@ -1,16 +1,16 @@
 # NFT Swap SDK
 
-_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_, 
+_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_,
 
 ## Overview
 
-The NFT Swap SDK developed by [Trader.xyz](https://trader.xyz) offers swap support for ERC20s, ERC721s, and ERC1155s. Exchange tokens, NFTs and other collectibles on Ethereum easily by using this SDK. Exchange NFTs for NFTs, NFTs for ERC20 tokenss, or swap bundles of NFTS. This library provides the ultimate swap flexibility combined with a simple API surface area so you can be productive immediately. 
+The NFT Swap SDK developed by [Trader.xyz](https://trader.xyz) offers swap support for ERC20s, ERC721s, and ERC1155s. Exchange tokens, NFTs and other collectibles on Ethereum easily by using this SDK. Exchange NFTs for NFTs, NFTs for ERC20 tokenss, or swap bundles of NFTS. This library provides the ultimate swap flexibility combined with a simple API surface area so you can be productive immediately.
 
 With this library, you can build support for NFT marketplaces or Over-the-counter (OTC) exchange.
 
 Develop your app with confidence, let this library do the heavy lifting so that you can focus on the unique aspects of your app!
 
-This library is powered and secured by the [0x protocol](https://0x.org). The 0x v3 protocol has been in production for multiple years securing billions of dollars with of trades. 
+This library is powered and secured by the [0x protocol](https://0x.org). The 0x v3 protocol has been in production for multiple years securing billions of dollars with of trades.
 
 Written in TypeScript, the SDK comes with strongly typed support out of the box, so you won't be guessing at arguments or types.
 
@@ -35,14 +35,13 @@ or npm:
 To use the SDK, instantiate and immediately start using it!
 
 ```tsx
-import { NftSwap } from '@traderxyz/nft-swap-sdk'
+import { NftSwap } from '@traderxyz/nft-swap-sdk';
 
 // From your app, provide NftSwap the web3 provider or signer, and the chainId to instantiate
 const nftSwapSdk = new NftSwap(providerOrSigner, chainId);
 
 // Check out the examples below on how to use the SDK
 ```
-
 
 ## Examples
 
@@ -52,7 +51,7 @@ In this first example, we're going to do a 1:1 NFT swap. We're going to swap Use
 
 > **Terminology**: `maker`: Since User A will initiate the trade, we'll refer to User A as the `maker` of the trade.
 
->**Terminology**: `taker`: Since User B will be filling and completing the trade created by User A, we'll refer to User B as the `taker` of the trade.
+> **Terminology**: `taker`: Since User B will be filling and completing the trade created by User A, we'll refer to User B as the `taker` of the trade.
 
 ```tsx
 // Setup the sample data...
@@ -144,14 +143,13 @@ const fillTxReceipt = await await nftSwapSdk.awaitTransactionHash(fillTx);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 ```
 
-
 ### Example 2: Kitchen Sink -- Bundle <> Bundle swap
 
-Here we show an example of what the swap library is capable of. We can even swap arbitrary ERC tokens in bundles. 
+Here we show an example of what the swap library is capable of. We can even swap arbitrary ERC tokens in bundles.
 
 In other words, we can swap `[ERC721, ERC1155, ERC20] <> [ERC721, ERC1155, ERC20]`. There's really no limit to what we can swap.
 
-More concrete example: We can swap `[2 CryptoPunks and 1,000 DAI] for [420 WETH and 694,200 USDC]`. In this case we'd be swapping an `ERC721` and an `ERC20` (Punk NFT and DAI, respectively) for `two ERC20s` (WETH and USDC). 
+More concrete example: We can swap `[2 CryptoPunks and 1,000 DAI] for [420 WETH and 694,200 USDC]`. In this case we'd be swapping an `ERC721` and an `ERC20` (Punk NFT and DAI, respectively) for `two ERC20s` (WETH and USDC).
 
 This is just one example. In reality, you can swap as many things as you'd like, any way you'd like. The underlying 0x protocol is extremely flexible, and the NFT swap library abstracts all the complexity away so you don't have to worry about protocol nuances.
 
@@ -201,7 +199,7 @@ const assetsToSwapUserB = [SIXTY_NINE_USDC, FOUR_THOUSAND_TWENTY_WETH];
 // Part 1 of the trade -- User A (the 'maker') initiates an order
 // ............................
 const nftSwapSdk = new NftSwap(signerUserA, CHAIN_ID);
-// Note: For brevity, we assume all assets are approved for swap in this example. 
+// Note: For brevity, we assume all assets are approved for swap in this example.
 // See previous example on how to approve an asset.
 
 const order = nftSwapSdk.buildOrder(
@@ -223,12 +221,14 @@ console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 // Not so bad, right? We can arbitrarily add more assets to our swap without introducing additional complexity!
 ```
 
-
 ## FAQ
+
 - Which ERCs does this library support
+
   - ERC20, ERC721, and ERC1155
 
 - What EVM chains are currently supported?
+
   - Mainnet (1)
   - Kovan (42)
   - Rinkeby (4)
@@ -237,15 +237,18 @@ console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
   - Avalance (43114)
 
 - What protocol does this library?
-  - trader.xyz and trader.xyz libraries are powered by 0x v3 Protocol. This protocol is mature and lindy, and has been extremely well-audited. 
+
+  - trader.xyz and trader.xyz libraries are powered by 0x v3 Protocol. This protocol is mature and lindy, and has been extremely well-audited.
   - Check out the 0x v3 spec [here](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md)
   - Check out the 0x v3 Consensys audit [here](https://consensys.net/diligence/audits/2019/09/0x-v3-exchange/)
 
 - Are there any protocol fees to execute swaps?
+
   - No
 
 - How do I get the user's `signer` object?
-  - Generally you can get it from the user's web3 wallet provider, by something like this: `provider.getSigner()`. 
+
+  - Generally you can get it from the user's web3 wallet provider, by something like this: `provider.getSigner()`.
   - See this [ethers guide](https://docs.ethers.io/v4/cookbook-providers.html#metamask) (control-f for `getSigner`).
   - In web3-react you can do:
     - `const { library } = useWeb3React();`
@@ -253,7 +256,6 @@ console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 
 - How do I store a `SignedOrder`
   - That's up to you. This library has no opinions on how to store orders. You can throw them in a centralized SQL database, save them to localstorage, use a decentralized messaging solution -- it's really up to you and your app concerns. You can even serialize and compress an order to fit in a tweet or shareable URL! 🤯
-
 
 ## Roadmap
 

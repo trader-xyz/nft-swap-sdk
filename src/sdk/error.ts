@@ -2,57 +2,60 @@
 // Sourced from https://github.com/vweevers/module-error
 
 interface ErrorOptions {
-  code?: string
-  cause?: Error
-  expected?: boolean
-  transient?: boolean
+  code?: string;
+  cause?: Error;
+  expected?: boolean;
+  transient?: boolean;
 }
 
 class ModuleError extends Error {
-  code: string | undefined
-  expected: boolean | undefined
-  transient: boolean | undefined
-  cause: Error | undefined
+  code: string | undefined;
+  expected: boolean | undefined;
+  transient: boolean | undefined;
+  cause: Error | undefined;
   /**
    * @param {string} message Error message
    * @param {{ code?: string, cause?: Error, expected?: boolean, transient?: boolean }} [options]
    */
   constructor(message: string, options: ErrorOptions) {
-    super(message || '')
+    super(message || '');
 
     if (typeof options === 'object' && options !== null) {
-      if (options.code) this.code = String(options.code)
-      if (options.expected) this.expected = true
-      if (options.transient) this.transient = true
-      if (options.cause) this.cause = options.cause
+      if (options.code) this.code = String(options.code);
+      if (options.expected) this.expected = true;
+      if (options.transient) this.transient = true;
+      if (options.cause) this.cause = options.cause;
     }
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor)
+      Error.captureStackTrace(this, this.constructor);
     }
   }
 }
 
 class UnexpectedAssetTypeError extends ModuleError {
   constructor(assetType: string) {
-    const code = 'UnexpectedAssetTypeError'
+    const code = 'UnexpectedAssetTypeError';
     super(`Unexpected asset type ${assetType}`, {
       expected: true,
       code,
-    })
-    this.name = code
+    });
+    this.name = code;
   }
 }
 
 class UnsupportedChainId extends ModuleError {
   constructor(chainId: number) {
-    const code = 'UnsupportedChainId'
-    super(`Unexpected chainId ${chainId}. If you want to use that chain, please provide custom zeroex addresses`, {
-      expected: true,
-      code,
-    })
-    this.name = code
+    const code = 'UnsupportedChainId';
+    super(
+      `Unexpected chainId ${chainId}. If you want to use that chain, please provide custom zeroex addresses`,
+      {
+        expected: true,
+        code,
+      }
+    );
+    this.name = code;
   }
 }
 
-export { ModuleError, UnexpectedAssetTypeError, UnsupportedChainId }
+export { ModuleError, UnexpectedAssetTypeError, UnsupportedChainId };

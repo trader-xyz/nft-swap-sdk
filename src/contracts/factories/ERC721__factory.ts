@@ -2,9 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from 'ethers'
-import { Provider } from '@ethersproject/providers'
-import type { ERC721, ERC721Interface } from '../ERC721'
+import { Contract, Signer, utils } from 'ethers';
+import { Provider } from '@ethersproject/providers';
+import type { ERC721, ERC721Interface } from '../ERC721';
 
 const _abi = [
   {
@@ -338,14 +338,14 @@ const _abi = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+];
 
 export class ERC721__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
   static createInterface(): ERC721Interface {
-    return new utils.Interface(_abi) as ERC721Interface
+    return new utils.Interface(_abi) as ERC721Interface;
   }
   static connect(address: string, signerOrProvider: Signer | Provider): ERC721 {
-    return new Contract(address, _abi, signerOrProvider) as ERC721
+    return new Contract(address, _abi, signerOrProvider) as ERC721;
   }
 }

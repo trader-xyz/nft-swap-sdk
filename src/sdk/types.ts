@@ -1,25 +1,25 @@
-import type { BigNumber } from '@0x/utils'
+import type { BigNumber } from '@0x/utils';
 
 export interface Order {
-  chainId: number
-  exchangeAddress: string
-  makerAddress: string
-  takerAddress: string
-  feeRecipientAddress: string
-  senderAddress: string
-  makerAssetAmount: BigNumber
-  takerAssetAmount: BigNumber
-  makerFee: BigNumber
-  takerFee: BigNumber
-  expirationTimeSeconds: BigNumber
-  salt: BigNumber
-  makerAssetData: string
-  takerAssetData: string
-  makerFeeAssetData: string
-  takerFeeAssetData: string
+  chainId: number;
+  exchangeAddress: string;
+  makerAddress: string;
+  takerAddress: string;
+  feeRecipientAddress: string;
+  senderAddress: string;
+  makerAssetAmount: BigNumber;
+  takerAssetAmount: BigNumber;
+  makerFee: BigNumber;
+  takerFee: BigNumber;
+  expirationTimeSeconds: BigNumber;
+  salt: BigNumber;
+  makerAssetData: string;
+  takerAssetData: string;
+  makerFeeAssetData: string;
+  takerFeeAssetData: string;
 }
 export interface SignedOrder extends Order {
-  signature: string
+  signature: string;
 }
 
 export declare enum SignatureType {
@@ -42,64 +42,64 @@ export declare enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 export interface ERC20AssetData {
-  assetProxyId: string
-  tokenAddress: string
+  assetProxyId: string;
+  tokenAddress: string;
 }
 export interface ERC20BridgeAssetData {
-  assetProxyId: string
-  tokenAddress: string
-  bridgeAddress: string
-  bridgeData: string
+  assetProxyId: string;
+  tokenAddress: string;
+  bridgeAddress: string;
+  bridgeData: string;
 }
 export interface ERC721AssetData {
-  assetProxyId: string
-  tokenAddress: string
-  tokenId: BigNumber
+  assetProxyId: string;
+  tokenAddress: string;
+  tokenId: BigNumber;
 }
 export interface ERC1155AssetData {
-  assetProxyId: string
-  tokenAddress: string
-  tokenIds: BigNumber[]
-  tokenValues: BigNumber[]
-  callbackData: string
+  assetProxyId: string;
+  tokenAddress: string;
+  tokenIds: BigNumber[];
+  tokenValues: BigNumber[];
+  callbackData: string;
 }
 export interface StaticCallAssetData {
-  assetProxyId: string
-  callTarget: string
-  staticCallData: string
-  callResultHash: string
+  assetProxyId: string;
+  callTarget: string;
+  staticCallData: string;
+  callResultHash: string;
 }
 export interface ERC1155AssetDataNoProxyId {
-  tokenAddress: string
-  tokenValues: BigNumber[]
-  tokenIds: BigNumber[]
-  callbackData: string
+  tokenAddress: string;
+  tokenValues: BigNumber[];
+  tokenIds: BigNumber[];
+  callbackData: string;
 }
 export declare type SingleAssetData =
   | ERC20AssetData
   | ERC20BridgeAssetData
   | ERC721AssetData
   | ERC1155AssetData
-  | StaticCallAssetData
+  | StaticCallAssetData;
 export interface MultiAssetData {
-  assetProxyId: string
-  amounts: BigNumber[]
-  nestedAssetData: string[]
+  assetProxyId: string;
+  amounts: BigNumber[];
+  nestedAssetData: string[];
 }
 export interface MultiAssetDataWithRecursiveDecoding {
-  assetProxyId: string
-  amounts: BigNumber[]
-  nestedAssetData: SingleAssetData[]
+  assetProxyId: string;
+  amounts: BigNumber[];
+  nestedAssetData: SingleAssetData[];
 }
 export interface DutchAuctionData {
-  assetData: AssetData
-  beginTimeSeconds: BigNumber
-  beginAmount: BigNumber
+  assetData: AssetData;
+  beginTimeSeconds: BigNumber;
+  beginAmount: BigNumber;
 }
 export declare type AssetData =
   | SingleAssetData
   | MultiAssetData
-  | MultiAssetDataWithRecursiveDecoding
+  | MultiAssetDataWithRecursiveDecoding;
 
 export enum RevertReason {
   OrderUnfillable = 'ORDER_UNFILLABLE',
@@ -215,37 +215,37 @@ export enum RevertReason {
 }
 
 export interface AddressesForChain {
-    exchangeV2: string;
-    exchange: string;
-    erc20Proxy: string;
-    erc721Proxy: string;
-    forwarder: string;
-    zrxToken: string;
-    etherToken: string;
-    assetProxyOwner: string;
-    zeroExGovernor: string;
-    coordinatorRegistry: string;
-    coordinator: string;
-    multiAssetProxy: string;
-    staticCallProxy: string;
-    erc1155Proxy: string;
-    zrxVault: string;
-    staking: string;
-    stakingProxy: string;
-    devUtils: string;
-    erc20BridgeProxy: string;
-    erc20BridgeSampler: string;
-    chaiBridge: string;
-    dydxBridge: string;
-    godsUnchainedValidator: string;
-    broker: string;
-    chainlinkStopLimit: string;
-    maximumGasPrice: string;
-    dexForwarderBridge: string;
-    exchangeProxyGovernor: string;
-    exchangeProxy: string;
-    exchangeProxyTransformerDeployer: string;
-    exchangeProxyFlashWallet: string;
-    exchangeProxyLiquidityProviderSandbox: string;
-    zrxTreasury: string;
+  exchangeV2: string;
+  exchange: string;
+  erc20Proxy: string;
+  erc721Proxy: string;
+  forwarder: string;
+  zrxToken: string;
+  etherToken: string;
+  assetProxyOwner: string;
+  zeroExGovernor: string;
+  coordinatorRegistry: string;
+  coordinator: string;
+  multiAssetProxy: string;
+  staticCallProxy: string;
+  erc1155Proxy: string;
+  zrxVault: string;
+  staking: string;
+  stakingProxy: string;
+  devUtils: string;
+  erc20BridgeProxy: string;
+  erc20BridgeSampler: string;
+  chaiBridge: string;
+  dydxBridge: string;
+  godsUnchainedValidator: string;
+  broker: string;
+  chainlinkStopLimit: string;
+  maximumGasPrice: string;
+  dexForwarderBridge: string;
+  exchangeProxyGovernor: string;
+  exchangeProxy: string;
+  exchangeProxyTransformerDeployer: string;
+  exchangeProxyFlashWallet: string;
+  exchangeProxyLiquidityProviderSandbox: string;
+  zrxTreasury: string;
 }
