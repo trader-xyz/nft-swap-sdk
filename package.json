@@ -1,0 +1,77 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "prettier": "prettier --write \"**/*.{ts,tsx,js,json,css,yml,md}\"",
+    "generate-types": "typechain --out-dir 'src/contracts' --target=ethers-v5 'src/abis/*.json'",
+    "typecheck": "tsc --pretty --noEmit"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "nft-swap",
+  "author": "johnrjj",
+  "module": "dist/nft-swap.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/nft-swap.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/nft-swap.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^6.0.3",
+    "@typechain/ethers-v5": "^8.0.0",
+    "@types/lodash": "^4.14.175",
+    "@types/ramda": "^0.27.45",
+    "husky": "^7.0.2",
+    "prettier": "^2.4.1",
+    "size-limit": "^5.0.5",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typechain": "^6.0.2",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@0x/contract-wrappers": "^13.18.0",
+    "@0x/order-utils": "^10.4.28",
+    "@0x/subproviders": "^6.6.1",
+    "@0x/utils": "^6.4.4",
+    "@ethersproject/abi": "^5.5.0",
+    "@ethersproject/bignumber": "^5.5.0",
+    "@ethersproject/bytes": "^5.5.0",
+    "@ethersproject/providers": "^5.5.0",
+    "date-fns": "^2.25.0",
+    "ethers": "^5.5.1",
+    "lodash": "^4.17.21",
+    "tiny-invariant": "^1.1.0"
+  }
+}
