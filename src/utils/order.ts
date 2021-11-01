@@ -231,7 +231,6 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     makerFee: ZERO_AMOUNT,
     takerFee: ZERO_AMOUNT,
   };
-  console.log('order', order);
 
   return order;
 };
