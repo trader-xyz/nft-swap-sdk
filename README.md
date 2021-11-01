@@ -1,6 +1,8 @@
 # NFT Swap SDK
 
-_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_,
+_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_.
+
+Trader.xyz is the easiest, most-powerful NFT swap library available for Ethereum and EVM-compatible chains. Works in both browser and node.js.
 
 ## Overview
 
@@ -32,16 +34,16 @@ or npm:
 
 ## Configuration
 
-To use the SDK, instantiate and immediately start using it!
+To use the SDK, create a new NftSwap instance.
 
 ```tsx
 import { NftSwap } from '@traderxyz/nft-swap-sdk';
 
 // From your app, provide NftSwap the web3 provider or signer, and the chainId to instantiate
 const nftSwapSdk = new NftSwap(providerOrSigner, chainId);
-
-// Check out the examples below on how to use the SDK
 ```
+
+Now you're setup and ready to use the SDK in your program. Check out the examples for how to swap with the library.
 
 ## Examples
 
@@ -139,13 +141,13 @@ if (!approvalStatusForUserB.contractApproved) {
 // The taker approves the trade transaction and it will be submitted on the blockchain for settlement.
 // Once the transaction is confirmed, the trade will be settled and cannot be reversed.
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
-const fillTxReceipt = await await nftSwapSdk.awaitTransactionHash(fillTx);
+const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 ```
 
-### Example 2: Kitchen Sink -- Bundle <> Bundle swap
+### Example 2: Swap bundles -- Bundle of mixed ERC721s and ERC20 <> Bundle of ERC20s
 
-Here we show an example of what the swap library is capable of. We can even swap arbitrary ERC tokens in bundles.
+Here we show an example of what the swap library is capable of. We can even swap arbitrary ERC tokens in bundles. We call it a bundle when we have more than one item that a party will swap. Bundles can have different ERC types within the same bundle.
 
 In other words, we can swap `[ERC721, ERC1155, ERC20] <> [ERC721, ERC1155, ERC20]`. There's really no limit to what we can swap.
 
@@ -215,7 +217,7 @@ const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 const nftSwapSdk = new NftSwap(signerUserB, CHAIN_ID);
 
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
-const fillTxReceipt = await await nftSwapSdk.awaitTransactionHash(fillTx);
+const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 
 // Not so bad, right? We can arbitrarily add more assets to our swap without introducing additional complexity!
@@ -296,3 +298,5 @@ We're currently working on the following features for the next iteration of this
 If you have feature requests, reach out in our Discord.
 
 We want to make this library a one-stop shop for all your NFT swapping needs.
+
+- We're also moving off of `@0x/*` libraries due to the payload size of these packages.
