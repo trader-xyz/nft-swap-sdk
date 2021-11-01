@@ -18,8 +18,8 @@ const nftSwapSdk = new NftSwap(signerOrProviderForMaker, CHAIN_ID);
 const walletAddressMaker = '0x1234...';
 await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK_420, walletAddressMaker);
 const order = nftSwapSdk.buildOrder(
-  [CRYPTOPUNK_420],
-  [BORED_APE_69],
+  [CRYPTOPUNK_420], // Maker asset(s) to swap
+  [BORED_APE_69], // Taker asset(s) to swap
   walletAddressMaker
 );
 const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
