@@ -221,6 +221,32 @@ console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 // Not so bad, right? We can arbitrarily add more assets to our swap without introducing additional complexity!
 ```
 
+### Example 3: React Hooks + Swap SDK
+
+In this example, we'll leverage the amazing [`web3-react`](https://github.com/NoahZinsmeister/web3-react) React Hook library.
+
+```tsx
+const App = () => {
+  const { library, chainId } = useWeb3React();
+
+  const [swapSdk, setSwapSdk] = useState(null);
+  useEffect(() => {
+    const sdk = new NftSwap(library.getSigner(), chainId);
+    setSwapSdk(sdk);
+  }, [library, chainId])
+
+  // Use the SDK however you'd like in the app...
+  const handleClick = useCallback(() => {
+    if (!swapSdk) {
+      return;
+    }
+    swapSdk.buildOrder(...)
+  }, [swapSdk])
+
+  // ...
+}
+```
+
 ## FAQ
 
 - Which ERCs does this library support
