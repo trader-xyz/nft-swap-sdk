@@ -4,7 +4,7 @@
 
 _The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_.
 
-Trader.xyz is the easiest, most-powerful NFT swap library available for Ethereum and EVM-compatible chains. Works in both browser and node.js.
+The easiest, most-powerful NFT swap library available for Ethereum and EVM-compatible chains. Works in both browser and node.js.
 
 ## Overview
 
