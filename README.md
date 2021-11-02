@@ -2,21 +2,15 @@
 
 # NFT Swap SDK
 
-_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org)_.
-
-The easiest, most-powerful NFT swap library available for Ethereum and EVM-compatible chains. Works in both browser and node.js.
+\_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers.
 
 ## Overview
 
-The NFT Swap SDK developed by [Trader.xyz](https://trader.xyz) offers swap support for ERC20s, ERC721s, and ERC1155s. Exchange tokens, NFTs and other collectibles on Ethereum easily by using this SDK. Exchange NFTs for NFTs, NFTs for ERC20 tokenss, or swap bundles of NFTS. This library provides the ultimate swap flexibility combined with a simple API surface area so you can be productive immediately.
+tl;dr: NFT Swap SDK is the easiest, most-powerful NFT swap library. Supports Ethereum and EVM-compatible chains (Polygon, Avalanche, BSC, etc..). Works in both browser and node.js. Written in TypeScript, built using the 0x protocol. With this library, you can build support for NFT marketplaces or over-the-counter (OTC) exchange.
 
-With this library, you can build support for NFT marketplaces or Over-the-counter (OTC) exchange.
+The NFT Swap SDK developed by [Trader.xyz](https://trader.xyz) offers swap support for ERC20s, ERC721s, and ERC1155s. Exchange NFTs for NFTs, NFTs for ERC20 tokens, or bundles of NFTs and tokens. This library provides the ultimate swap flexibility combined with a simple API surface area so you can be productive immediately and focus on building your web3 app.
 
-Develop your app with confidence, let this library do the heavy lifting so that you can focus on the unique aspects of your app!
-
-This library is powered and secured by the [0x protocol](https://0x.org). The 0x v3 protocol has been in production for multiple years securing billions of dollars with of trades.
-
-Written in TypeScript, the SDK comes with strongly typed support out of the box, so you won't be guessing at arguments or types.
+This library is powered and secured by the [0x v3 protocol](https://0x.org). The 0x v3 protocol has been in production for multiple years securing billions of dollars with of trades.
 
 ### Goals
 
