@@ -20,7 +20,8 @@
     "analyze": "size-limit --why",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,json,css,yml,md}\"",
     "generate-types": "typechain --out-dir 'src/contracts' --target=ethers-v5 'src/abis/**/*.json'",
-    "typecheck": "tsc --pretty --noEmit"
+    "typecheck": "tsc --pretty --noEmit",
+    "postinstall": "generate-types"
   },
   "peerDependencies": {},
   "husky": {
