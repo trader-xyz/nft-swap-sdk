@@ -239,6 +239,7 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   exchangeAddress: string;
   takerAddress?: string;
   expiration?: Date;
+  salt?: string;
 }): Order => {
   const {
     makerAssetAmount,
@@ -248,6 +249,7 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     takerAssetData,
     takerAddress,
     expiration,
+    salt,
   } = orderConfig;
 
   const expirationTimeSeconds = expiration
@@ -265,7 +267,7 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     // Stuff that doesn't really matter but is required
     senderAddress: NULL_ADDRESS,
     feeRecipientAddress: TRADER_ADDRESS_IDENTIFIER,
-    salt: randomBytes(32).toString(),
+    salt: salt ?? generateSaltHash(),
     makerFeeAssetData: NULL_BYTES,
     takerFeeAssetData: NULL_BYTES,
     makerFee: ZERO_AMOUNT.toString(),
@@ -273,4 +275,12 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   };
 
   return order;
+};
+
+const generateSaltHash = (manualSaltHashToUse?: string): string => {
+  if (manualSaltHashToUse) {
+    return manualSaltHashToUse;
+  }
+  const randomSalt = BigNumber.from(randomBytes(32)).toString();
+  return randomSalt;
 };
