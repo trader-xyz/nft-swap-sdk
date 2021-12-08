@@ -30,8 +30,6 @@ describe('NFTSwap', () => {
       nft1Owner // maker wallet address
     );
 
-    expect(order.chainId).toBe(4);
-
     expect(order.makerAddress).toBe(nft1Owner);
     expect(order.makerAssetAmount.toString()).toEqual('1');
     expect(order.makerAssetData).toBe(

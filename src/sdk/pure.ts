@@ -11,7 +11,11 @@ import {
   UserFacingSerializedSingleAssetDataTypes,
 } from '../utils/order';
 import { NULL_ADDRESS } from '../utils/eth';
-import { encodeAssetData, encodeMultiAssetAssetData, getAmountFromAsset } from '../utils/asset-data';
+import {
+  encodeAssetData,
+  encodeMultiAssetAssetData,
+  getAmountFromAsset,
+} from '../utils/asset-data';
 import {
   ERC1155__factory,
   ERC20__factory,

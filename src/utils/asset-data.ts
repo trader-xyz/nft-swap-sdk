@@ -16,7 +16,6 @@ const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
 
-
 export const encodeErc1155AssetData = (
   tokenAddress: string,
   tokenIds: BigNumberish[],
@@ -54,7 +53,6 @@ export const encodeMultiAssetAssetData = (
     AssetProxyId.MultiAsset,
     defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
   ]);
-
 
 const encodeAssetData = (
   assetData: UserFacingSerializedSingleAssetDataTypes
