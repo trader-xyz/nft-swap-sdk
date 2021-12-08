@@ -1,6 +1,7 @@
+import type { ContractTransaction } from '@ethersproject/contracts';
+import { TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BaseProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import addresses from '../addresses.json';
+import { BigNumber } from '@ethersproject/bignumber';
 import {
   AdditionalOrderConfig,
   EIP712_TYPES,
@@ -10,7 +11,7 @@ import {
   UserFacingSerializedSingleAssetDataTypes,
 } from '../utils/order';
 import { NULL_ADDRESS } from '../utils/eth';
-import { encodeAssetData, getAmountFromAsset } from '../utils/asset-data';
+import { encodeAssetData, encodeMultiAssetAssetData, getAmountFromAsset } from '../utils/asset-data';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -18,12 +19,8 @@ import {
   ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
-
+import addresses from '../addresses.json';
 import type { AddressesForChain, Order, SignedOrder } from './types';
-import type { ContractTransaction } from '@ethersproject/contracts';
-import { TypedDataSigner } from '@ethersproject/abstract-signer';
-import { hexConcat } from '@ethersproject/bytes';
-import { defaultAbiCoder } from '@ethersproject/abi';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -108,44 +105,6 @@ export const buildOrder = (
 
   return order;
 };
-
-export const encodeErc1155AssetData = (
-  tokenAddress: string,
-  tokenIds: BigNumberish[],
-  values: BigNumberish[],
-  callbackData: string
-) =>
-  hexConcat([
-    AssetProxyId.ERC1155,
-    defaultAbiCoder.encode(
-      ['address', 'uint256[]', 'uint256[]', 'bytes'],
-      [tokenAddress, tokenIds, values, callbackData]
-    ),
-  ]);
-
-export const encodeErc20AssetData = (tokenAddress: string) =>
-  hexConcat([
-    AssetProxyId.ERC20,
-    defaultAbiCoder.encode(['address'], [tokenAddress]),
-  ]);
-
-export const encodeErc721AssetData = (
-  tokenAddress: string,
-  tokenId: BigNumberish
-) =>
-  hexConcat([
-    AssetProxyId.ERC721,
-    defaultAbiCoder.encode(['address', 'uint256'], [tokenAddress, tokenId]),
-  ]);
-
-export const encodeMultiAssetAssetData = (
-  values: BigNumberish[],
-  nestedAssetData: string[]
-) =>
-  hexConcat([
-    AssetProxyId.MultiAsset,
-    defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
-  ]);
 
 export const sendSignedOrderToEthereum = async (
   signedOrder: SignedOrder,

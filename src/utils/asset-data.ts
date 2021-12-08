@@ -1,13 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber';
-import {
-  encodeErc1155AssetData,
-  encodeErc20AssetData,
-  encodeErc721AssetData,
-} from '../sdk/pure';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { hexConcat } from '@ethersproject/bytes';
+import { defaultAbiCoder } from '@ethersproject/abi';
+
 import {
   SupportedTokenTypes,
   UserFacingSerializedSingleAssetDataTypes,
 } from './order';
+import { AssetProxyId } from '../sdk/types';
 
 const convertStringToBN = (s: string) => {
   return BigNumber.from(s);
@@ -16,6 +15,46 @@ const convertStringToBN = (s: string) => {
 const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
+
+
+export const encodeErc1155AssetData = (
+  tokenAddress: string,
+  tokenIds: BigNumberish[],
+  values: BigNumberish[],
+  callbackData: string
+) =>
+  hexConcat([
+    AssetProxyId.ERC1155,
+    defaultAbiCoder.encode(
+      ['address', 'uint256[]', 'uint256[]', 'bytes'],
+      [tokenAddress, tokenIds, values, callbackData]
+    ),
+  ]);
+
+export const encodeErc20AssetData = (tokenAddress: string) =>
+  hexConcat([
+    AssetProxyId.ERC20,
+    defaultAbiCoder.encode(['address'], [tokenAddress]),
+  ]);
+
+export const encodeErc721AssetData = (
+  tokenAddress: string,
+  tokenId: BigNumberish
+) =>
+  hexConcat([
+    AssetProxyId.ERC721,
+    defaultAbiCoder.encode(['address', 'uint256'], [tokenAddress, tokenId]),
+  ]);
+
+export const encodeMultiAssetAssetData = (
+  values: BigNumberish[],
+  nestedAssetData: string[]
+) =>
+  hexConcat([
+    AssetProxyId.MultiAsset,
+    defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
+  ]);
+
 
 const encodeAssetData = (
   assetData: UserFacingSerializedSingleAssetDataTypes
