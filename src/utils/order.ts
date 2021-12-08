@@ -241,8 +241,6 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   expiration?: Date;
 }): Order => {
   const {
-    chainId,
-    exchangeAddress,
     makerAssetAmount,
     takerAssetAmount,
     makerAddress,
