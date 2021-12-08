@@ -1,16 +1,11 @@
-import { ExchangeContract, SupportedProvider } from '@0x/contract-wrappers';
-import {
-  assetDataUtils,
-  signatureUtils as zeroExSigUtils,
-} from '@0x/order-utils';
-import { MetamaskSubprovider } from '@0x/subproviders';
 import { BaseProvider } from '@ethersproject/providers';
-import { BigNumber } from '@0x/utils';
-import { BigNumber as BigNumberEthers } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import addresses from '../addresses.json';
 import {
   AdditionalOrderConfig,
+  EIP712_TYPES,
   generateOrderFromAssetDatas,
+  getEipDomain,
   SupportedTokenTypes,
   UserFacingSerializedSingleAssetDataTypes,
 } from '../utils/order';
@@ -20,11 +15,15 @@ import {
   ERC1155__factory,
   ERC20__factory,
   ERC721__factory,
+  ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
 
 import type { AddressesForChain, Order, SignedOrder } from './types';
 import type { ContractTransaction } from '@ethersproject/contracts';
+import { TypedDataSigner } from '@ethersproject/abstract-signer';
+import { hexConcat } from '@ethersproject/bytes';
+import { defaultAbiCoder } from '@ethersproject/abi';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -32,29 +31,6 @@ export enum AssetProxyId {
   MultiAsset = '0x94cfcdd7',
   ERC1155 = '0xa7cb5fb7',
   StaticCall = '0xc339d10a',
-}
-
-export interface ZeroExOrder {
-  chainId: number;
-  exchangeAddress: string;
-  makerAddress: string;
-  takerAddress: string;
-  feeRecipientAddress: string;
-  senderAddress: string;
-  makerAssetAmount: BigNumber;
-  takerAssetAmount: BigNumber;
-  makerFee: BigNumber;
-  takerFee: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  salt: BigNumber;
-  makerAssetData: string;
-  takerAssetData: string;
-  makerFeeAssetData: string;
-  takerFeeAssetData: string;
-}
-
-export interface ZeroExSignedOrder extends ZeroExOrder {
-  signature: string;
 }
 
 export enum ChainId {
@@ -70,30 +46,35 @@ export enum ChainId {
 }
 
 const convertStringToBN = (s: string) => {
-  return new BigNumber(s);
+  return BigNumber.from(s);
 };
 
 const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
 
-export type AssetDataUtils = typeof assetDataUtils;
-
 export type InterallySupportedAssetFormat =
   UserFacingSerializedSingleAssetDataTypes;
 
-export const signOrder = (
+export const signOrder = async (
   order: Order,
-  signerAddress: string,
-  provider: BaseProvider
+  _signerAddress: string,
+  signer: TypedDataSigner,
+  chainId: number,
+  exchangeContractAddress: string
 ): Promise<SignedOrder> => {
-  let stdProvider = provider as unknown as SupportedProvider;
-  if ((provider as any).isMetaMask) {
-    stdProvider = new MetamaskSubprovider(
-      provider as unknown as SupportedProvider
-    );
-  }
-  return zeroExSigUtils.ecSignOrderAsync(stdProvider, order, signerAddress);
+  const rawSignature = await signer._signTypedData(
+    getEipDomain(chainId, exchangeContractAddress),
+    EIP712_TYPES,
+    order
+  );
+
+  const signedOrder: SignedOrder = {
+    ...order,
+    signature: rawSignature,
+  };
+
+  return signedOrder;
 };
 
 export const buildOrder = (
@@ -103,23 +84,23 @@ export const buildOrder = (
 ): Order => {
   const makerAssetAmounts = makerAssets.map((ma) => getAmountFromAsset(ma));
   const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma));
-  const makerMultiAsset = assetDataUtils.encodeMultiAssetData(
-    convertCollectionToBN(makerAssetAmounts),
+  const makerMultiAsset = encodeMultiAssetAssetData(
+    makerAssetAmounts, //convertCollectionToBN(makerAssetAmounts),
     makerAssetDatas
   );
 
   const takerAssetAmounts = takerAssets.map((ta) => getAmountFromAsset(ta));
   const takerAssetDatas = takerAssets.map((ta) => encodeAssetData(ta));
-  const takerMultiAsset = assetDataUtils.encodeMultiAssetData(
+  const takerMultiAsset = encodeMultiAssetAssetData(
     convertCollectionToBN(takerAssetAmounts),
     takerAssetDatas
   );
 
   const order = generateOrderFromAssetDatas({
-    makerAssetAmount: new BigNumber(1), // needs to be 1
+    makerAssetAmount: BigNumber.from(1), // needs to be 1
     makerAssetData: makerMultiAsset,
     takerAddress: orderConfig.takerAddress ?? NULL_ADDRESS,
-    takerAssetAmount: new BigNumber(1), // needs to be 1
+    takerAssetAmount: BigNumber.from(1), // needs to be 1
     takerAssetData: takerMultiAsset,
     exchangeAddress: orderConfig.exchangeAddress ?? '', // look up address from chain id if null,
     ...orderConfig,
@@ -128,18 +109,54 @@ export const buildOrder = (
   return order;
 };
 
+export const encodeErc1155AssetData = (
+  tokenAddress: string,
+  tokenIds: BigNumberish[],
+  values: BigNumberish[],
+  callbackData: string
+) =>
+  hexConcat([
+    AssetProxyId.ERC1155,
+    defaultAbiCoder.encode(
+      ['address', 'uint256[]', 'uint256[]', 'bytes'],
+      [tokenAddress, tokenIds, values, callbackData]
+    ),
+  ]);
+
+export const encodeErc20AssetData = (tokenAddress: string) =>
+  hexConcat([
+    AssetProxyId.ERC20,
+    defaultAbiCoder.encode(['address'], [tokenAddress]),
+  ]);
+
+export const encodeErc721AssetData = (
+  tokenAddress: string,
+  tokenId: BigNumberish
+) =>
+  hexConcat([
+    AssetProxyId.ERC721,
+    defaultAbiCoder.encode(['address', 'uint256'], [tokenAddress, tokenId]),
+  ]);
+
+export const encodeMultiAssetAssetData = (
+  values: BigNumberish[],
+  nestedAssetData: string[]
+) =>
+  hexConcat([
+    AssetProxyId.MultiAsset,
+    defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
+  ]);
+
 export const sendSignedOrderToEthereum = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract
-): Promise<string> => {
-  const txHash = await exchangeContract
-    .fillOrKillOrder(
-      signedOrder,
-      signedOrder.takerAssetAmount,
-      signedOrder.signature
-    )
-    .sendTransactionAsync();
-  return txHash;
+): Promise<ContractTransaction> => {
+  const transaction = await exchangeContract.fillOrKillOrder(
+    signedOrder,
+    signedOrder.takerAssetAmount,
+    signedOrder.signature
+  );
+  return transaction;
 };
 
 /**
@@ -176,7 +193,7 @@ export const getApprovalStatus = async (
   switch (asset.type) {
     case 'ERC20':
       const erc20 = ERC20__factory.connect(asset.tokenAddress, provider);
-      const erc20AllowanceBigNumber: BigNumberEthers = await erc20.allowance(
+      const erc20AllowanceBigNumber: BigNumber = await erc20.allowance(
         walletAddress,
         exchangeProxyAddressForAsset
       );
@@ -219,7 +236,7 @@ export const getApprovalStatus = async (
   }
 };
 
-export const MAX_APPROVAL = BigNumberEthers.from(2).pow(128).sub(1);
+export const MAX_APPROVAL = BigNumber.from(2).pow(128).sub(1);
 
 /**
  *

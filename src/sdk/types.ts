@@ -1,22 +1,21 @@
-import type { BigNumber } from '@0x/utils';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export interface Order {
-  chainId: number;
-  exchangeAddress: string;
   makerAddress: string;
   takerAddress: string;
   feeRecipientAddress: string;
   senderAddress: string;
-  makerAssetAmount: BigNumber;
-  takerAssetAmount: BigNumber;
-  makerFee: BigNumber;
-  takerFee: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  salt: BigNumber;
+  makerAssetAmount: string;
+  takerAssetAmount: string;
+  makerFee: string;
+  takerFee: string;
+  expirationTimeSeconds: string;
+  salt: string;
   makerAssetData: string;
   takerAssetData: string;
   makerFeeAssetData: string;
   takerFeeAssetData: string;
+  signature?: string;
 }
 export interface SignedOrder extends Order {
   signature: string;
@@ -33,7 +32,8 @@ export declare enum SignatureType {
   EIP1271Wallet = 7,
   NSignatureTypes = 8,
 }
-export declare enum AssetProxyId {
+
+export enum AssetProxyId {
   ERC20 = '0xf47261b0',
   ERC721 = '0x02571792',
   MultiAsset = '0x94cfcdd7',
@@ -41,21 +41,25 @@ export declare enum AssetProxyId {
   StaticCall = '0xc339d10a',
   ERC20Bridge = '0xdc1600f3',
 }
+
 export interface ERC20AssetData {
   assetProxyId: string;
   tokenAddress: string;
 }
+
 export interface ERC20BridgeAssetData {
   assetProxyId: string;
   tokenAddress: string;
   bridgeAddress: string;
   bridgeData: string;
 }
+
 export interface ERC721AssetData {
   assetProxyId: string;
   tokenAddress: string;
   tokenId: BigNumber;
 }
+
 export interface ERC1155AssetData {
   assetProxyId: string;
   tokenAddress: string;

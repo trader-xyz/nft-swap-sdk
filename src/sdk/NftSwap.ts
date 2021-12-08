@@ -1,4 +1,3 @@
-import { ExchangeContract, SupportedProvider } from '@0x/contract-wrappers';
 import addresses from '../addresses.json';
 import { ChainId } from '../utils/eth';
 import {
@@ -24,6 +23,8 @@ import type {
   UserFacingERC721AssetDataSerialized,
 } from '../utils/order';
 import type { Order, SignedOrder } from './types';
+import { TypedDataSigner } from '@ethersproject/abstract-signer';
+import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 
 interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -33,7 +34,7 @@ interface INftSwap {
   signOrder: (
     order: Order,
     signerAddress: string,
-    provider: BaseProvider
+    signer: TypedDataSigner
   ) => Promise<SignedOrder>;
   buildOrder: (
     makerAssets: Array<SwappableAsset>,
@@ -146,9 +147,9 @@ class NftSwap implements INftSwap {
       );
     }
 
-    this.exchangeContract = new ExchangeContract(
+    this.exchangeContract = ExchangeContract__factory.connect(
       zeroExExchangeContractAddress,
-      provider as unknown as SupportedProvider
+      provider
     );
   }
 
@@ -159,9 +160,15 @@ class NftSwap implements INftSwap {
   public signOrder = async (
     order: Order,
     addressOfWalletSigningOrder: string,
-    signer: BaseProvider = this.provider
+    signer: TypedDataSigner
   ) => {
-    return _signOrder(order, addressOfWalletSigningOrder, signer);
+    return _signOrder(
+      order,
+      addressOfWalletSigningOrder,
+      signer,
+      this.chainId,
+      this.exchangeContract.address
+    );
   };
 
   public buildOrder = (
@@ -223,12 +230,16 @@ class NftSwap implements INftSwap {
 
   public fillSignedOrder = async (
     signedOrder: SignedOrder,
-    fillOrverrides?: Partial<FillOrderOverrides>
+    fillOverrides?: Partial<FillOrderOverrides>
   ) => {
-    return _sendSignedOrderToEthereum(
+    const tx = await _sendSignedOrderToEthereum(
       signedOrder,
-      fillOrverrides?.exchangeContract ?? this.exchangeContract
+      fillOverrides?.exchangeContract ?? this.exchangeContract
     );
+
+    const txReceipt = await tx.wait();
+
+    return txReceipt.transactionHash;
   };
 }
 

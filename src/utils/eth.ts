@@ -1,10 +1,8 @@
-import startsWith from 'lodash/startsWith';
-import isString from 'lodash/isString';
-import { BigNumber } from '@0x/utils';
+// import startsWith from 'lodash/startsWith';
 import { isHexString } from '@ethersproject/bytes';
 import { getAddress } from '@ethersproject/address';
-
-import type { ObjectMap, BigNumberIsh } from '../types';
+import { BigNumber } from '@ethersproject/bignumber';
+import type { ObjectMap } from '../types';
 
 export const CRYPTO_KITTIES_CONTRACT_ADDRESS =
   '0x06012c8cf97bead5deae237070f9587f8e7a266d';
@@ -18,43 +16,45 @@ export enum ChainId {
 export const ETH_GAS_STATION_API_BASE_URL = 'https://ethgasstation.info';
 export const ETH_GAS_STATION_GAS_ENDPOINT = `${ETH_GAS_STATION_API_BASE_URL}/json/ethgasAPI.json`;
 
-export const MAX_UINT256 = new BigNumber(2).pow(128).minus(1);
+export const MAX_UINT256 = BigNumber.from(2).pow(128).sub(1);
 export const UNLIMITED_ALLOWANCE_IN_BASE_UNITS = MAX_UINT256;
-export const GWEI_IN_WEI = new BigNumber(1000000000);
-export const GWEI_IN_ETH = new BigNumber(1000000000);
+export const GWEI_IN_WEI = BigNumber.from(1000000000);
+export const GWEI_IN_ETH = BigNumber.from(1000000000);
 
-export const ZERO_AMOUNT = new BigNumber(0);
+export const ZERO_AMOUNT = BigNumber.from(0);
+export const ONE_AMOUNT = BigNumber.from(1);
+
 export const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const NULL_BYTES = '0x';
 export const BASE_TEN = 10;
 
-export const ONE_NFT_UNIT = new BigNumber(1);
-export const ZERO_NFT_UNIT = new BigNumber(0);
-export const DEFAULT_ERC20_TOKEN_DECIMALS = new BigNumber(18);
+export const ONE_NFT_UNIT = ONE_AMOUNT;
+export const ZERO_NFT_UNIT = ZERO_AMOUNT;
+export const DEFAULT_ERC20_TOKEN_DECIMALS = BigNumber.from(18);
 
 export type Numberish = BigNumber | number | string;
 
 const isENSAddressFormat = (address: string) => !!address.match(/.+\..+/g);
 
-const isHexStringIgnorePrefix = (value: string) => {
-  const trimmedValue = value.trim();
-  const updatedValue = addHexPrefix(trimmedValue);
-  return isHexString(updatedValue);
-};
+// const isHexStringIgnorePrefix = (value: string) => {
+//   const trimmedValue = value.trim();
+//   const updatedValue = addHexPrefix(trimmedValue);
+//   return isHexString(updatedValue);
+// };
 
-const addHexPrefix = (value: string) =>
-  startsWith(value, '0x') ? value : `0x${value}`;
+// const addHexPrefix = (value: string) =>
+//   startsWith(value, '0x') ? value : `0x${value}`;
 
-const convertRawAmountToDecimalFormat = (
-  value: BigNumber,
-  decimals: Numberish = new BigNumber(18),
-  maxFormattedDecimals = 4
-): string =>
-  new BigNumber(value)
-    .dividedBy(new BigNumber(10).pow(decimals))
-    .decimalPlaces(maxFormattedDecimals)
-    .toFormat(maxFormattedDecimals)
-    .toString();
+// const convertRawAmountToDecimalFormat = (
+//   value: BigNumber,
+//   decimals: Numberish = new BigNumber(18),
+//   maxFormattedDecimals = 4
+// ): string =>
+//    BigNumber.from(value)
+//     .dividedBy(new BigNumber(10).pow(decimals))
+//     .decimalPlaces(maxFormattedDecimals)
+//     .toFormat(maxFormattedDecimals)
+//     .toString();
 
 const getEthPriceInUsd = async (): Promise<number | undefined> => {
   const res = await fetch(
@@ -64,31 +64,31 @@ const getEthPriceInUsd = async (): Promise<number | undefined> => {
   return json?.ethereum?.usd;
 };
 
-const convertGweiToEth = (gweiAmount: BigNumber) => {
-  const BASE_TEN = 10;
-  const unit = new BigNumber(BASE_TEN).pow(-9);
-  const gweiInEth = unit.times(gweiAmount);
-  return gweiInEth;
-};
+// const convertGweiToEth = (gweiAmount: BigNumber) => {
+//   const BASE_TEN = 10;
+//   const unit = new BigNumber(BASE_TEN).pow(-9);
+//   const gweiInEth = unit.times(gweiAmount);
+//   return gweiInEth;
+// };
 
 /**
  *
  * @returns gas price in wei (base unit), need to convert to eth
  */
-const getGasPrice = async (): Promise<BigNumber> => {
-  try {
-    const res = await fetch(ETH_GAS_STATION_GAS_ENDPOINT);
-    const gasInfo = await res.json();
-    // Eth Gas Station result is gwei * 10
-    const BASE_TEN = 10;
-    const gasPriceGwei = new BigNumber(gasInfo.fast / BASE_TEN);
-    const unit = new BigNumber(BASE_TEN).pow(9);
-    const gasPriceWei = unit.times(gasPriceGwei);
-    return gasPriceWei;
-  } catch (e) {
-    throw new Error(e as any);
-  }
-};
+// const getGasPrice = async (): Promise<BigNumber> => {
+//   try {
+//     const res = await fetch(ETH_GAS_STATION_GAS_ENDPOINT);
+//     const gasInfo = await res.json();
+//     // Eth Gas Station result is gwei * 10
+//     const BASE_TEN = 10;
+//     const gasPriceGwei = new BigNumber(gasInfo.fast / BASE_TEN);
+//     const unit = new BigNumber(BASE_TEN).pow(9);
+//     const gasPriceWei = unit.times(gasPriceGwei);
+//     return gasPriceWei;
+//   } catch (e) {
+//     throw new Error(e as any);
+//   }
+// };
 
 // const toBaseUnitAmount = (amount: Numberish, decimals: number): BigNumber => {
 //   const unit = new BigNumber(BASE_TEN).pow(decimals)
@@ -112,30 +112,30 @@ const arrayToMapWithId = <T extends object>(
   }, initialMap);
 };
 
-const convertAmountToBigNumber = (value: BigNumberIsh): BigNumber => {
-  const num = value || 0;
-  const isBigNumber = BigNumber.isBigNumber(num);
-  if (isBigNumber) {
-    return num as BigNumber;
-  }
+// const convertAmountToBigNumber = (value: BigNumberIsh): BigNumber => {
+//   const num = value || 0;
+//   const isBigNumber = BigNumber.isBigNumber(num);
+//   if (isBigNumber) {
+//     return num as BigNumber;
+//   }
 
-  if (isString(num) && (num.indexOf('0x') === 0 || num.indexOf('-0x') === 0)) {
-    return new BigNumber(num.replace('0x', ''), 16);
-  }
+//   if (isString(num) && (num.indexOf('0x') === 0 || num.indexOf('-0x') === 0)) {
+//     return new BigNumber(num.replace('0x', ''), 16);
+//   }
 
-  const baseTen = 10;
-  return new BigNumber((num as number).toString(baseTen), baseTen);
-};
+//   const baseTen = 10;
+//   return BigNumber.from((num as number).toString(baseTen));
+// };
 
-const encodeAmountAsHexString = (value: BigNumberIsh): string => {
-  const valueBigNumber = convertAmountToBigNumber(value);
-  const hexBase = 16;
-  const valueHex = valueBigNumber.toString(hexBase);
+// const encodeAmountAsHexString = (value: BigNumberIsh): string => {
+//   const valueBigNumber = convertAmountToBigNumber(value);
+//   const hexBase = 16;
+//   const valueHex = valueBigNumber.toString(hexBase);
 
-  return valueBigNumber.isLessThan(0)
-    ? `-0x${valueHex.substr(1)}`
-    : `0x${valueHex}`;
-};
+//   return valueBigNumber.isLessThan(0)
+//     ? `-0x${valueHex.substr(1)}`
+//     : `0x${valueHex}`;
+// };
 
 const isHexAddressFormat = (address: string): boolean => {
   if (!isHexString(address)) return false;
@@ -201,58 +201,58 @@ const getShortenedAddress = (
 };
 
 export const toUnitAmount = (amount: BigNumber, decimals: number) => {
-  const unit = new BigNumber(BASE_TEN).pow(decimals);
+  const unit = BigNumber.from(BASE_TEN).pow(decimals);
 
-  const unitAmount = amount.dividedBy(unit);
-  const hasDecimals = unit.decimalPlaces() !== 0;
-  if (hasDecimals) {
-    throw new Error(
-      `Invalid unit amount: ${amount.toString()}, incorrect decimals ${decimals}`
-    );
-  }
+  const unitAmount = amount.div(unit);
+  // const hasDecimals = unit.() !== 0;
+  // if (hasDecimals) {
+  //   throw new Error(
+  //     `Invalid unit amount: ${amount.toString()}, incorrect decimals ${decimals}`
+  //   );
+  // }
   return unitAmount;
 };
 
-export const toBaseUnitAmount = (
-  amount: Numberish,
-  decimals: number
-): BigNumber => {
-  const unit = new BigNumber(BASE_TEN).pow(decimals);
-  const baseUnitAmount = unit.times(amount);
-  const hasDecimals = baseUnitAmount.decimalPlaces() !== 0;
-  if (hasDecimals) {
-    throw new Error(
-      `Invalid unit amount: ${amount.toString()} - Too many decimal places`
-    );
-  }
-  return baseUnitAmount;
-};
+// export const toBaseUnitAmount = (
+//   amount: Numberish,
+//   decimals: number
+// ): BigNumber => {
+//   const unit = BigNumber.from(BASE_TEN).pow(decimals);
+//   const baseUnitAmount = unit.mul(amount);
+//   const hasDecimals = baseUnitAmount.decimalPlaces() !== 0;
+//   if (hasDecimals) {
+//     throw new Error(
+//       `Invalid unit amount: ${amount.toString()} - Too many decimal places`
+//     );
+//   }
+//   return baseUnitAmount;
+// };
 
-export const toNearestBaseUnitAmount = (
-  amount: BigNumber,
-  decimals: number
-): BigNumber => {
-  const unit = new BigNumber(BASE_TEN).pow(decimals);
-  const baseUnitAmount = unit.times(amount);
-  const nearestBaseUnitAmount = baseUnitAmount.decimalPlaces(0);
-  return nearestBaseUnitAmount;
-};
+// export const toNearestBaseUnitAmount = (
+//   amount: BigNumber,
+//   decimals: number
+// ): BigNumber => {
+//   const unit = BigNumber.from(BASE_TEN).pow(decimals);
+//   const baseUnitAmount = unit.mul(amount);
+//   const nearestBaseUnitAmount = baseUnitAmount.decimalPlaces(0);
+//   return nearestBaseUnitAmount;
+// };
 
-export const toBaseUnitAmountSafe = (
-  amount?: BigNumber | string | number,
-  decimals?: BigNumber | string | number
-): BigNumber | undefined => {
-  if (amount === undefined) {
-    return undefined;
-  }
-  if (decimals === undefined) {
-    return undefined;
-  }
-  return toBaseUnitAmount(
-    new BigNumber(amount),
-    new BigNumber(decimals).toNumber()
-  );
-};
+// export const toBaseUnitAmountSafe = (
+//   amount?: BigNumber | string | number,
+//   decimals?: BigNumber | string | number
+// ): BigNumber | undefined => {
+//   if (amount === undefined) {
+//     return undefined;
+//   }
+//   if (decimals === undefined) {
+//     return undefined;
+//   }
+//   return toBaseUnitAmount(
+//     new BigNumber(amount),
+//     new BigNumber(decimals).toNumber()
+//   );
+// };
 
 const getEtherscanRootUrlForChain = (chainId: number) => {
   if (chainId === 4) {
@@ -284,26 +284,25 @@ export const getEtherscanLinkForAccount = (
   return etherscanLink;
 };
 
-export const convertGweiToWei = (numInGwei: BigNumber) => {
-  const numInWei = numInGwei.multipliedBy(GWEI_IN_WEI).toFixed(0);
-  return numInWei;
-};
+// export const convertGweiToWei = (numInGwei: BigNumber) => {
+//   const numInWei = numInGwei.mul(GWEI_IN_WEI)
+//   return numInWei;
+// };
 
-export const convertWeiToGwei = (numInWei: BigNumber) => {
-  const numInGwei = numInWei.div(GWEI_IN_WEI).toFixed(0);
-  return numInGwei;
-};
+// export const convertWeiToGwei = (numInWei: BigNumber) => {
+//   const numInGwei = numInWei.div(GWEI_IN_WEI).toFixed(0);
+//   return numInGwei;
+// };
 
 export {
   isENSAddressFormat,
-  convertRawAmountToDecimalFormat,
   isHexAddressFormat,
-  isHexStringIgnorePrefix,
-  getGasPrice,
+  // isHexStringIgnorePrefix,
+  // getGasPrice,
   getEthPriceInUsd,
-  encodeAmountAsHexString,
-  convertAmountToBigNumber,
+  // encodeAmountAsHexString,
+  // convertAmountToBigNumber,
   arrayToMapWithId,
   getShortenedAddress,
-  convertGweiToEth,
+  // convertGweiToEth,
 };

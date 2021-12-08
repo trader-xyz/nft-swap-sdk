@@ -1,4 +1,4 @@
-import type { BigNumber } from '@0x/utils';
+import type { BigNumber } from '@ethersproject/bignumber';
 import type { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 
 export interface ObjectMap<T> {

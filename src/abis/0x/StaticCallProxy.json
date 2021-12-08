@@ -1,0 +1,25 @@
+[
+  {
+    "constant": true,
+    "inputs": [
+      { "name": "assetData", "type": "bytes" },
+      { "name": "from", "type": "address" },
+      { "name": "to", "type": "address" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "transferFrom",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getProxyId",
+    "outputs": [{ "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]
