@@ -78,11 +78,12 @@ describe('NFTSwap', () => {
     );
     expect(isValidSignature).toBe(true);
 
-    const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-      gasPrice,
-      gasLimit: '500000',
-      // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-      value: parseEther('0.01'),
-    });
+    // Uncomment to actually fill order
+    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
+    //   gasPrice,
+    //   gasLimit: '500000',
+    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
+    //   value: parseEther('0.01'),
+    // });
   });
 });

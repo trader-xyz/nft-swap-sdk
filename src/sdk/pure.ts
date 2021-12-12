@@ -260,7 +260,7 @@ export interface TransactionOverrides {
  * @returns
  */
 export const approveAsset = async (
-  walletAddress: string,
+  _walletAddress: string,
   exchangeProxyAddressexchangeProxyAddressForAsset: string,
   asset: InterallySupportedAssetFormat,
   signer: BaseProvider,
