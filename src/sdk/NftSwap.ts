@@ -8,6 +8,8 @@ import {
   getApprovalStatus as _getApprovalStatus,
   ApprovalStatus,
   getProxyAddressForErcType,
+  TransactionOverrides,
+  PayableOverrides,
 } from './pure';
 import { SupportedTokenTypes } from '../utils/order';
 import { UnexpectedAssetTypeError } from './error';
@@ -212,7 +214,8 @@ class NftSwap implements INftSwap {
   public async approveTokenOrNftByAsset(
     asset: SwappableAsset,
     walletAddress: string,
-    approvalOverrides?: Partial<ApprovalOverrides>
+    approvalOverrides?: Partial<ApprovalOverrides>,
+    transactionOverrides?: Partial<TransactionOverrides>
   ) {
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
       asset.type as SupportedTokenTypes,
@@ -224,17 +227,20 @@ class NftSwap implements INftSwap {
         exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
       approvalOverrides?.provider ?? this.provider,
+      transactionOverrides ?? {},
       approvalOverrides?.approve ?? true
     );
   }
 
   public fillSignedOrder = async (
     signedOrder: SignedOrder,
-    fillOverrides?: Partial<FillOrderOverrides>
+    fillOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides: Partial<PayableOverrides> = {}
   ) => {
     const tx = await _sendSignedOrderToEthereum(
       signedOrder,
-      fillOverrides?.exchangeContract ?? this.exchangeContract
+      fillOverrides?.exchangeContract ?? this.exchangeContract,
+      transactionOverrides
     );
 
     const txReceipt = await tx.wait();

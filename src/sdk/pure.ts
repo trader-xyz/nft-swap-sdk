@@ -1,12 +1,13 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BaseProvider } from '@ethersproject/providers';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
   AdditionalOrderConfig,
   EIP712_TYPES,
   generateOrderFromAssetDatas,
   getEipDomain,
+  normalizeOrder,
   SupportedTokenTypes,
   UserFacingSerializedSingleAssetDataTypes,
 } from '../utils/order';
@@ -25,6 +26,8 @@ import {
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
 import addresses from '../addresses.json';
 import type { AddressesForChain, Order, SignedOrder } from './types';
+import { hexConcat, hexlify, splitSignature } from '@ethersproject/bytes';
+import { verifyTypedData } from '@ethersproject/wallet';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -78,6 +81,35 @@ export const signOrder = async (
   return signedOrder;
 };
 
+export const prepareOrderSignature = (rawSignature: string) => {
+  // Append the signature type (eg. "0x02" for EIP712 signatures)
+  // at the end of the signature since this is what 0x expects
+  const signature = splitSignature(rawSignature);
+  return hexConcat([hexlify(signature.v), signature.r, signature.s, '0x02']);
+};
+
+export const verifyOrderSignature = (
+  order: Order,
+  signature: string,
+  chainId: number,
+  exchangeContractAddress: string
+) => {
+  const EIP712_DOMAIN = getEipDomain(chainId, exchangeContractAddress);
+  try {
+    const maker = order.makerAddress.toLowerCase();
+    const signer = verifyTypedData(
+      EIP712_DOMAIN,
+      EIP712_TYPES,
+      order,
+      signature
+    );
+
+    return maker.toLowerCase() === signer.toLowerCase();
+  } catch {
+    return false;
+  }
+};
+
 export const buildOrder = (
   makerAssets: Array<InterallySupportedAssetFormat>,
   takerAssets: Array<InterallySupportedAssetFormat>,
@@ -110,14 +142,20 @@ export const buildOrder = (
   return order;
 };
 
+export interface PayableOverrides extends TransactionOverrides {
+  value?: BigNumberish | Promise<BigNumberish>;
+}
+
 export const sendSignedOrderToEthereum = async (
   signedOrder: SignedOrder,
-  exchangeContract: ExchangeContract
+  exchangeContract: ExchangeContract,
+  overrides: PayableOverrides = {}
 ): Promise<ContractTransaction> => {
   const transaction = await exchangeContract.fillOrKillOrder(
-    signedOrder,
+    normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
-    signedOrder.signature
+    prepareOrderSignature(signedOrder.signature),
+    overrides
   );
   return transaction;
 };
@@ -201,6 +239,17 @@ export const getApprovalStatus = async (
 
 export const MAX_APPROVAL = BigNumber.from(2).pow(128).sub(1);
 
+export interface TransactionOverrides {
+  gasLimit?: BigNumberish | Promise<BigNumberish>;
+  gasPrice?: BigNumberish | Promise<BigNumberish>;
+  maxFeePerGas?: BigNumberish | Promise<BigNumberish>;
+  maxPriorityFeePerGas?: BigNumberish | Promise<BigNumberish>;
+  nonce?: BigNumberish | Promise<BigNumberish>;
+  type?: number;
+  accessList?: any;
+  customData?: Record<string, any>;
+}
+
 /**
  *
  * @param walletAddress Owner of the asset
@@ -215,6 +264,7 @@ export const approveAsset = async (
   exchangeProxyAddressexchangeProxyAddressForAsset: string,
   asset: InterallySupportedAssetFormat,
   signer: BaseProvider,
+  overrides: TransactionOverrides = {},
   approve: boolean = true
 ): Promise<ContractTransaction> => {
   switch (asset.type) {
@@ -224,7 +274,8 @@ export const approveAsset = async (
         exchangeProxyAddressexchangeProxyAddressForAsset,
         approve ? MAX_APPROVAL : 0,
         {
-          from: walletAddress,
+          // from: walletAddress,
+          ...overrides,
         }
       );
       return erc20ApprovalTxPromise;
@@ -234,7 +285,8 @@ export const approveAsset = async (
         exchangeProxyAddressexchangeProxyAddressForAsset,
         approve,
         {
-          from: walletAddress,
+          // from: walletAddress,
+          ...overrides,
         }
       );
       return erc721ApprovalForAllPromise;
@@ -244,7 +296,8 @@ export const approveAsset = async (
         exchangeProxyAddressexchangeProxyAddressForAsset,
         approve,
         {
-          from: walletAddress,
+          // from: walletAddress,
+          ...overrides,
         }
       );
       return erc1155ApprovalForAll;

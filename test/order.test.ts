@@ -5,7 +5,7 @@ import { NULL_ADDRESS } from '../src/utils/eth';
 describe('NFTSwap', () => {
   const chainId = 4;
   const rpcProvider = new InfuraProvider(4);
-  it('builds order correctly', async () => {
+  xit('builds order correctly', async () => {
     // https://testnets.opensea.io/assets/0x72d391648c4fe374dea6ed5244a306060453364b/1
     const nft1Owner = '0x72d391648c4fe374dea6ed5244a306060453364b';
     const testNft1: SwappableAsset = {
