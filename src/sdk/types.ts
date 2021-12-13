@@ -219,37 +219,9 @@ export enum RevertReason {
 }
 
 export interface AddressesForChain {
-  exchangeV2: string;
   exchange: string;
   erc20Proxy: string;
   erc721Proxy: string;
-  forwarder: string;
-  zrxToken: string;
-  etherToken: string;
-  assetProxyOwner: string;
-  zeroExGovernor: string;
-  coordinatorRegistry: string;
-  coordinator: string;
   multiAssetProxy: string;
-  staticCallProxy: string;
   erc1155Proxy: string;
-  zrxVault: string;
-  staking: string;
-  stakingProxy: string;
-  devUtils: string;
-  erc20BridgeProxy: string;
-  erc20BridgeSampler: string;
-  chaiBridge: string;
-  dydxBridge: string;
-  godsUnchainedValidator: string;
-  broker: string;
-  chainlinkStopLimit: string;
-  maximumGasPrice: string;
-  dexForwarderBridge: string;
-  exchangeProxyGovernor: string;
-  exchangeProxy: string;
-  exchangeProxyTransformerDeployer: string;
-  exchangeProxyFlashWallet: string;
-  exchangeProxyLiquidityProviderSandbox: string;
-  zrxTreasury: string;
 }

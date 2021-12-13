@@ -54,7 +54,12 @@ describe('NFTSwap', () => {
     const order = nftSwapperMaker.buildOrder(
       [MAKER_ASSET],
       [TAKER_ASSET],
-      MAKER_WALLET_ADDRESS
+      MAKER_WALLET_ADDRESS,
+      {
+        // Fix dates and salt so we have reproducible tests
+        expiration: new Date(3000, 10),
+        salt: '16067189784881358057906593238688655078558518561185118904709866293383414615588',
+      }
     );
 
     const normalizedOrder = normalizeOrder(order);

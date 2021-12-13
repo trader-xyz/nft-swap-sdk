@@ -1,11 +1,13 @@
 import { InfuraProvider } from '@ethersproject/providers';
 import { NftSwap, SwappableAsset } from '../src';
+import { hashOrder } from '../src/sdk/pure';
 import { NULL_ADDRESS } from '../src/utils/eth';
+import { INFINITE_TIMESTAMP_SEC } from '../src/utils/order';
 
 describe('NFTSwap', () => {
   const chainId = 4;
   const rpcProvider = new InfuraProvider(4);
-  xit('builds order correctly', async () => {
+  it('builds order correctly', async () => {
     // https://testnets.opensea.io/assets/0x72d391648c4fe374dea6ed5244a306060453364b/1
     const nft1Owner = '0x72d391648c4fe374dea6ed5244a306060453364b';
     const testNft1: SwappableAsset = {
@@ -27,7 +29,11 @@ describe('NFTSwap', () => {
     const order = nftSdk.buildOrder(
       [testNft1], // maker assets
       [testNft2], // taker assets
-      nft1Owner // maker wallet address
+      nft1Owner, // maker wallet address
+      {
+        expiration: new Date(3000, 10),
+        salt: '16067189784881358057906593238688655078558518561185118904709866293383414615588',
+      }
     );
 
     expect(order.makerAddress).toBe(nft1Owner);
@@ -48,5 +54,15 @@ describe('NFTSwap', () => {
     expect(order.salt.length).toBeGreaterThanOrEqual(32);
     // Ensure salt is always a string
     expect(typeof order.salt).toBe('string');
+
+    const orderHash = hashOrder(
+      order,
+      chainId,
+      nftSdk.exchangeContract.address
+    );
+
+    expect(orderHash).toEqual(
+      '0xb093949bbf1d629d7eb3b1ddceb459e797f6bcfc1795d1ca1f9fc1ec4634eb7c'
+    );
   });
 });

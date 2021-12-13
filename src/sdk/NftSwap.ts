@@ -10,6 +10,7 @@ import {
   getProxyAddressForErcType,
   TransactionOverrides,
   PayableOverrides,
+  hashOrder,
 } from './pure';
 import { SupportedTokenTypes } from '../utils/order';
 import { UnexpectedAssetTypeError } from './error';
@@ -59,6 +60,7 @@ interface INftSwap {
     fillOrderOverrides?: Partial<FillOrderOverrides>
   ) => Promise<string>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
+  getOrderHash: (order: any) => any;
 }
 
 /**
@@ -173,6 +175,8 @@ class NftSwap implements INftSwap {
     );
   };
 
+  // public signOrderWithHash = async () => {};
+
   public buildOrder = (
     makerAssets: SwappableAsset[],
     takerAssets: SwappableAsset[],
@@ -231,6 +235,10 @@ class NftSwap implements INftSwap {
       approvalOverrides?.approve ?? true
     );
   }
+
+  public getOrderHash = async (order: Order) => {
+    return hashOrder(order, this.chainId, this.exchangeContract.address);
+  };
 
   public fillSignedOrder = async (
     signedOrder: SignedOrder,

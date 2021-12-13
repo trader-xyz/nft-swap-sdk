@@ -1,5 +1,5 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
-import { TypedDataSigner } from '@ethersproject/abstract-signer';
+import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BaseProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
@@ -27,7 +27,8 @@ import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
 import addresses from '../addresses.json';
 import type { AddressesForChain, Order, SignedOrder } from './types';
 import { hexConcat, hexlify, splitSignature } from '@ethersproject/bytes';
-import { verifyTypedData } from '@ethersproject/wallet';
+import { verifyTypedData, Wallet } from '@ethersproject/wallet';
+import { _TypedDataEncoder } from '@ethersproject/hash';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -57,6 +58,15 @@ const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
 
+export const hashOrder = (
+  order: Order,
+  chainId: number,
+  exchangeContractAddress: string
+): string => {
+  const EIP712_DOMAIN = getEipDomain(chainId, exchangeContractAddress);
+  return _TypedDataEncoder.hash(EIP712_DOMAIN, EIP712_TYPES, order);
+};
+
 export type InterallySupportedAssetFormat =
   UserFacingSerializedSingleAssetDataTypes;
 
@@ -67,19 +77,45 @@ export const signOrder = async (
   chainId: number,
   exchangeContractAddress: string
 ): Promise<SignedOrder> => {
-  const rawSignature = await signer._signTypedData(
-    getEipDomain(chainId, exchangeContractAddress),
-    EIP712_TYPES,
-    order
-  );
+  try {
+    const rawSignature = await signer._signTypedData(
+      getEipDomain(chainId, exchangeContractAddress),
+      EIP712_TYPES,
+      order
+    );
 
-  const signedOrder: SignedOrder = {
-    ...order,
-    signature: rawSignature,
-  };
+    const signedOrder: SignedOrder = {
+      ...order,
+      signature: rawSignature,
+    };
 
-  return signedOrder;
+    return signedOrder;
+  } catch (e) {
+    console.log('error signing order', e);
+    throw e;
+  }
 };
+
+// export const signOrderWithHash = async (
+//   order: Order,
+//   _signerAddress: string,
+//   signer: Signer,
+//   chainId: number,
+//   exchangeContractAddress: string,
+// ): Promise<SignedOrder> => {
+//   const rawSignature = await signer.signMessage(
+//     getEipDomain(chainId, exchangeContractAddress),
+//     EIP712_TYPES,
+//     order
+//   );
+
+// const signedOrder: SignedOrder = {
+//   ...order,
+//   signature: rawSignature,
+// };
+
+// return signedOrder;
+// };
 
 export const prepareOrderSignature = (rawSignature: string) => {
   // Append the signature type (eg. "0x02" for EIP712 signatures)
@@ -149,7 +185,7 @@ export interface PayableOverrides extends TransactionOverrides {
 export const sendSignedOrderToEthereum = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract,
-  overrides: PayableOverrides = {}
+  overrides?: PayableOverrides
 ): Promise<ContractTransaction> => {
   const transaction = await exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
