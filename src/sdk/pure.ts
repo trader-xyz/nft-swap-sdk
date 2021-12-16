@@ -1,7 +1,10 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BaseProvider } from '@ethersproject/providers';
+import { BaseProvider, JsonRpcSigner } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { hexConcat, hexlify, splitSignature } from '@ethersproject/bytes';
+import { verifyTypedData, Wallet } from '@ethersproject/wallet';
+import { _TypedDataEncoder } from '@ethersproject/hash';
 import {
   AdditionalOrderConfig,
   EIP712_TYPES,
@@ -24,11 +27,8 @@ import {
   ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
-import addresses from '../addresses.json';
 import type { AddressesForChain, Order, SignedOrder } from './types';
-import { hexConcat, hexlify, splitSignature } from '@ethersproject/bytes';
-import { verifyTypedData, Wallet } from '@ethersproject/wallet';
-import { _TypedDataEncoder } from '@ethersproject/hash';
+import addresses from '../addresses.json';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -78,11 +78,35 @@ export const signOrder = async (
   exchangeContractAddress: string
 ): Promise<SignedOrder> => {
   try {
-    const rawSignature = await signer._signTypedData(
-      getEipDomain(chainId, exchangeContractAddress),
-      EIP712_TYPES,
-      order
+    let jsonSigner: JsonRpcSigner = signer as any;
+    const domain = getEipDomain(chainId, exchangeContractAddress);
+    const types = EIP712_TYPES;
+    const value = order;
+    console.log('calling signtypeddata');
+    // const rawSignature = await signer._signTypedData(
+    //   domain,
+    //   types,
+    //   order
+    // );
+
+    //   // Populate any ENS names (in-place)
+    //   const populated = await _TypedDataEncoder.resolveNames(domain, types, value, (name: string) => {
+    //     return signer.provider.resolveName(name);
+    // });
+
+    const address = await jsonSigner.getAddress();
+
+    console.log('address', address);
+    const rawSignature = await jsonSigner.provider.send(
+      'eth_signTypedData',
+      //'eth_signTypedData_v4',
+      [
+        address.toLowerCase(),
+        JSON.stringify(_TypedDataEncoder.getPayload(domain, types, value)),
+      ]
     );
+
+    console.log('rawSignature', rawSignature);
 
     const signedOrder: SignedOrder = {
       ...order,
@@ -122,6 +146,13 @@ export const prepareOrderSignature = (rawSignature: string) => {
   // at the end of the signature since this is what 0x expects
   const signature = splitSignature(rawSignature);
   return hexConcat([hexlify(signature.v), signature.r, signature.s, '0x02']);
+};
+
+export const prepareOrderSignatureContractWallet = (rawSignature: string) => {
+  // Append the signature type (eg. "0x07" for EIP712 signatures)
+  // at the end of the signature since this is what 0x expects
+  // See: https://github.com/0xProject/ZEIPs/issues/33
+  return hexConcat([rawSignature, '0x07']);
 };
 
 export const verifyOrderSignature = (
@@ -190,7 +221,8 @@ export const sendSignedOrderToEthereum = async (
   const transaction = await exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
-    prepareOrderSignature(signedOrder.signature),
+    //prepareOrderSignature(signedOrder.signature), // EOA signatures...
+    prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
     overrides
   );
   return transaction;

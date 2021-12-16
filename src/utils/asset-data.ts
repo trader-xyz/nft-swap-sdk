@@ -4,9 +4,14 @@ import { defaultAbiCoder } from '@ethersproject/abi';
 
 import {
   SupportedTokenTypes,
+  UserFacingERC1155AssetDataSerializedNormalizedSingle,
+  UserFacingERC20AssetDataSerialized,
+  UserFacingERC721AssetDataSerialized,
   UserFacingSerializedSingleAssetDataTypes,
 } from './order';
 import { AssetProxyId } from '../sdk/types';
+import { InterallySupportedAssetFormat } from '../sdk/pure';
+import { UnexpectedAssetTypeError } from '../sdk/error';
 
 const convertStringToBN = (s: string) => {
   return BigNumber.from(s);
@@ -95,6 +100,46 @@ const getAmountFromAsset = (
     default:
       throw new Error(`Unsupported type ${(assetData as any)?.type}`);
   }
+};
+
+export type SwappableAsset =
+  | UserFacingERC20AssetDataSerialized
+  | UserFacingERC721AssetDataSerialized
+  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
+
+export const convertAssetToInternalFormat = (
+  swappable: SwappableAsset
+): InterallySupportedAssetFormat => {
+  switch (swappable.type) {
+    // No converting needed
+    case 'ERC20':
+      return swappable;
+    // No converting needed
+    case 'ERC721':
+      return swappable;
+    // Convert normalized public ERC1155 interface to 0x internal asset data format
+    // We do this to reduce complexity for end user SDK (and keep api same with erc721)
+    case 'ERC1155':
+      const zeroExErc1155AssetFormat = {
+        tokenAddress: swappable.tokenAddress,
+        tokens: [
+          {
+            tokenId: swappable.tokenId,
+            tokenValue: '1',
+          },
+        ],
+        type: SupportedTokenTypes.ERC1155 as const,
+      };
+      return zeroExErc1155AssetFormat;
+    default:
+      throw new UnexpectedAssetTypeError((swappable as any)?.type ?? 'Unknown');
+  }
+};
+
+export const convertAssetsToInternalFormat = (
+  assets: Array<SwappableAsset>
+): Array<InterallySupportedAssetFormat> => {
+  return assets.map(convertAssetToInternalFormat);
 };
 
 export { encodeAssetData, getAmountFromAsset };

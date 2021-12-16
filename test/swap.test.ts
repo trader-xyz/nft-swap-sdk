@@ -28,10 +28,10 @@ const MAKER_WALLET = new ethers.Wallet(MAKER_PRIVATE_KEY);
 
 const PROVIDER = new ethers.providers.StaticJsonRpcProvider(RPC_TESTNET);
 
-const MAKER_PROVIDER = MAKER_WALLET.connect(PROVIDER);
+const MAKER_SIGNER = MAKER_WALLET.connect(PROVIDER);
 // const TAKER_PROVIDER = TAKER_WALLET.connect(PROVIDER);
 
-const nftSwapperMaker = new NftSwap(MAKER_PROVIDER as any, 4);
+const nftSwapperMaker = new NftSwap(PROVIDER, MAKER_SIGNER, 4);
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
 const TAKER_ASSET: SwappableAsset = {
@@ -66,7 +66,7 @@ describe('NFTSwap', () => {
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
-      MAKER_PROVIDER
+      MAKER_SIGNER
     );
 
     const normalizedSignedOrder = normalizeOrder(signedOrder);

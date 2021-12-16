@@ -5,6 +5,7 @@ import {
   signOrder as _signOrder,
   sendSignedOrderToEthereum as _sendSignedOrderToEthereum,
   approveAsset as _approveAsset,
+  verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
   ApprovalStatus,
   getProxyAddressForErcType,
@@ -12,10 +13,17 @@ import {
   PayableOverrides,
   hashOrder,
 } from './pure';
-import { SupportedTokenTypes } from '../utils/order';
+import {
+  EIP712_TYPES,
+  EipDomain,
+  getEipDomain,
+  SupportedTokenTypes,
+  TypedData,
+} from '../utils/order';
 import { UnexpectedAssetTypeError } from './error';
 import type {
   BaseProvider,
+  JsonRpcSigner,
   TransactionReceipt,
 } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
@@ -25,12 +33,21 @@ import type {
   UserFacingERC20AssetDataSerialized,
   UserFacingERC721AssetDataSerialized,
 } from '../utils/order';
-import type { Order, SignedOrder } from './types';
+import { normalizeOrder as _normalizeOrder } from '../utils/order';
+import { AssetProxyId, Order, SignedOrder } from './types';
 import { TypedDataSigner } from '@ethersproject/abstract-signer';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
+import {
+  convertAssetsToInternalFormat,
+  convertAssetToInternalFormat,
+  SwappableAsset,
+} from '../utils/asset-data';
 
 interface NftSwapConfig {
   exchangeContractAddress?: string;
+  erc20ProxyContractAddress?: string;
+  erc721ProxyContractAddress?: string;
+  erc1155ProxyContractAddress?: string;
 }
 
 interface INftSwap {
@@ -53,14 +70,28 @@ interface INftSwap {
   approveTokenOrNftByAsset: (
     asset: SwappableAsset,
     walletAddress: string,
+    approvalTransactionOverrides?: Partial<TransactionOverrides>,
     approvalOverrides?: Partial<ApprovalOverrides>
   ) => Promise<ContractTransaction>;
   fillSignedOrder: (
     signedOrder: SignedOrder,
     fillOrderOverrides?: Partial<FillOrderOverrides>
-  ) => Promise<string>;
+  ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
   getOrderHash: (order: any) => any;
+  getTypedData: (
+    chainId: number,
+    exchangeContractAddress: string,
+    order: Order
+  ) => TypedData;
+  normalizeSignedOrder: (order: SignedOrder) => SignedOrder;
+  normalizeOrder: (order: Order) => Order;
+  verifyOrderSignature: (
+    order: Order,
+    signature: string,
+    chainId: number,
+    exchangeContractAddress: string
+  ) => boolean;
 }
 
 /**
@@ -73,46 +104,6 @@ export interface BuildOrderAdditionalConfig {
   exchangeAddress?: string;
   salt?: string;
 }
-
-export type SwappableAsset =
-  | UserFacingERC20AssetDataSerialized
-  | UserFacingERC721AssetDataSerialized
-  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
-
-const convertAssetToInternalFormat = (
-  swappable: SwappableAsset
-): InterallySupportedAssetFormat => {
-  switch (swappable.type) {
-    // No converting needed
-    case 'ERC20':
-      return swappable;
-    // No converting needed
-    case 'ERC721':
-      return swappable;
-    // Convert normalized public ERC1155 interface to 0x internal asset data format
-    // We do this to reduce complexity for end user SDK (and keep api same with erc721)
-    case 'ERC1155':
-      const zeroExErc1155AssetFormat = {
-        tokenAddress: swappable.tokenAddress,
-        tokens: [
-          {
-            tokenId: swappable.tokenId,
-            tokenValue: '1',
-          },
-        ],
-        type: SupportedTokenTypes.ERC1155 as const,
-      };
-      return zeroExErc1155AssetFormat;
-    default:
-      throw new UnexpectedAssetTypeError((swappable as any)?.type ?? 'Unknown');
-  }
-};
-
-const convertAssetsToInternalFormat = (
-  assets: Array<SwappableAsset>
-): Array<InterallySupportedAssetFormat> => {
-  return assets.map(convertAssetToInternalFormat);
-};
 
 export interface ApprovalOverrides {
   provider: BaseProvider;
@@ -133,9 +124,14 @@ class NftSwap implements INftSwap {
   public provider: BaseProvider;
   public chainId: number;
   public exchangeContract: ExchangeContract;
+  public exchangeContractAddress: string;
+  public erc20ProxyContractAddress: string;
+  public erc720ProxyContractAddress: string;
+  public erc1155ProxyContractAddress: string;
 
   constructor(
     provider: BaseProvider,
+    signer: JsonRpcSigner | TypedDataSigner,
     chainId: ChainId,
     additionalConfig?: NftSwapConfig
   ) {
@@ -147,10 +143,23 @@ class NftSwap implements INftSwap {
 
     if (!zeroExExchangeContractAddress) {
       throw new Error(
-        `Chain ${chainId} missing exchange contract address. Supply one manually via the constructor config param`
+        `Chain ${chainId} missing ExchangeContract address. Supply one manually via the additionalConfig argument`
       );
     }
 
+    this.exchangeContractAddress = zeroExExchangeContractAddress;
+
+    this.erc20ProxyContractAddress =
+      additionalConfig?.erc20ProxyContractAddress ??
+      getProxyAddressForErcType(SupportedTokenTypes.ERC20, chainId);
+    this.erc720ProxyContractAddress =
+      additionalConfig?.erc721ProxyContractAddress ??
+      getProxyAddressForErcType(SupportedTokenTypes.ERC721, chainId);
+    this.erc1155ProxyContractAddress =
+      additionalConfig?.erc1155ProxyContractAddress ??
+      getProxyAddressForErcType(SupportedTokenTypes.ERC1155, chainId);
+
+    // Initialize Exchange contract so we can interact with it easily.
     this.exchangeContract = ExchangeContract__factory.connect(
       zeroExExchangeContractAddress,
       provider
@@ -166,6 +175,7 @@ class NftSwap implements INftSwap {
     addressOfWalletSigningOrder: string,
     signer: TypedDataSigner
   ) => {
+    console.log('signing order...');
     return _signOrder(
       order,
       addressOfWalletSigningOrder,
@@ -175,7 +185,7 @@ class NftSwap implements INftSwap {
     );
   };
 
-  // public signOrderWithHash = async () => {};
+  public signOrderWithHash = async () => {};
 
   public buildOrder = (
     makerAssets: SwappableAsset[],
@@ -197,6 +207,7 @@ class NftSwap implements INftSwap {
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides>
   ) => {
+    // TODO(johnrjj) - Fix this...
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
       asset.type as SupportedTokenTypes,
       this.chainId
@@ -218,26 +229,42 @@ class NftSwap implements INftSwap {
   public async approveTokenOrNftByAsset(
     asset: SwappableAsset,
     walletAddress: string,
-    approvalOverrides?: Partial<ApprovalOverrides>,
-    transactionOverrides?: Partial<TransactionOverrides>
+    approvalTransactionOverrides?: Partial<TransactionOverrides>,
+    otherOverrides?: Partial<ApprovalOverrides>
   ) {
+    // TODO(johnrjj) - Look up via class fields instead...
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
       asset.type as SupportedTokenTypes,
       this.chainId
     );
     return _approveAsset(
       walletAddress,
-      approvalOverrides?.exchangeProxyContractAddressForAsset ??
+      otherOverrides?.exchangeProxyContractAddressForAsset ??
         exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
-      approvalOverrides?.provider ?? this.provider,
-      transactionOverrides ?? {},
-      approvalOverrides?.approve ?? true
+      otherOverrides?.provider ?? this.provider,
+      approvalTransactionOverrides ?? {},
+      otherOverrides?.approve ?? true
     );
   }
 
   public getOrderHash = async (order: Order) => {
     return hashOrder(order, this.chainId, this.exchangeContract.address);
+  };
+
+  public getTypedData = (
+    chainId: number,
+    exchangeContractAddress: string,
+    order: Order
+  ) => {
+    const domain = getEipDomain(chainId, exchangeContractAddress);
+    const types = EIP712_TYPES;
+    const value = order;
+    return {
+      domain,
+      types,
+      value,
+    };
   };
 
   public fillSignedOrder = async (
@@ -250,10 +277,31 @@ class NftSwap implements INftSwap {
       fillOverrides?.exchangeContract ?? this.exchangeContract,
       transactionOverrides
     );
+    return tx;
+  };
 
-    const txReceipt = await tx.wait();
+  public normalizeOrder = (order: Order) => {
+    const normalizedOrder = _normalizeOrder(order);
+    return normalizedOrder as Order;
+  };
 
-    return txReceipt.transactionHash;
+  public normalizeSignedOrder = (order: SignedOrder) => {
+    const normalizedOrder = _normalizeOrder(order);
+    return normalizedOrder as SignedOrder;
+  };
+
+  public verifyOrderSignature = (
+    order: Order,
+    signature: string,
+    chainId: number,
+    exchangeContractAddress: string
+  ) => {
+    return _verifyOrderSignature(
+      order,
+      signature,
+      chainId,
+      exchangeContractAddress
+    );
   };
 }
 

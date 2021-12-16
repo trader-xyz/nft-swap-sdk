@@ -36,7 +36,7 @@ export interface MultiAssetDataSerialized {
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
   tokenAddress: string;
-  type: 'ERC20'; //SupportedTokenTypes.ERC20
+  type: 'ERC20';
   amount: string;
 }
 
@@ -50,8 +50,6 @@ export interface UserFacingERC1155AssetDataSerialized {
   tokenAddress: string;
   tokens: Array<{ tokenId: string; tokenValue: string }>;
   type: 'ERC1155';
-  //   tokenIds: string[]
-  //   tokenValues: string[]
 }
 
 /**
@@ -169,10 +167,28 @@ export interface ZeroExSignedOrder extends ZeroExOrder {
   signature: string;
 }
 
+export interface EipDomain {
+  name: string;
+  version: string;
+  chainId: string;
+  verifyingContract: string;
+}
+
+export interface TypedData {
+  domain: EipDomain;
+  types: {
+    Order: {
+      name: string;
+      type: string;
+    }[];
+  };
+  value: Order;
+}
+
 export const getEipDomain = (
   chainId: number,
   exchangeContractAddress: string
-) => ({
+): EipDomain => ({
   name: '0x Protocol',
   version: '3.0.0',
   chainId: chainId.toString(10),

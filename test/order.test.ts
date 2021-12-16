@@ -24,7 +24,7 @@ describe('NFTSwap', () => {
       tokenId: '3',
     };
 
-    const nftSdk = new NftSwap(rpcProvider, chainId);
+    const nftSdk = new NftSwap(rpcProvider, rpcProvider.getSigner(), chainId);
 
     const order = nftSdk.buildOrder(
       [testNft1], // maker assets
