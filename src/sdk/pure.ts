@@ -327,7 +327,7 @@ export const approveAsset = async (
   _walletAddress: string,
   exchangeProxyAddressexchangeProxyAddressForAsset: string,
   asset: InterallySupportedAssetFormat,
-  signer: BaseProvider,
+  signer: Signer,
   overrides: TransactionOverrides = {},
   approve: boolean = true
 ): Promise<ContractTransaction> => {

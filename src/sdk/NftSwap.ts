@@ -35,7 +35,7 @@ import type {
 } from '../utils/order';
 import { normalizeOrder as _normalizeOrder } from '../utils/order';
 import { AssetProxyId, Order, SignedOrder } from './types';
-import { TypedDataSigner } from '@ethersproject/abstract-signer';
+import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
   convertAssetsToInternalFormat,
@@ -54,7 +54,7 @@ interface INftSwap {
   signOrder: (
     order: Order,
     signerAddress: string,
-    signer: TypedDataSigner
+    signer: Signer
   ) => Promise<SignedOrder>;
   buildOrder: (
     makerAssets: Array<SwappableAsset>,
@@ -106,14 +106,14 @@ export interface BuildOrderAdditionalConfig {
 }
 
 export interface ApprovalOverrides {
-  provider: BaseProvider;
+  signer: Signer;
   approve: boolean;
   exchangeProxyContractAddressForAsset: string;
   chainId: number;
 }
 
 export interface FillOrderOverrides {
-  signer: BaseProvider;
+  signer: Signer;
   exchangeContract: ExchangeContract;
 }
 
@@ -122,6 +122,7 @@ export interface FillOrderOverrides {
  */
 class NftSwap implements INftSwap {
   public provider: BaseProvider;
+  public signer: Signer | undefined;
   public chainId: number;
   public exchangeContract: ExchangeContract;
   public exchangeContractAddress: string;
@@ -131,11 +132,12 @@ class NftSwap implements INftSwap {
 
   constructor(
     provider: BaseProvider,
-    signer: JsonRpcSigner | TypedDataSigner,
+    signer: Signer,
     chainId: ChainId,
     additionalConfig?: NftSwapConfig
   ) {
     this.provider = provider;
+    this.signer = signer;
     this.chainId = chainId;
 
     const zeroExExchangeContractAddress =
@@ -164,6 +166,11 @@ class NftSwap implements INftSwap {
       zeroExExchangeContractAddress,
       provider
     );
+
+    this.exchangeContract = ExchangeContract__factory.connect(
+      zeroExExchangeContractAddress,
+      signer
+    );
   }
 
   public awaitTransactionHash = async (txHash: string) => {
@@ -173,13 +180,16 @@ class NftSwap implements INftSwap {
   public signOrder = async (
     order: Order,
     addressOfWalletSigningOrder: string,
-    signer: TypedDataSigner
+    signerOverride?: Signer
   ) => {
-    console.log('signing order...');
+    const signerToUser = signerOverride ?? this.signer
+    if (!signerToUser) {
+      throw new Error('signOrder:Signer undefined')
+    }
     return _signOrder(
       order,
       addressOfWalletSigningOrder,
-      signer,
+      signerToUser as any,
       this.chainId,
       this.exchangeContract.address
     );
@@ -205,7 +215,6 @@ class NftSwap implements INftSwap {
   public loadApprovalStatus = async (
     asset: SwappableAsset,
     walletAddress: string,
-    approvalOverrides?: Partial<ApprovalOverrides>
   ) => {
     // TODO(johnrjj) - Fix this...
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
@@ -214,10 +223,9 @@ class NftSwap implements INftSwap {
     );
     return _getApprovalStatus(
       walletAddress,
-      approvalOverrides?.exchangeProxyContractAddressForAsset ??
-        exchangeProxyAddressForAsset,
+      exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
-      approvalOverrides?.provider ?? this.provider
+      this.provider,
     );
   };
 
@@ -237,12 +245,16 @@ class NftSwap implements INftSwap {
       asset.type as SupportedTokenTypes,
       this.chainId
     );
+    const signerToUse = otherOverrides?.signer ?? this.signer
+    if (!signerToUse) {
+      throw new Error('approveTokenOrNftByAsset:Signer null')
+    }
     return _approveAsset(
       walletAddress,
       otherOverrides?.exchangeProxyContractAddressForAsset ??
         exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
-      otherOverrides?.provider ?? this.provider,
+      signerToUse,
       approvalTransactionOverrides ?? {},
       otherOverrides?.approve ?? true
     );
