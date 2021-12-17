@@ -182,9 +182,9 @@ class NftSwap implements INftSwap {
     addressOfWalletSigningOrder: string,
     signerOverride?: Signer
   ) => {
-    const signerToUser = signerOverride ?? this.signer
+    const signerToUser = signerOverride ?? this.signer;
     if (!signerToUser) {
-      throw new Error('signOrder:Signer undefined')
+      throw new Error('signOrder:Signer undefined');
     }
     return _signOrder(
       order,
@@ -214,7 +214,7 @@ class NftSwap implements INftSwap {
 
   public loadApprovalStatus = async (
     asset: SwappableAsset,
-    walletAddress: string,
+    walletAddress: string
   ) => {
     // TODO(johnrjj) - Fix this...
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
@@ -225,7 +225,7 @@ class NftSwap implements INftSwap {
       walletAddress,
       exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
-      this.provider,
+      this.provider
     );
   };
 
@@ -245,9 +245,9 @@ class NftSwap implements INftSwap {
       asset.type as SupportedTokenTypes,
       this.chainId
     );
-    const signerToUse = otherOverrides?.signer ?? this.signer
+    const signerToUse = otherOverrides?.signer ?? this.signer;
     if (!signerToUse) {
-      throw new Error('approveTokenOrNftByAsset:Signer null')
+      throw new Error('approveTokenOrNftByAsset:Signer null');
     }
     return _approveAsset(
       walletAddress,
