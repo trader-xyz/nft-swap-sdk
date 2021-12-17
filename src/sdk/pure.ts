@@ -78,35 +78,31 @@ export const signOrder = async (
   exchangeContractAddress: string
 ): Promise<SignedOrder> => {
   try {
-    let jsonSigner: JsonRpcSigner = signer as any;
+    // let jsonSigner: JsonRpcSigner = signer as any;
     const domain = getEipDomain(chainId, exchangeContractAddress);
     const types = EIP712_TYPES;
     const value = order;
-    console.log('calling signtypeddata');
-    // const rawSignature = await signer._signTypedData(
-    //   domain,
-    //   types,
-    //   order
-    // );
+
+    const rawSignature = await signer._signTypedData(domain, types, value);
 
     //   // Populate any ENS names (in-place)
     //   const populated = await _TypedDataEncoder.resolveNames(domain, types, value, (name: string) => {
     //     return signer.provider.resolveName(name);
     // });
 
-    const address = await jsonSigner.getAddress();
+    // const address = await jsonSigner.getAddress();
 
-    console.log('address', address);
-    const rawSignature = await jsonSigner.provider.send(
-      'eth_signTypedData',
-      //'eth_signTypedData_v4',
-      [
-        address.toLowerCase(),
-        JSON.stringify(_TypedDataEncoder.getPayload(domain, types, value)),
-      ]
-    );
+    // console.log('address', address);
+    // const rawSignature = await jsonSigner.provider.send(
+    //   'eth_signTypedData',
+    //   //'eth_signTypedData_v4',
+    //   [
+    //     address.toLowerCase(),
+    //     JSON.stringify(_TypedDataEncoder.getPayload(domain, types, value)),
+    //   ]
+    // );
 
-    console.log('rawSignature', rawSignature);
+    // console.log('rawSignature', rawSignature);
 
     const signedOrder: SignedOrder = {
       ...order,
@@ -185,7 +181,7 @@ export const buildOrder = (
   const makerAssetAmounts = makerAssets.map((ma) => getAmountFromAsset(ma));
   const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma));
   const makerMultiAsset = encodeMultiAssetAssetData(
-    makerAssetAmounts, //convertCollectionToBN(makerAssetAmounts),
+    makerAssetAmounts,
     makerAssetDatas
   );
 
@@ -221,8 +217,8 @@ export const sendSignedOrderToEthereum = async (
   const transaction = await exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
-    //prepareOrderSignature(signedOrder.signature), // EOA signatures...
-    prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
+    prepareOrderSignature(signedOrder.signature), // EOA signatures...
+    // prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
     overrides
   );
   return transaction;

@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
-import { parseEther } from 'ethers/lib/utils';
+import { defaultAbiCoder, hexDataSlice, parseEther } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
 import { verifyOrderSignature } from '../src/sdk/pure';
+import { encodeErc20AssetData } from '../src/utils/asset-data';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -31,7 +32,7 @@ const PROVIDER = new ethers.providers.StaticJsonRpcProvider(RPC_TESTNET);
 const MAKER_SIGNER = MAKER_WALLET.connect(PROVIDER);
 // const TAKER_PROVIDER = TAKER_WALLET.connect(PROVIDER);
 
-const nftSwapperMaker = new NftSwap(PROVIDER, MAKER_SIGNER, 4);
+const nftSwapperMaker = new NftSwap(MAKER_SIGNER as any, MAKER_SIGNER, 4);
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
 const TAKER_ASSET: SwappableAsset = {
@@ -57,8 +58,7 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS,
       {
         // Fix dates and salt so we have reproducible tests
-        expiration: new Date(3000, 10),
-        salt: '16067189784881358057906593238688655078558518561185118904709866293383414615588',
+        expiration: new Date(3000, 10, 1),
       }
     );
 
@@ -84,11 +84,15 @@ describe('NFTSwap', () => {
     expect(isValidSignature).toBe(true);
 
     // Uncomment to actually fill order
-    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-    //   gasPrice,
-    //   gasLimit: '500000',
-    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-    //   value: parseEther('0.01'),
-    // });
+    const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
+      gasPrice,
+      gasLimit: '500000',
+      // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
+      value: parseEther('0.01'),
+    });
+
+    const txReceipt = await tx.wait();
+    expect(txReceipt.transactionHash).toBeTruthy();
+    console.log(`Swapped on Rinkeby (txHAsh: ${txReceipt.transactionIndex})`);
   });
 });

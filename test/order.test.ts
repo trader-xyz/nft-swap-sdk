@@ -1,3 +1,5 @@
+import { defaultAbiCoder } from '@ethersproject/abi';
+import { hexDataSlice } from '@ethersproject/bytes';
 import { InfuraProvider } from '@ethersproject/providers';
 import { NftSwap, SwappableAsset } from '../src';
 import { hashOrder } from '../src/sdk/pure';
@@ -24,7 +26,7 @@ describe('NFTSwap', () => {
       tokenId: '3',
     };
 
-    const nftSdk = new NftSwap(rpcProvider, rpcProvider.getSigner(), chainId);
+    const nftSdk = new NftSwap(rpcProvider, rpcProvider as any, chainId);
 
     const order = nftSdk.buildOrder(
       [testNft1], // maker assets
@@ -47,7 +49,6 @@ describe('NFTSwap', () => {
       '0x94cfcdd7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000004402571792000000000000000000000000fa85acaaff1d2fd159aa8454222da76bdf8fa956000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000'
     );
 
-    console.log(order.salt);
     // Ensure doesn't exceed 256 bit number
     expect(order.salt.length).toBeLessThanOrEqual(78);
     // Ensure we always have more than 32 bits of randomness
@@ -60,9 +61,9 @@ describe('NFTSwap', () => {
       chainId,
       nftSdk.exchangeContract.address
     );
-
+    expect(orderHash.length).toEqual(66);
     expect(orderHash).toEqual(
-      '0xb093949bbf1d629d7eb3b1ddceb459e797f6bcfc1795d1ca1f9fc1ec4634eb7c'
+      '0xba51b7bf0feb831bf5d05424b61e4a64293726281e97507b5fd007252ebbfcb2'
     );
   });
 });
