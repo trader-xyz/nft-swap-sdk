@@ -11,6 +11,8 @@ export enum ChainId {
   Mainnet = 1,
   Kovan = 42,
   Ganache = 1337,
+  Polygon = 137,
+  Mumbai = 80001,
 }
 
 export const ETH_GAS_STATION_API_BASE_URL = 'https://ethgasstation.info';
