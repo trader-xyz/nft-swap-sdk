@@ -78,7 +78,7 @@ interface INftSwap {
     fillOrderOverrides?: Partial<FillOrderOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
-  getOrderHash: (order: any) => any;
+  getOrderHash: (order: any) => string;
   getTypedData: (
     chainId: number,
     exchangeContractAddress: string,
@@ -260,7 +260,7 @@ class NftSwap implements INftSwap {
     );
   }
 
-  public getOrderHash = async (order: Order) => {
+  public getOrderHash = (order: Order) => {
     return hashOrder(order, this.chainId, this.exchangeContract.address);
   };
 
