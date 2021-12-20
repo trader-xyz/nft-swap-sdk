@@ -1,41 +1,85 @@
-import { assetDataUtils } from '@0x/order-utils';
-import { BigNumber } from '@0x/utils';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { hexConcat, hexDataSlice } from '@ethersproject/bytes';
+import { AbiCoder, defaultAbiCoder } from '@ethersproject/abi';
+
 import {
   SupportedTokenTypes,
+  UserFacingERC1155AssetDataSerializedNormalizedSingle,
+  UserFacingERC20AssetDataSerialized,
+  UserFacingERC721AssetDataSerialized,
   UserFacingSerializedSingleAssetDataTypes,
 } from './order';
+import { AssetProxyId } from '../sdk/types';
+import { InterallySupportedAssetFormat } from '../sdk/pure';
+import { UnexpectedAssetTypeError } from '../sdk/error';
 
 const convertStringToBN = (s: string) => {
-  return new BigNumber(s);
+  return BigNumber.from(s);
 };
 
 const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
 
+export const encodeErc1155AssetData = (
+  tokenAddress: string,
+  tokenIds: BigNumberish[],
+  values: BigNumberish[],
+  callbackData: string
+) =>
+  hexConcat([
+    AssetProxyId.ERC1155,
+    defaultAbiCoder.encode(
+      ['address', 'uint256[]', 'uint256[]', 'bytes'],
+      [tokenAddress, tokenIds, values, callbackData]
+    ),
+  ]);
+
+export const encodeErc20AssetData = (tokenAddress: string) =>
+  hexConcat([
+    AssetProxyId.ERC20,
+    defaultAbiCoder.encode(['address'], [tokenAddress]),
+  ]);
+
+export const encodeErc721AssetData = (
+  tokenAddress: string,
+  tokenId: BigNumberish
+) =>
+  hexConcat([
+    AssetProxyId.ERC721,
+    defaultAbiCoder.encode(['address', 'uint256'], [tokenAddress, tokenId]),
+  ]);
+
+export const encodeMultiAssetAssetData = (
+  values: BigNumberish[],
+  nestedAssetData: string[]
+) =>
+  hexConcat([
+    AssetProxyId.MultiAsset,
+    defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
+  ]);
+
 const encodeAssetData = (
   assetData: UserFacingSerializedSingleAssetDataTypes
 ): string => {
   switch (assetData.type) {
     case SupportedTokenTypes.ERC20:
-      const erc20AssetData = assetDataUtils.encodeERC20AssetData(
-        assetData.tokenAddress
-      );
+      const erc20AssetData = encodeErc20AssetData(assetData.tokenAddress);
       return erc20AssetData;
     case SupportedTokenTypes.ERC721:
-      const erc721AssetData = assetDataUtils.encodeERC721AssetData(
+      const erc721AssetData = encodeErc721AssetData(
         assetData.tokenAddress,
-        new BigNumber(assetData.tokenId)
+        BigNumber.from(assetData.tokenId)
       );
       return erc721AssetData;
     case SupportedTokenTypes.ERC1155:
       const tokenIds = assetData.tokens.map((x) => x.tokenId);
       const tokenValues = assetData.tokens.map((x) => x.tokenValue);
-      const erc1155AssetData = assetDataUtils.encodeERC1155AssetData(
+      const erc1155AssetData = encodeErc1155AssetData(
         assetData.tokenAddress,
         convertCollectionToBN(tokenIds),
         convertCollectionToBN(tokenValues),
-        '0x' // Needs to be '0x' (not empty string) or else it won't work lol
+        '0x' // Needs to be '0x' (null bytes) (not empty string) or else it won't work lol
       );
       return erc1155AssetData;
     default:
@@ -56,6 +100,46 @@ const getAmountFromAsset = (
     default:
       throw new Error(`Unsupported type ${(assetData as any)?.type}`);
   }
+};
+
+export type SwappableAsset =
+  | UserFacingERC20AssetDataSerialized
+  | UserFacingERC721AssetDataSerialized
+  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
+
+export const convertAssetToInternalFormat = (
+  swappable: SwappableAsset
+): InterallySupportedAssetFormat => {
+  switch (swappable.type) {
+    // No converting needed
+    case 'ERC20':
+      return swappable;
+    // No converting needed
+    case 'ERC721':
+      return swappable;
+    // Convert normalized public ERC1155 interface to 0x internal asset data format
+    // We do this to reduce complexity for end user SDK (and keep api same with erc721)
+    case 'ERC1155':
+      const zeroExErc1155AssetFormat = {
+        tokenAddress: swappable.tokenAddress,
+        tokens: [
+          {
+            tokenId: swappable.tokenId,
+            tokenValue: '1',
+          },
+        ],
+        type: SupportedTokenTypes.ERC1155 as const,
+      };
+      return zeroExErc1155AssetFormat;
+    default:
+      throw new UnexpectedAssetTypeError((swappable as any)?.type ?? 'Unknown');
+  }
+};
+
+export const convertAssetsToInternalFormat = (
+  assets: Array<SwappableAsset>
+): Array<InterallySupportedAssetFormat> => {
+  return assets.map(convertAssetToInternalFormat);
 };
 
 export { encodeAssetData, getAmountFromAsset };

@@ -1,6 +1,7 @@
-import { BigNumber } from '@0x/utils';
 import getUnixTime from 'date-fns/getUnixTime';
-
+import { BigNumber } from '@ethersproject/bignumber';
+import { randomBytes } from '@ethersproject/random';
+import { _TypedDataEncoder } from '@ethersproject/hash';
 import { NULL_ADDRESS, ZERO_AMOUNT } from './eth';
 import type {
   ERC20AssetData,
@@ -14,22 +15,9 @@ const TRADER_ADDRESS_IDENTIFIER = '0xBCC02a155c374263321155555Ccf41070017649e';
 
 const NULL_BYTES = '0x';
 
-const MAX_DIGITS_IN_UNSIGNED_256_INT = 78;
+// const MAX_DIGITS_IN_UNSIGNED_256_INT = 78;
 
-export const INFINITE_TIMESTAMP_SEC = new BigNumber(2524604400);
-
-/**
- * Generates a pseudo-random 256-bit number.
- * @return  A pseudo-random 256-bit number.
- */
-export function generatePseudoRandom256BitNumber(): BigNumber {
-  // BigNumber.random returns a pseudo-random number between 0 & 1 with a passed in number of decimal places.
-  // Source: https://mikemcl.github.io/bignumber.js/#random
-  const randomNumber = BigNumber.random(MAX_DIGITS_IN_UNSIGNED_256_INT);
-  const factor = new BigNumber(10).pow(MAX_DIGITS_IN_UNSIGNED_256_INT - 1);
-  const randomNumberScaledTo256Bits = randomNumber.times(factor).integerValue();
-  return randomNumberScaledTo256Bits;
-}
+export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
 
 export type AvailableSingleAssetDataTypes =
   | ERC20AssetData
@@ -48,7 +36,7 @@ export interface MultiAssetDataSerialized {
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
   tokenAddress: string;
-  type: 'ERC20'; //SupportedTokenTypes.ERC20
+  type: 'ERC20';
   amount: string;
 }
 
@@ -62,8 +50,6 @@ export interface UserFacingERC1155AssetDataSerialized {
   tokenAddress: string;
   tokens: Array<{ tokenId: string; tokenValue: string }>;
   type: 'ERC1155';
-  //   tokenIds: string[]
-  //   tokenValues: string[]
 }
 
 /**
@@ -161,18 +147,16 @@ export interface AdditionalOrderConfig {
 }
 
 export interface ZeroExOrder {
-  chainId: number;
-  exchangeAddress: string;
   makerAddress: string;
   takerAddress: string;
   feeRecipientAddress: string;
   senderAddress: string;
-  makerAssetAmount: BigNumber;
-  takerAssetAmount: BigNumber;
-  makerFee: BigNumber;
-  takerFee: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  salt: BigNumber;
+  makerAssetAmount: string;
+  takerAssetAmount: string;
+  makerFee: string;
+  takerFee: string;
+  expirationTimeSeconds: string;
+  salt: string;
   makerAssetData: string;
   takerAssetData: string;
   makerFeeAssetData: string;
@@ -183,7 +167,83 @@ export interface ZeroExSignedOrder extends ZeroExOrder {
   signature: string;
 }
 
-const generatePseudoRandomSalt = generatePseudoRandom256BitNumber;
+export interface EipDomain {
+  name: string;
+  version: string;
+  chainId: string;
+  verifyingContract: string;
+}
+
+export interface TypedData {
+  domain: EipDomain;
+  types: {
+    Order: {
+      name: string;
+      type: string;
+    }[];
+  };
+  value: Order;
+}
+
+export const getEipDomain = (
+  chainId: number,
+  exchangeContractAddress: string
+): EipDomain => ({
+  name: '0x Protocol',
+  version: '3.0.0',
+  chainId: chainId.toString(10),
+  verifyingContract: exchangeContractAddress,
+});
+
+export const EIP712_TYPES = {
+  Order: [
+    { name: 'makerAddress', type: 'address' },
+    { name: 'takerAddress', type: 'address' },
+    { name: 'feeRecipientAddress', type: 'address' },
+    { name: 'senderAddress', type: 'address' },
+    { name: 'makerAssetAmount', type: 'uint256' },
+    { name: 'takerAssetAmount', type: 'uint256' },
+    { name: 'makerFee', type: 'uint256' },
+    { name: 'takerFee', type: 'uint256' },
+    { name: 'expirationTimeSeconds', type: 'uint256' },
+    { name: 'salt', type: 'uint256' },
+    { name: 'makerAssetData', type: 'bytes' },
+    { name: 'takerAssetData', type: 'bytes' },
+    { name: 'makerFeeAssetData', type: 'bytes' },
+    { name: 'takerFeeAssetData', type: 'bytes' },
+  ],
+};
+
+export const hashOrder = (
+  order: Order,
+  chainId: number,
+  exchangeContractAddress: string
+): string =>
+  _TypedDataEncoder.hash(
+    getEipDomain(chainId, exchangeContractAddress),
+    EIP712_TYPES,
+    order
+  );
+
+export const normalizeOrder = (order: Order): Order => {
+  return {
+    makerAddress: order.makerAddress.toLowerCase(),
+    takerAddress: order.takerAddress.toLowerCase(),
+    feeRecipientAddress: order.feeRecipientAddress.toLowerCase(),
+    senderAddress: order.senderAddress.toLowerCase(),
+    makerAssetAmount: order.makerAssetAmount.toString(),
+    takerAssetAmount: order.takerAssetAmount.toString(),
+    makerFee: order.makerFee.toString(),
+    takerFee: order.takerFee.toString(),
+    expirationTimeSeconds: order.expirationTimeSeconds.toString(),
+    salt: order.salt.toString(),
+    makerAssetData: order.makerAssetData.toLowerCase(),
+    takerAssetData: order.takerAssetData.toLowerCase(),
+    makerFeeAssetData: order.makerFeeAssetData.toLowerCase(),
+    takerFeeAssetData: order.takerFeeAssetData.toLowerCase(),
+    signature: order.signature?.toLowerCase(),
+  };
+};
 
 export const generateOrderFromAssetDatas = (orderConfig: {
   makerAddress: string;
@@ -195,10 +255,9 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   exchangeAddress: string;
   takerAddress?: string;
   expiration?: Date;
+  salt?: string;
 }): Order => {
   const {
-    chainId,
-    exchangeAddress,
     makerAssetAmount,
     takerAssetAmount,
     makerAddress,
@@ -206,31 +265,38 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     takerAssetData,
     takerAddress,
     expiration,
+    salt,
   } = orderConfig;
 
   const expirationTimeSeconds = expiration
-    ? new BigNumber(getUnixTime(expiration))
+    ? BigNumber.from(getUnixTime(expiration))
     : INFINITE_TIMESTAMP_SEC;
 
   const order: ZeroExOrder = {
-    chainId: chainId,
-    exchangeAddress: exchangeAddress,
     makerAddress,
-    makerAssetAmount,
+    makerAssetAmount: makerAssetAmount.toString(),
     makerAssetData,
     takerAddress: takerAddress || NULL_ADDRESS,
-    takerAssetAmount,
+    takerAssetAmount: takerAssetAmount.toString(),
     takerAssetData,
-    expirationTimeSeconds,
+    expirationTimeSeconds: expirationTimeSeconds.toString(),
     // Stuff that doesn't really matter but is required
     senderAddress: NULL_ADDRESS,
     feeRecipientAddress: TRADER_ADDRESS_IDENTIFIER,
-    salt: generatePseudoRandomSalt(),
+    salt: salt ?? generateSaltHash(),
     makerFeeAssetData: NULL_BYTES,
     takerFeeAssetData: NULL_BYTES,
-    makerFee: ZERO_AMOUNT,
-    takerFee: ZERO_AMOUNT,
+    makerFee: ZERO_AMOUNT.toString(),
+    takerFee: ZERO_AMOUNT.toString(),
   };
 
   return order;
+};
+
+const generateSaltHash = (manualSaltHashToUse?: string): string => {
+  if (manualSaltHashToUse) {
+    return manualSaltHashToUse;
+  }
+  const randomSalt = BigNumber.from(randomBytes(32)).toString();
+  return randomSalt;
 };

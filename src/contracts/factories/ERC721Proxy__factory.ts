@@ -4,17 +4,36 @@
 
 import { Contract, Signer, utils } from 'ethers';
 import { Provider } from '@ethersproject/providers';
-import type { ERC20, ERC20Interface } from '../ERC20';
+import type { ERC721Proxy, ERC721ProxyInterface } from '../ERC721Proxy';
 
 const _abi = [
   {
+    constant: false,
+    inputs: [
+      {
+        name: 'target',
+        type: 'address',
+      },
+    ],
+    name: 'addAuthorizedAddress',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     constant: true,
-    inputs: [],
-    name: 'name',
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'authorities',
     outputs: [
       {
         name: '',
-        type: 'string',
+        type: 'address',
       },
     ],
     payable: false,
@@ -25,21 +44,12 @@ const _abi = [
     constant: false,
     inputs: [
       {
-        name: '_spender',
+        name: 'target',
         type: 'address',
       },
-      {
-        name: '_value',
-        type: 'uint256',
-      },
     ],
-    name: 'approve',
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-      },
-    ],
+    name: 'removeAuthorizedAddress',
+    outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
@@ -47,11 +57,11 @@ const _abi = [
   {
     constant: true,
     inputs: [],
-    name: 'totalSupply',
+    name: 'owner',
     outputs: [
       {
         name: '',
-        type: 'uint256',
+        type: 'address',
       },
     ],
     payable: false,
@@ -62,25 +72,16 @@ const _abi = [
     constant: false,
     inputs: [
       {
-        name: '_from',
+        name: 'target',
         type: 'address',
       },
       {
-        name: '_to',
-        type: 'address',
-      },
-      {
-        name: '_value',
+        name: 'index',
         type: 'uint256',
       },
     ],
-    name: 'transferFrom',
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-      },
-    ],
+    name: 'removeAuthorizedAddressAtIndex',
+    outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
@@ -88,30 +89,30 @@ const _abi = [
   {
     constant: true,
     inputs: [],
-    name: 'decimals',
+    name: 'getProxyId',
     outputs: [
       {
         name: '',
-        type: 'uint8',
+        type: 'bytes4',
       },
     ],
     payable: false,
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: '_owner',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'balanceOf',
+    name: 'authorized',
     outputs: [
       {
-        name: 'balance',
-        type: 'uint256',
+        name: '',
+        type: 'bool',
       },
     ],
     payable: false,
@@ -121,11 +122,11 @@ const _abi = [
   {
     constant: true,
     inputs: [],
-    name: 'symbol',
+    name: 'getAuthorizedAddresses',
     outputs: [
       {
         name: '',
-        type: 'string',
+        type: 'address[]',
       },
     ],
     payable: false,
@@ -136,51 +137,19 @@ const _abi = [
     constant: false,
     inputs: [
       {
-        name: '_to',
+        name: 'newOwner',
         type: 'address',
       },
-      {
-        name: '_value',
-        type: 'uint256',
-      },
     ],
-    name: 'transfer',
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-      },
-    ],
+    name: 'transferOwnership',
+    outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    constant: true,
-    inputs: [
-      {
-        name: '_owner',
-        type: 'address',
-      },
-      {
-        name: '_spender',
-        type: 'address',
-      },
-    ],
-    name: 'allowance',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-      },
-    ],
     payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    payable: true,
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'fallback',
   },
   {
@@ -188,21 +157,16 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        name: 'owner',
+        name: 'target',
         type: 'address',
       },
       {
         indexed: true,
-        name: 'spender',
+        name: 'caller',
         type: 'address',
       },
-      {
-        indexed: false,
-        name: 'value',
-        type: 'uint256',
-      },
     ],
-    name: 'Approval',
+    name: 'AuthorizedAddressAdded',
     type: 'event',
   },
   {
@@ -210,31 +174,29 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        name: 'from',
+        name: 'target',
         type: 'address',
       },
       {
         indexed: true,
-        name: 'to',
+        name: 'caller',
         type: 'address',
       },
-      {
-        indexed: false,
-        name: 'value',
-        type: 'uint256',
-      },
     ],
-    name: 'Transfer',
+    name: 'AuthorizedAddressRemoved',
     type: 'event',
   },
 ];
 
-export class ERC20__factory {
+export class ERC721Proxy__factory {
   static readonly abi = _abi;
-  static createInterface(): ERC20Interface {
-    return new utils.Interface(_abi) as ERC20Interface;
+  static createInterface(): ERC721ProxyInterface {
+    return new utils.Interface(_abi) as ERC721ProxyInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): ERC20 {
-    return new Contract(address, _abi, signerOrProvider) as ERC20;
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): ERC721Proxy {
+    return new Contract(address, _abi, signerOrProvider) as ERC721Proxy;
   }
 }

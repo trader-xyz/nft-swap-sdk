@@ -1,0 +1,429 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_exchange", "type": "address" },
+      { "internalType": "address", "name": "_exchangeV2", "type": "address" },
+      { "internalType": "address", "name": "_weth", "type": "address" }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  { "payable": true, "stateMutability": "payable", "type": "fallback" },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ERC1155_BATCH_RECEIVED",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ERC1155_RECEIVED",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "EXCHANGE_V2_ORDER_ID",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "bytes", "name": "assetData", "type": "bytes" }
+    ],
+    "name": "approveMakerAssetProxy",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "makerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "takerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "feeRecipientAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "senderAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerAssetAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerAssetAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "makerFee", "type": "uint256" },
+          { "internalType": "uint256", "name": "takerFee", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "expirationTimeSeconds",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          {
+            "internalType": "bytes",
+            "name": "makerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "makerFeeAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerFeeAssetData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct LibOrder.Order[]",
+        "name": "orders",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "makerAssetBuyAmount",
+        "type": "uint256"
+      },
+      { "internalType": "bytes[]", "name": "signatures", "type": "bytes[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "ethFeeAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address payable[]",
+        "name": "feeRecipients",
+        "type": "address[]"
+      }
+    ],
+    "name": "marketBuyOrdersWithEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "wethSpentAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "makerAssetAcquiredAmount",
+        "type": "uint256"
+      }
+    ],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "makerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "takerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "feeRecipientAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "senderAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerAssetAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerAssetAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "makerFee", "type": "uint256" },
+          { "internalType": "uint256", "name": "takerFee", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "expirationTimeSeconds",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          {
+            "internalType": "bytes",
+            "name": "makerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "makerFeeAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerFeeAssetData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct LibOrder.Order[]",
+        "name": "orders",
+        "type": "tuple[]"
+      },
+      { "internalType": "uint256", "name": "ethSellAmount", "type": "uint256" },
+      { "internalType": "bytes[]", "name": "signatures", "type": "bytes[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "ethFeeAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address payable[]",
+        "name": "feeRecipients",
+        "type": "address[]"
+      }
+    ],
+    "name": "marketSellAmountWithEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "wethSpentAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "makerAssetAcquiredAmount",
+        "type": "uint256"
+      }
+    ],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "makerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "takerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "feeRecipientAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "senderAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "makerAssetAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "takerAssetAmount",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "makerFee", "type": "uint256" },
+          { "internalType": "uint256", "name": "takerFee", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "expirationTimeSeconds",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          {
+            "internalType": "bytes",
+            "name": "makerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "makerFeeAssetData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "takerFeeAssetData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct LibOrder.Order[]",
+        "name": "orders",
+        "type": "tuple[]"
+      },
+      { "internalType": "bytes[]", "name": "signatures", "type": "bytes[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "ethFeeAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address payable[]",
+        "name": "feeRecipients",
+        "type": "address[]"
+      }
+    ],
+    "name": "marketSellOrdersWithEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "wethSpentAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "makerAssetAcquiredAmount",
+        "type": "uint256"
+      }
+    ],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "address", "name": "operator", "type": "address" },
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "values", "type": "uint256[]" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "onERC1155BatchReceived",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "address", "name": "operator", "type": "address" },
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "onERC1155Received",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "bytes", "name": "assetData", "type": "bytes" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "withdrawAsset",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
