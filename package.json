@@ -50,6 +50,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "7.0.3",
     "@typechain/ethers-v5": "^8.0.5",
+    "@types/lodash": "^4.14.178",
     "husky": "^7.0.2",
     "prettier": "^2.5.1",
     "size-limit": "7.0.4",
@@ -68,7 +69,10 @@
     "@ethersproject/wallet": "^5.5.0",
     "date-fns": "^2.27.0",
     "ethers": "^5.5.2",
-    "tiny-invariant": "^1.2.0"
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "tiny-invariant": "^1.2.0",
+    "tiny-warning": "^1.0.3"
   },
   "publishConfig": {
     "access": "public",
