@@ -189,7 +189,8 @@ class NftSwap implements INftSwap {
     return _signOrder(
       order,
       addressOfWalletSigningOrder,
-      signerToUser as any,
+      signerToUser,
+      this.provider,
       this.chainId,
       this.exchangeContract.address
     );
@@ -284,12 +285,11 @@ class NftSwap implements INftSwap {
     fillOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides: Partial<PayableOverrides> = {}
   ) => {
-    const tx = await _sendSignedOrderToEthereum(
+    return _sendSignedOrderToEthereum(
       signedOrder,
       fillOverrides?.exchangeContract ?? this.exchangeContract,
       transactionOverrides
     );
-    return tx;
   };
 
   public normalizeOrder = (order: Order) => {

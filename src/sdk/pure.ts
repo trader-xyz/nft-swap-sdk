@@ -1,9 +1,14 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
-import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BaseProvider, JsonRpcSigner } from '@ethersproject/providers';
+// import { TypedDataSigner } from '@ethersproject/abstract-signer';
+import { BaseProvider, Provider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { hexConcat, hexlify, splitSignature } from '@ethersproject/bytes';
-import { verifyTypedData, Wallet } from '@ethersproject/wallet';
+import {
+  arrayify,
+  hexConcat,
+  hexlify,
+  splitSignature,
+} from '@ethersproject/bytes';
+import { verifyTypedData } from '@ethersproject/wallet';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 import {
   AdditionalOrderConfig,
@@ -29,6 +34,10 @@ import {
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
 import type { AddressesForChain, Order, SignedOrder } from './types';
 import addresses from '../addresses.json';
+import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
+import { Interface } from '@ethersproject/abi';
+import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
+import { Signer } from 'ethers';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
@@ -72,41 +81,66 @@ export type InterallySupportedAssetFormat =
 
 export const signOrder = async (
   order: Order,
-  _signerAddress: string,
-  signer: TypedDataSigner,
+  signerAddress: string,
+  signer: Signer,
+  provider: Provider,
   chainId: number,
   exchangeContractAddress: string
 ): Promise<SignedOrder> => {
   try {
-    // let jsonSigner: JsonRpcSigner = signer as any;
+    // Let's try to determine if the signer is a contract wallet or not.
+    // If it is, we'll try EIP-1271, otherwise we'll do a normal sign
+    let isContractWallet = false;
+
+    let walletCode = await provider.getCode(signerAddress);
+    // Wallet Code returns '0x' if no contract address is associated with
+    // Note: Lazy loaded contract wallets will show 0x initially, so we fall back to feature detection
+    if (walletCode && walletCode != '0x') {
+      isContractWallet = true;
+    }
+    let isSequence = !!(provider as any)._isSequenceProvider;
+    if (isSequence) {
+      isContractWallet = true;
+    }
+    // Walletconnect hides the real provider in the provider (yo dawg)
+    let providerToUse = (provider as any).provider;
+    if (providerToUse?.isWalletConnect) {
+      const isSequenceViaWalletConnect = !!(
+        (providerToUse as any).connector?._peerMeta?.description === 'Sequence'
+      );
+      if (isSequenceViaWalletConnect) {
+        isContractWallet = true;
+      }
+    }
+
     const domain = getEipDomain(chainId, exchangeContractAddress);
     const types = EIP712_TYPES;
     const value = order;
 
-    const rawSignature = await signer._signTypedData(domain, types, value);
+    const typedData: TypedData = {
+      domain,
+      types,
+      message: value,
+    };
 
-    //   // Populate any ENS names (in-place)
-    //   const populated = await _TypedDataEncoder.resolveNames(domain, types, value, (name: string) => {
-    //     return signer.provider.resolveName(name);
-    // });
+    const orderHash = encodeTypedDataHash(typedData);
 
-    // const address = await jsonSigner.getAddress();
+    const msg = new Interface(EIP1271ZeroExDataAbi).encodeFunctionData(
+      'OrderWithHash',
+      [order, orderHash]
+    );
 
-    // console.log('address', address);
-    // const rawSignature = await jsonSigner.provider.send(
-    //   'eth_signTypedData',
-    //   //'eth_signTypedData_v4',
-    //   [
-    //     address.toLowerCase(),
-    //     JSON.stringify(_TypedDataEncoder.getPayload(domain, types, value)),
-    //   ]
-    // );
+    const rawSignatureFromContractWallet = await signer.signMessage(
+      arrayify(msg)
+    );
 
-    // console.log('rawSignature', rawSignature);
+    console.log(rawSignatureFromContractWallet, rawSignatureFromContractWallet);
+
+    // const rawSignatureFromEoaWallet = await signer._signTypedData(domain, types, value);
 
     const signedOrder: SignedOrder = {
       ...order,
-      signature: rawSignature,
+      signature: rawSignatureFromContractWallet,
     };
 
     return signedOrder;
@@ -115,27 +149,6 @@ export const signOrder = async (
     throw e;
   }
 };
-
-// export const signOrderWithHash = async (
-//   order: Order,
-//   _signerAddress: string,
-//   signer: Signer,
-//   chainId: number,
-//   exchangeContractAddress: string,
-// ): Promise<SignedOrder> => {
-//   const rawSignature = await signer.signMessage(
-//     getEipDomain(chainId, exchangeContractAddress),
-//     EIP712_TYPES,
-//     order
-//   );
-
-// const signedOrder: SignedOrder = {
-//   ...order,
-//   signature: rawSignature,
-// };
-
-// return signedOrder;
-// };
 
 export const prepareOrderSignature = (rawSignature: string) => {
   // Append the signature type (eg. "0x02" for EIP712 signatures)
@@ -214,14 +227,13 @@ export const sendSignedOrderToEthereum = async (
   exchangeContract: ExchangeContract,
   overrides?: PayableOverrides
 ): Promise<ContractTransaction> => {
-  const transaction = await exchangeContract.fillOrKillOrder(
+  return exchangeContract.fillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
-    prepareOrderSignature(signedOrder.signature), // EOA signatures...
-    // prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
+    // prepareOrderSignature(signedOrder.signature), // EOA signatures...
+    prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
     overrides
   );
-  return transaction;
 };
 
 /**
