@@ -224,4 +224,5 @@ export interface AddressesForChain {
   erc721Proxy: string;
   multiAssetProxy: string;
   erc1155Proxy: string;
+  forwarder: string;
 }
