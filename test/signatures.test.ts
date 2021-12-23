@@ -79,10 +79,9 @@ describe('NFTSwap', () => {
       nftSwapperMaker.exchangeContractAddress
     );
 
-
     const length = hexDataLength(signedOrder.signature);
     const signatureType = hexDataSlice(signedOrder.signature, length - 1);
-    
+
     expect(signatureType).toBe('0x02');
 
     const isValidSignature = await verifyOrderSignature(
