@@ -12,30 +12,23 @@ import {
   TransactionOverrides,
   PayableOverrides,
   hashOrder,
+  SigningOptions,
+  getForwarderAddress,
 } from './pure';
 import {
   EIP712_TYPES,
-  EipDomain,
   getEipDomain,
   SupportedTokenTypes,
   TypedData,
 } from '../utils/order';
-import { UnexpectedAssetTypeError } from './error';
 import type {
   BaseProvider,
-  JsonRpcSigner,
   TransactionReceipt,
 } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
-import type { InterallySupportedAssetFormat } from './pure';
-import type {
-  UserFacingERC1155AssetDataSerializedNormalizedSingle,
-  UserFacingERC20AssetDataSerialized,
-  UserFacingERC721AssetDataSerialized,
-} from '../utils/order';
 import { normalizeOrder as _normalizeOrder } from '../utils/order';
-import { AssetProxyId, Order, SignedOrder } from './types';
-import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
+import { Order, SignedOrder } from './types';
+import { Signer } from '@ethersproject/abstract-signer';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
   convertAssetsToInternalFormat,
@@ -43,18 +36,20 @@ import {
   SwappableAsset,
 } from '../utils/asset-data';
 
-interface NftSwapConfig {
+export interface NftSwapConfig {
   exchangeContractAddress?: string;
   erc20ProxyContractAddress?: string;
   erc721ProxyContractAddress?: string;
   erc1155ProxyContractAddress?: string;
+  forwarderContractAddress?: string;
 }
 
-interface INftSwap {
+export interface INftSwap {
   signOrder: (
     order: Order,
     signerAddress: string,
-    signer: Signer
+    signer: Signer,
+    signingOptions?: Partial<SigningOptions>
   ) => Promise<SignedOrder>;
   buildOrder: (
     makerAssets: Array<SwappableAsset>,
@@ -129,6 +124,7 @@ class NftSwap implements INftSwap {
   public erc20ProxyContractAddress: string;
   public erc720ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
+  public forwarderContractAddress: string | null;
 
   constructor(
     provider: BaseProvider,
@@ -160,6 +156,10 @@ class NftSwap implements INftSwap {
     this.erc1155ProxyContractAddress =
       additionalConfig?.erc1155ProxyContractAddress ??
       getProxyAddressForErcType(SupportedTokenTypes.ERC1155, chainId);
+    this.forwarderContractAddress =
+      additionalConfig?.forwarderContractAddress ??
+      getForwarderAddress(chainId) ??
+      null;
 
     // Initialize Exchange contract so we can interact with it easily.
     this.exchangeContract = ExchangeContract__factory.connect(
@@ -189,13 +189,12 @@ class NftSwap implements INftSwap {
     return _signOrder(
       order,
       addressOfWalletSigningOrder,
-      signerToUser as any,
+      signerToUser,
+      this.provider,
       this.chainId,
       this.exchangeContract.address
     );
   };
-
-  public signOrderWithHash = async () => {};
 
   public buildOrder = (
     makerAssets: SwappableAsset[],
@@ -284,20 +283,19 @@ class NftSwap implements INftSwap {
     fillOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides: Partial<PayableOverrides> = {}
   ) => {
-    const tx = await _sendSignedOrderToEthereum(
+    return _sendSignedOrderToEthereum(
       signedOrder,
       fillOverrides?.exchangeContract ?? this.exchangeContract,
       transactionOverrides
     );
-    return tx;
   };
 
-  public normalizeOrder = (order: Order) => {
+  public normalizeOrder = (order: Order): Order => {
     const normalizedOrder = _normalizeOrder(order);
     return normalizedOrder as Order;
   };
 
-  public normalizeSignedOrder = (order: SignedOrder) => {
+  public normalizeSignedOrder = (order: SignedOrder): SignedOrder => {
     const normalizedOrder = _normalizeOrder(order);
     return normalizedOrder as SignedOrder;
   };

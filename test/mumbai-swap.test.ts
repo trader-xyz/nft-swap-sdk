@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { defaultAbiCoder, hexDataSlice, parseEther } from 'ethers/lib/utils';
+import { defaultAbiCoder, hexDataSlice, parseEther, hexDataLength } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
 import { verifyOrderSignature } from '../src/sdk/pure';
 import { encodeErc20AssetData } from '../src/utils/asset-data';
@@ -95,15 +95,7 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    const isValidSignature = await verifyOrderSignature(
-      normalizedSignedOrder,
-      signedOrder.signature,
-      80001,
-      nftSwapperMaker.exchangeContract.address
-    );
-    expect(isValidSignature).toBe(true);
-
-    // Uncomment to actually fill order
+    // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
     //   gasPrice,
     //   gasLimit: '500000',
