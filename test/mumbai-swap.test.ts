@@ -100,7 +100,7 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    // Uncomment to actually fill order
+    // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
     //   gasPrice,
     //   gasLimit: '500000',

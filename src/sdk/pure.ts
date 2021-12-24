@@ -5,8 +5,6 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
   arrayify,
   hexConcat,
-  hexDataLength,
-  hexDataSlice,
   hexlify,
   splitSignature,
 } from '@ethersproject/bytes';
@@ -250,27 +248,29 @@ export const signOrder = async (
   }
 };
 
-export const getSignatureTypeFromSignature = (signature: string) => {
-  const length = hexDataLength(signature);
-  const signatureType = hexDataSlice(signature, length - 1);
-};
-
-export const SIGNATURE_TYPES = {
-  EIP712: '0x02',
-  EthSign: '0x03',
-  EIP1271: '0x07',
+export const prepareOrderSignature = (
+  rawSignature: string,
+  method?: AvailableSignatureTypes
+) => {
+  let preferredMethod = method ?? 'eoa';
+  try {
+    return prepareOrderSignatureFromEoaWallet(rawSignature);
+  } catch (e) {
+    console.log('prepareOrderSignature:Errror preparing order signature', e);
+    console.log('Attempting to decode contract wallet signature');
+    try {
+      return prepareOrderSignatureFromContractWallet(rawSignature);
+    } catch (e) {
+      throw e;
+    }
+  }
 };
 
 export const prepareOrderSignatureFromEoaWallet = (rawSignature: string) => {
   // Append the signature type (eg. "0x02" for EIP712 signatures)
   // at the end of the signature since this is what 0x expects
   const signature = splitSignature(rawSignature);
-  return hexConcat([
-    hexlify(signature.v),
-    signature.r,
-    signature.s,
-    SIGNATURE_TYPES.EIP712,
-  ]);
+  return hexConcat([hexlify(signature.v), signature.r, signature.s, '0x02']);
 };
 
 export const prepareOrderSignatureFromContractWallet = (
@@ -279,7 +279,7 @@ export const prepareOrderSignatureFromContractWallet = (
   // Append the signature type (eg. "0x07" for EIP712 signatures)
   // at the end of the signature since this is what 0x expects
   // See: https://github.com/0xProject/ZEIPs/issues/33
-  return hexConcat([rawSignature, SIGNATURE_TYPES.EIP1271]);
+  return hexConcat([rawSignature, '0x07']);
 };
 
 export const verifyOrderSignature = (
@@ -345,7 +345,6 @@ export const sendSignedOrderToEthereum = async (
   exchangeContract: ExchangeContract,
   overrides?: PayableOverrides
 ): Promise<ContractTransaction> => {
-  // TODO(johnrjj) - Give better lower bound for gas estimate so orders dont fail
   // const gas = await exchangeContract.estimateGas.fillOrder(
   //   normalizeOrder(signedOrder),
   //   signedOrder.takerAssetAmount,
@@ -356,10 +355,13 @@ export const sendSignedOrderToEthereum = async (
   //   overrides
   // )
   // console.log('sendSignedOrderToEthereum:gas', gas.toString())
-  return exchangeContract.fillOrKillOrder(
+  return exchangeContract.fillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
     signedOrder.signature,
+    // prepareOrderSignature(signedOrder.signature), // EOA signatures...
+    // prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
+    // prepareOrderSignature(signedOrder.signature), // Contract wallet signatures.
     overrides
   );
 };
