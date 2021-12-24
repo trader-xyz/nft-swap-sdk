@@ -59,6 +59,7 @@ export interface UserFacingERC1155AssetDataSerializedNormalizedSingle {
   tokenAddress: string;
   tokenId: string;
   type: 'ERC1155';
+  amount?: string; // Will default to '1'
 }
 
 export type UserFacingSerializedSingleAssetDataTypes =
