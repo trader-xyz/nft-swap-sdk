@@ -99,7 +99,7 @@ const getAmountFromAsset = (
       // Trader.sdk only supports trading 1 ERC1155 per _asset_ at a time, 
       // so we can access the 0th index for our token
       // (You can still trade multiple ERC1155s per _order_).
-      return assetData.tokens[0]?.tokenValue ?? '1';
+      return assetData.tokens[0]?.tokenValue || '1';
     default:
       throw new Error(`Unsupported type ${(assetData as any)?.type}`);
   }
@@ -128,7 +128,7 @@ export const convertAssetToInternalFormat = (
         tokens: [
           {
             tokenId: swappable.tokenId,
-            tokenValue: swappable.amount ?? '1',
+            tokenValue: swappable.amount || '1',
           },
         ],
         type: SupportedTokenTypes.ERC1155 as const,
