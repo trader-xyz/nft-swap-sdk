@@ -223,8 +223,6 @@ class NftSwap implements INftSwap {
       this.chainId
     );
     const assetInternalFmt = convertAssetToInternalFormat(asset);
-    console.log('assetInternalFmt', assetInternalFmt);
-    console.log('exchangeProxyAddressForAsset', exchangeProxyAddressForAsset);
     return _getApprovalStatus(
       walletAddress,
       exchangeProxyAddressForAsset,
