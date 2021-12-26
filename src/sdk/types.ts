@@ -58,6 +58,16 @@ export enum OrderStatus {
   Cancelled,
 }
 
+export const OrderStatusCodeLookup = {
+  0: 'Invalid',
+  1: 'InvalidMakerAssetAmount',
+  2: 'InvalidTakerAssetAmount',
+  3: 'Fillable',
+  4: 'Expired',
+  5: 'FullyFilled',
+  6: 'Cancelled',
+};
+
 export interface ERC20AssetData {
   assetProxyId: string;
   tokenAddress: string;
