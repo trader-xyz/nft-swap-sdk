@@ -1,5 +1,4 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
-// import { TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BaseProvider, Provider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
@@ -12,6 +11,9 @@ import {
 } from '@ethersproject/bytes';
 import { verifyTypedData } from '@ethersproject/wallet';
 import { _TypedDataEncoder } from '@ethersproject/hash';
+import { Interface } from '@ethersproject/abi';
+import type { Signer } from 'ethers';
+import type { TypedDataSigner } from '@ethersproject/abstract-signer';
 import {
   AdditionalOrderConfig,
   EIP712_TYPES,
@@ -34,19 +36,10 @@ import {
   ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
-import type {
-  AddressesForChain,
-  Order,
-  SignatureType,
-  SignedOrder,
-} from './types';
-import addresses from '../addresses.json';
+import type { AddressesForChain, Order, SignedOrder } from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
-import { Interface } from '@ethersproject/abi';
 import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
-import { Signer } from 'ethers';
-import { TypedDataSigner } from '@ethersproject/abstract-signer';
-import invariant from 'tiny-invariant';
+import addresses from '../addresses.json';
 
 export enum AssetProxyId {
   ERC20 = '0xf47261b0',
