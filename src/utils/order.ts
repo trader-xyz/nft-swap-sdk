@@ -294,10 +294,14 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   return order;
 };
 
+export const generateTimeBasedSalt = () => {
+  const unixTime = getUnixTime(new Date());
+  return unixTime.toString(10);
+};
+
 const generateSaltHash = (manualSaltHashToUse?: string): string => {
   if (manualSaltHashToUse) {
     return manualSaltHashToUse;
   }
-  const randomSalt = BigNumber.from(randomBytes(32)).toString();
-  return randomSalt;
+  return generateTimeBasedSalt();
 };

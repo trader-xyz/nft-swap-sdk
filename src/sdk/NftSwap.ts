@@ -7,6 +7,9 @@ import {
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
+  cancelOrder as _cancelOrder,
+  cancelOrders as _cancelOrders,
+  cancelOrdersUpToNow as _cancelOrdersUpToNow,
   ApprovalStatus,
   getProxyAddressForErcType,
   TransactionOverrides,
@@ -27,7 +30,7 @@ import type {
 } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { normalizeOrder as _normalizeOrder } from '../utils/order';
-import { Order, SignedOrder } from './types';
+import { Order, OrderInfo, OrderStatus, SignedOrder } from './types';
 import { Signer } from '@ethersproject/abstract-signer';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
@@ -45,6 +48,16 @@ export interface NftSwapConfig {
 }
 
 export interface INftSwap {
+  cancelOrder: (
+    order: Order,
+    overrides: PayableOverrides
+  ) => Promise<ContractTransaction>;
+  waitUntilOrderFilledOrCancelled: (
+    order: Order,
+    timeoutInMs: number
+  ) => Promise<OrderInfo>;
+  getOrderStatus: (order: Order) => Promise<OrderStatus>;
+  getOrderInfo: (order: Order) => Promise<OrderInfo>;
   signOrder: (
     order: Order,
     signerAddress: string,
@@ -172,6 +185,19 @@ class NftSwap implements INftSwap {
       signer
     );
   }
+  public cancelOrder = async (order: Order, overrides: PayableOverrides) => {
+    return _cancelOrder(this.exchangeContract, order, overrides);
+  };
+
+  public waitUntilOrderFilled = async (
+    order: Order,
+    timeoutInMs: number = 60 * 1000
+  ) => {
+    // this.provider.once()
+  };
+  public getOrderStatus = async (order: Order) => {};
+
+  public getOrderInfo = async (order: Order) => {};
 
   public awaitTransactionHash = async (txHash: string) => {
     return this.provider.waitForTransaction(txHash);

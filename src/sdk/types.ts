@@ -42,6 +42,22 @@ export enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 
+export interface OrderInfo {
+  orderStatus: OrderStatus;
+  orderHash: string;
+  orderTakerAssetFilledAmount: BigNumber;
+}
+
+export enum OrderStatus {
+  Invalid = 0,
+  InvalidMakerAssetAmount,
+  InvalidTakerAssetAmount,
+  Fillable,
+  Expired,
+  FullyFilled,
+  Cancelled,
+}
+
 export interface ERC20AssetData {
   assetProxyId: string;
   tokenAddress: string;

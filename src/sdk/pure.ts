@@ -18,6 +18,7 @@ import {
   AdditionalOrderConfig,
   EIP712_TYPES,
   generateOrderFromAssetDatas,
+  generateTimeBasedSalt,
   getEipDomain,
   normalizeOrder,
   SupportedTokenTypes,
@@ -36,7 +37,14 @@ import {
   ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
-import type { AddressesForChain, Order, SignedOrder } from './types';
+import type {
+  AddressesForChain,
+  Order,
+  OrderInfo,
+  OrderStatus,
+  SignatureType,
+  SignedOrder,
+} from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
 import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
 import addresses from '../addresses.json';
@@ -67,6 +75,47 @@ const convertStringToBN = (s: string) => {
 
 const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
+};
+
+export const cancelOrder = (
+  exchangeContract: ExchangeContract,
+  order: Order,
+  overrides?: PayableOverrides
+) => {
+  return exchangeContract.cancelOrder(order, overrides);
+};
+
+export const getOrderInfo = async (
+  exchangeContract: ExchangeContract,
+  order: Order,
+  overrides?: PayableOverrides
+): Promise<OrderInfo> => {
+  const orderInfo = await exchangeContract.getOrderInfo(order, overrides);
+  return orderInfo as OrderInfo;
+};
+
+export const getOrderStatus = async (
+  exchangeContract: ExchangeContract,
+  order: Order,
+  overrides?: PayableOverrides
+): Promise<OrderStatus> => {
+  const orderInfo = await exchangeContract.getOrderInfo(order, overrides);
+  return orderInfo.orderStatus as OrderStatus;
+};
+
+export const cancelOrders = (
+  exchangeContract: ExchangeContract,
+  orders: Array<Order>,
+  overrides?: PayableOverrides
+) => {
+  return exchangeContract.batchCancelOrders(orders, overrides);
+};
+
+export const cancelOrdersUpToNow = (
+  exchangeContract: ExchangeContract,
+  unixTimestampAsSalt: string = generateTimeBasedSalt()
+) => {
+  exchangeContract.cancelOrdersUpTo(unixTimestampAsSalt);
 };
 
 export const hashOrder = (
