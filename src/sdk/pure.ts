@@ -5,6 +5,8 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
   arrayify,
   hexConcat,
+  hexDataLength,
+  hexDataSlice,
   hexlify,
   splitSignature,
 } from '@ethersproject/bytes';
@@ -540,6 +542,12 @@ export const getProxyAddressForErcType = (
     default:
       throw new UnexpectedAssetTypeError(assetType);
   }
+};
+
+export const getSignatureTypeFromSignature = (signature: string): string => {
+  const length = hexDataLength(signature);
+  const signatureType = hexDataSlice(signature, length - 1);
+  return signatureType;
 };
 
 export const getForwarderAddress = (chainId: number) => {
