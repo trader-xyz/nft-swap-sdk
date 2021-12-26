@@ -180,7 +180,8 @@ class NftSwap implements INftSwap {
   public signOrder = async (
     order: Order,
     addressOfWalletSigningOrder: string,
-    signerOverride?: Signer
+    signerOverride?: Signer,
+    signingOptions?: Partial<SigningOptions>
   ) => {
     const signerToUser = signerOverride ?? this.signer;
     if (!signerToUser) {
@@ -192,7 +193,8 @@ class NftSwap implements INftSwap {
       signerToUser,
       this.provider,
       this.chainId,
-      this.exchangeContract.address
+      this.exchangeContract.address,
+      signingOptions
     );
   };
 
@@ -220,10 +222,13 @@ class NftSwap implements INftSwap {
       asset.type as SupportedTokenTypes,
       this.chainId
     );
+    const assetInternalFmt = convertAssetToInternalFormat(asset);
+    console.log('assetInternalFmt', assetInternalFmt);
+    console.log('exchangeProxyAddressForAsset', exchangeProxyAddressForAsset);
     return _getApprovalStatus(
       walletAddress,
       exchangeProxyAddressForAsset,
-      convertAssetToInternalFormat(asset),
+      assetInternalFmt,
       this.provider
     );
   };
