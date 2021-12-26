@@ -18,11 +18,11 @@ import {
   cancelOrders as _cancelOrders,
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
-  ApprovalStatus,
   getProxyAddressForErcType,
+  hashOrder,
   TransactionOverrides,
   PayableOverrides,
-  hashOrder,
+  ApprovalStatus,
   SigningOptions,
   getForwarderAddress,
 } from './pure';
