@@ -310,14 +310,14 @@ export const buildOrder = (
   orderConfig: AdditionalOrderConfig
 ): Order => {
   const makerAssetAmounts = makerAssets.map((ma) => getAmountFromAsset(ma));
-  const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma));
+  const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma, true));
   const makerMultiAsset = encodeMultiAssetAssetData(
     makerAssetAmounts,
     makerAssetDatas
   );
 
   const takerAssetAmounts = takerAssets.map((ta) => getAmountFromAsset(ta));
-  const takerAssetDatas = takerAssets.map((ta) => encodeAssetData(ta));
+  const takerAssetDatas = takerAssets.map((ta) => encodeAssetData(ta, true));
   const takerMultiAsset = encodeMultiAssetAssetData(
     convertCollectionToBN(takerAssetAmounts),
     takerAssetDatas
@@ -355,7 +355,7 @@ export const sendSignedOrderToEthereum = async (
   //   overrides
   // )
   // console.log('sendSignedOrderToEthereum:gas', gas.toString())
-  return exchangeContract.fillOrder(
+  return exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
     signedOrder.signature,

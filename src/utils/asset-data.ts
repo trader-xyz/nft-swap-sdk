@@ -60,7 +60,8 @@ export const encodeMultiAssetAssetData = (
   ]);
 
 const encodeAssetData = (
-  assetData: UserFacingSerializedSingleAssetDataTypes
+  assetData: UserFacingSerializedSingleAssetDataTypes,
+  erc1155EncodingForMultiAssetOrder: boolean = false
 ): string => {
   switch (assetData.type) {
     case SupportedTokenTypes.ERC20:
@@ -74,7 +75,12 @@ const encodeAssetData = (
       return erc721AssetData;
     case SupportedTokenTypes.ERC1155:
       const tokenIds = assetData.tokens.map((x) => x.tokenId);
-      const tokenValues = assetData.tokens.map((x) => x.tokenValue);
+      let tokenValues: string[];
+      if (erc1155EncodingForMultiAssetOrder) {
+        tokenValues = assetData.tokens.map((_) => '1');
+      } else {
+        tokenValues = assetData.tokens.map((x) => x.tokenValue);
+      }
       const erc1155AssetData = encodeErc1155AssetData(
         assetData.tokenAddress,
         convertCollectionToBN(tokenIds),
@@ -96,10 +102,10 @@ const getAmountFromAsset = (
     case SupportedTokenTypes.ERC721:
       return '1';
     case SupportedTokenTypes.ERC1155:
-      // Trader.sdk only supports trading 1 ERC1155 per _asset_ at a time, 
+      // Trader.sdk only supports trading 1 ERC1155 per _asset_ at a time,
       // so we can access the 0th index for our token
       // (You can still trade multiple ERC1155s per _order_).
-      return assetData.tokens[0]?.tokenValue || '1';
+      return assetData.tokens[0]?.tokenValue ?? '1';
     default:
       throw new Error(`Unsupported type ${(assetData as any)?.type}`);
   }
