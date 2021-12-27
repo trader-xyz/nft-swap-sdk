@@ -1,14 +1,6 @@
 import { ethers } from 'ethers';
-import {
-  defaultAbiCoder,
-  hexDataSlice,
-  parseEther,
-  hexDataLength,
-} from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
-import { verifyOrderSignature } from '../src/sdk/pure';
 import { OrderStatus } from '../src/sdk/types';
-import { encodeErc20AssetData } from '../src/utils/asset-data';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -119,7 +111,7 @@ describe('NFTSwap', () => {
     //   normalizedOrder
     // );
     // expect(orderInfoAfterCancel.orderStatus).toBe(OrderStatus.Cancelled);
-    
+
     // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
     //   gasPrice,

@@ -357,7 +357,6 @@ export enum RevertReason {
   InvalidTxHash = 'INVALID_TX_HASH',
   InvalidTxSignature = 'INVALID_TX_SIGNATURE',
   FailedExecution = 'FAILED_EXECUTION',
-  AssetProxyAlreadyExists = 'ASSET_PROXY_ALREADY_EXISTS',
   LengthGreaterThan0Required = 'LENGTH_GREATER_THAN_0_REQUIRED',
   LengthGreaterThan3Required = 'LENGTH_GREATER_THAN_3_REQUIRED',
   LengthGreaterThan131Required = 'LENGTH_GREATER_THAN_131_REQUIRED',
@@ -423,8 +422,6 @@ export enum RevertReason {
   NFTNotOwnedByFromAddress = 'NFT_NOT_OWNED_BY_FROM_ADDRESS',
   OwnersAndIdsMustHaveSameLength = 'OWNERS_AND_IDS_MUST_HAVE_SAME_LENGTH',
   TokenAndValuesLengthMismatch = 'TOKEN_AND_VALUES_LENGTH_MISMATCH',
-  TriedToMintFungibleForNonFungibleToken = 'TRIED_TO_MINT_FUNGIBLE_FOR_NON_FUNGIBLE_TOKEN',
-  TriedToMintNonFungibleForFungibleToken = 'TRIED_TO_MINT_NON_FUNGIBLE_FOR_FUNGIBLE_TOKEN',
   TransferRejected = 'TRANSFER_REJECTED',
   Uint256Underflow = 'UINT256_UNDERFLOW',
   InvalidIdsOffset = 'INVALID_IDS_OFFSET',
@@ -441,10 +438,6 @@ export enum RevertReason {
   CustomTimeLockIncomplete = 'CUSTOM_TIME_LOCK_INCOMPLETE',
   EqualLengthsRequired = 'EQUAL_LENGTHS_REQUIRED',
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
-  ChaiBridgeOnlyCallableByErc20BridgeProxy = 'ChaiBridge/ONLY_CALLABLE_BY_ERC20_BRIDGE_PROXY',
-  ChaiBridgeDrawDaiFailed = 'ChaiBridge/DRAW_DAI_FAILED',
-  DydxBridgeOnlyCallableByErc20BridgeProxy = 'DydxBridge/ONLY_CALLABLE_BY_ERC20_BRIDGE_PROXY',
-  DydxBridgeUnrecognizedBridgeAction = 'DydxBridge/UNRECOGNIZED_BRIDGE_ACTION',
 }
 
 export interface AddressesForChain {
