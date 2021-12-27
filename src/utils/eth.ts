@@ -7,14 +7,6 @@ import type { ObjectMap } from '../types';
 export const CRYPTO_KITTIES_CONTRACT_ADDRESS =
   '0x06012c8cf97bead5deae237070f9587f8e7a266d';
 
-export enum ChainId {
-  Mainnet = 1,
-  Kovan = 42,
-  Ganache = 1337,
-  Polygon = 137,
-  Mumbai = 80001,
-}
-
 export const ETH_GAS_STATION_API_BASE_URL = 'https://ethgasstation.info';
 export const ETH_GAS_STATION_GAS_ENDPOINT = `${ETH_GAS_STATION_API_BASE_URL}/json/ethgasAPI.json`;
 

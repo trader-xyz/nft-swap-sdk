@@ -1,13 +1,5 @@
 import { ethers } from 'ethers';
-import {
-  defaultAbiCoder,
-  hexDataSlice,
-  parseEther,
-  hexDataLength,
-} from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
-import { verifyOrderSignature } from '../src/sdk/pure';
-import { encodeErc20AssetData } from '../src/utils/asset-data';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);

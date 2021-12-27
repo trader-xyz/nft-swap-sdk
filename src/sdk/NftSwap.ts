@@ -6,7 +6,6 @@ import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
 
 import addresses from '../addresses.json';
-import { ChainId } from '../utils/eth';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
@@ -27,24 +26,25 @@ import {
   getForwarderAddress,
 } from './pure';
 import {
-  EIP712_TYPES,
   getEipDomain,
-  SupportedTokenTypes,
-  TypedData,
+  normalizeOrder as _normalizeOrder,
 } from '../utils/order';
-import { normalizeOrder as _normalizeOrder } from '../utils/order';
 import {
+  ChainId,
+  EIP712_TYPES,
   Order,
   OrderInfo,
   OrderStatus,
   OrderStatusCodeLookup,
   SignedOrder,
+  SupportedTokenTypes,
+  SwappableAsset,
+  TypedData,
 } from './types';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
-  SwappableAsset,
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
 
