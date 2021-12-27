@@ -207,11 +207,12 @@ class NftSwap implements INftSwap {
       this.forwarderContractAddress,
       'Forwarder Contract Address not set, ETH buy/sells will not work'
     );
+    warning(this.signer, 'No Signer provided; Read-only mode only.');
 
     // Initialize Exchange contract so we can interact with it easily.
     this.exchangeContract = ExchangeContract__factory.connect(
       zeroExExchangeContractAddress,
-      signer
+      signer ?? provider
     );
   }
 
