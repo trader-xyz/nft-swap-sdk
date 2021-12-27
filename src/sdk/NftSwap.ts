@@ -1,5 +1,11 @@
+import type {
+  BaseProvider,
+  TransactionReceipt,
+} from '@ethersproject/providers';
+import type { ContractTransaction } from '@ethersproject/contracts';
+import type { Signer } from '@ethersproject/abstract-signer';
+
 import addresses from '../addresses.json';
-import { ChainId } from '../utils/eth';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
@@ -7,34 +13,40 @@ import {
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
-  ApprovalStatus,
+  cancelOrder as _cancelOrder,
+  cancelOrders as _cancelOrders,
+  cancelOrdersUpToNow as _cancelOrdersUpToNow,
+  getOrderInfo as _getOrderInfo,
   getProxyAddressForErcType,
+  hashOrder,
   TransactionOverrides,
   PayableOverrides,
-  hashOrder,
+  ApprovalStatus,
   SigningOptions,
   getForwarderAddress,
 } from './pure';
 import {
-  EIP712_TYPES,
   getEipDomain,
-  SupportedTokenTypes,
-  TypedData,
+  normalizeOrder as _normalizeOrder,
 } from '../utils/order';
-import type {
-  BaseProvider,
-  TransactionReceipt,
-} from '@ethersproject/providers';
-import type { ContractTransaction } from '@ethersproject/contracts';
-import { normalizeOrder as _normalizeOrder } from '../utils/order';
-import { Order, SignedOrder } from './types';
-import { Signer } from '@ethersproject/abstract-signer';
+import {
+  ChainId,
+  EIP712_TYPES,
+  Order,
+  OrderInfo,
+  OrderStatus,
+  OrderStatusCodeLookup,
+  SignedOrder,
+  SupportedTokenTypes,
+  SwappableAsset,
+  TypedData,
+} from './types';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
-  SwappableAsset,
 } from '../utils/asset-data';
+import { sleep } from '../utils/sleep';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -73,7 +85,15 @@ export interface INftSwap {
     fillOrderOverrides?: Partial<FillOrderOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
-  getOrderHash: (order: any) => string;
+  cancelOrder: (order: Order) => Promise<ContractTransaction>;
+  waitUntilOrderFilledOrCancelled: (
+    order: Order,
+    timeoutInMs: number,
+    throwIfStatusOtherThanFillableOrFilled?: boolean
+  ) => Promise<OrderInfo | null>;
+  getOrderStatus: (order: Order) => Promise<OrderStatus>;
+  getOrderInfo: (order: Order) => Promise<OrderInfo>;
+  getOrderHash: (order: Order) => string;
   getTypedData: (
     chainId: number,
     exchangeContractAddress: string,
@@ -113,7 +133,7 @@ export interface FillOrderOverrides {
 }
 
 /**
- * Convenience wrapper to swap between ERC20,ERC721,and ERC1155
+ * NftSwap Convenience class to swap between ERC20, ERC721, and ERC1155. Primary entrypoint for swapping.
  */
 class NftSwap implements INftSwap {
   public provider: BaseProvider;
@@ -166,12 +186,79 @@ class NftSwap implements INftSwap {
       zeroExExchangeContractAddress,
       provider
     );
-
-    this.exchangeContract = ExchangeContract__factory.connect(
-      zeroExExchangeContractAddress,
-      signer
-    );
   }
+
+  public cancelOrder = async (order: Order) => {
+    return _cancelOrder(this.exchangeContract, order);
+  };
+
+  /**
+   *
+   * @param order : 0x Order;
+   * @param timeoutInMs : Timeout in millisecond to give up listening for order fill
+   * @param throwIfStatusOtherThanFillableOrFilled : Option to throw if status changes from fillable to anything other than 'filled' (e.g 'cancelled')
+   * @returns OrderInfo if status change in order, or null if timed out
+   */
+  public waitUntilOrderFilledOrCancelled = async (
+    order: Order,
+    timeoutInMs: number = 60 * 1000,
+    throwIfStatusOtherThanFillableOrFilled: boolean = false
+  ): Promise<OrderInfo | null> => {
+    let settled = false;
+
+    const timeoutPromise = sleep(timeoutInMs).then((_) => null);
+
+    const orderStatusRefreshPromiseFn = async (): Promise<OrderInfo | null> => {
+      while (!settled) {
+        const orderInfo = await this.getOrderInfo(order);
+        if (orderInfo.orderStatus === OrderStatus.Fillable) {
+          await sleep(10_000);
+          continue;
+        } else if (orderInfo.orderStatus === OrderStatus.FullyFilled) {
+          return orderInfo;
+        } else {
+          // expired, bad order, etc
+          if (throwIfStatusOtherThanFillableOrFilled) {
+            throw new Error(
+              OrderStatusCodeLookup[orderInfo.orderStatus] ??
+                orderInfo.orderStatus ??
+                'Unknown status'
+            );
+          }
+          return orderInfo;
+        }
+      }
+      return null;
+    };
+    const fillEventListenerFn = async () => {
+      // TODO(johnrjj)
+      await sleep(120_000);
+      return null;
+    };
+
+    const orderStatusRefreshPromiseLoop: Promise<OrderInfo | null> =
+      orderStatusRefreshPromiseFn();
+
+    const fillEventPromise: Promise<OrderInfo | null> = fillEventListenerFn();
+
+    const orderInfo = await Promise.any([
+      timeoutPromise,
+      orderStatusRefreshPromiseLoop,
+      fillEventPromise,
+    ]);
+    settled = true;
+
+    return orderInfo;
+  };
+
+  public getOrderInfo = async (order: Order): Promise<OrderInfo> => {
+    return _getOrderInfo(this.exchangeContract, order);
+  };
+
+  public getOrderStatus = async (order: Order): Promise<OrderStatus> => {
+    const orderInfo = await this.getOrderInfo(order);
+    return orderInfo.orderStatus;
+  };
 
   public awaitTransactionHash = async (txHash: string) => {
     return this.provider.waitForTransaction(txHash);

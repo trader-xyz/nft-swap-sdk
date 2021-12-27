@@ -1,10 +1,7 @@
-import { defaultAbiCoder } from '@ethersproject/abi';
-import { hexDataSlice } from '@ethersproject/bytes';
 import { InfuraProvider } from '@ethersproject/providers';
 import { NftSwap, SwappableAsset } from '../src';
 import { hashOrder } from '../src/sdk/pure';
 import { NULL_ADDRESS } from '../src/utils/eth';
-import { INFINITE_TIMESTAMP_SEC } from '../src/utils/order';
 
 describe('NFTSwap', () => {
   const chainId = 4;

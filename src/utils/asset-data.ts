@@ -1,23 +1,21 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { hexConcat, hexDataSlice } from '@ethersproject/bytes';
-import { AbiCoder, defaultAbiCoder } from '@ethersproject/abi';
+import { hexConcat } from '@ethersproject/bytes';
+import { defaultAbiCoder } from '@ethersproject/abi';
 
 import {
+  AssetProxyId,
   SupportedTokenTypes,
-  UserFacingERC1155AssetDataSerializedNormalizedSingle,
-  UserFacingERC20AssetDataSerialized,
-  UserFacingERC721AssetDataSerialized,
+  SwappableAsset,
   UserFacingSerializedSingleAssetDataTypes,
-} from './order';
-import { AssetProxyId } from '../sdk/types';
+} from '../sdk/types';
 import { InterallySupportedAssetFormat } from '../sdk/pure';
 import { UnexpectedAssetTypeError } from '../sdk/error';
 
-const convertStringToBN = (s: string) => {
+export const convertStringToBN = (s: string) => {
   return BigNumber.from(s);
 };
 
-const convertCollectionToBN = (arr: string[]) => {
+export const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
 };
 
@@ -59,7 +57,7 @@ export const encodeMultiAssetAssetData = (
     defaultAbiCoder.encode(['uint256[]', 'bytes[]'], [values, nestedAssetData]),
   ]);
 
-const encodeAssetData = (
+export const encodeAssetData = (
   assetData: UserFacingSerializedSingleAssetDataTypes,
   erc1155EncodingForMultiAssetOrder: boolean = false
 ): string => {
@@ -93,7 +91,7 @@ const encodeAssetData = (
   }
 };
 
-const getAmountFromAsset = (
+export const getAmountFromAsset = (
   assetData: UserFacingSerializedSingleAssetDataTypes
 ): string => {
   switch (assetData.type) {
@@ -110,11 +108,6 @@ const getAmountFromAsset = (
       throw new Error(`Unsupported type ${(assetData as any)?.type}`);
   }
 };
-
-export type SwappableAsset =
-  | UserFacingERC20AssetDataSerialized
-  | UserFacingERC721AssetDataSerialized
-  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
 
 export const convertAssetToInternalFormat = (
   swappable: SwappableAsset
@@ -150,5 +143,3 @@ export const convertAssetsToInternalFormat = (
 ): Array<InterallySupportedAssetFormat> => {
   return assets.map(convertAssetToInternalFormat);
 };
-
-export { encodeAssetData, getAmountFromAsset };

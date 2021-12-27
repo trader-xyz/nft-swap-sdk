@@ -15,13 +15,10 @@ import { Interface } from '@ethersproject/abi';
 import type { Signer } from 'ethers';
 import type { TypedDataSigner } from '@ethersproject/abstract-signer';
 import {
-  AdditionalOrderConfig,
-  EIP712_TYPES,
   generateOrderFromAssetDatas,
+  generateTimeBasedSalt,
   getEipDomain,
   normalizeOrder,
-  SupportedTokenTypes,
-  UserFacingSerializedSingleAssetDataTypes,
 } from '../utils/order';
 import { NULL_ADDRESS } from '../utils/eth';
 import {
@@ -36,37 +33,65 @@ import {
   ExchangeContract,
 } from '../contracts';
 import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
-import type { AddressesForChain, Order, SignedOrder } from './types';
+import {
+  AdditionalOrderConfig,
+  AddressesForChain,
+  EIP712_TYPES,
+  Order,
+  OrderInfo,
+  OrderStatus,
+  SignedOrder,
+  SupportedTokenTypes,
+  UserFacingSerializedSingleAssetDataTypes,
+} from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
 import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
 import addresses from '../addresses.json';
 
-export enum AssetProxyId {
-  ERC20 = '0xf47261b0',
-  ERC721 = '0x02571792',
-  MultiAsset = '0x94cfcdd7',
-  ERC1155 = '0xa7cb5fb7',
-  StaticCall = '0xc339d10a',
-}
-
-export enum ChainId {
-  Mainnet = 1,
-  Ropsten = 3,
-  Rinkeby = 4,
-  Kovan = 42,
-  Ganache = 1337,
-  BSC = 56,
-  Polygon = 137,
-  PolygonMumbai = 80001,
-  Avalanche = 43114,
-}
-
-const convertStringToBN = (s: string) => {
+export const convertStringToBN = (s: string) => {
   return BigNumber.from(s);
 };
 
-const convertCollectionToBN = (arr: string[]) => {
+export const convertCollectionToBN = (arr: string[]) => {
   return arr.map(convertStringToBN);
+};
+
+export const cancelOrder = (
+  exchangeContract: ExchangeContract,
+  order: Order
+) => {
+  return exchangeContract.cancelOrder(order);
+};
+
+export const getOrderInfo = async (
+  exchangeContract: ExchangeContract,
+  order: Order
+): Promise<OrderInfo> => {
+  const orderInfo = await exchangeContract.getOrderInfo(order);
+  return orderInfo as OrderInfo;
+};
+
+export const getOrderStatus = async (
+  exchangeContract: ExchangeContract,
+  order: Order
+): Promise<OrderStatus> => {
+  const orderInfo = await exchangeContract.getOrderInfo(order);
+  return orderInfo.orderStatus as OrderStatus;
+};
+
+export const cancelOrders = (
+  exchangeContract: ExchangeContract,
+  orders: Array<Order>,
+  overrides?: PayableOverrides
+) => {
+  return exchangeContract.batchCancelOrders(orders, overrides);
+};
+
+export const cancelOrdersUpToNow = (
+  exchangeContract: ExchangeContract,
+  unixTimestampAsSalt: string = generateTimeBasedSalt()
+) => {
+  exchangeContract.cancelOrdersUpTo(unixTimestampAsSalt);
 };
 
 export const hashOrder = (
@@ -88,7 +113,7 @@ export interface SigningOptions {
   autodetectSignatureType: boolean;
 }
 
-const signOrderWithEip1271 = async (
+export const signOrderWithEip1271 = async (
   order: Order,
   signer: Signer,
   chainId: number,
@@ -137,7 +162,7 @@ export const signOrderWithEoaWallet = async (
   return rawSignatureFromEoaWallet;
 };
 
-const checkIfContractWallet = async (
+export const checkIfContractWallet = async (
   provider: Provider,
   walletAddress: string
 ): Promise<boolean> => {
@@ -243,23 +268,23 @@ export const signOrder = async (
   }
 };
 
-export const prepareOrderSignature = (
-  rawSignature: string,
-  method?: AvailableSignatureTypes
-) => {
-  let preferredMethod = method ?? 'eoa';
-  try {
-    return prepareOrderSignatureFromEoaWallet(rawSignature);
-  } catch (e) {
-    console.log('prepareOrderSignature:Errror preparing order signature', e);
-    console.log('Attempting to decode contract wallet signature');
-    try {
-      return prepareOrderSignatureFromContractWallet(rawSignature);
-    } catch (e) {
-      throw e;
-    }
-  }
-};
+// export const prepareOrderSignature = (
+//   rawSignature: string,
+//   method?: AvailableSignatureTypes
+// ) => {
+//   let preferredMethod = method ?? 'eoa';
+//   try {
+//     return prepareOrderSignatureFromEoaWallet(rawSignature);
+//   } catch (e) {
+//     console.log('prepareOrderSignature:Errror preparing order signature', e);
+//     console.log('Attempting to decode contract wallet signature');
+//     try {
+//       return prepareOrderSignatureFromContractWallet(rawSignature);
+//     } catch (e) {
+//       throw e;
+//     }
+//   }
+// };
 
 export const prepareOrderSignatureFromEoaWallet = (rawSignature: string) => {
   // Append the signature type (eg. "0x02" for EIP712 signatures)
@@ -399,7 +424,14 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
+      console.log('asset', asset.tokenAddress);
+      console.log(
+        'erc20AllowanceBigNumber',
+        erc20AllowanceBigNumber.toString()
+      );
       const approvedForMax = erc20AllowanceBigNumber.gte(MAX_APPROVAL);
+      console.log('MAX_APPROVAL', MAX_APPROVAL.toString());
+      console.log(MAX_APPROVAL.sub(erc20AllowanceBigNumber).toString());
       return {
         contractApproved: approvedForMax,
       };
@@ -438,7 +470,7 @@ export const getApprovalStatus = async (
   }
 };
 
-export const MAX_APPROVAL = BigNumber.from(2).pow(128).sub(1);
+export const MAX_APPROVAL = BigNumber.from(2).pow(120).sub(1);
 
 export interface TransactionOverrides {
   gasLimit?: BigNumberish | Promise<BigNumberish>;

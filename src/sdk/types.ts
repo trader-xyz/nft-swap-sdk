@@ -42,6 +42,44 @@ export enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 
+export enum ChainId {
+  Mainnet = 1,
+  Ropsten = 3,
+  Rinkeby = 4,
+  Kovan = 42,
+  Ganache = 1337,
+  BSC = 56,
+  Polygon = 137,
+  PolygonMumbai = 80001,
+  Avalanche = 43114,
+}
+
+export interface OrderInfo {
+  orderStatus: OrderStatus;
+  orderHash: string;
+  orderTakerAssetFilledAmount: BigNumber;
+}
+
+export enum OrderStatus {
+  Invalid = 0,
+  InvalidMakerAssetAmount,
+  InvalidTakerAssetAmount,
+  Fillable,
+  Expired,
+  FullyFilled,
+  Cancelled,
+}
+
+export const OrderStatusCodeLookup = {
+  0: 'Invalid',
+  1: 'InvalidMakerAssetAmount',
+  2: 'InvalidTakerAssetAmount',
+  3: 'Fillable',
+  4: 'Expired',
+  5: 'FullyFilled',
+  6: 'Cancelled',
+};
+
 export interface ERC20AssetData {
   assetProxyId: string;
   tokenAddress: string;
@@ -105,6 +143,197 @@ export declare type AssetData =
   | MultiAssetData
   | MultiAssetDataWithRecursiveDecoding;
 
+export type AvailableSingleAssetDataTypes =
+  | ERC20AssetData
+  | ERC721AssetData
+  | ERC1155AssetData;
+export type AvailableAssetDataTypes =
+  | AvailableSingleAssetDataTypes
+  | MultiAssetData;
+
+export interface MultiAssetDataSerialized {
+  assetProxyId: string;
+  amounts: string[];
+  nestedAssetData: string[];
+}
+
+// User facing
+export interface UserFacingERC20AssetDataSerialized {
+  tokenAddress: string;
+  type: 'ERC20';
+  amount: string;
+}
+
+export interface UserFacingERC721AssetDataSerialized {
+  tokenAddress: string;
+  tokenId: string;
+  type: 'ERC721';
+}
+
+export interface UserFacingERC1155AssetDataSerialized {
+  tokenAddress: string;
+  tokens: Array<{ tokenId: string; tokenValue: string }>;
+  type: 'ERC1155';
+}
+
+/**
+ * Mimic the erc721 duck type
+ */
+export interface UserFacingERC1155AssetDataSerializedNormalizedSingle {
+  tokenAddress: string;
+  tokenId: string;
+  type: 'ERC1155';
+  amount?: string; // Will default to '1'
+}
+
+export type UserFacingSerializedSingleAssetDataTypes =
+  | UserFacingERC20AssetDataSerialized
+  | UserFacingERC721AssetDataSerialized
+  | UserFacingERC1155AssetDataSerialized;
+
+export interface ERC20AssetDataSerialized {
+  assetProxyId: string;
+  tokenAddress: string;
+}
+
+export interface ERC721AssetDataSerialized {
+  assetProxyId: string;
+  tokenAddress: string;
+  tokenId: string;
+}
+export interface ERC1155AssetDataSerialized {
+  assetProxyId: string;
+  tokenAddress: string;
+  tokenIds: string[];
+  tokenValues: string[];
+  callbackData: string;
+}
+
+export type SerializedSingleAssetDataTypes =
+  | ERC20AssetDataSerialized
+  | ERC721AssetDataSerialized
+  | ERC1155AssetDataSerialized;
+export type SerializedAvailableAssetDataTypes =
+  | SerializedSingleAssetDataTypes
+  | MultiAssetDataSerialized;
+
+export enum ORDER_BUILDER_ERROR_CODES {
+  MISSING_CONTRACT_WRAPPERS_ERROR = 'MISSING_CONTRACT_WRAPPERS_ERROR',
+}
+
+export enum SupportedTokenTypes {
+  ERC20 = 'ERC20',
+  ERC721 = 'ERC721',
+  ERC1155 = 'ERC1155',
+}
+
+export type SupportedTokenTypesType =
+  | SupportedTokenTypes.ERC20
+  | SupportedTokenTypes.ERC721
+  | SupportedTokenTypes.ERC1155;
+
+export interface TradeableAssetItem<TMetadata = any> {
+  amount: string;
+  userInputtedAmount?: string;
+  assetData: SerializedSingleAssetDataTypes;
+  type: SupportedTokenTypesType;
+  id: string; // unique id
+  metadata?: TMetadata;
+}
+
+// Convenience type wrappers
+export interface Erc20TradeableAsset extends TradeableAssetItem {
+  assetData: ERC20AssetDataSerialized;
+  type: SupportedTokenTypes.ERC20;
+}
+
+export interface Erc721TradeableAsset extends TradeableAssetItem {
+  assetData: ERC721AssetDataSerialized;
+  type: SupportedTokenTypes.ERC721;
+}
+
+export interface Erc1155TradeableAsset extends TradeableAssetItem {
+  assetData: ERC1155AssetDataSerialized;
+  type: SupportedTokenTypes.ERC1155;
+}
+
+export type AvailableTradeableAssets =
+  | Erc20TradeableAsset
+  | Erc721TradeableAsset
+  | Erc1155TradeableAsset;
+
+export interface AdditionalOrderConfig {
+  chainId: number;
+  makerAddress: string;
+  takerAddress?: string;
+  expiration?: Date;
+  exchangeAddress?: string;
+  salt?: string;
+}
+
+export interface ZeroExOrder {
+  makerAddress: string;
+  takerAddress: string;
+  feeRecipientAddress: string;
+  senderAddress: string;
+  makerAssetAmount: string;
+  takerAssetAmount: string;
+  makerFee: string;
+  takerFee: string;
+  expirationTimeSeconds: string;
+  salt: string;
+  makerAssetData: string;
+  takerAssetData: string;
+  makerFeeAssetData: string;
+  takerFeeAssetData: string;
+}
+
+export interface ZeroExSignedOrder extends ZeroExOrder {
+  signature: string;
+}
+
+export interface EipDomain {
+  name: string;
+  version: string;
+  chainId: string;
+  verifyingContract: string;
+}
+
+export interface TypedData {
+  domain: EipDomain;
+  types: {
+    Order: {
+      name: string;
+      type: string;
+    }[];
+  };
+  value: Order;
+}
+
+export const EIP712_TYPES = {
+  Order: [
+    { name: 'makerAddress', type: 'address' },
+    { name: 'takerAddress', type: 'address' },
+    { name: 'feeRecipientAddress', type: 'address' },
+    { name: 'senderAddress', type: 'address' },
+    { name: 'makerAssetAmount', type: 'uint256' },
+    { name: 'takerAssetAmount', type: 'uint256' },
+    { name: 'makerFee', type: 'uint256' },
+    { name: 'takerFee', type: 'uint256' },
+    { name: 'expirationTimeSeconds', type: 'uint256' },
+    { name: 'salt', type: 'uint256' },
+    { name: 'makerAssetData', type: 'bytes' },
+    { name: 'takerAssetData', type: 'bytes' },
+    { name: 'makerFeeAssetData', type: 'bytes' },
+    { name: 'takerFeeAssetData', type: 'bytes' },
+  ],
+};
+
+export type SwappableAsset =
+  | UserFacingERC20AssetDataSerialized
+  | UserFacingERC721AssetDataSerialized
+  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
+
 export enum RevertReason {
   OrderUnfillable = 'ORDER_UNFILLABLE',
   InvalidMaker = 'INVALID_MAKER',
@@ -128,7 +357,6 @@ export enum RevertReason {
   InvalidTxHash = 'INVALID_TX_HASH',
   InvalidTxSignature = 'INVALID_TX_SIGNATURE',
   FailedExecution = 'FAILED_EXECUTION',
-  AssetProxyAlreadyExists = 'ASSET_PROXY_ALREADY_EXISTS',
   LengthGreaterThan0Required = 'LENGTH_GREATER_THAN_0_REQUIRED',
   LengthGreaterThan3Required = 'LENGTH_GREATER_THAN_3_REQUIRED',
   LengthGreaterThan131Required = 'LENGTH_GREATER_THAN_131_REQUIRED',
@@ -194,8 +422,6 @@ export enum RevertReason {
   NFTNotOwnedByFromAddress = 'NFT_NOT_OWNED_BY_FROM_ADDRESS',
   OwnersAndIdsMustHaveSameLength = 'OWNERS_AND_IDS_MUST_HAVE_SAME_LENGTH',
   TokenAndValuesLengthMismatch = 'TOKEN_AND_VALUES_LENGTH_MISMATCH',
-  TriedToMintFungibleForNonFungibleToken = 'TRIED_TO_MINT_FUNGIBLE_FOR_NON_FUNGIBLE_TOKEN',
-  TriedToMintNonFungibleForFungibleToken = 'TRIED_TO_MINT_NON_FUNGIBLE_FOR_FUNGIBLE_TOKEN',
   TransferRejected = 'TRANSFER_REJECTED',
   Uint256Underflow = 'UINT256_UNDERFLOW',
   InvalidIdsOffset = 'INVALID_IDS_OFFSET',
@@ -212,10 +438,6 @@ export enum RevertReason {
   CustomTimeLockIncomplete = 'CUSTOM_TIME_LOCK_INCOMPLETE',
   EqualLengthsRequired = 'EQUAL_LENGTHS_REQUIRED',
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
-  ChaiBridgeOnlyCallableByErc20BridgeProxy = 'ChaiBridge/ONLY_CALLABLE_BY_ERC20_BRIDGE_PROXY',
-  ChaiBridgeDrawDaiFailed = 'ChaiBridge/DRAW_DAI_FAILED',
-  DydxBridgeOnlyCallableByErc20BridgeProxy = 'DydxBridge/ONLY_CALLABLE_BY_ERC20_BRIDGE_PROXY',
-  DydxBridgeUnrecognizedBridgeAction = 'DydxBridge/UNRECOGNIZED_BRIDGE_ACTION',
 }
 
 export interface AddressesForChain {

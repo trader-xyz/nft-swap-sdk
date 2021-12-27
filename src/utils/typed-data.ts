@@ -4,7 +4,6 @@ import {
 } from '@ethersproject/abstract-signer';
 import { arrayify } from '@ethersproject/bytes';
 import { _TypedDataEncoder } from '@ethersproject/hash';
-import { keccak256, toUtf8Bytes } from 'ethers/lib/utils';
 
 export interface TypedData {
   domain: TypedDataDomain;
@@ -27,12 +26,4 @@ export const encodeTypedDataHash = (typedData: TypedData): string => {
 
 export const encodeTypedDataDigest = (typedData: TypedData): Uint8Array => {
   return arrayify(encodeTypedDataHash(typedData));
-};
-
-export const encodeMessageDigest = (message: string | Uint8Array) => {
-  if (typeof message === 'string') {
-    return arrayify(keccak256(toUtf8Bytes(message)));
-  } else {
-    return arrayify(keccak256(message));
-  }
 };
