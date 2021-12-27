@@ -2,7 +2,7 @@
 
 # NFT Swap SDK
 
-\_The missing NFT swap SDK for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers.
+The missing NFT swap library for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers.
 
 ## Overview
 
