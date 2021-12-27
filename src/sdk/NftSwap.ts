@@ -4,8 +4,8 @@ import type {
 } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
-
-import addresses from '../addresses.json';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
@@ -30,7 +30,7 @@ import {
   normalizeOrder as _normalizeOrder,
 } from '../utils/order';
 import {
-  ChainId,
+  SupportedChainIds,
   EIP712_TYPES,
   Order,
   OrderInfo,
@@ -40,6 +40,7 @@ import {
   SupportedTokenTypes,
   SwappableAsset,
   TypedData,
+  AddressesForChain,
 } from './types';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
@@ -47,6 +48,7 @@ import {
   convertAssetToInternalFormat,
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
+import addresses from '../addresses.json';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -142,49 +144,74 @@ class NftSwap implements INftSwap {
   public exchangeContract: ExchangeContract;
   public exchangeContractAddress: string;
   public erc20ProxyContractAddress: string;
-  public erc720ProxyContractAddress: string;
+  public erc721ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
   public forwarderContractAddress: string | null;
 
   constructor(
     provider: BaseProvider,
     signer: Signer,
-    chainId: ChainId,
+    chainId?: number,
     additionalConfig?: NftSwapConfig
   ) {
     this.provider = provider;
     this.signer = signer;
-    this.chainId = chainId;
+    this.chainId =
+      chainId ?? (this.provider._network.chainId as SupportedChainIds);
+
+    const chainDefaultContractAddresses: AddressesForChain | undefined =
+      addresses[this.chainId as SupportedChainIds];
 
     const zeroExExchangeContractAddress =
-      additionalConfig?.exchangeContractAddress ?? addresses[chainId]?.exchange;
+      additionalConfig?.exchangeContractAddress ??
+      chainDefaultContractAddresses?.exchange;
 
-    if (!zeroExExchangeContractAddress) {
-      throw new Error(
-        `Chain ${chainId} missing ExchangeContract address. Supply one manually via the additionalConfig argument`
-      );
-    }
+    warning(
+      chainDefaultContractAddresses,
+      `Default contract addresses missing for chain ${this.chainId}. Supply ExchangeContract and Asset Proxy contracts manually via additionalConfig argument`
+    );
 
     this.exchangeContractAddress = zeroExExchangeContractAddress;
 
     this.erc20ProxyContractAddress =
       additionalConfig?.erc20ProxyContractAddress ??
-      getProxyAddressForErcType(SupportedTokenTypes.ERC20, chainId);
-    this.erc720ProxyContractAddress =
+      getProxyAddressForErcType(SupportedTokenTypes.ERC20, this.chainId);
+    this.erc721ProxyContractAddress =
       additionalConfig?.erc721ProxyContractAddress ??
-      getProxyAddressForErcType(SupportedTokenTypes.ERC721, chainId);
+      getProxyAddressForErcType(SupportedTokenTypes.ERC721, this.chainId);
     this.erc1155ProxyContractAddress =
       additionalConfig?.erc1155ProxyContractAddress ??
-      getProxyAddressForErcType(SupportedTokenTypes.ERC1155, chainId);
+      getProxyAddressForErcType(SupportedTokenTypes.ERC1155, this.chainId);
     this.forwarderContractAddress =
       additionalConfig?.forwarderContractAddress ??
-      getForwarderAddress(chainId) ??
+      getForwarderAddress(this.chainId) ??
       null;
+
+    invariant(
+      this.exchangeContractAddress,
+      '0x V3 Exchange Contract Address not set. Exchange Contract is required to load NftSwap'
+    );
+    warning(
+      this.erc20ProxyContractAddress,
+      'ERC20Proxy Contract Address not set, ERC20 swaps will not work'
+    );
+    warning(
+      this.erc721ProxyContractAddress,
+      'ERC721Proxy Contract Address not set, ERC721 swaps will not work'
+    );
+    warning(
+      this.erc1155ProxyContractAddress,
+      'ERC20Proxy Contract Address not set, ERC1155 swaps will not work'
+    );
+    warning(
+      this.forwarderContractAddress,
+      'Forwarder Contract Address not set, ETH buy/sells will not work'
+    );
 
     // Initialize Exchange contract so we can interact with it easily.
     this.exchangeContract = ExchangeContract__factory.connect(
       zeroExExchangeContractAddress,
-      provider
+      signer
     );
   }
 

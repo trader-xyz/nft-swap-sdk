@@ -2,7 +2,6 @@
 import { isHexString } from '@ethersproject/bytes';
 import { getAddress } from '@ethersproject/address';
 import { BigNumber } from '@ethersproject/bignumber';
-import type { ObjectMap } from '../types';
 
 export const CRYPTO_KITTIES_CONTRACT_ADDRESS =
   '0x06012c8cf97bead5deae237070f9587f8e7a266d';
@@ -93,6 +92,10 @@ const getEthPriceInUsd = async (): Promise<number | undefined> => {
 //   }
 //   return baseUnitAmount
 // }
+
+export interface ObjectMap<T> {
+  [key: string]: T;
+}
 
 const arrayToMapWithId = <T extends object>(
   array: T[],
