@@ -296,7 +296,7 @@ export const prepareOrderSignatureFromEoaWallet = (rawSignature: string) => {
 export const prepareOrderSignatureFromContractWallet = (
   rawSignature: string
 ) => {
-  // Append the signature type (eg. "0x07" for EIP712 signatures)
+  // Append the signature type (eg. "0x07" for EIP1271 signatures)
   // at the end of the signature since this is what 0x expects
   // See: https://github.com/0xProject/ZEIPs/issues/33
   return hexConcat([rawSignature, '0x07']);
@@ -379,9 +379,6 @@ export const sendSignedOrderToEthereum = async (
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
     signedOrder.signature,
-    // prepareOrderSignature(signedOrder.signature), // EOA signatures...
-    // prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
-    // prepareOrderSignature(signedOrder.signature), // Contract wallet signatures.
     overrides
   );
 };
