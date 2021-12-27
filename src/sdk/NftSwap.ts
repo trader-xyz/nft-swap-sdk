@@ -4,8 +4,8 @@ import type {
 } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
-
-import addresses from '../addresses.json';
+import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
@@ -48,8 +48,7 @@ import {
   convertAssetToInternalFormat,
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
-import invariant from 'tiny-invariant';
-import warning from 'tiny-warning';
+import addresses from '../addresses.json';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
