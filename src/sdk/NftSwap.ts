@@ -88,7 +88,8 @@ export interface INftSwap {
   cancelOrder: (order: Order) => Promise<ContractTransaction>;
   waitUntilOrderFilledOrCancelled: (
     order: Order,
-    timeoutInMs: number
+    timeoutInMs: number,
+    throwIfStatusOtherThanFillableOrFilled?: boolean
   ) => Promise<OrderInfo | null>;
   getOrderStatus: (order: Order) => Promise<OrderStatus>;
   getOrderInfo: (order: Order) => Promise<OrderInfo>;
