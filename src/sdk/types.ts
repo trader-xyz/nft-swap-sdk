@@ -1,4 +1,13 @@
-import { BigNumber } from '@ethersproject/bignumber';
+import type { BigNumber } from '@ethersproject/bignumber';
+
+export interface AddressesForChain {
+  exchange: string;
+  erc20Proxy: string;
+  erc721Proxy: string;
+  multiAssetProxy: string;
+  erc1155Proxy: string;
+  forwarder: string;
+}
 
 export interface Order {
   makerAddress: string;
@@ -17,6 +26,7 @@ export interface Order {
   takerFeeAssetData: string;
   signature?: string;
 }
+
 export interface SignedOrder extends Order {
   signature: string;
 }
@@ -42,7 +52,7 @@ export enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 
-export enum ChainId {
+export enum SupportedChainIds {
   Mainnet = 1,
   Ropsten = 3,
   Rinkeby = 4,
@@ -105,39 +115,46 @@ export interface ERC1155AssetData {
   tokenValues: BigNumber[];
   callbackData: string;
 }
+
 export interface StaticCallAssetData {
   assetProxyId: string;
   callTarget: string;
   staticCallData: string;
   callResultHash: string;
 }
+
 export interface ERC1155AssetDataNoProxyId {
   tokenAddress: string;
   tokenValues: BigNumber[];
   tokenIds: BigNumber[];
   callbackData: string;
 }
+
 export declare type SingleAssetData =
   | ERC20AssetData
   | ERC20BridgeAssetData
   | ERC721AssetData
   | ERC1155AssetData
   | StaticCallAssetData;
+
 export interface MultiAssetData {
   assetProxyId: string;
   amounts: BigNumber[];
   nestedAssetData: string[];
 }
+
 export interface MultiAssetDataWithRecursiveDecoding {
   assetProxyId: string;
   amounts: BigNumber[];
   nestedAssetData: SingleAssetData[];
 }
+
 export interface DutchAuctionData {
   assetData: AssetData;
   beginTimeSeconds: BigNumber;
   beginAmount: BigNumber;
 }
+
 export declare type AssetData =
   | SingleAssetData
   | MultiAssetData
@@ -147,6 +164,7 @@ export type AvailableSingleAssetDataTypes =
   | ERC20AssetData
   | ERC721AssetData
   | ERC1155AssetData;
+
 export type AvailableAssetDataTypes =
   | AvailableSingleAssetDataTypes
   | MultiAssetData;
@@ -213,6 +231,7 @@ export type SerializedSingleAssetDataTypes =
   | ERC20AssetDataSerialized
   | ERC721AssetDataSerialized
   | ERC1155AssetDataSerialized;
+
 export type SerializedAvailableAssetDataTypes =
   | SerializedSingleAssetDataTypes
   | MultiAssetDataSerialized;
@@ -438,13 +457,4 @@ export enum RevertReason {
   CustomTimeLockIncomplete = 'CUSTOM_TIME_LOCK_INCOMPLETE',
   EqualLengthsRequired = 'EQUAL_LENGTHS_REQUIRED',
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
-}
-
-export interface AddressesForChain {
-  exchange: string;
-  erc20Proxy: string;
-  erc721Proxy: string;
-  multiAssetProxy: string;
-  erc1155Proxy: string;
-  forwarder: string;
 }
