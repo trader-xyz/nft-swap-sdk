@@ -1,7 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { hexConcat, hexDataSlice } from '@ethersproject/bytes';
-import { AbiCoder, defaultAbiCoder } from '@ethersproject/abi';
-
+import { hexConcat } from '@ethersproject/bytes';
+import { defaultAbiCoder } from '@ethersproject/abi';
 import {
   SupportedTokenTypes,
   UserFacingERC1155AssetDataSerializedNormalizedSingle,

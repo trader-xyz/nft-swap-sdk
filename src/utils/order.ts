@@ -1,8 +1,7 @@
 import getUnixTime from 'date-fns/getUnixTime';
 import { BigNumber } from '@ethersproject/bignumber';
-import { randomBytes } from '@ethersproject/random';
 import { _TypedDataEncoder } from '@ethersproject/hash';
-import { NULL_ADDRESS, ZERO_AMOUNT } from './eth';
+import { NULL_ADDRESS, NULL_BYTES, ZERO_AMOUNT } from './eth';
 import type {
   ERC20AssetData,
   ERC721AssetData,
@@ -11,11 +10,7 @@ import type {
   Order,
 } from '../sdk/types';
 
-const TRADER_ADDRESS_IDENTIFIER = '0xBCC02a155c374263321155555Ccf41070017649e';
-
-const NULL_BYTES = '0x';
-
-// const MAX_DIGITS_IN_UNSIGNED_256_INT = 78;
+export const TRADER_ADDRESS_IDENTIFIER = '0xBCC02a155c374263321155555Ccf41070017649e';
 
 export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
 
