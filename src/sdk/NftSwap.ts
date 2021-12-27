@@ -240,6 +240,7 @@ class NftSwap implements INftSwap {
 
     const orderStatusRefreshPromiseLoop: Promise<OrderInfo | null> =
       orderStatusRefreshPromiseFn();
+
     const fillEventPromise: Promise<OrderInfo | null> = fillEventListenerFn();
 
     const orderInfo = await Promise.any([
@@ -247,6 +248,7 @@ class NftSwap implements INftSwap {
       orderStatusRefreshPromiseLoop,
       fillEventPromise,
     ]);
+    settled = true;
 
     return orderInfo;
   };
