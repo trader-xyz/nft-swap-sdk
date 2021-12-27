@@ -42,7 +42,6 @@ import type {
   Order,
   OrderInfo,
   OrderStatus,
-  SignatureType,
   SignedOrder,
 } from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
@@ -79,27 +78,24 @@ const convertCollectionToBN = (arr: string[]) => {
 
 export const cancelOrder = (
   exchangeContract: ExchangeContract,
-  order: Order,
-  overrides?: PayableOverrides
+  order: Order
 ) => {
-  return exchangeContract.cancelOrder(order, overrides);
+  return exchangeContract.cancelOrder(order);
 };
 
 export const getOrderInfo = async (
   exchangeContract: ExchangeContract,
-  order: Order,
-  overrides?: PayableOverrides
+  order: Order
 ): Promise<OrderInfo> => {
-  const orderInfo = await exchangeContract.getOrderInfo(order, overrides);
+  const orderInfo = await exchangeContract.getOrderInfo(order);
   return orderInfo as OrderInfo;
 };
 
 export const getOrderStatus = async (
   exchangeContract: ExchangeContract,
-  order: Order,
-  overrides?: PayableOverrides
+  order: Order
 ): Promise<OrderStatus> => {
-  const orderInfo = await exchangeContract.getOrderInfo(order, overrides);
+  const orderInfo = await exchangeContract.getOrderInfo(order);
   return orderInfo.orderStatus as OrderStatus;
 };
 
@@ -448,7 +444,14 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
+      console.log('asset', asset.tokenAddress);
+      console.log(
+        'erc20AllowanceBigNumber',
+        erc20AllowanceBigNumber.toString()
+      );
       const approvedForMax = erc20AllowanceBigNumber.gte(MAX_APPROVAL);
+      console.log('MAX_APPROVAL', MAX_APPROVAL.toString());
+      console.log(MAX_APPROVAL.sub(erc20AllowanceBigNumber).toString());
       return {
         contractApproved: approvedForMax,
       };
@@ -487,7 +490,7 @@ export const getApprovalStatus = async (
   }
 };
 
-export const MAX_APPROVAL = BigNumber.from(2).pow(128).sub(1);
+export const MAX_APPROVAL = BigNumber.from(2).pow(120).sub(1);
 
 export interface TransactionOverrides {
   gasLimit?: BigNumberish | Promise<BigNumberish>;

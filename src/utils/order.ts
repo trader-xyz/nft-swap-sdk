@@ -10,7 +10,8 @@ import type {
   Order,
 } from '../sdk/types';
 
-export const TRADER_ADDRESS_IDENTIFIER = '0xBCC02a155c374263321155555Ccf41070017649e';
+export const TRADER_ADDRESS_IDENTIFIER =
+  '0xBCC02a155c374263321155555Ccf41070017649e';
 
 export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
 

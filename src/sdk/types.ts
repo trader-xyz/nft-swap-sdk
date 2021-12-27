@@ -42,6 +42,18 @@ export enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 
+export enum ChainId {
+  Mainnet = 1,
+  Ropsten = 3,
+  Rinkeby = 4,
+  Kovan = 42,
+  Ganache = 1337,
+  BSC = 56,
+  Polygon = 137,
+  PolygonMumbai = 80001,
+  Avalanche = 43114,
+}
+
 export interface OrderInfo {
   orderStatus: OrderStatus;
   orderHash: string;

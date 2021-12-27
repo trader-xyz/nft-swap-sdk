@@ -57,16 +57,6 @@ export interface NftSwapConfig {
 }
 
 export interface INftSwap {
-  cancelOrder: (
-    order: Order,
-    overrides: PayableOverrides
-  ) => Promise<ContractTransaction>;
-  waitUntilOrderFilledOrCancelled: (
-    order: Order,
-    timeoutInMs: number
-  ) => Promise<OrderInfo | null>;
-  getOrderStatus: (order: Order) => Promise<OrderStatus>;
-  getOrderInfo: (order: Order) => Promise<OrderInfo>;
   signOrder: (
     order: Order,
     signerAddress: string,
@@ -95,7 +85,14 @@ export interface INftSwap {
     fillOrderOverrides?: Partial<FillOrderOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
-  getOrderHash: (order: any) => string;
+  cancelOrder: (order: Order) => Promise<ContractTransaction>;
+  waitUntilOrderFilledOrCancelled: (
+    order: Order,
+    timeoutInMs: number
+  ) => Promise<OrderInfo | null>;
+  getOrderStatus: (order: Order) => Promise<OrderStatus>;
+  getOrderInfo: (order: Order) => Promise<OrderInfo>;
+  getOrderHash: (order: Order) => string;
   getTypedData: (
     chainId: number,
     exchangeContractAddress: string,
@@ -190,8 +187,8 @@ class NftSwap implements INftSwap {
     );
   }
 
-  public cancelOrder = async (order: Order, overrides: PayableOverrides) => {
-    return _cancelOrder(this.exchangeContract, order, overrides);
+  public cancelOrder = async (order: Order) => {
+    return _cancelOrder(this.exchangeContract, order);
   };
 
   /**
