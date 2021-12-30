@@ -411,14 +411,13 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
-      console.log('asset', asset.tokenAddress);
-      console.log(
-        'erc20AllowanceBigNumber',
-        erc20AllowanceBigNumber.toString()
+      // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
+      const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
+        MAX_APPROVAL.toString()
+      ).sub('100000000000000000');
+      const approvedForMax = erc20AllowanceBigNumber.gte(
+        MAX_APPROVAL_WITH_BUFFER
       );
-      const approvedForMax = erc20AllowanceBigNumber.gte(MAX_APPROVAL);
-      console.log('MAX_APPROVAL', MAX_APPROVAL.toString());
-      console.log(MAX_APPROVAL.sub(erc20AllowanceBigNumber).toString());
       return {
         contractApproved: approvedForMax,
       };
@@ -491,7 +490,7 @@ export const approveAsset = async (
       const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
       const erc20ApprovalTxPromise = erc20.approve(
         exchangeProxyAddressForAsset,
-        approve ? MAX_APPROVAL : 0,
+        approve ? MAX_APPROVAL.toString() : 0,
         {
           ...overrides,
         }
