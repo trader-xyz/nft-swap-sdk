@@ -1,4 +1,7 @@
 import type { BigNumber } from '@ethersproject/bignumber';
+import type { Bytes } from '@ethersproject/bytes';
+
+export type BigNumberish = BigNumber | Bytes | bigint | string | number;
 
 export interface AddressesForChain {
   exchange: string;

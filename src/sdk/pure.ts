@@ -1,6 +1,5 @@
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { BaseProvider, Provider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import {
   arrayify,
   hexConcat,
@@ -11,9 +10,9 @@ import {
 } from '@ethersproject/bytes';
 import { verifyTypedData } from '@ethersproject/wallet';
 import { _TypedDataEncoder } from '@ethersproject/hash';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Interface } from '@ethersproject/abi';
-import type { Signer } from 'ethers';
-import type { TypedDataSigner } from '@ethersproject/abstract-signer';
+import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import {
   generateOrderFromAssetDatas,
   generateTimeBasedSalt,
@@ -36,6 +35,7 @@ import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
 import {
   AdditionalOrderConfig,
   AddressesForChain,
+  BigNumberish,
   EIP712_TYPES,
   Order,
   OrderInfo,
@@ -360,21 +360,11 @@ export interface PayableOverrides extends TransactionOverrides {
   value?: BigNumberish | Promise<BigNumberish>;
 }
 
-export const sendSignedOrderToEthereum = async (
+export const fillSignedOrder = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract,
   overrides?: PayableOverrides
 ): Promise<ContractTransaction> => {
-  // const gas = await exchangeContract.estimateGas.fillOrder(
-  //   normalizeOrder(signedOrder),
-  //   signedOrder.takerAssetAmount,
-  //   signedOrder.signature,
-  //   // prepareOrderSignature(signedOrder.signature), // EOA signatures...
-  //   // prepareOrderSignatureContractWallet(signedOrder.signature), // Contract wallet signatures.
-  //   // prepareOrderSignature(signedOrder.signature), // Contract wallet signatures.
-  //   overrides
-  // )
-  // console.log('sendSignedOrderToEthereum:gas', gas.toString())
   return exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
     signedOrder.takerAssetAmount,
@@ -421,14 +411,13 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
-      console.log('asset', asset.tokenAddress);
-      console.log(
-        'erc20AllowanceBigNumber',
-        erc20AllowanceBigNumber.toString()
+      // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
+      const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
+        MAX_APPROVAL.toString()
+      ).sub('100000000000000000');
+      const approvedForMax = erc20AllowanceBigNumber.gte(
+        MAX_APPROVAL_WITH_BUFFER
       );
-      const approvedForMax = erc20AllowanceBigNumber.gte(MAX_APPROVAL);
-      console.log('MAX_APPROVAL', MAX_APPROVAL.toString());
-      console.log(MAX_APPROVAL.sub(erc20AllowanceBigNumber).toString());
       return {
         contractApproved: approvedForMax,
       };
@@ -467,7 +456,9 @@ export const getApprovalStatus = async (
   }
 };
 
-export const MAX_APPROVAL = BigNumber.from(2).pow(120).sub(1);
+// Some arbitrarily high number.
+// TODO(johnrjj) - Support custom ERC20 approval amounts
+export const MAX_APPROVAL = BigNumber.from(2).pow(118);
 
 export interface TransactionOverrides {
   gasLimit?: BigNumberish | Promise<BigNumberish>;
@@ -481,17 +472,14 @@ export interface TransactionOverrides {
 }
 
 /**
- *
- * @param walletAddress Owner of the asset
- * @param exchangeProxyAddressexchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
+ * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
  * @param asset
  * @param signer Signer, must be a signer not a provider, as signed transactions are needed to approve
  * @param approve Optional, can specify to unapprove asset when set to false
  * @returns
  */
 export const approveAsset = async (
-  _walletAddress: string,
-  exchangeProxyAddressexchangeProxyAddressForAsset: string,
+  exchangeProxyAddressForAsset: string,
   asset: InterallySupportedAssetFormat,
   signer: Signer,
   overrides: TransactionOverrides = {},
@@ -501,10 +489,9 @@ export const approveAsset = async (
     case 'ERC20':
       const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
       const erc20ApprovalTxPromise = erc20.approve(
-        exchangeProxyAddressexchangeProxyAddressForAsset,
-        approve ? MAX_APPROVAL : 0,
+        exchangeProxyAddressForAsset,
+        approve ? MAX_APPROVAL.toString() : 0,
         {
-          // from: walletAddress,
           ...overrides,
         }
       );
@@ -512,10 +499,9 @@ export const approveAsset = async (
     case 'ERC721':
       const erc721 = ERC721__factory.connect(asset.tokenAddress, signer);
       const erc721ApprovalForAllPromise = erc721.setApprovalForAll(
-        exchangeProxyAddressexchangeProxyAddressForAsset,
+        exchangeProxyAddressForAsset,
         approve,
         {
-          // from: walletAddress,
           ...overrides,
         }
       );
@@ -523,12 +509,52 @@ export const approveAsset = async (
     case 'ERC1155':
       const erc1155 = ERC1155__factory.connect(asset.tokenAddress, signer);
       const erc1155ApprovalForAll = await erc1155.setApprovalForAll(
-        exchangeProxyAddressexchangeProxyAddressForAsset,
+        exchangeProxyAddressForAsset,
         approve,
         {
-          // from: walletAddress,
           ...overrides,
         }
+      );
+      return erc1155ApprovalForAll;
+    default:
+      throw new UnexpectedAssetTypeError((asset as any).type);
+  }
+};
+
+/**
+ * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
+ * @param asset
+ * @param signer Signer, must be a signer not a provider, as signed transactions are needed to approve
+ * @param approve Optional, can specify to unapprove asset when set to false
+ * @returns
+ */
+export const estimateGasForApproval = async (
+  exchangeProxyAddressForAsset: string,
+  asset: InterallySupportedAssetFormat,
+  signer: Signer,
+  overrides: TransactionOverrides = {},
+  approve: boolean = true
+): Promise<BigNumber> => {
+  switch (asset.type) {
+    case 'ERC20':
+      const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
+      const erc20ApprovalTxPromise = erc20.estimateGas.approve(
+        exchangeProxyAddressForAsset,
+        approve ? MAX_APPROVAL : 0
+      );
+      return erc20ApprovalTxPromise;
+    case 'ERC721':
+      const erc721 = ERC721__factory.connect(asset.tokenAddress, signer);
+      const erc721ApprovalForAllPromise = erc721.estimateGas.setApprovalForAll(
+        exchangeProxyAddressForAsset,
+        approve
+      );
+      return erc721ApprovalForAllPromise;
+    case 'ERC1155':
+      const erc1155 = ERC1155__factory.connect(asset.tokenAddress, signer);
+      const erc1155ApprovalForAll = await erc1155.estimateGas.setApprovalForAll(
+        exchangeProxyAddressForAsset,
+        approve
       );
       return erc1155ApprovalForAll;
     default:
@@ -578,6 +604,20 @@ export const getForwarderAddress = (chainId: number) => {
     throw new UnsupportedChainId(chainId);
   }
   return zeroExAddresses.forwarder;
+};
+
+export const estimateGasForFillOrder = async (
+  signedOrder: SignedOrder,
+  exchangeContract: ExchangeContract,
+  overrides?: PayableOverrides | undefined
+) => {
+  const estimatedGasRequiredForFill =
+    await exchangeContract.estimateGas.fillOrder(
+      normalizeOrder(signedOrder),
+      signedOrder.takerAssetAmount,
+      signedOrder.signature
+    );
+  return estimatedGasRequiredForFill;
 };
 
 // export const loadApprovalStatusAll = async (assets: Array<InterallySupportedAsset>) => {
