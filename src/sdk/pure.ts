@@ -10,9 +10,9 @@ import {
 } from '@ethersproject/bytes';
 import { verifyTypedData } from '@ethersproject/wallet';
 import { _TypedDataEncoder } from '@ethersproject/hash';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Interface } from '@ethersproject/abi';
-import { BigNumber, Signer } from 'ethers';
-import type { TypedDataSigner } from '@ethersproject/abstract-signer';
+import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import {
   generateOrderFromAssetDatas,
   generateTimeBasedSalt,
