@@ -9,7 +9,11 @@ import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
+<<<<<<< HEAD
   fillSignedOrder as _fillSignedOrder,
+=======
+  fillOrder as _fillOrder,
+>>>>>>> Forwarder wip
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
@@ -45,14 +49,18 @@ import {
   AddressesForChain,
   BigNumberish,
 } from './types';
-import { ExchangeContract, ExchangeContract__factory } from '../contracts';
+import { ExchangeContract, ExchangeContract__factory, Forwarder__factory } from '../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
+<<<<<<< HEAD
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
+=======
+import { ZERO_AMOUNT } from '../utils/eth';
+>>>>>>> Forwarder wip
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -146,7 +154,11 @@ export interface ApprovalOverrides {
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
+<<<<<<< HEAD
   gasAmountBufferMultiple: number | null;
+=======
+  buyWithNativeTokenInsteadOfWrappedToken: boolean;
+>>>>>>> Forwarder wip
 }
 
 /**
@@ -231,8 +243,15 @@ class NftSwap implements INftSwap {
       signer ?? provider
     );
 
+<<<<<<< HEAD
     this.gasBufferMultiples =
       additionalConfig?.gasBufferMultiples ?? DEFAUTLT_GAS_BUFFER_MULTIPLES;
+=======
+    const forwarderContract = Forwarder__factory.connect(
+      this.forwarderContractAddress,
+      signer ?? provider,
+    )
+>>>>>>> Forwarder wip
   }
 
   public cancelOrder = async (order: Order) => {
@@ -442,6 +461,14 @@ class NftSwap implements INftSwap {
     };
   };
 
+  public canBuyOrderWithEth = (order: Order) => {
+
+  }
+
+  public canSellOrderWithEth = (order: Order) => {
+
+  }
+
   public fillSignedOrder = async (
     signedOrder: SignedOrder,
     fillOverrides?: Partial<FillOrderOverrides>,
@@ -469,6 +496,20 @@ class NftSwap implements INftSwap {
         estimatedGasAmount.toNumber() * gasBufferMultiple
       );
     }
+
+    // if (fillOverrides?.buyWithNativeTokenInsteadOfWrappedToken) {
+    //   const forwarderContract = Forwarder__factory.connect(
+    //     this.forwarderContractAddress!,
+    //     this.signer ?? this.provider,
+    //   )
+    //   return forwarderContract.marketBuyOrdersWithEth([signedOrder], 1, [signedOrder.signature], [], [], transactionOverrides)
+    // }
+    // return _fillOrder(
+    //   signedOrder,
+    //   fillOverrides?.exchangeContract ?? this.exchangeContract,
+    //   transactionOverrides
+    // );
+
     return _fillSignedOrder(signedOrder, exchangeContract, {
       gasLimit: maybeCustomGasLimit,
       ...transactionOverrides,
