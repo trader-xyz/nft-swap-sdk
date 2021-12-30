@@ -1,5 +1,11 @@
 import { ethers } from 'ethers';
-import { NftSwap, SwappableAsset } from '../src';
+import {
+  estimateGasForFillOrder,
+  NftSwap,
+  SupportedChainIds,
+  SwappableAsset,
+} from '../src';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../src/utils/gas-buffer';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -92,13 +98,18 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
+    // const estimatedGasLimit = await estimateGasForFillOrder(signedOrder, nftSwapperMaker.exchangeContract);
+
     // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
     //   gasPrice,
-    //   gasLimit: '500000',
-    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-    //   value: parseEther('0.0001'),
     // });
+
+    // const finalGasLimit = tx.gasLimit
+
+    // const expectedGasLimitWithBufferMultiple = Math.floor(estimatedGasLimit.toNumber() * (DEFAUTLT_GAS_BUFFER_MULTIPLES[SupportedChainIds.PolygonMumbai]))
+
+    // expect(finalGasLimit.toNumber()).toEqual(expectedGasLimitWithBufferMultiple)
 
     // const txReceipt = await tx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();

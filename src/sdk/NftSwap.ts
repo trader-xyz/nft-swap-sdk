@@ -9,12 +9,14 @@ import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
-  sendSignedOrderToEthereum as _sendSignedOrderToEthereum,
+  fillSignedOrder as _fillSignedOrder,
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
   cancelOrder as _cancelOrder,
   cancelOrders as _cancelOrders,
+  estimateGasForFillOrder as _estimateGasForFillOrder,
+  estimateGasForApproval as _estimateGasForApproval,
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
   getProxyAddressForErcType,
@@ -41,6 +43,7 @@ import {
   SwappableAsset,
   TypedData,
   AddressesForChain,
+  BigNumberish,
 } from './types';
 import { ExchangeContract, ExchangeContract__factory } from '../contracts';
 import {
@@ -49,6 +52,7 @@ import {
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -56,6 +60,7 @@ export interface NftSwapConfig {
   erc721ProxyContractAddress?: string;
   erc1155ProxyContractAddress?: string;
   forwarderContractAddress?: string;
+  gasBufferMultiples?: { [chainId: number]: number };
 }
 
 export interface INftSwap {
@@ -127,11 +132,13 @@ export interface ApprovalOverrides {
   approve: boolean;
   exchangeProxyContractAddressForAsset: string;
   chainId: number;
+  gasAmountBufferMultiple: number;
 }
 
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
+  gasAmountBufferMultiple: number;
 }
 
 /**
@@ -147,6 +154,7 @@ class NftSwap implements INftSwap {
   public erc721ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
   public forwarderContractAddress: string | null;
+  public gasBufferMultiples: { [chainId: number]: number } | null;
 
   constructor(
     provider: BaseProvider,
@@ -214,6 +222,9 @@ class NftSwap implements INftSwap {
       zeroExExchangeContractAddress,
       signer ?? provider
     );
+
+    this.gasBufferMultiples =
+      additionalConfig?.gasBufferMultiples ?? DEFAUTLT_GAS_BUFFER_MULTIPLES;
   }
 
   public cancelOrder = async (order: Order) => {
@@ -347,32 +358,51 @@ class NftSwap implements INftSwap {
   };
 
   /**
-   * Convenience wrapper around internal approveTokenOrNft
    * @param asset Asset in the SDK format
    * @returns
    */
   public async approveTokenOrNftByAsset(
     asset: SwappableAsset,
-    walletAddress: string,
+    _walletAddress: string, // Remove in next release
     approvalTransactionOverrides?: Partial<TransactionOverrides>,
     otherOverrides?: Partial<ApprovalOverrides>
   ) {
     // TODO(johnrjj) - Look up via class fields instead...
-    const exchangeProxyAddressForAsset = getProxyAddressForErcType(
-      asset.type as SupportedTokenTypes,
-      this.chainId
-    );
+    const exchangeProxyAddressForAsset =
+      otherOverrides?.exchangeProxyContractAddressForAsset ??
+      getProxyAddressForErcType(
+        asset.type as SupportedTokenTypes,
+        this.chainId
+      );
     const signerToUse = otherOverrides?.signer ?? this.signer;
     if (!signerToUse) {
       throw new Error('approveTokenOrNftByAsset:Signer null');
     }
-    return _approveAsset(
-      walletAddress,
-      otherOverrides?.exchangeProxyContractAddressForAsset ??
+    const gasBufferMultiple =
+      otherOverrides?.gasAmountBufferMultiple ??
+      this.getGasMultipleForChainId(this.chainId);
+    let maybeCustomGasLimit: BigNumberish | undefined;
+    if (gasBufferMultiple) {
+      const estimatedGasAmount = await _estimateGasForApproval(
         exchangeProxyAddressForAsset,
+        convertAssetToInternalFormat(asset),
+        signerToUse,
+        approvalTransactionOverrides ?? {},
+        otherOverrides?.approve ?? true
+      );
+      maybeCustomGasLimit = Math.floor(
+        estimatedGasAmount.toNumber() * gasBufferMultiple
+      );
+    }
+
+    return _approveAsset(
+      exchangeProxyAddressForAsset,
       convertAssetToInternalFormat(asset),
       signerToUse,
-      approvalTransactionOverrides ?? {},
+      {
+        gasLimit: maybeCustomGasLimit,
+        ...approvalTransactionOverrides,
+      },
       otherOverrides?.approve ?? true
     );
   }
@@ -401,11 +431,33 @@ class NftSwap implements INftSwap {
     fillOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides: Partial<PayableOverrides> = {}
   ) => {
-    return _sendSignedOrderToEthereum(
-      signedOrder,
-      fillOverrides?.exchangeContract ?? this.exchangeContract,
-      transactionOverrides
-    );
+    const exchangeContract =
+      fillOverrides?.exchangeContract ?? this.exchangeContract;
+    const gasBufferMultiple =
+      fillOverrides?.gasAmountBufferMultiple ??
+      this.getGasMultipleForChainId(this.chainId);
+    let maybeCustomGasLimit: BigNumberish | undefined;
+    if (gasBufferMultiple) {
+      const estimatedGasAmount = await _estimateGasForFillOrder(
+        signedOrder,
+        exchangeContract
+      );
+      // NOTE(johnrjj) - Underflow issues, so we convert to number. Gas amounts shouldn't overflow.
+      maybeCustomGasLimit = Math.floor(
+        estimatedGasAmount.toNumber() * gasBufferMultiple
+      );
+    }
+    return _fillSignedOrder(signedOrder, exchangeContract, {
+      gasLimit: maybeCustomGasLimit,
+      ...transactionOverrides,
+    });
+  };
+
+  private getGasMultipleForChainId = (chainId: number): number | undefined => {
+    if (this.gasBufferMultiples) {
+      return this.gasBufferMultiples[this.chainId];
+    }
+    return undefined;
   };
 
   public normalizeOrder = (order: Order): Order => {
