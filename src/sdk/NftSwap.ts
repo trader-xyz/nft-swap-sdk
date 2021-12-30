@@ -132,13 +132,13 @@ export interface ApprovalOverrides {
   approve: boolean;
   exchangeProxyContractAddressForAsset: string;
   chainId: number;
-  gasAmountBufferMultiple: number;
+  gasAmountBufferMultiple: number | null;
 }
 
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
-  gasAmountBufferMultiple: number;
+  gasAmountBufferMultiple: number | null;
 }
 
 /**
@@ -378,9 +378,17 @@ class NftSwap implements INftSwap {
     if (!signerToUse) {
       throw new Error('approveTokenOrNftByAsset:Signer null');
     }
-    const gasBufferMultiple =
-      otherOverrides?.gasAmountBufferMultiple ??
-      this.getGasMultipleForChainId(this.chainId);
+    if (otherOverrides?.gasAmountBufferMultiple === null) {
+    }
+    let gasBufferMultiple: number | undefined = undefined;
+    if (otherOverrides?.gasAmountBufferMultiple === null) {
+      // keep gasBufferMultiple undefined, b/c user specifically specified null.
+      gasBufferMultiple = undefined;
+    } else {
+      gasBufferMultiple =
+        otherOverrides?.gasAmountBufferMultiple ??
+        this.getGasMultipleForChainId(this.chainId);
+    }
     let maybeCustomGasLimit: BigNumberish | undefined;
     if (gasBufferMultiple) {
       const estimatedGasAmount = await _estimateGasForApproval(
@@ -433,9 +441,15 @@ class NftSwap implements INftSwap {
   ) => {
     const exchangeContract =
       fillOverrides?.exchangeContract ?? this.exchangeContract;
-    const gasBufferMultiple =
-      fillOverrides?.gasAmountBufferMultiple ??
-      this.getGasMultipleForChainId(this.chainId);
+    let gasBufferMultiple: number | undefined = undefined;
+    if (fillOverrides?.gasAmountBufferMultiple === null) {
+      // keep gasBufferMultiple undefined, b/c user specifically specified null.
+      gasBufferMultiple = undefined;
+    } else {
+      gasBufferMultiple =
+        fillOverrides?.gasAmountBufferMultiple ??
+        this.getGasMultipleForChainId(this.chainId);
+    }
     let maybeCustomGasLimit: BigNumberish | undefined;
     if (gasBufferMultiple) {
       const estimatedGasAmount = await _estimateGasForFillOrder(
