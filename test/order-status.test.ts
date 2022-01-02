@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { NftSwap, SwappableAsset } from '../src';
-import { OrderStatus } from '../src/sdk/types';
+import { OrderStatus, SupportedChainIds } from '../src/sdk/types';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -103,14 +103,14 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    // const cancelTx = await nftSwapperMaker.cancelOrder(normalizedOrder);
-    // const cancelTxReceipt = await cancelTx.wait();
-    // expect(cancelTxReceipt.transactionHash).toBeTruthy();
+    const cancelTx = await nftSwapperMaker.cancelOrder(normalizedOrder, { chainId: SupportedChainIds.PolygonMumbai });
+    const cancelTxReceipt = await cancelTx.wait();
+    expect(cancelTxReceipt.transactionHash).toBeTruthy();
 
-    // const orderInfoAfterCancel = await nftSwapperMaker.getOrderInfo(
-    //   normalizedOrder
-    // );
-    // expect(orderInfoAfterCancel.orderStatus).toBe(OrderStatus.Cancelled);
+    const orderInfoAfterCancel = await nftSwapperMaker.getOrderInfo(
+      normalizedOrder
+    );
+    expect(orderInfoAfterCancel.orderStatus).toBe(OrderStatus.Cancelled);
 
     // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {

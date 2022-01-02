@@ -58,9 +58,10 @@ export const convertCollectionToBN = (arr: string[]) => {
 
 export const cancelOrder = (
   exchangeContract: ExchangeContract,
-  order: Order
+  order: Order,
+  overrides?: PayableOverrides
 ) => {
-  return exchangeContract.cancelOrder(order);
+  return exchangeContract.cancelOrder(order, overrides);
 };
 
 export const getOrderInfo = async (
@@ -469,6 +470,7 @@ export interface TransactionOverrides {
   type?: number;
   accessList?: any;
   customData?: Record<string, any>;
+  chainId?: number | undefined;
 }
 
 /**

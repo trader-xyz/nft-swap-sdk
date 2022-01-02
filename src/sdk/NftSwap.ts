@@ -227,8 +227,8 @@ class NftSwap implements INftSwap {
       additionalConfig?.gasBufferMultiples ?? DEFAUTLT_GAS_BUFFER_MULTIPLES;
   }
 
-  public cancelOrder = async (order: Order) => {
-    return _cancelOrder(this.exchangeContract, order);
+  public cancelOrder = async (order: Order, overrides?: Partial<PayableOverrides>) => {
+    return _cancelOrder(this.exchangeContract, order, overrides);
   };
 
   /**
