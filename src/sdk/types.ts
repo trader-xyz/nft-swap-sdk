@@ -285,12 +285,16 @@ export type AvailableTradeableAssets =
   | Erc1155TradeableAsset;
 
 export interface AdditionalOrderConfig {
-  chainId: number;
-  makerAddress: string;
+  makerAddress: string; // only field required
+  chainId?: number;
   takerAddress?: string;
-  expiration?: Date;
+  expiration?: Date | number;
   exchangeAddress?: string;
   salt?: string;
+  feeRecipientAddress?: string,
+  makerFeeAssetData?: string,
+  takerFeeAssetData?: string,
+  makerFee?: string,
 }
 
 export interface ZeroExOrder {

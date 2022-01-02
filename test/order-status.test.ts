@@ -82,10 +82,14 @@ describe('NFTSwap', () => {
       {
         // Fix dates and salt so we have reproducible tests
         expiration: new Date(3000, 10, 1),
+        feeRecipientAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeE'
       }
     );
 
     const normalizedOrder = normalizeOrder(order);
+
+    expect(normalizedOrder.feeRecipientAddress).toBe('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+
 
     const orderInfo = await nftSwapperMaker.getOrderInfo(normalizedOrder);
 
@@ -94,7 +98,7 @@ describe('NFTSwap', () => {
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
-      MAKER_SIGNER
+      MAKER_SIGNER,
     );
 
     const normalizedSignedOrder = normalizeOrder(signedOrder);

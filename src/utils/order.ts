@@ -56,11 +56,16 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   takerAssetData: string;
   makerAssetAmount: BigNumber;
   takerAssetAmount: BigNumber;
-  chainId: number;
   exchangeAddress: string;
+  // Rest of params optional
   takerAddress?: string;
-  expiration?: Date;
+  expiration?: Date | number;
   salt?: string;
+  feeRecipientAddress?: string,
+  makerFeeAssetData?: string,
+  takerFeeAssetData?: string,
+  makerFee?: string,
+  takerFee?: string,
 }): Order => {
   const {
     makerAssetAmount,
@@ -71,6 +76,11 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     takerAddress,
     expiration,
     salt,
+    feeRecipientAddress,
+    makerFeeAssetData,
+    takerFeeAssetData,
+    makerFee,
+    takerFee,
   } = orderConfig;
 
   const expirationTimeSeconds = expiration
@@ -87,12 +97,12 @@ export const generateOrderFromAssetDatas = (orderConfig: {
     expirationTimeSeconds: expirationTimeSeconds.toString(),
     // Stuff that doesn't really matter but is required
     senderAddress: NULL_ADDRESS,
-    feeRecipientAddress: TRADER_ADDRESS_IDENTIFIER,
+    feeRecipientAddress: feeRecipientAddress ?? TRADER_ADDRESS_IDENTIFIER,
     salt: salt ?? generateSaltHash(),
-    makerFeeAssetData: NULL_BYTES,
-    takerFeeAssetData: NULL_BYTES,
-    makerFee: ZERO_AMOUNT.toString(),
-    takerFee: ZERO_AMOUNT.toString(),
+    makerFeeAssetData: makerFeeAssetData ?? NULL_BYTES,
+    takerFeeAssetData: takerFeeAssetData ?? NULL_BYTES,
+    makerFee: makerFee ?? ZERO_AMOUNT.toString(),
+    takerFee: takerFee ?? ZERO_AMOUNT.toString(),
   };
 
   return order;
