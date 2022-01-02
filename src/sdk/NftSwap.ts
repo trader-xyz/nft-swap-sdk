@@ -120,11 +120,19 @@ export interface INftSwap {
  * All optional
  */
 export interface BuildOrderAdditionalConfig {
-  chainId?: number;
   takerAddress?: string;
-  expiration?: Date;
+  /**
+   * Date type or unix timestamp
+   */
+  expiration?: Date | number;
   exchangeAddress?: string;
+  chainId?: number;
   salt?: string;
+  feeRecipientAddress?: string,
+  makerFeeAssetData?: string,
+  takerFeeAssetData?: string,
+  makerFee?: string,
+  takerFee?: string,
 }
 
 export interface ApprovalOverrides {
