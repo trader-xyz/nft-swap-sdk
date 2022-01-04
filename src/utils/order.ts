@@ -61,11 +61,11 @@ export const generateOrderFromAssetDatas = (orderConfig: {
   takerAddress?: string;
   expiration?: Date | number;
   salt?: string;
-  feeRecipientAddress?: string,
-  makerFeeAssetData?: string,
-  takerFeeAssetData?: string,
-  makerFee?: string,
-  takerFee?: string,
+  feeRecipientAddress?: string;
+  makerFeeAssetData?: string;
+  takerFeeAssetData?: string;
+  makerFee?: string;
+  takerFee?: string;
 }): Order => {
   const {
     makerAssetAmount,

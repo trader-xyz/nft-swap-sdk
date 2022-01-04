@@ -128,11 +128,11 @@ export interface BuildOrderAdditionalConfig {
   exchangeAddress?: string;
   chainId?: number;
   salt?: string;
-  feeRecipientAddress?: string,
-  makerFeeAssetData?: string,
-  takerFeeAssetData?: string,
-  makerFee?: string,
-  takerFee?: string,
+  feeRecipientAddress?: string;
+  makerFeeAssetData?: string;
+  takerFeeAssetData?: string;
+  makerFee?: string;
+  takerFee?: string;
 }
 
 export interface ApprovalOverrides {

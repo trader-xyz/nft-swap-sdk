@@ -291,10 +291,10 @@ export interface AdditionalOrderConfig {
   expiration?: Date | number;
   exchangeAddress?: string;
   salt?: string;
-  feeRecipientAddress?: string,
-  makerFeeAssetData?: string,
-  takerFeeAssetData?: string,
-  makerFee?: string,
+  feeRecipientAddress?: string;
+  makerFeeAssetData?: string;
+  takerFeeAssetData?: string;
+  makerFee?: string;
 }
 
 export interface ZeroExOrder {

@@ -36,7 +36,7 @@ To use the SDK, create a new NftSwap instance.
 import { NftSwap } from '@traderxyz/nft-swap-sdk';
 
 // From your app, provide NftSwap the web3 provider or signer, and the chainId to instantiate
-const nftSwapSdk = new NftSwap(providerOrSigner, chainId);
+const nftSwapSdk = new NftSwap(provider, signer, chainId);
 ```
 
 Now you're setup and ready to use the SDK in your program. Check out the examples for how to swap with the library.
@@ -115,7 +115,7 @@ const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 // ............................
 // Initiate the SDK for User B.
 // Pass the user's wallet signer (available via the user's wallet provider) to the Swap SDK
-const nftSwapSdk = new NftSwap(signerUserB, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerUserB, CHAIN_ID);
 
 // Check if we need to approve the NFT for swapping
 const approvalStatusForUserB = await nftSwapSdk.loadApprovalStatus(
@@ -196,7 +196,7 @@ const assetsToSwapUserB = [SIXTY_NINE_USDC, FOUR_THOUSAND_TWENTY_WETH];
 // ............................
 // Part 1 of the trade -- User A (the 'maker') initiates an order
 // ............................
-const nftSwapSdk = new NftSwap(signerUserA, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerUserA, CHAIN_ID);
 // Note: For brevity, we assume all assets are approved for swap in this example.
 // See previous example on how to approve an asset.
 
@@ -210,7 +210,7 @@ const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 // ............................
 // Part 2 of the trade -- User B (the 'taker') accepts and fills order from User A and completes trade
 // ............................
-const nftSwapSdk = new NftSwap(signerUserB, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerUserB, CHAIN_ID);
 
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
 const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
@@ -225,11 +225,11 @@ In this example, we'll leverage the amazing [`web3-react`](https://github.com/No
 
 ```tsx
 const App = () => {
-  const { library, chainId } = useWeb3React();
+  const { library, chainId } = useWeb3React<Web3React>();
 
   const [swapSdk, setSwapSdk] = useState(null);
   useEffect(() => {
-    const sdk = new NftSwap(library.getSigner(), chainId);
+    const sdk = new NftSwap(library, library.getSigner(), chainId);
     setSwapSdk(sdk);
   }, [library, chainId])
 
@@ -291,8 +291,6 @@ We're currently working on the following features for the next iteration of this
 - Live order status
 - Order event streaming via websockets
 
-If you have feature requests, reach out in our Discord.
+If you have feature requests, reach out in our [Discord](https://discord.gg/GCf5rSX6).
 
 We want to make this library a one-stop shop for all your NFT swapping needs.
-
-- We're also moving off of `@0x/*` libraries due to the payload size of these packages.

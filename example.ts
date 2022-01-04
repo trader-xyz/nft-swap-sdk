@@ -14,7 +14,7 @@ const BORED_APE_69 = {
 };
 
 // [Part 1: Maker (owner of the Punk) creates trade]
-const nftSwapSdk = new NftSwap(signerOrProviderForMaker, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerForMaker, CHAIN_ID);
 const walletAddressMaker = '0x1234...';
 await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK_420, walletAddressMaker);
 const order = nftSwapSdk.buildOrder(
@@ -25,7 +25,7 @@ const order = nftSwapSdk.buildOrder(
 const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 
 // [Part 2: Taker (owner of the BoredApe) fills trade]
-const nftSwapSdk = new NftSwap(signerOrProviderForTaker, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);
 const walletAddressTaker = '0x9876...';
 await nftSwapSdk.approveTokenOrNftByAsset(BORED_APE_69, walletAddressTaker);
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
