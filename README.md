@@ -35,7 +35,7 @@ To use the SDK, create a new NftSwap instance.
 ```tsx
 import { NftSwap } from '@traderxyz/nft-swap-sdk';
 
-// From your app, provide NftSwap the web3 provider or signer, and the chainId to instantiate
+// From your app, provide NftSwap the web3 provider, signer for the user's wallet, and the chain id.
 const nftSwapSdk = new NftSwap(provider, signer, chainId);
 ```
 
@@ -81,7 +81,7 @@ const assetsToSwapUserB = [BORED_APE_69];
 
 // Initiate the SDK for User A.
 // Pass the user's wallet signer (available via the user's wallet provider) to the Swap SDK
-const nftSwapSdk = new NftSwap(signerUserA, CHAIN_ID);
+const nftSwapSdk = new NftSwap(provider, signerUserA, CHAIN_ID);
 
 // Check if we need to approve the NFT for swapping
 const approvalStatusForUserA = await nftSwapSdk.loadApprovalStatus(
@@ -114,7 +114,6 @@ const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 // Part 2 of the trade -- User B (the 'taker') accepts and fills order from User A and completes trade
 // ............................
 // Initiate the SDK for User B.
-// Pass the user's wallet signer (available via the user's wallet provider) to the Swap SDK
 const nftSwapSdk = new NftSwap(provider, signerUserB, CHAIN_ID);
 
 // Check if we need to approve the NFT for swapping
