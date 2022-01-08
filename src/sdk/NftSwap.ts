@@ -558,6 +558,12 @@ class NftSwap implements INftSwap {
     };
 
     if (fillOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken) {
+      const eligibleForNativeTokenFill =
+        this.checkIfOrderCanBeFilledWithNativeToken(signedOrder);
+      warning(
+        eligibleForNativeTokenFill,
+        `Order ineligible for native token fill, fill will fail.`
+      );
       invariant(
         this.forwarderContractAddress,
         'Forwarder contract address null, cannot fill order in native token'
