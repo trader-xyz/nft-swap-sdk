@@ -9,11 +9,7 @@ import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
-<<<<<<< HEAD
-  fillSignedOrder as _fillSignedOrder,
-=======
-  fillOrder as _fillOrder,
->>>>>>> Forwarder wip
+  fillSignedOrder as _fillOrder,
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
@@ -30,6 +26,7 @@ import {
   ApprovalStatus,
   SigningOptions,
   getForwarderAddress,
+  getWethAddress,
 } from './pure';
 import {
   getEipDomain,
@@ -56,11 +53,8 @@ import {
 } from '../utils/asset-data';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
-<<<<<<< HEAD
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
-=======
 import { ZERO_AMOUNT } from '../utils/eth';
->>>>>>> Forwarder wip
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -68,6 +62,7 @@ export interface NftSwapConfig {
   erc721ProxyContractAddress?: string;
   erc1155ProxyContractAddress?: string;
   forwarderContractAddress?: string;
+  wethContractAddress?: string;
   gasBufferMultiples?: { [chainId: number]: number };
 }
 
@@ -103,7 +98,8 @@ export interface INftSwap {
   cancelOrder: (order: Order) => Promise<ContractTransaction>;
   waitUntilOrderFilledOrCancelled: (
     order: Order,
-    timeoutInMs: number,
+    timeoutInMs?: number,
+    pollOrderStatusFrequencyInMs?: number,
     throwIfStatusOtherThanFillableOrFilled?: boolean
   ) => Promise<OrderInfo | null>;
   getOrderStatus: (order: Order) => Promise<OrderStatus>;
@@ -154,11 +150,8 @@ export interface ApprovalOverrides {
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
-<<<<<<< HEAD
   gasAmountBufferMultiple: number | null;
-=======
   buyWithNativeTokenInsteadOfWrappedToken: boolean;
->>>>>>> Forwarder wip
 }
 
 /**
@@ -173,6 +166,7 @@ class NftSwap implements INftSwap {
   public erc20ProxyContractAddress: string;
   public erc721ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
+  public wethContractAddress: string | null;
   public forwarderContractAddress: string | null;
   public gasBufferMultiples: { [chainId: number]: number } | null;
 
@@ -215,6 +209,8 @@ class NftSwap implements INftSwap {
       getForwarderAddress(this.chainId) ??
       null;
 
+    this.wethContractAddress = additionalConfig?.wethContractAddress ?? getWethAddress(this.chainId) ?? null
+
     invariant(
       this.exchangeContractAddress,
       '0x V3 Exchange Contract Address not set. Exchange Contract is required to load NftSwap'
@@ -233,7 +229,11 @@ class NftSwap implements INftSwap {
     );
     warning(
       this.forwarderContractAddress,
-      'Forwarder Contract Address not set, ETH buy/sells will not work'
+      'Forwarder Contract Address not set, native token fills will not work'
+    );
+    warning(
+      this.wethContractAddress,
+      'WETH Contract Address not set, SDK cannot automatically check if order can be filled with native token'
     );
     warning(this.signer, 'No Signer provided; Read-only mode only.');
 
@@ -243,15 +243,13 @@ class NftSwap implements INftSwap {
       signer ?? provider
     );
 
-<<<<<<< HEAD
     this.gasBufferMultiples =
       additionalConfig?.gasBufferMultiples ?? DEFAUTLT_GAS_BUFFER_MULTIPLES;
-=======
+
     const forwarderContract = Forwarder__factory.connect(
       this.forwarderContractAddress,
       signer ?? provider,
     )
->>>>>>> Forwarder wip
   }
 
   public cancelOrder = async (order: Order) => {
@@ -268,6 +266,7 @@ class NftSwap implements INftSwap {
   public waitUntilOrderFilledOrCancelled = async (
     order: Order,
     timeoutInMs: number = 60 * 1000,
+    pollOrderStatusFrequencyInMs: number = 10_000,
     throwIfStatusOtherThanFillableOrFilled: boolean = false
   ): Promise<OrderInfo | null> => {
     let settled = false;
@@ -278,7 +277,7 @@ class NftSwap implements INftSwap {
       while (!settled) {
         const orderInfo = await this.getOrderInfo(order);
         if (orderInfo.orderStatus === OrderStatus.Fillable) {
-          await sleep(10_000);
+          await sleep(pollOrderStatusFrequencyInMs);
           continue;
         } else if (orderInfo.orderStatus === OrderStatus.FullyFilled) {
           return orderInfo;
@@ -298,7 +297,7 @@ class NftSwap implements INftSwap {
     };
     const fillEventListenerFn = async () => {
       // TODO(johnrjj)
-      await sleep(120_000);
+      await sleep(timeoutInMs * 2);
       return null;
     };
 
@@ -461,12 +460,8 @@ class NftSwap implements INftSwap {
     };
   };
 
-  public canBuyOrderWithEth = (order: Order) => {
-
-  }
-
-  public canSellOrderWithEth = (order: Order) => {
-
+  public callFillOrderWithNativeToken = (order: Order, wethContractAddress?: string): boolean => {
+    return order.takerAddress.toLowerCase() === wethContractAddress?.toLowerCase()
   }
 
   public fillSignedOrder = async (
@@ -510,7 +505,7 @@ class NftSwap implements INftSwap {
     //   transactionOverrides
     // );
 
-    return _fillSignedOrder(signedOrder, exchangeContract, {
+    return _fillOrder(signedOrder, exchangeContract, {
       gasLimit: maybeCustomGasLimit,
       ...transactionOverrides,
     });

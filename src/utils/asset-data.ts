@@ -59,6 +59,9 @@ export const encodeMultiAssetAssetData = (
 
 export const encodeAssetData = (
   assetData: UserFacingSerializedSingleAssetDataTypes,
+  // To express ERC1155 amounts inside a multiasset order, you cannot encode the amount on the indiviual asset data,
+  // It needs to be paired with the [asset, amount] tuple inside the Multiasset order format order array (I know, a bit confusing)
+  // But if you're encoding erc1155 asset data within the context of a multi-asset order, this boolean should be true
   erc1155EncodingForMultiAssetOrder: boolean = false
 ): string => {
   switch (assetData.type) {

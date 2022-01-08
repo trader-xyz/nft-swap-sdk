@@ -330,27 +330,54 @@ export const buildOrder = (
   takerAssets: Array<InterallySupportedAssetFormat>,
   orderConfig: AdditionalOrderConfig
 ): Order => {
-  const makerAssetAmounts = makerAssets.map((ma) => getAmountFromAsset(ma));
-  const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma, true));
-  const makerMultiAsset = encodeMultiAssetAssetData(
-    makerAssetAmounts,
-    makerAssetDatas
-  );
+  // Encode maker assets
+  let makerAssetAmount: BigNumber;
+  let makerAssetData: string;
 
-  const takerAssetAmounts = takerAssets.map((ta) => getAmountFromAsset(ta));
-  const takerAssetDatas = takerAssets.map((ta) => encodeAssetData(ta, true));
-  const takerMultiAsset = encodeMultiAssetAssetData(
-    convertCollectionToBN(takerAssetAmounts),
-    takerAssetDatas
-  );
+  const makerAssetEligibleForSingleAsset = makerAssets.length === 1;
+  if (makerAssetEligibleForSingleAsset) {
+    const makerAsset = makerAssets[0];
+    makerAssetAmount = BigNumber.from(getAmountFromAsset(makerAsset));
+    makerAssetData = encodeAssetData(makerAsset, false);
+  } else {
+    const makerAssetAmounts = makerAssets.map((ma) => getAmountFromAsset(ma));
+    const makerAssetDatas = makerAssets.map((ma) => encodeAssetData(ma, true));
+    const makerMultiAsset = encodeMultiAssetAssetData(
+      makerAssetAmounts,
+      makerAssetDatas
+    );
+    makerAssetData = makerMultiAsset;
+    makerAssetAmount = BigNumber.from(1); // needs to be 1
+  }
+
+  // Encode taker assets
+  let takerAssetAmount: BigNumber;
+  let takerAssetData: string;
+
+  const takerAssetEligibleForSingleAsset = takerAssets.length === 1;
+  // If we only have one asset to swap
+  if (takerAssetEligibleForSingleAsset) {
+    const takerAsset = takerAssets[0];
+    takerAssetAmount = BigNumber.from(getAmountFromAsset(takerAsset));
+    takerAssetData = encodeAssetData(takerAsset, false);
+  } else {
+    const takerAssetAmounts = takerAssets.map((ta) => getAmountFromAsset(ta));
+    const takerAssetDatas = takerAssets.map((ta) => encodeAssetData(ta, true));
+    const takerMultiAsset = encodeMultiAssetAssetData(
+      convertCollectionToBN(takerAssetAmounts),
+      takerAssetDatas
+      );
+      takerAssetData = takerMultiAsset;
+      takerAssetAmount = BigNumber.from(1); // needs to be 1
+  }
 
   const order = generateOrderFromAssetDatas({
-    makerAssetAmount: BigNumber.from(1), // needs to be 1
-    makerAssetData: makerMultiAsset,
+    makerAssetAmount: makerAssetAmount,
+    makerAssetData: makerAssetData,
     takerAddress: orderConfig.takerAddress ?? NULL_ADDRESS,
-    takerAssetAmount: BigNumber.from(1), // needs to be 1
-    takerAssetData: takerMultiAsset,
-    exchangeAddress: orderConfig.exchangeAddress ?? '', // look up address from chain id if null,
+    takerAssetAmount: takerAssetAmount,
+    takerAssetData: takerAssetData,
+    exchangeAddress: orderConfig.exchangeAddress ?? '',
     ...orderConfig,
   });
 
@@ -364,7 +391,7 @@ export interface PayableOverrides extends TransactionOverrides {
 export const fillSignedOrder = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract,
-  overrides?: PayableOverrides,
+  overrides?: PayableOverrides
 ): Promise<ContractTransaction> => {
   return exchangeContract.fillOrKillOrder(
     normalizeOrder(signedOrder),
@@ -374,9 +401,7 @@ export const fillSignedOrder = async (
   );
 };
 
-export const fillOrderWithEth = async () => {
-  
-}
+export const fillOrderWithEth = async () => {};
 
 /**
  * Approval status of an ERC20, ERC721, or ERC1155 asset/item.
@@ -610,6 +635,12 @@ export const getForwarderAddress = (chainId: number) => {
   }
   return zeroExAddresses.forwarder;
 };
+
+export const getWethAddress = (chainId: number): string | undefined => {
+  const zeroExAddresses = getZeroExAddressesForChain(chainId);
+  return zeroExAddresses?.forwarder;
+};
+
 
 export const estimateGasForFillOrder = async (
   signedOrder: SignedOrder,
