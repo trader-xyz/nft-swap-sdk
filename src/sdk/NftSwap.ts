@@ -46,7 +46,11 @@ import {
   AddressesForChain,
   BigNumberish,
 } from './types';
-import { ExchangeContract, ExchangeContract__factory, Forwarder__factory } from '../contracts';
+import {
+  ExchangeContract,
+  ExchangeContract__factory,
+  Forwarder__factory,
+} from '../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
@@ -209,7 +213,10 @@ class NftSwap implements INftSwap {
       getForwarderAddress(this.chainId) ??
       null;
 
-    this.wethContractAddress = additionalConfig?.wethContractAddress ?? getWethAddress(this.chainId) ?? null
+    this.wethContractAddress =
+      additionalConfig?.wethContractAddress ??
+      getWethAddress(this.chainId) ??
+      null;
 
     invariant(
       this.exchangeContractAddress,
@@ -248,8 +255,8 @@ class NftSwap implements INftSwap {
 
     const forwarderContract = Forwarder__factory.connect(
       this.forwarderContractAddress,
-      signer ?? provider,
-    )
+      signer ?? provider
+    );
   }
 
   public cancelOrder = async (order: Order) => {
@@ -460,9 +467,14 @@ class NftSwap implements INftSwap {
     };
   };
 
-  public callFillOrderWithNativeToken = (order: Order, wethContractAddress?: string): boolean => {
-    return order.takerAddress.toLowerCase() === wethContractAddress?.toLowerCase()
-  }
+  public callFillOrderWithNativeToken = (
+    order: Order,
+    wethContractAddress?: string
+  ): boolean => {
+    return (
+      order.takerAddress.toLowerCase() === wethContractAddress?.toLowerCase()
+    );
+  };
 
   public fillSignedOrder = async (
     signedOrder: SignedOrder,
@@ -492,13 +504,25 @@ class NftSwap implements INftSwap {
       );
     }
 
-    // if (fillOverrides?.buyWithNativeTokenInsteadOfWrappedToken) {
-    //   const forwarderContract = Forwarder__factory.connect(
-    //     this.forwarderContractAddress!,
-    //     this.signer ?? this.provider,
-    //   )
-    //   return forwarderContract.marketBuyOrdersWithEth([signedOrder], 1, [signedOrder.signature], [], [], transactionOverrides)
-    // }
+    const allTxOverrides: Partial<PayableOverrides> = {
+      gasLimit: maybeCustomGasLimit,
+      ...transactionOverrides,
+    };
+
+    if (fillOverrides?.buyWithNativeTokenInsteadOfWrappedToken) {
+      const forwarderContract = Forwarder__factory.connect(
+        this.forwarderContractAddress!,
+        this.signer ?? this.provider
+      );
+      return forwarderContract.marketBuyOrdersWithEth(
+        [signedOrder],
+        signedOrder.makerAssetAmount,
+        [signedOrder.signature],
+        [],
+        [],
+        allTxOverrides
+      );
+    }
     // return _fillOrder(
     //   signedOrder,
     //   fillOverrides?.exchangeContract ?? this.exchangeContract,

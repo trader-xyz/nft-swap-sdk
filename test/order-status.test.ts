@@ -10,7 +10,8 @@ const MAKER_PRIVATE_KEY =
   'fc5db508b0a52da8fbcac3ab698088715595f8de9cccf2467d51952eec564ec9';
 // NOTE(johnrjj) - NEVER use these private keys for anything of value, testnets only!
 
-const WMATIC_TOKEN_ADDRESS_TESTNET = '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
+const WMATIC_TOKEN_ADDRESS_TESTNET =
+  '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
 const DAI_TOKEN_ADDRESS_TESTNET = '0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f';
 
 const RPC_TESTNET =

@@ -366,9 +366,9 @@ export const buildOrder = (
     const takerMultiAsset = encodeMultiAssetAssetData(
       convertCollectionToBN(takerAssetAmounts),
       takerAssetDatas
-      );
-      takerAssetData = takerMultiAsset;
-      takerAssetAmount = BigNumber.from(1); // needs to be 1
+    );
+    takerAssetData = takerMultiAsset;
+    takerAssetAmount = BigNumber.from(1); // needs to be 1
   }
 
   const order = generateOrderFromAssetDatas({
@@ -640,7 +640,6 @@ export const getWethAddress = (chainId: number): string | undefined => {
   const zeroExAddresses = getZeroExAddressesForChain(chainId);
   return zeroExAddresses?.forwarder;
 };
-
 
 export const estimateGasForFillOrder = async (
   signedOrder: SignedOrder,
