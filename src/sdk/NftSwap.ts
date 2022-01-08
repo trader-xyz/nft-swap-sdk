@@ -9,7 +9,7 @@ import warning from 'tiny-warning';
 import {
   buildOrder as _buildOrder,
   signOrder as _signOrder,
-  fillSignedOrder as _fillOrder,
+  fillSignedOrder as _fillSignedOrder,
   approveAsset as _approveAsset,
   verifyOrderSignature as _verifyOrderSignature,
   getApprovalStatus as _getApprovalStatus,
@@ -523,16 +523,8 @@ class NftSwap implements INftSwap {
         allTxOverrides
       );
     }
-    // return _fillOrder(
-    //   signedOrder,
-    //   fillOverrides?.exchangeContract ?? this.exchangeContract,
-    //   transactionOverrides
-    // );
 
-    return _fillOrder(signedOrder, exchangeContract, {
-      gasLimit: maybeCustomGasLimit,
-      ...transactionOverrides,
-    });
+    return _fillSignedOrder(signedOrder, exchangeContract, allTxOverrides);
   };
 
   private getGasMultipleForChainId = (chainId: number): number | undefined => {
