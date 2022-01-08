@@ -78,7 +78,6 @@ describe('NFTSwap', () => {
 
   it('builds single asset order erc1155 with amounts > 1 correctly', async () => {
     const walletAddress = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174';
-    // https://testnets.opensea.io/assets/0x72d391648c4fe374dea6ed5244a306060453364b/1
     const nft1Address = '0x631998e91476da5b870d741192fc5cbc55f5a52e';
     const testNft1: SwappableAsset = {
       type: 'ERC1155',
@@ -87,7 +86,6 @@ describe('NFTSwap', () => {
       amount: '14',
     };
 
-    // https://testnets.opensea.io/assets/0xfa85acaaff1d2fd159aa8454222da76bdf8fa956/3
     const erc20Address = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174';
     const testErc20: SwappableAsset = {
       type: 'ERC20',
