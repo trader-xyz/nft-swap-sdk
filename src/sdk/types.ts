@@ -10,6 +10,7 @@ export interface AddressesForChain {
   multiAssetProxy: string;
   erc1155Proxy: string;
   forwarder: string;
+  wrappedNativeToken?: string | null;
 }
 
 export interface Order {

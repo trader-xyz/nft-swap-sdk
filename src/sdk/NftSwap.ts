@@ -19,14 +19,11 @@ import {
   estimateGasForApproval as _estimateGasForApproval,
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
-  getProxyAddressForErcType,
   hashOrder,
   TransactionOverrides,
   PayableOverrides,
   ApprovalStatus,
   SigningOptions,
-  getForwarderAddress,
-  getWethAddress,
 } from './pure';
 import {
   getEipDomain,
@@ -55,10 +52,14 @@ import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
 } from '../utils/asset-data';
+import {
+  getProxyAddressForErcType,
+  getForwarderAddress,
+  getWrappedNativeToken,
+} from '../utils/default-addresses';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
-import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
-import { ZERO_AMOUNT } from '../utils/eth';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -66,7 +67,7 @@ export interface NftSwapConfig {
   erc721ProxyContractAddress?: string;
   erc1155ProxyContractAddress?: string;
   forwarderContractAddress?: string;
-  wethContractAddress?: string;
+  wrappedNativeTokenContractAddress?: string;
   gasBufferMultiples?: { [chainId: number]: number };
 }
 
@@ -170,7 +171,7 @@ class NftSwap implements INftSwap {
   public erc20ProxyContractAddress: string;
   public erc721ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
-  public wethContractAddress: string | null;
+  public wrappedNativeTokenContractAddress: string | null;
   public forwarderContractAddress: string | null;
   public gasBufferMultiples: { [chainId: number]: number } | null;
 
@@ -212,10 +213,9 @@ class NftSwap implements INftSwap {
       additionalConfig?.forwarderContractAddress ??
       getForwarderAddress(this.chainId) ??
       null;
-
-    this.wethContractAddress =
-      additionalConfig?.wethContractAddress ??
-      getWethAddress(this.chainId) ??
+    this.wrappedNativeTokenContractAddress =
+      additionalConfig?.wrappedNativeTokenContractAddress ??
+      getWrappedNativeToken(this.chainId) ??
       null;
 
     invariant(
@@ -239,7 +239,7 @@ class NftSwap implements INftSwap {
       'Forwarder Contract Address not set, native token fills will not work'
     );
     warning(
-      this.wethContractAddress,
+      this.wrappedNativeTokenContractAddress,
       'WETH Contract Address not set, SDK cannot automatically check if order can be filled with native token'
     );
     warning(this.signer, 'No Signer provided; Read-only mode only.');

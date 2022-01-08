@@ -17,7 +17,8 @@ const MAKER_PRIVATE_KEY =
 // const TAKER_PRIVATE_KEY =
 //   "a8d6d0643c732663bf5221f83df806a59ed54dbd9be02e226b1a11ff4de83de8";
 
-const USDC_TOKEN_ADDRESS_TESTNET = '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
+const WMATIC_TOKEN_ADDRESS_TESTNET =
+  '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
 const DAI_TOKEN_ADDRESS_TESTNET = '0x001b3b4d0f3714ca98ba10f6042daebf0b1b7b6f';
 
 const RPC_TESTNET =
@@ -36,7 +37,7 @@ const nftSwapperMaker = new NftSwap(MAKER_SIGNER as any, MAKER_SIGNER, 80001);
 
 const TAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
-  tokenAddress: USDC_TOKEN_ADDRESS_TESTNET,
+  tokenAddress: WMATIC_TOKEN_ADDRESS_TESTNET,
   amount: '10000000000000000', // 1 WMATIC
 };
 const MAKER_ASSET: SwappableAsset = {

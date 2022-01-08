@@ -30,24 +30,20 @@ import {
   ERC20__factory,
   ERC721__factory,
   ExchangeContract,
-  Forwarder,
 } from '../contracts';
-import { UnexpectedAssetTypeError, UnsupportedChainId } from './error';
+import { UnexpectedAssetTypeError } from './error';
 import {
   AdditionalOrderConfig,
-  AddressesForChain,
   BigNumberish,
   EIP712_TYPES,
   Order,
   OrderInfo,
   OrderStatus,
   SignedOrder,
-  SupportedTokenTypes,
   UserFacingSerializedSingleAssetDataTypes,
 } from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
 import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
-import addresses from '../addresses.json';
 
 export const convertStringToBN = (s: string) => {
   return BigNumber.from(s);
@@ -592,53 +588,10 @@ export const estimateGasForApproval = async (
   }
 };
 
-const getZeroExAddressesForChain = (
-  chainId: number
-): AddressesForChain | undefined => {
-  const chainIdString = chainId.toString(10);
-  const maybeAddressesForChain: AddressesForChain | undefined = (
-    addresses as { [key: string]: AddressesForChain }
-  )[chainIdString];
-  return maybeAddressesForChain;
-};
-
-export const getProxyAddressForErcType = (
-  assetType: SupportedTokenTypes,
-  chainId: number
-) => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
-  if (!zeroExAddresses) {
-    throw new UnsupportedChainId(chainId);
-  }
-  switch (assetType) {
-    case 'ERC20':
-      return zeroExAddresses.erc20Proxy;
-    case 'ERC721':
-      return zeroExAddresses.erc721Proxy;
-    case 'ERC1155':
-      return zeroExAddresses.erc1155Proxy;
-    default:
-      throw new UnexpectedAssetTypeError(assetType);
-  }
-};
-
 export const getSignatureTypeFromSignature = (signature: string): string => {
   const length = hexDataLength(signature);
   const signatureType = hexDataSlice(signature, length - 1);
   return signatureType;
-};
-
-export const getForwarderAddress = (chainId: number) => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
-  if (!zeroExAddresses) {
-    throw new UnsupportedChainId(chainId);
-  }
-  return zeroExAddresses.forwarder;
-};
-
-export const getWethAddress = (chainId: number): string | undefined => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
-  return zeroExAddresses?.forwarder;
 };
 
 export const estimateGasForFillOrder = async (
