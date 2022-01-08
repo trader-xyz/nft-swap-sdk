@@ -4,6 +4,13 @@ import { defaultAbiCoder } from '@ethersproject/abi';
 
 import {
   AssetProxyId,
+  ERC1155AssetDataSerialized,
+  ERC20AssetDataSerialized,
+  ERC721AssetDataSerialized,
+  MultiAssetDataSerializedRecursivelyDecoded,
+  SerializedAvailableAssetDataTypes,
+  SerializedAvailableAssetDataTypesDecoded,
+  SerializedSingleAssetDataTypes,
   SupportedTokenTypes,
   SwappableAsset,
   UserFacingSerializedSingleAssetDataTypes,
@@ -18,7 +25,9 @@ export const encodeErc20AssetData = (tokenAddress: string) =>
     defaultAbiCoder.encode(['address'], [tokenAddress]),
   ]);
 
-export const decodeErc20AssetData = (encodedAssetData: string) => {
+export const decodeErc20AssetData = (
+  encodedAssetData: string
+): ERC20AssetDataSerialized => {
   const length = hexDataLength(encodedAssetData);
   const assetProxyId: string | undefined = hexDataSlice(encodedAssetData, 0, 4);
   const rest = hexDataSlice(encodedAssetData, 4);
@@ -40,7 +49,9 @@ export const encodeErc721AssetData = (
     defaultAbiCoder.encode(['address', 'uint256'], [tokenAddress, tokenId]),
   ]);
 
-export const decodeErc721AssetData = (encodedAssetData: string) => {
+export const decodeErc721AssetData = (
+  encodedAssetData: string
+): ERC721AssetDataSerialized => {
   const assetProxyId: string | undefined = hexDataSlice(encodedAssetData, 0, 4);
   const rest = hexDataSlice(encodedAssetData, 4);
   const data = defaultAbiCoder.decode(['address', 'uint256'], rest);
@@ -69,7 +80,9 @@ export const encodeErc1155AssetData = (
     ),
   ]);
 
-export const decodeErc1155AssetData = (encodedAssetData: string) => {
+export const decodeErc1155AssetData = (
+  encodedAssetData: string
+): ERC1155AssetDataSerialized => {
   const assetProxyId: string | undefined = hexDataSlice(encodedAssetData, 0, 4);
 
   const rest = hexDataSlice(encodedAssetData, 4);
@@ -87,7 +100,7 @@ export const decodeErc1155AssetData = (encodedAssetData: string) => {
     assetProxyId: assetProxyId.toLowerCase(),
     tokenAddress: tokenAddress.toLowerCase(),
     tokenIds: tokenIds.map((id) => id.toString()),
-    values: values.map((val) => val.toString()),
+    tokenValues: values.map((val) => val.toString()),
     callbackData,
   };
 };
@@ -112,10 +125,10 @@ export const decodeMultiAssetData = (encodedAssetData: string) => {
 
   return {
     assetProxyId: assetProxyId.toLowerCase(),
-    // tokenIds: tokenIds.map(id => id.toString()),
-    values: values.map((val) => val.toString()),
-    assetDatas: nestedAssetDatas.map((nestedAssetData) =>
-      decodeAssetData(nestedAssetData)
+    amounts: values.map((val) => val.toString()),
+    nestedAssetData: nestedAssetDatas.map(
+      (nestedAssetData) =>
+        decodeAssetData(nestedAssetData) as SerializedSingleAssetDataTypes // Cast b/c multiasset can only happen at depth 0, only singe asset datas can be nested
     ),
   };
 };
@@ -157,7 +170,9 @@ export const encodeAssetData = (
   }
 };
 
-export const decodeAssetData = (encodedAssetData: string): any => {
+export const decodeAssetData = (
+  encodedAssetData: string
+): SerializedAvailableAssetDataTypesDecoded => {
   const assetProxyId: string | undefined = hexDataSlice(encodedAssetData, 0, 4);
 
   switch (assetProxyId) {

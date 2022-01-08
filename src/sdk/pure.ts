@@ -1,3 +1,4 @@
+import flatten from 'lodash/flatten';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { BaseProvider, Provider } from '@ethersproject/providers';
 import {
@@ -21,6 +22,7 @@ import {
 } from '../utils/order';
 import { NULL_ADDRESS } from '../utils/eth';
 import {
+  decodeAssetData,
   encodeAssetData,
   encodeMultiAssetAssetData,
   getAmountFromAsset,
@@ -34,12 +36,22 @@ import {
 import { UnexpectedAssetTypeError } from './error';
 import {
   AdditionalOrderConfig,
+  AssetProxyId,
   BigNumberish,
   EIP712_TYPES,
+  ERC1155AssetDataSerialized,
+  ERC20AssetDataSerialized,
+  ERC721AssetDataSerialized,
+  MultiAssetDataSerializedRecursivelyDecoded,
   Order,
   OrderInfo,
   OrderStatus,
+  SerializedAvailableAssetDataTypesDecoded,
   SignedOrder,
+  SwappableAsset,
+  UserFacingERC1155AssetDataSerializedNormalizedSingle,
+  UserFacingERC20AssetDataSerialized,
+  UserFacingERC721AssetDataSerialized,
   UserFacingSerializedSingleAssetDataTypes,
 } from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
@@ -599,6 +611,89 @@ export const estimateGasForFillOrder = async (
       signedOrder.signature
     );
   return estimatedGasRequiredForFill;
+};
+
+const convertDecodedAssetDataToUserFacingAssets = (
+  decodedAssetData: SerializedAvailableAssetDataTypesDecoded,
+  assetAmount: string
+): Array<SwappableAsset> => {
+  const assetProxyId = decodedAssetData.assetProxyId;
+
+  switch (assetProxyId) {
+    case AssetProxyId.ERC20:
+      const decodedErc20 = decodedAssetData as ERC20AssetDataSerialized;
+      const swappableErc20: UserFacingERC20AssetDataSerialized = {
+        type: 'ERC20',
+        amount: assetAmount,
+        tokenAddress: decodedErc20.tokenAddress,
+      };
+      return [swappableErc20];
+    case AssetProxyId.ERC721:
+      const decodedErc721 = decodedAssetData as ERC721AssetDataSerialized;
+      const swappableErc721: UserFacingERC721AssetDataSerialized = {
+        type: 'ERC721',
+        tokenAddress: decodedErc721.tokenAddress,
+        tokenId: decodedErc721.tokenId,
+      };
+      return [swappableErc721];
+    case AssetProxyId.ERC1155:
+      const decodedErc1155 = decodedAssetData as ERC1155AssetDataSerialized;
+      const swappableErc1155: UserFacingERC1155AssetDataSerializedNormalizedSingle =
+        {
+          type: 'ERC1155',
+          tokenAddress: decodedErc1155.tokenAddress,
+          tokenId: decodedErc1155.tokenIds[0],
+          amount: decodedErc1155.tokenValues[0] ?? '1',
+        };
+      return [swappableErc1155];
+    case AssetProxyId.MultiAsset:
+      const multiAssetDecodedData =
+        decodedAssetData as MultiAssetDataSerializedRecursivelyDecoded;
+      const nestedAssets = flatten(
+        multiAssetDecodedData.nestedAssetData.map((asset, idx) =>
+          convertDecodedAssetDataToUserFacingAssets(
+            asset,
+            multiAssetDecodedData.amounts[idx]
+          )
+        )
+      );
+      const nestedAssetsWithCorrectAmounts: Array<SwappableAsset> =
+        nestedAssets.map((nestedAsset, idx) => {
+          const nestedAssetValueFromMultiAsset =
+            multiAssetDecodedData.amounts[idx];
+          // Overwrite original nested asset amount, b/c when its nested inside a multiasset encoding, the multiasset top level values take over.
+          return {
+            ...nestedAsset,
+            amount: nestedAssetValueFromMultiAsset,
+          };
+        });
+      return nestedAssetsWithCorrectAmounts;
+    default:
+      throw new Error(
+        `Unsupported AssetProxyId ${(assetProxyId as any)?.type}`
+      );
+  }
+};
+
+export const getAssetsFromOrder = (
+  order: Order
+): { makerAssets: SwappableAsset[]; takerAssets: SwappableAsset[] } => {
+  const decodedMakerAssetData = decodeAssetData(order.makerAssetData);
+  const decodedTakerAssetData = decodeAssetData(order.takerAssetData);
+
+  const makerAssets = convertDecodedAssetDataToUserFacingAssets(
+    decodedMakerAssetData,
+    order.makerAssetAmount
+  );
+  const takerAssets = convertDecodedAssetDataToUserFacingAssets(
+    decodedTakerAssetData,
+    order.takerAssetAmount
+  );
+
+  return {
+    makerAssets,
+    takerAssets,
+  };
 };
 
 // export const loadApprovalStatusAll = async (assets: Array<InterallySupportedAsset>) => {

@@ -19,6 +19,7 @@ import {
   estimateGasForApproval as _estimateGasForApproval,
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
+  getAssetsFromOrder as _getAssetsFromOrder,
   hashOrder,
   TransactionOverrides,
   PayableOverrides,
@@ -42,6 +43,8 @@ import {
   TypedData,
   AddressesForChain,
   BigNumberish,
+  ERC20AssetDataSerialized,
+  AssetProxyId,
 } from './types';
 import {
   ExchangeContract,
@@ -61,7 +64,6 @@ import {
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
-import { AssetProxyId } from '.';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -126,6 +128,10 @@ export interface INftSwap {
     exchangeContractAddress: string
   ) => boolean;
   checkIfOrderCanBeFilledWithNativeToken: (order: Order) => boolean;
+  getAssetsFromOrder: (order: Order) => {
+    makerAssets: SwappableAsset[];
+    takerAssets: SwappableAsset[];
+  };
 }
 
 /**
@@ -470,6 +476,10 @@ class NftSwap implements INftSwap {
     };
   };
 
+  public getAssetsFromOrder = (order: Order) => {
+    return _getAssetsFromOrder(order);
+  };
+
   public checkIfOrderCanBeFilledWithNativeToken = (
     order: Order,
     wrappedNativeTokenContractAddress: string | undefined = this
@@ -491,7 +501,8 @@ class NftSwap implements INftSwap {
 
     // If we get this far, we have a single asset (non-multiasset) ERC20 for the taker token.
     // Let's check if it is the wrapped native contract address for this chain (e.g. WETH on mainnet or rinkeby, WMATIC on polygon)
-    const erc20TokenAddress = decodedAssetData.tokenAddress;
+    const erc20TokenAddress = (decodedAssetData as ERC20AssetDataSerialized)
+      .tokenAddress;
     invariant(
       erc20TokenAddress,
       'ERC20 token address missing from detected ERC20 asset data'
