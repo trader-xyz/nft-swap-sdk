@@ -343,7 +343,7 @@ export const buildOrder = (
       makerAssetDatas
     );
     makerAssetData = makerMultiAsset;
-    makerAssetAmount = BigNumber.from(1); // needs to be 1
+    makerAssetAmount = BigNumber.from(1); // needs to be 1 for multiasset wrapper amount (actual amounts are nested)
   }
 
   // Encode taker assets
@@ -364,7 +364,7 @@ export const buildOrder = (
       takerAssetDatas
     );
     takerAssetData = takerMultiAsset;
-    takerAssetAmount = BigNumber.from(1); // needs to be 1
+    takerAssetAmount = BigNumber.from(1); // needs to be 1 for multiasset wrapper amount (actual amounts are nested)
   }
 
   const order = generateOrderFromAssetDatas({
