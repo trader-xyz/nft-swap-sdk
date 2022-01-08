@@ -602,7 +602,7 @@ export const getSignatureTypeFromSignature = (signature: string): string => {
 export const estimateGasForFillOrder = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract,
-  overrides?: PayableOverrides | undefined
+  _overrides?: PayableOverrides | undefined
 ) => {
   const estimatedGasRequiredForFill =
     await exchangeContract.estimateGas.fillOrder(
@@ -613,7 +613,7 @@ export const estimateGasForFillOrder = async (
   return estimatedGasRequiredForFill;
 };
 
-const convertDecodedAssetDataToUserFacingAssets = (
+export const convertDecodedAssetDataToUserFacingAssets = (
   decodedAssetData: SerializedAvailableAssetDataTypesDecoded,
   assetAmount: string
 ): Array<SwappableAsset> => {
