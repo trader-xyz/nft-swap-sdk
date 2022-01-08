@@ -19,13 +19,12 @@ import {
   estimateGasForApproval as _estimateGasForApproval,
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
-  getProxyAddressForErcType,
+  getAssetsFromOrder as _getAssetsFromOrder,
   hashOrder,
   TransactionOverrides,
   PayableOverrides,
   ApprovalStatus,
   SigningOptions,
-  getForwarderAddress,
 } from './pure';
 import {
   getEipDomain,
@@ -44,15 +43,27 @@ import {
   TypedData,
   AddressesForChain,
   BigNumberish,
+  ERC20AssetDataSerialized,
+  AssetProxyId,
 } from './types';
-import { ExchangeContract, ExchangeContract__factory } from '../contracts';
+import {
+  ExchangeContract,
+  ExchangeContract__factory,
+  Forwarder__factory,
+} from '../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
+  decodeAssetData,
 } from '../utils/asset-data';
+import {
+  getProxyAddressForErcType,
+  getForwarderAddress,
+  getWrappedNativeToken,
+} from '../utils/default-addresses';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
-import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -60,6 +71,7 @@ export interface NftSwapConfig {
   erc721ProxyContractAddress?: string;
   erc1155ProxyContractAddress?: string;
   forwarderContractAddress?: string;
+  wrappedNativeTokenContractAddress?: string;
   gasBufferMultiples?: { [chainId: number]: number };
 }
 
@@ -95,7 +107,8 @@ export interface INftSwap {
   cancelOrder: (order: Order) => Promise<ContractTransaction>;
   waitUntilOrderFilledOrCancelled: (
     order: Order,
-    timeoutInMs: number,
+    timeoutInMs?: number,
+    pollOrderStatusFrequencyInMs?: number,
     throwIfStatusOtherThanFillableOrFilled?: boolean
   ) => Promise<OrderInfo | null>;
   getOrderStatus: (order: Order) => Promise<OrderStatus>;
@@ -114,20 +127,31 @@ export interface INftSwap {
     chainId: number,
     exchangeContractAddress: string
   ) => boolean;
+  checkIfOrderCanBeFilledWithNativeToken: (order: Order) => boolean;
+  getAssetsFromOrder: (order: Order) => {
+    makerAssets: SwappableAsset[];
+    takerAssets: SwappableAsset[];
+  };
 }
 
 /**
  * All optional
  */
 export interface BuildOrderAdditionalConfig {
+  /**
+   * If not specified, will be fillable by anyone
+   */
   takerAddress?: string;
   /**
-   * Date type or unix timestamp
+   * Date type or unix timestamp when order expires
    */
   expiration?: Date | number;
+  /**
+   * Unique salt for order, defaults to a unix timestamp
+   */
+  salt?: string;
   exchangeAddress?: string;
   chainId?: number;
-  salt?: string;
   feeRecipientAddress?: string;
   makerFeeAssetData?: string;
   takerFeeAssetData?: string;
@@ -146,6 +170,11 @@ export interface ApprovalOverrides {
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
+  /**
+   * Fill order with native token if possible
+   * e.g. If taker asset is WETH, allows order to be filled with ETH
+   */
+  fillOrderWithNativeTokenInsteadOfWrappedToken: boolean;
   gasAmountBufferMultiple: number | null;
 }
 
@@ -161,6 +190,7 @@ class NftSwap implements INftSwap {
   public erc20ProxyContractAddress: string;
   public erc721ProxyContractAddress: string;
   public erc1155ProxyContractAddress: string;
+  public wrappedNativeTokenContractAddress: string | null;
   public forwarderContractAddress: string | null;
   public gasBufferMultiples: { [chainId: number]: number } | null;
 
@@ -202,6 +232,10 @@ class NftSwap implements INftSwap {
       additionalConfig?.forwarderContractAddress ??
       getForwarderAddress(this.chainId) ??
       null;
+    this.wrappedNativeTokenContractAddress =
+      additionalConfig?.wrappedNativeTokenContractAddress ??
+      getWrappedNativeToken(this.chainId) ??
+      null;
 
     invariant(
       this.exchangeContractAddress,
@@ -221,7 +255,11 @@ class NftSwap implements INftSwap {
     );
     warning(
       this.forwarderContractAddress,
-      'Forwarder Contract Address not set, ETH buy/sells will not work'
+      'Forwarder Contract Address not set, native token fills will not work'
+    );
+    warning(
+      this.wrappedNativeTokenContractAddress,
+      'WETH Contract Address not set, SDK cannot automatically check if order can be filled with native token'
     );
     warning(this.signer, 'No Signer provided; Read-only mode only.');
 
@@ -249,6 +287,7 @@ class NftSwap implements INftSwap {
   public waitUntilOrderFilledOrCancelled = async (
     order: Order,
     timeoutInMs: number = 60 * 1000,
+    pollOrderStatusFrequencyInMs: number = 10_000,
     throwIfStatusOtherThanFillableOrFilled: boolean = false
   ): Promise<OrderInfo | null> => {
     let settled = false;
@@ -259,7 +298,7 @@ class NftSwap implements INftSwap {
       while (!settled) {
         const orderInfo = await this.getOrderInfo(order);
         if (orderInfo.orderStatus === OrderStatus.Fillable) {
-          await sleep(10_000);
+          await sleep(pollOrderStatusFrequencyInMs);
           continue;
         } else if (orderInfo.orderStatus === OrderStatus.FullyFilled) {
           return orderInfo;
@@ -279,7 +318,7 @@ class NftSwap implements INftSwap {
     };
     const fillEventListenerFn = async () => {
       // TODO(johnrjj)
-      await sleep(120_000);
+      await sleep(timeoutInMs * 2);
       return null;
     };
 
@@ -442,6 +481,49 @@ class NftSwap implements INftSwap {
     };
   };
 
+  /**
+   * Decodes readable order data (maker and taker assets) from the Order's encoded asset data
+   * @param order : 0x Order (or Signed Order);
+   * @returns Maker and taker assets for the order
+   */
+  public getAssetsFromOrder = (order: Order) => {
+    return _getAssetsFromOrder(order);
+  };
+
+  public checkIfOrderCanBeFilledWithNativeToken = (
+    order: Order,
+    wrappedNativeTokenContractAddress: string | undefined = this
+      .wrappedNativeTokenContractAddress ?? undefined
+  ): boolean => {
+    warning(
+      this.wrappedNativeTokenContractAddress,
+      'Wrapped native token contract address not set. Cannot determine if order can be filled with native token'
+    );
+    const decodedAssetData = decodeAssetData(order.takerAssetData);
+
+    // Can only fill with native token when taker asset is ERC20. (Multiasset is not supported)
+    if (
+      decodedAssetData.assetProxyId.toLowerCase() !==
+      AssetProxyId.ERC20.toLowerCase()
+    ) {
+      return false;
+    }
+
+    // If we get this far, we have a single asset (non-multiasset) ERC20 for the taker token.
+    // Let's check if it is the wrapped native contract address for this chain (e.g. WETH on mainnet or rinkeby, WMATIC on polygon)
+    const erc20TokenAddress = (decodedAssetData as ERC20AssetDataSerialized)
+      .tokenAddress;
+    invariant(
+      erc20TokenAddress,
+      'ERC20 token address missing from detected ERC20 asset data'
+    );
+
+    return (
+      erc20TokenAddress.toLowerCase() ===
+      wrappedNativeTokenContractAddress?.toLowerCase()
+    );
+  };
+
   public fillSignedOrder = async (
     signedOrder: SignedOrder,
     fillOverrides?: Partial<FillOrderOverrides>,
@@ -469,10 +551,42 @@ class NftSwap implements INftSwap {
         estimatedGasAmount.toNumber() * gasBufferMultiple
       );
     }
-    return _fillSignedOrder(signedOrder, exchangeContract, {
+
+    const allTxOverrides: Partial<PayableOverrides> = {
       gasLimit: maybeCustomGasLimit,
       ...transactionOverrides,
-    });
+    };
+
+    if (fillOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken) {
+      const eligibleForNativeTokenFill =
+        this.checkIfOrderCanBeFilledWithNativeToken(signedOrder);
+      warning(
+        eligibleForNativeTokenFill,
+        `Order ineligible for native token fill, fill will fail.`
+      );
+      invariant(
+        this.forwarderContractAddress,
+        'Forwarder contract address null, cannot fill order in native token'
+      );
+      const forwarderContract = Forwarder__factory.connect(
+        this.forwarderContractAddress,
+        this.signer ?? this.provider
+      );
+      const amountOfEthToFillWith = signedOrder.takerAssetAmount;
+      return forwarderContract.marketBuyOrdersWithEth(
+        [signedOrder],
+        signedOrder.makerAssetAmount,
+        [signedOrder.signature],
+        [],
+        [],
+        {
+          value: amountOfEthToFillWith,
+          ...allTxOverrides,
+        }
+      );
+    }
+
+    return _fillSignedOrder(signedOrder, exchangeContract, allTxOverrides);
   };
 
   private getGasMultipleForChainId = (chainId: number): number | undefined => {

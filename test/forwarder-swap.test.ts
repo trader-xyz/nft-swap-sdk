@@ -1,7 +1,6 @@
-import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import { ethers } from 'ethers';
+import { parseEther } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
-import { signOrderWithEoaWallet, verifyOrderSignature } from '../src/sdk/pure';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -35,20 +34,42 @@ const MAKER_SIGNER = MAKER_WALLET.connect(PROVIDER);
 const nftSwapperMaker = new NftSwap(MAKER_SIGNER as any, MAKER_SIGNER, 80001);
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
-const TAKER_ASSET: SwappableAsset = {
-  type: 'ERC20',
-  tokenAddress: WMATIC_TOKEN_ADDRESS_TESTNET,
-  amount: '10000000000000000', // 1 WMATIC
-};
 const MAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
-  amount: '10000000000000000', // 1 DAI
+  amount: '1000000000', // 1 DAI
+};
+const TAKER_ASSET: SwappableAsset = {
+  type: 'ERC20',
+  tokenAddress: WMATIC_TOKEN_ADDRESS_TESTNET,
+  amount: '1000000000', // 1 WMATIC
 };
 
 describe('NFTSwap', () => {
-  it('eoa signatures correctly', async () => {
+  fit('swaps 0.1 DAI and 0.1 WMATIC on mumbai test using forwarder correctly', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
+
+    const gasPrice = (await PROVIDER.getGasPrice()).mul(2);
+
+    // const approvalTxMaker = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   MAKER_ASSET,
+    //   MAKER_WALLET_ADDRESS
+    // );
+    // const approvalTxTaker = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   TAKER_ASSET,
+    //   MAKER_WALLET_ADDRESS
+    // );
+
+    // const makerApprovalTxReceipt = await approvalTxMaker.wait();
+    // console.log(
+    //   'makerApprovalTxReceipt',
+    //   makerApprovalTxReceipt.transactionHash
+    // );
+    // const takerApprovalTxReceipt = await approvalTxTaker.wait();
+    // console.log(
+    //   'takerApprovalTxReceipt',
+    //   takerApprovalTxReceipt.transactionHash
+    // );
 
     const order = nftSwapperMaker.buildOrder(
       [MAKER_ASSET],
@@ -61,6 +82,11 @@ describe('NFTSwap', () => {
     );
 
     const normalizedOrder = normalizeOrder(order);
+
+    const canOrderBeFilledWithNativeToken =
+      nftSwapperMaker.checkIfOrderCanBeFilledWithNativeToken(order);
+    expect(canOrderBeFilledWithNativeToken).toBe(true);
+
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
@@ -73,25 +99,24 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    const rawSignature = await signOrderWithEoaWallet(
-      order,
-      nftSwapperMaker.signer as any,
-      nftSwapperMaker.chainId,
-      nftSwapperMaker.exchangeContractAddress
-    );
+    // Uncomment to actually fill order
+    // const tx = await nftSwapperMaker.fillSignedOrder(
+    //   signedOrder,
+    //   { fillOrderWithNativeTokenInsteadOfWrappedToken: true },
+    //   {
+    //     gasPrice,
+    //     gasLimit: '800000',
+    //     // value: '20000000000000000',
+    //     // value: parseEther('0.000000002'),
+    //   }
+    // );
 
-    const length = hexDataLength(signedOrder.signature);
-    const signatureType = hexDataSlice(signedOrder.signature, length - 1);
-
-    expect(signatureType).toBe('0x02');
-
-    const isValidSignature = await verifyOrderSignature(
-      normalizedSignedOrder,
-      rawSignature,
-      80001,
-      nftSwapperMaker.exchangeContract.address
-    );
-    expect(isValidSignature).toBe(true);
+    // const txReceipt = await tx.wait();
+    // expect(txReceipt.transactionHash).toBeTruthy();
+    // console.log(
+    //   `Forwarder succcess -- Swapped on Mumbai (txHAsh: ${txReceipt.transactionHash})`
+    // );
+    // expect(tx.value.toString()).toBe(signedOrder.takerAssetAmount);
   });
 });
 

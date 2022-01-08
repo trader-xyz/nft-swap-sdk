@@ -10,6 +10,7 @@ export interface AddressesForChain {
   multiAssetProxy: string;
   erc1155Proxy: string;
   forwarder: string;
+  wrappedNativeToken?: string | null;
 }
 
 export interface Order {
@@ -152,6 +153,12 @@ export interface MultiAssetDataWithRecursiveDecoding {
   nestedAssetData: SingleAssetData[];
 }
 
+export interface MultiAssetDataWithRecursiveDecoding {
+  assetProxyId: string;
+  amounts: BigNumber[];
+  nestedAssetData: SingleAssetData[];
+}
+
 export interface DutchAuctionData {
   assetData: AssetData;
   beginTimeSeconds: BigNumber;
@@ -238,6 +245,16 @@ export type SerializedSingleAssetDataTypes =
 export type SerializedAvailableAssetDataTypes =
   | SerializedSingleAssetDataTypes
   | MultiAssetDataSerialized;
+
+export interface MultiAssetDataSerializedRecursivelyDecoded {
+  assetProxyId: string;
+  amounts: string[];
+  nestedAssetData: SerializedSingleAssetDataTypes[];
+}
+
+export type SerializedAvailableAssetDataTypesDecoded =
+  | SerializedSingleAssetDataTypes
+  | MultiAssetDataSerializedRecursivelyDecoded;
 
 export enum ORDER_BUILDER_ERROR_CODES {
   MISSING_CONTRACT_WRAPPERS_ERROR = 'MISSING_CONTRACT_WRAPPERS_ERROR',
