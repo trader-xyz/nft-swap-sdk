@@ -138,14 +138,20 @@ export interface INftSwap {
  * All optional
  */
 export interface BuildOrderAdditionalConfig {
+  /**
+   * If not specified, will be fillable by anyone
+   */
   takerAddress?: string;
   /**
-   * Date type or unix timestamp
+   * Date type or unix timestamp when order expires
    */
   expiration?: Date | number;
+  /**
+   * Unique salt for order, defaults to a unix timestamp
+   */
+  salt?: string;
   exchangeAddress?: string;
   chainId?: number;
-  salt?: string;
   feeRecipientAddress?: string;
   makerFeeAssetData?: string;
   takerFeeAssetData?: string;
@@ -164,8 +170,12 @@ export interface ApprovalOverrides {
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
-  gasAmountBufferMultiple: number | null;
+  /**
+   * Fill order with native token if possible
+   * e.g. If taker asset is WETH, allows order to be filled with ETH
+   */
   fillOrderWithNativeTokenInsteadOfWrappedToken: boolean;
+  gasAmountBufferMultiple: number | null;
 }
 
 /**
@@ -261,11 +271,6 @@ class NftSwap implements INftSwap {
 
     this.gasBufferMultiples =
       additionalConfig?.gasBufferMultiples ?? DEFAUTLT_GAS_BUFFER_MULTIPLES;
-
-    const forwarderContract = Forwarder__factory.connect(
-      this.forwarderContractAddress,
-      signer ?? provider
-    );
   }
 
   public cancelOrder = async (order: Order) => {
@@ -476,6 +481,11 @@ class NftSwap implements INftSwap {
     };
   };
 
+  /**
+   * Decodes readable order data (maker and taker assets) from the Order's encoded asset data
+   * @param order : 0x Order (or Signed Order);
+   * @returns Maker and taker assets for the order
+   */
   public getAssetsFromOrder = (order: Order) => {
     return _getAssetsFromOrder(order);
   };
