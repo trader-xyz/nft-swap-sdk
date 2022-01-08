@@ -1,5 +1,5 @@
+import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import { ethers } from 'ethers';
-import { hexDataLength, hexDataSlice } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
 import { signOrderWithEoaWallet, verifyOrderSignature } from '../src/sdk/pure';
 import { normalizeOrder } from '../src/utils/order';

@@ -82,6 +82,11 @@ describe('NFTSwap', () => {
     );
 
     const normalizedOrder = normalizeOrder(order);
+
+    const canOrderBeFilledWithNativeToken =
+      nftSwapperMaker.checkIfOrderCanBeFilledWithNativeToken(order);
+    expect(canOrderBeFilledWithNativeToken).toBe(true);
+
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
@@ -94,17 +99,18 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    // // Uncomment to actually fill order
+    // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, { buyWithNativeTokenInsteadOfWrappedToken: true }, {
     //   gasPrice,
     //   gasLimit: '800000',
     //   // value: '20000000000000000',
-    //   value: parseEther('0.000000002'),
+    //   // value: parseEther('0.000000002'),
     // });
 
     // const txReceipt = await tx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();
     // console.log(`Forwarder succcess -- Swapped on Mumbai (txHAsh: ${txReceipt.transactionHash})`);
+    // expect(tx.value.toString()).toBe(signedOrder.takerAssetAmount);
   });
 });
 

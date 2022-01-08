@@ -44,14 +44,7 @@ import {
 } from './types';
 import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
 import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
-
-export const convertStringToBN = (s: string) => {
-  return BigNumber.from(s);
-};
-
-export const convertCollectionToBN = (arr: string[]) => {
-  return arr.map(convertStringToBN);
-};
+import { convertCollectionToBN } from '../utils/bn/convert';
 
 export const cancelOrder = (
   exchangeContract: ExchangeContract,

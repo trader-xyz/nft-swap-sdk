@@ -51,6 +51,7 @@ import {
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
+  decodeAssetData,
 } from '../utils/asset-data';
 import {
   getProxyAddressForErcType,
@@ -60,6 +61,7 @@ import {
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
 import { sleep } from '../utils/sleep';
 import addresses from '../addresses.json';
+import { AssetProxyId } from '.';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -123,6 +125,7 @@ export interface INftSwap {
     chainId: number,
     exchangeContractAddress: string
   ) => boolean;
+  checkIfOrderCanBeFilledWithNativeToken: (order: Order) => boolean;
 }
 
 /**
@@ -156,7 +159,7 @@ export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: ExchangeContract;
   gasAmountBufferMultiple: number | null;
-  buyWithNativeTokenInsteadOfWrappedToken: boolean;
+  fillOrderWithNativeTokenInsteadOfWrappedToken: boolean;
 }
 
 /**
@@ -467,12 +470,36 @@ class NftSwap implements INftSwap {
     };
   };
 
-  public callFillOrderWithNativeToken = (
+  public checkIfOrderCanBeFilledWithNativeToken = (
     order: Order,
-    wethContractAddress?: string
+    wrappedNativeTokenContractAddress: string | undefined = this
+      .wrappedNativeTokenContractAddress ?? undefined
   ): boolean => {
+    warning(
+      this.wrappedNativeTokenContractAddress,
+      'Wrapped native token contract address not set. Cannot determine if order can be filled with native token'
+    );
+    const decodedAssetData = decodeAssetData(order.takerAssetData);
+
+    // Can only fill with native token when taker asset is ERC20. (Multiasset is not supported)
+    if (
+      decodedAssetData.assetProxyId.toLowerCase() !==
+      AssetProxyId.ERC20.toLowerCase()
+    ) {
+      return false;
+    }
+
+    // If we get this far, we have a single asset (non-multiasset) ERC20 for the taker token.
+    // Let's check if it is the wrapped native contract address for this chain (e.g. WETH on mainnet or rinkeby, WMATIC on polygon)
+    const erc20TokenAddress = decodedAssetData.tokenAddress;
+    invariant(
+      erc20TokenAddress,
+      'ERC20 token address missing from detected ERC20 asset data'
+    );
+
     return (
-      order.takerAddress.toLowerCase() === wethContractAddress?.toLowerCase()
+      erc20TokenAddress.toLowerCase() ===
+      wrappedNativeTokenContractAddress?.toLowerCase()
     );
   };
 
@@ -509,18 +536,26 @@ class NftSwap implements INftSwap {
       ...transactionOverrides,
     };
 
-    if (fillOverrides?.buyWithNativeTokenInsteadOfWrappedToken) {
+    if (fillOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken) {
+      invariant(
+        this.forwarderContractAddress,
+        'Forwarder contract address null, cannot fill order in native token'
+      );
       const forwarderContract = Forwarder__factory.connect(
-        this.forwarderContractAddress!,
+        this.forwarderContractAddress,
         this.signer ?? this.provider
       );
+      const amountOfEthToFillWith = signedOrder.takerAssetAmount;
       return forwarderContract.marketBuyOrdersWithEth(
         [signedOrder],
         signedOrder.makerAssetAmount,
         [signedOrder.signature],
         [],
         [],
-        allTxOverrides
+        {
+          value: amountOfEthToFillWith,
+          ...allTxOverrides,
+        }
       );
     }
 
