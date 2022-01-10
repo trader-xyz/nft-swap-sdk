@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
+import { NULL_ADDRESS } from '../src/utils/eth';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
@@ -45,8 +46,20 @@ const TAKER_ASSET: SwappableAsset = {
   amount: '1000000000', // 1 WMATIC
 };
 
+const MAKER_ASSET_NFT_1: SwappableAsset = {
+  type: 'ERC721',
+  tokenAddress: '0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b',
+  tokenId: '4355',
+};
+
+const MAKER_ASSET_NFT_2: SwappableAsset = {
+  type: 'ERC721',
+  tokenAddress: '0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b',
+  tokenId: '4354',
+};
+
 describe('NFTSwap', () => {
-  fit('swaps 0.1 DAI and 0.1 WMATIC on mumbai test using forwarder correctly', async () => {
+  it('swaps 0.1 DAI and 0.1 WMATIC on mumbai test using forwarder correctly', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const gasPrice = (await PROVIDER.getGasPrice()).mul(2);
@@ -103,12 +116,6 @@ describe('NFTSwap', () => {
     // const tx = await nftSwapperMaker.fillSignedOrder(
     //   signedOrder,
     //   { fillOrderWithNativeTokenInsteadOfWrappedToken: true },
-    //   {
-    //     gasPrice,
-    //     gasLimit: '800000',
-    //     // value: '20000000000000000',
-    //     // value: parseEther('0.000000002'),
-    //   }
     // );
 
     // const txReceipt = await tx.wait();
@@ -117,6 +124,116 @@ describe('NFTSwap', () => {
     //   `Forwarder succcess -- Swapped on Mumbai (txHAsh: ${txReceipt.transactionHash})`
     // );
     // expect(tx.value.toString()).toBe(signedOrder.takerAssetAmount);
+  });
+
+
+  it('multiasset maker with forwarder taker matic fill', async () => {
+    // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
+
+    const gasPrice = (await PROVIDER.getGasPrice()).mul(2);
+
+    // const approvalTxMaker = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   MAKER_ASSET,
+    //   MAKER_WALLET_ADDRESS
+    // );
+    // const approvalTxTaker = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   TAKER_ASSET,
+    //   MAKER_WALLET_ADDRESS
+    // );
+
+    // const approvalTxTakerNft1 = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   TAKER_ASSET_NFT_1,
+    //   MAKER_WALLET_ADDRESS
+    // );
+    // await approvalTxTakerNft1.wait()
+
+    // const approvalTxTakerNft2 = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   TAKER_ASSET_NFT_2,
+    //   MAKER_WALLET_ADDRESS
+    // );
+    // await approvalTxTakerNft2.wait()
+
+    // const makerApprovalTxReceipt = await approvalTxMaker.wait();
+    // console.log(
+    //   'makerApprovalTxReceipt',
+    //   makerApprovalTxReceipt.transactionHash
+    // );
+    // const takerApprovalTxReceipt = await approvalTxTaker.wait();
+    // console.log(
+    //   'takerApprovalTxReceipt',
+    //   takerApprovalTxReceipt.transactionHash
+    // );
+
+    const order = nftSwapperMaker.buildOrder(
+      [MAKER_ASSET],
+      [],//[TAKER_ASSET],
+      MAKER_WALLET_ADDRESS,
+      {
+        // Fix dates and salt so we have reproducible tests
+        expiration: new Date(3000, 10, 1),
+      }
+    );
+
+    const normalizedOrder = normalizeOrder(order);
+    const signedOrder = await nftSwapperMaker.signOrder(
+      normalizedOrder,
+      MAKER_WALLET_ADDRESS,
+      MAKER_SIGNER
+    );
+
+    const normalizedSignedOrder = normalizeOrder(signedOrder);
+
+    // const decodedTakerAssets = decodeAssetData(
+    //   normalizedSignedOrder.takerAssetData
+    // ) as MultiAssetDataSerializedRecursivelyDecoded;
+
+    expect(normalizedSignedOrder.makerAddress.toLowerCase()).toBe(
+      MAKER_WALLET_ADDRESS.toLowerCase()
+    );
+
+    // expect(decodedTakerAssets.assetProxyId).toBe(AssetProxyId.MultiAsset);
+    // expect(decodedTakerAssets.nestedAssetData.length).toBe(3);
+    // expect(decodedTakerAssets.nestedAssetData[0].tokenAddress).toBe(
+    //   TAKER_ASSET.tokenAddress
+    // );
+    // expect(decodedTakerAssets.nestedAssetData[1].tokenAddress).toBe(
+    //   TAKER_ASSET_NFT_1.tokenAddress
+    // );
+    // expect(
+    //   (decodedTakerAssets.nestedAssetData[1] as ERC721AssetDataSerialized)
+    //     .tokenId
+    // ).toBe(TAKER_ASSET_NFT_1.tokenId);
+    // expect(
+    //   (decodedTakerAssets.nestedAssetData[2] as ERC721AssetDataSerialized)
+    //     .tokenId
+    // ).toBe(TAKER_ASSET_NFT_2.tokenId);
+
+    // const estimatedGasLimit = await nftSwapperMaker(
+    //   signedOrder,
+    //   nftSwapperMaker.exchangeContract
+    // );
+
+    // Uncomment to actually fill order
+    const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, { fillOrderWithNativeTokenInsteadOfWrappedToken: false }, {
+      gasPrice,
+    });
+
+    // const finalGasLimit = tx.gasLimit;
+
+    // const expectedGasLimitWithBufferMultiple = Math.floor(
+    //   estimatedGasLimit.toNumber() *
+    //     DEFAUTLT_GAS_BUFFER_MULTIPLES[SupportedChainIds.PolygonMumbai]
+    // );
+
+    // expect(finalGasLimit.toNumber()).toEqual(
+    //   expectedGasLimitWithBufferMultiple
+    // );
+
+    const txReceipt = await tx.wait();
+    expect(txReceipt.transactionHash).toBeTruthy();
+    console.log(
+      `Swapped maker multiasset with forwarder MATIC on Mumbai (txHAsh: ${txReceipt.transactionHash})`
+    );
   });
 });
 
