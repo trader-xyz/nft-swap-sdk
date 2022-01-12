@@ -1,8 +1,8 @@
 ![NFT Swap Banner](./nft-swap-sdk-banner.jpg)
 
-# NFT Swap SDK
+# Swap SDK
 
-The missing peer-to-peer swap library for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers. Trade tokens (ERC20s), NFTs, and other collectibles (ERC721 and ERC1155) with just a few lines of code.
+The missing peer-to-peer swap library for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers. Trade tokens (ERC20s), NFTs, and other collectibles (ERC721 and ERC1155) with just a few lines of code. Seriously, easily trade anything on Ethereum with this library.
 
 ## Overview
 
