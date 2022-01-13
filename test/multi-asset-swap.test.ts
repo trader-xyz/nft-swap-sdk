@@ -154,26 +154,26 @@ describe('NFTSwap', () => {
     );
 
     // Uncomment to actually fill order
-    const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-      gasPrice,
-    });
+    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
+    //   gasPrice,
+    // });
 
-    const finalGasLimit = tx.gasLimit;
+    // const finalGasLimit = tx.gasLimit;
 
-    const expectedGasLimitWithBufferMultiple = Math.floor(
-      estimatedGasLimit.toNumber() *
-        DEFAUTLT_GAS_BUFFER_MULTIPLES[SupportedChainIds.PolygonMumbai]
-    );
+    // const expectedGasLimitWithBufferMultiple = Math.floor(
+    //   estimatedGasLimit.toNumber() *
+    //     DEFAUTLT_GAS_BUFFER_MULTIPLES[SupportedChainIds.PolygonMumbai]
+    // );
 
-    expect(finalGasLimit.toNumber()).toEqual(
-      expectedGasLimitWithBufferMultiple
-    );
+    // expect(finalGasLimit.toNumber()).toEqual(
+    //   expectedGasLimitWithBufferMultiple
+    // );
 
-    const txReceipt = await tx.wait();
-    expect(txReceipt.transactionHash).toBeTruthy();
-    console.log(
-      `Swapped multiasset on Mumbai (txHAsh: ${txReceipt.transactionHash})`
-    );
+    // const txReceipt = await tx.wait();
+    // expect(txReceipt.transactionHash).toBeTruthy();
+    // console.log(
+    //   `Swapped multiasset on Mumbai (txHAsh: ${txReceipt.transactionHash})`
+    // );
   });
 });
 
