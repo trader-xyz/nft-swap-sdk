@@ -29,5 +29,5 @@ const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);
 const walletAddressTaker = '0x9876...';
 await nftSwapSdk.approveTokenOrNftByAsset(BORED_APE_69, walletAddressTaker);
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
-const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
+const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx.hash);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
