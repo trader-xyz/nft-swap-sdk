@@ -1,4 +1,3 @@
-import flatten from 'lodash/flatten';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import { BaseProvider, Provider } from '@ethersproject/providers';
 import {
@@ -649,14 +648,14 @@ export const convertDecodedAssetDataToUserFacingAssets = (
     case AssetProxyId.MultiAsset:
       const multiAssetDecodedData =
         decodedAssetData as MultiAssetDataSerializedRecursivelyDecoded;
-      const nestedAssets = flatten(
-        multiAssetDecodedData.nestedAssetData.map((asset, idx) =>
+        console.log('here')
+      const nestedAssets = 
+        multiAssetDecodedData.nestedAssetData.flatMap((asset, idx) =>
           convertDecodedAssetDataToUserFacingAssets(
             asset,
             multiAssetDecodedData.amounts[idx]
           )
         )
-      );
       const nestedAssetsWithCorrectAmounts: Array<SwappableAsset> =
         nestedAssets.map((nestedAsset, idx) => {
           const nestedAssetValueFromMultiAsset =
