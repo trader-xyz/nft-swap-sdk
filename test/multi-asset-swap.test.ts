@@ -148,10 +148,10 @@ describe('NFTSwap', () => {
         .tokenId
     ).toBe(TAKER_ASSET_NFT_2.tokenId);
 
-    const estimatedGasLimit = await estimateGasForFillOrder(
-      signedOrder,
-      nftSwapperMaker.exchangeContract
-    );
+    // const estimatedGasLimit = await estimateGasForFillOrder(
+    //   signedOrder,
+    //   nftSwapperMaker.exchangeContract
+    // );
 
     // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {

@@ -113,7 +113,7 @@ export const generateTimeBasedSalt = () => {
   return unixTime.toString(10);
 };
 
-const generateSaltHash = (manualSaltHashToUse?: string): string => {
+export const generateSaltHash = (manualSaltHashToUse?: string): string => {
   if (manualSaltHashToUse) {
     return manualSaltHashToUse;
   }

@@ -6,7 +6,7 @@ import {
   SwappableAsset,
 } from '../src';
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../src/utils/gas-buffer';
-import { normalizeOrder } from '../src/utils/order';
+import { generateSaltHash, normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
 
@@ -44,6 +44,13 @@ const TAKER_ASSET: SwappableAsset = {
   tokenAddress: WMATIC_TOKEN_ADDRESS_TESTNET,
   amount: '10000000000000000', // 1 WMATIC
 };
+
+
+const TAKER_ASSET_2: SwappableAsset = {
+  type: 'ERC20',
+  tokenAddress: WMATIC_TOKEN_ADDRESS_TESTNET,
+  amount: '20000000000000000', // 1 WMATIC
+};
 const MAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
@@ -76,6 +83,8 @@ describe('NFTSwap', () => {
     //   takerApprovalTxReceipt.transactionHash
     // );
 
+    const salt = generateSaltHash()
+
     const order = nftSwapperMaker.buildOrder(
       [MAKER_ASSET],
       [TAKER_ASSET],
@@ -83,28 +92,53 @@ describe('NFTSwap', () => {
       {
         // Fix dates and salt so we have reproducible tests
         expiration: new Date(3000, 10, 1),
+        salt,
+      }
+    );
+
+    const order2 = nftSwapperMaker.buildOrder(
+      [MAKER_ASSET],
+      [TAKER_ASSET_2],
+      MAKER_WALLET_ADDRESS,
+      {
+        // Fix dates and salt so we have reproducible tests
+        expiration: new Date(3000, 10, 1),
+        salt,
       }
     );
 
     const normalizedOrder = normalizeOrder(order);
-    const signedOrder = await nftSwapperMaker.signOrder(
+    const normalizedOrder2 = normalizeOrder(order2);
+
+    const signedOrder1 = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
       MAKER_SIGNER
     );
 
-    const normalizedSignedOrder = normalizeOrder(signedOrder);
-
-    expect(normalizedSignedOrder.makerAddress.toLowerCase()).toBe(
-      MAKER_WALLET_ADDRESS.toLowerCase()
+    const signedOrder2 = await nftSwapperMaker.signOrder(
+      normalizedOrder2,
+      MAKER_WALLET_ADDRESS,
+      MAKER_SIGNER
     );
+
+    const tx = await nftSwapperMaker.cancelOrder(signedOrder1);
+    const txReceipt = tx.wait()
+    console.log('cancel order 1 success, tx hash', (await txReceipt).transactionHash)
+
+    const normalizedSignedOrder1 = normalizeOrder(signedOrder1);
+
+    // expect(normalizedSignedOrder.makerAddress.toLowerCase()).toBe(
+    //   MAKER_WALLET_ADDRESS.toLowerCase()
+    // );
 
     // const estimatedGasLimit = await estimateGasForFillOrder(signedOrder, nftSwapperMaker.exchangeContract);
 
-    // // Uncomment to actually fill order
-    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-    //   gasPrice,
-    // });
+    // Uncomment to actually fill order
+    const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder2, undefined, {
+      gasPrice,
+      gasLimit: 1000000,
+    });
 
     // const finalGasLimit = tx.gasLimit
 
@@ -112,9 +146,9 @@ describe('NFTSwap', () => {
 
     // expect(finalGasLimit.toNumber()).toEqual(expectedGasLimitWithBufferMultiple)
 
-    // const txReceipt = await tx.wait();
+    const fillTxReceipt = await fillTx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();
-    // console.log(`Swapped on Mumbai (txHAsh: ${txReceipt.transactionHash})`);
+    console.log(`Swapped on Mumbai (txHAsh: ${fillTxReceipt.transactionHash})`);
   });
 });
 

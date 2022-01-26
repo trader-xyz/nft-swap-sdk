@@ -541,16 +541,19 @@ class NftSwap implements INftSwap {
         this.getGasMultipleForChainId(this.chainId);
     }
     let maybeCustomGasLimit: BigNumberish | undefined;
-    if (gasBufferMultiple) {
-      const estimatedGasAmount = await _estimateGasForFillOrder(
-        signedOrder,
-        exchangeContract
-      );
-      // NOTE(johnrjj) - Underflow issues, so we convert to number. Gas amounts shouldn't overflow.
-      maybeCustomGasLimit = Math.floor(
-        estimatedGasAmount.toNumber() * gasBufferMultiple
-      );
-    }
+    // if (gasBufferMultiple) {
+    //   const estimatedGasAmount = await _estimateGasForFillOrder(
+    //     signedOrder,
+    //     exchangeContract,
+    //     {
+    //       gasLimit: 10000000,
+    //     }
+    //   );
+    //   // NOTE(johnrjj) - Underflow issues, so we convert to number. Gas amounts shouldn't overflow.
+    //   maybeCustomGasLimit = Math.floor(
+    //     estimatedGasAmount.toNumber() * gasBufferMultiple
+    //   );
+    // }
 
     const allTxOverrides: Partial<PayableOverrides> = {
       gasLimit: maybeCustomGasLimit,
@@ -570,9 +573,25 @@ class NftSwap implements INftSwap {
       );
       const forwarderContract = Forwarder__factory.connect(
         this.forwarderContractAddress,
-        this.signer ?? this.provider
+        this.provider
       );
       const amountOfEthToFillWith = signedOrder.takerAssetAmount;
+      console.log('attempting to market buy thing?')
+
+      console.log('tryna populate')
+      const foo = await forwarderContract.populateTransaction.marketBuyOrdersWithEth(
+        [signedOrder],
+        signedOrder.makerAssetAmount,
+        [signedOrder.signature],
+        [],
+        [],
+        {
+          value: amountOfEthToFillWith,
+          ...allTxOverrides,
+        }
+      )
+
+      console.log('foo', foo.data)
       return forwarderContract.marketBuyOrdersWithEth(
         [signedOrder],
         signedOrder.makerAssetAmount,

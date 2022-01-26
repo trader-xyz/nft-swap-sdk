@@ -57,7 +57,11 @@ describe('NFTSwap', () => {
     // );
     // const approvalTxTaker = await nftSwapperMaker.approveTokenOrNftByAsset(
     //   TAKER_ASSET,
-    //   MAKER_WALLET_ADDRESS
+    //   MAKER_WALLET_ADDRESS,
+    //   undefined,
+    //   {
+    //     approve: false,
+    //   }
     // );
 
     // const makerApprovalTxReceipt = await approvalTxMaker.wait();
@@ -105,9 +109,11 @@ describe('NFTSwap', () => {
     //   { fillOrderWithNativeTokenInsteadOfWrappedToken: true },
     //   {
     //     gasPrice,
-    //     gasLimit: '800000',
+    //     gasLimit: '1000000',
+
+
     //     // value: '20000000000000000',
-    //     // value: parseEther('0.000000002'),
+    //     value: parseEther('0.0000002'),
     //   }
     // );
 

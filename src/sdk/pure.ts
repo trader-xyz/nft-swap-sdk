@@ -442,6 +442,7 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
+
       // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
       const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
         MAX_APPROVAL.toString()
@@ -489,7 +490,7 @@ export const getApprovalStatus = async (
 
 // Some arbitrarily high number.
 // TODO(johnrjj) - Support custom ERC20 approval amounts
-export const MAX_APPROVAL = BigNumber.from(2).pow(118);
+export const MAX_APPROVAL = BigNumber.from(2).pow(256).sub(1).toString();
 
 export interface TransactionOverrides {
   gasLimit?: BigNumberish | Promise<BigNumberish>;
