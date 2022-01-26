@@ -19,21 +19,21 @@ import {
   generateTimeBasedSalt,
   getEipDomain,
   normalizeOrder,
-} from '../utils/order';
-import { NULL_ADDRESS } from '../utils/eth';
+} from '../../utils/order';
+import { NULL_ADDRESS } from '../../utils/eth';
 import {
   decodeAssetData,
   encodeAssetData,
   encodeMultiAssetAssetData,
   getAmountFromAsset,
-} from '../utils/asset-data';
+} from '../../utils/asset-data';
 import {
   ERC1155__factory,
   ERC20__factory,
   ERC721__factory,
   ExchangeContract,
-} from '../contracts';
-import { UnexpectedAssetTypeError } from './error';
+} from '../../contracts';
+import { UnexpectedAssetTypeError } from '../error';
 import {
   AdditionalOrderConfig,
   AssetProxyId,
@@ -54,9 +54,9 @@ import {
   UserFacingERC721AssetDataSerialized,
   UserFacingSerializedSingleAssetDataTypes,
 } from './types';
-import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
-import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
-import { convertCollectionToBN } from '../utils/bn/convert';
+import { encodeTypedDataHash, TypedData } from '../../utils/typed-data';
+import { EIP1271ZeroExDataAbi } from '../../utils/eip1271';
+import { convertCollectionToBN } from '../../utils/bn/convert';
 
 export const cancelOrder = (
   exchangeContract: ExchangeContract,

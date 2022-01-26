@@ -14,8 +14,8 @@ import {
   SupportedTokenTypes,
   SwappableAsset,
   UserFacingSerializedSingleAssetDataTypes,
-} from '../sdk/types';
-import { InterallySupportedAssetFormat } from '../sdk/pure';
+} from '../sdk/v3/types';
+import { InterallySupportedAssetFormat } from '../sdk/v3/pure';
 import { UnexpectedAssetTypeError } from '../sdk/error';
 import { convertCollectionToBN } from './bn/convert';
 

@@ -1,5 +1,5 @@
 import { UnsupportedChainId, UnexpectedAssetTypeError } from '../sdk/error';
-import type { AddressesForChain, SupportedTokenTypes } from '../sdk/types';
+import type { AddressesForChain, SupportedTokenTypes } from '../sdk/v3/types';
 import addresses from '../addresses.json';
 
 const getZeroExAddressesForChain = (

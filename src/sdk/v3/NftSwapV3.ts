@@ -29,7 +29,7 @@ import {
 import {
   getEipDomain,
   normalizeOrder as _normalizeOrder,
-} from '../utils/order';
+} from '../../utils/order';
 import {
   SupportedChainIds,
   EIP712_TYPES,
@@ -50,20 +50,20 @@ import {
   ExchangeContract,
   ExchangeContract__factory,
   Forwarder__factory,
-} from '../contracts';
+} from '../../contracts';
 import {
   convertAssetsToInternalFormat,
   convertAssetToInternalFormat,
   decodeAssetData,
-} from '../utils/asset-data';
+} from '../../utils/asset-data';
 import {
   getProxyAddressForErcType,
   getForwarderAddress,
   getWrappedNativeToken,
-} from '../utils/default-addresses';
-import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../utils/gas-buffer';
-import { sleep } from '../utils/sleep';
-import addresses from '../addresses.json';
+} from '../../utils/default-addresses';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../../utils/gas-buffer';
+import { sleep } from '../../utils/sleep';
+import addresses from '../../addresses.json';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
