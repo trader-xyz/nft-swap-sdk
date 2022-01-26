@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { NftSwap, SwappableAsset } from '../src';
-import { OrderStatus } from '../src/sdk/types';
+import { OrderStatus } from '../src/sdk/v3/types';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);

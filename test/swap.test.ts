@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { defaultAbiCoder, hexDataSlice, parseEther } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
-import { verifyOrderSignature } from '../src/sdk/pure';
+import { verifyOrderSignature } from '../src/sdk/v3/pure';
 import { encodeErc20AssetData } from '../src/utils/asset-data';
 import { normalizeOrder } from '../src/utils/order';
 

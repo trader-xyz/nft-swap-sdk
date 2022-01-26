@@ -9,7 +9,7 @@ import {
 import {
   convertDecodedAssetDataToUserFacingAssets,
   getAssetsFromOrder,
-} from '../src/sdk/pure';
+} from '../src/sdk/v3/pure';
 import { decodeAssetData } from '../src/utils/asset-data';
 import { NULL_ADDRESS } from '../src/utils/eth';
 

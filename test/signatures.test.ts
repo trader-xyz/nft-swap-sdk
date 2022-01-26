@@ -1,7 +1,10 @@
 import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import { ethers } from 'ethers';
 import { NftSwap, SwappableAsset } from '../src';
-import { signOrderWithEoaWallet, verifyOrderSignature } from '../src/sdk/pure';
+import {
+  signOrderWithEoaWallet,
+  verifyOrderSignature,
+} from '../src/sdk/v3/pure';
 import { normalizeOrder } from '../src/utils/order';
 
 jest.setTimeout(60 * 1000);
