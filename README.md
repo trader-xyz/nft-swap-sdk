@@ -146,7 +146,7 @@ Here we show an example of what the swap library is capable of. We can even swap
 
 In other words, we can swap `[ERC721, ERC1155, ERC20] <> [ERC721, ERC1155, ERC20]`. There's really no limit to what we can swap.
 
-More concrete example: We can swap `[2 CryptoPunks and 1,000 DAI] for [420 WETH and 694,200 USDC]`. In this case we'd be swapping an `ERC721` and an `ERC20` (Punk NFT and DAI, respectively) for `two ERC20s` (WETH and USDC).
+More concrete example: We can swap `[2 CryptoPunks and 1,000 DAI] for [420 WETH and 694,200 USDC]`. In this case we'd be swapping two `ERC721`s and an `ERC20` (Punk NFT and DAI, respectively) for `two ERC20s` (WETH and USDC).
 
 This is just one example. In reality, you can swap as many things as you'd like, any way you'd like. The underlying 0x protocol is extremely flexible, and the NFT swap library abstracts all the complexity away so you don't have to worry about protocol nuances.
 

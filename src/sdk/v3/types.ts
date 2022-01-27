@@ -13,6 +13,10 @@ export interface AddressesForChain {
   wrappedNativeToken?: string | null;
 }
 
+export type ContractAddresses = {
+  [chainId: string]: AddressesForChain;
+};
+
 export interface Order {
   makerAddress: string;
   takerAddress: string;

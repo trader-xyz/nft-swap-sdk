@@ -2,11 +2,6 @@ import type { TransactionReceipt } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
 import type {
-  TransactionOverrides,
-  ApprovalStatus,
-  SigningOptions,
-} from './pure';
-import type {
   Order,
   OrderInfo,
   OrderStatus,
@@ -15,6 +10,12 @@ import type {
   TypedData,
 } from './types';
 import type { ExchangeContract } from '../../contracts';
+import type {
+  ApprovalStatus,
+  BaseNftSwap,
+  SigningOptions,
+  TransactionOverrides,
+} from '../common/types';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -26,7 +27,7 @@ export interface NftSwapConfig {
   gasBufferMultiples?: { [chainId: number]: number };
 }
 
-export interface INftSwapV3 {
+export interface INftSwapV3 extends BaseNftSwap {
   signOrder: (
     order: Order,
     signerAddress: string,

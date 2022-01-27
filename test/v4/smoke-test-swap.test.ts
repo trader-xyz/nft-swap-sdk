@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
-import { defaultAbiCoder, hexDataSlice, parseEther } from 'ethers/lib/utils';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
-import { verifyOrderSignature } from '../../src/sdk/v3/pure';
 
 import { SwappableAsset } from '../../src/sdk/v4/pure';
 
@@ -52,9 +50,8 @@ describe('NFTSwapV4', () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const v4Erc721Order = nftSwapperMaker.buildOrder(
-      MAKER_ASSET,
       TAKER_ASSET,
-      MAKER_WALLET_ADDRESS
+      MAKER_ASSET
       // {
       //   // Fix dates and salt so we have reproducible tests
       //   expiration: new Date(3000, 10, 1),

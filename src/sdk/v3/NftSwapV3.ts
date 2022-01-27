@@ -20,11 +20,7 @@ import {
   cancelOrdersUpToNow as _cancelOrdersUpToNow,
   getOrderInfo as _getOrderInfo,
   getAssetsFromOrder as _getAssetsFromOrder,
-  hashOrder,
-  TransactionOverrides,
-  PayableOverrides,
-  ApprovalStatus,
-  SigningOptions,
+  hashOrder as _hashOrder,
 } from './pure';
 import {
   getEipDomain,
@@ -63,7 +59,13 @@ import {
 } from '../../utils/v3/default-addresses';
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../../utils/v3/gas-buffer';
 import { sleep } from '../../utils/sleep';
-import addresses from '../../addresses-v3.json';
+import addresses from './addresses.json';
+import {
+  ApprovalStatus,
+  PayableOverrides,
+  SigningOptions,
+  TransactionOverrides,
+} from '../common/types';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -463,7 +465,7 @@ class NftSwapV3 implements INftSwap {
   }
 
   public getOrderHash = (order: Order) => {
-    return hashOrder(order, this.chainId, this.exchangeContract.address);
+    return _hashOrder(order, this.chainId, this.exchangeContract.address);
   };
 
   public getTypedData = (
