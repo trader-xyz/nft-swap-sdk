@@ -5,7 +5,7 @@ import {
   signOrderWithEoaWallet,
   verifyOrderSignature,
 } from '../src/sdk/v3/pure';
-import { normalizeOrder } from '../src/utils/order';
+import { normalizeOrder } from '../src/utils/v3/order';
 
 jest.setTimeout(60 * 1000);
 

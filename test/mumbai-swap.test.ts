@@ -5,8 +5,8 @@ import {
   SupportedChainIds,
   SwappableAsset,
 } from '../src';
-import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../src/utils/gas-buffer';
-import { normalizeOrder } from '../src/utils/order';
+import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../src/utils/v3/gas-buffer';
+import { normalizeOrder } from '../src/utils/v3/order';
 
 jest.setTimeout(60 * 1000);
 

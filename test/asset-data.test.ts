@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import {
+  decodeAssetData,
   NftSwap,
   SupportedTokenTypes,
   SwappableAsset,
@@ -10,7 +11,6 @@ import {
   convertDecodedAssetDataToUserFacingAssets,
   getAssetsFromOrder,
 } from '../src/sdk/v3/pure';
-import { decodeAssetData } from '../src/utils/asset-data';
 import { NULL_ADDRESS } from '../src/utils/eth';
 
 jest.setTimeout(60 * 1000);

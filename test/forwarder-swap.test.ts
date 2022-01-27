@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import { NftSwap, SwappableAsset } from '../src';
-import { normalizeOrder } from '../src/utils/order';
+import { normalizeOrder } from '../src/utils/v3/order';
 
 jest.setTimeout(60 * 1000);
 
