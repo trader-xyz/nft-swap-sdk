@@ -128,21 +128,4 @@ class NftSwapV4 {
   };
 }
 
-/**
- * Approval status of an ERC20, ERC721, or ERC1155 asset/item.
- * The default approval spending address is the ExchangeProxy adapter specific to ERC type.
- */
-export type ApprovalStatus = {
-  /**
-   * contractApproved is the standard approval check.
-   * Equivalent to 'isApprovedForAll' for ERC721 and ERC1155, and is the normal allowance for ERC20
-   */
-  contractApproved: boolean;
-  /**
-   * Only exists for ERC721, tokenIdApproved checks if tokenId is approved. You can be in a state where tokenId is approved but isApprovedForAll is false
-   * In this case, you do not need to approve. ERC1155 does not have support for individual tokenId approvals. Not applicable for ERC20s since they are fungible
-   */
-  tokenIdApproved?: boolean;
-};
-
 export { NftSwapV4 };

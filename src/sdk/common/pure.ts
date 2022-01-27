@@ -1,4 +1,2 @@
-const foo = '1'
-export {
-    foo
-}
+const foo = '1';
+export { foo };
