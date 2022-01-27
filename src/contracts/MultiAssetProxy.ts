@@ -18,6 +18,7 @@ import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface MultiAssetProxyInterface extends utils.Interface {
+  contractName: 'MultiAssetProxy';
   functions: {
     'assetProxies(bytes4)': FunctionFragment;
     'addAuthorizedAddress(address)': FunctionFragment;
@@ -152,6 +153,7 @@ export type AssetProxyRegisteredEventFilter =
   TypedEventFilter<AssetProxyRegisteredEvent>;
 
 export interface MultiAssetProxy extends BaseContract {
+  contractName: 'MultiAssetProxy';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

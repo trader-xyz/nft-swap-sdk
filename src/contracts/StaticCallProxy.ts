@@ -16,6 +16,7 @@ import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface StaticCallProxyInterface extends utils.Interface {
+  contractName: 'StaticCallProxy';
   functions: {
     'transferFrom(bytes,address,address,uint256)': FunctionFragment;
     'getProxyId()': FunctionFragment;
@@ -40,6 +41,7 @@ export interface StaticCallProxyInterface extends utils.Interface {
 }
 
 export interface StaticCallProxy extends BaseContract {
+  contractName: 'StaticCallProxy';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

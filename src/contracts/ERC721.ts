@@ -18,6 +18,7 @@ import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface ERC721Interface extends utils.Interface {
+  contractName: 'ERC721';
   functions: {
     'approve(address,uint256)': FunctionFragment;
     'mint(address,uint256)': FunctionFragment;
@@ -131,6 +132,7 @@ export type ApprovalForAllEvent = TypedEvent<
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
 export interface ERC721 extends BaseContract {
+  contractName: 'ERC721';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
