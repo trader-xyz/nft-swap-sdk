@@ -181,7 +181,7 @@ export interface FillOrderOverrides {
 /**
  * NftSwap Convenience class to swap between ERC20, ERC721, and ERC1155. Primary entrypoint for swapping.
  */
-class NftSwap implements INftSwap {
+class NftSwapV3 implements INftSwap {
   public provider: BaseProvider;
   public signer: Signer | undefined;
   public chainId: number;
@@ -621,4 +621,4 @@ class NftSwap implements INftSwap {
   };
 }
 
-export { NftSwap };
+export { NftSwapV3 };

@@ -1,5 +1,6 @@
 export * from './v3/NftSwapV3';
 export * from './v4/NftSwapV4';
+export { NftSwapV3 as NftSwap } from './v3/NftSwapV3';
 export * from './v3/types';
 export * from './v3/pure';
 export * from '../utils/asset-data';
