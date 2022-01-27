@@ -12,6 +12,7 @@ import {
   signOrderWithEoaWallet,
   SwappableAsset,
   TradeDirection,
+  UserFacingERC1155AssetDataSerializedNormalizedSingle,
   UserFacingERC20AssetDataSerialized,
   UserFacingERC721AssetDataSerialized,
 } from './pure';
@@ -49,6 +50,30 @@ class NftSwapV4 {
     }
     return approveAsset(this.exchangeProxy.address, asset, this.signer);
   };
+
+  // TyPeSaFeTy: Order types supported:
+  // ERC721<>ERC20
+  // ERC1155<>ERC20
+  // Below ensures type-safe for those specific combinations
+  buildOrder2(
+    makerAsset: UserFacingERC1155AssetDataSerializedNormalizedSingle,
+    takerAsset: UserFacingERC20AssetDataSerialized
+  ): ERC721OrderStruct;
+  buildOrder2(
+    makerAsset: UserFacingERC20AssetDataSerialized,
+    takerAsset: UserFacingERC1155AssetDataSerializedNormalizedSingle
+  ): ERC721OrderStruct;
+  buildOrder2(
+    makerAsset: UserFacingERC721AssetDataSerialized,
+    takerAsset: UserFacingERC20AssetDataSerialized
+  ): ERC721OrderStruct;
+  buildOrder2(
+    makerAsset: UserFacingERC20AssetDataSerialized,
+    takerAsset: UserFacingERC721AssetDataSerialized
+  ): ERC721OrderStruct;
+  buildOrder2(makerAsset: SwappableAsset, takerAsset: SwappableAsset) {
+    return this.buildOrder({} as any, {} as any, '') as ERC721OrderStruct;
+  }
 
   buildOrder = (
     makerAsset: UserFacingERC721AssetDataSerialized,
