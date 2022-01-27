@@ -1,4 +1,4 @@
-import { SupportedChainIds } from '../sdk/v3/types';
+import { SupportedChainIds } from '../../sdk/v3/types';
 
 const DEFAUTLT_GAS_BUFFER_MULTIPLES: { [chainId: number]: number } = {
   [SupportedChainIds.Polygon]: 1.5,

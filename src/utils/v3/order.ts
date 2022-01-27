@@ -1,8 +1,8 @@
 import getUnixTime from 'date-fns/getUnixTime';
 import { BigNumber } from '@ethersproject/bignumber';
 import { _TypedDataEncoder } from '@ethersproject/hash';
-import { NULL_ADDRESS, NULL_BYTES, ZERO_AMOUNT } from './eth';
-import { Order, EipDomain, EIP712_TYPES, ZeroExOrder } from '../sdk/v3/types';
+import { NULL_ADDRESS, NULL_BYTES, ZERO_AMOUNT } from '../eth';
+import { Order, EipDomain, EIP712_TYPES, ZeroExOrder } from '../../sdk/v3/types';
 
 export const TRADER_ADDRESS_IDENTIFIER =
   '0xBCC02a155c374263321155555Ccf41070017649e';

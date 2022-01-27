@@ -19,14 +19,14 @@ import {
   generateTimeBasedSalt,
   getEipDomain,
   normalizeOrder,
-} from '../../utils/order';
+} from '../../utils/v3/order';
 import { NULL_ADDRESS } from '../../utils/eth';
 import {
   decodeAssetData,
   encodeAssetData,
   encodeMultiAssetAssetData,
   getAmountFromAsset,
-} from '../../utils/asset-data';
+} from '../../utils/v3/asset-data';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -55,7 +55,7 @@ import {
   UserFacingSerializedSingleAssetDataTypes,
 } from './types';
 import { encodeTypedDataHash, TypedData } from '../../utils/typed-data';
-import { EIP1271ZeroExDataAbi } from '../../utils/eip1271';
+import { EIP1271ZeroExDataAbi } from '../../utils/v3/eip1271';
 import { convertCollectionToBN } from '../../utils/bn/convert';
 
 export const cancelOrder = (

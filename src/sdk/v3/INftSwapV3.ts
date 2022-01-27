@@ -1,34 +1,20 @@
 import type { TransactionReceipt } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
-import {
-  buildOrder as _buildOrder,
-  signOrder as _signOrder,
-  fillSignedOrder as _fillSignedOrder,
-  approveAsset as _approveAsset,
-  verifyOrderSignature as _verifyOrderSignature,
-  getApprovalStatus as _getApprovalStatus,
-  cancelOrder as _cancelOrder,
-  cancelOrders as _cancelOrders,
-  estimateGasForFillOrder as _estimateGasForFillOrder,
-  estimateGasForApproval as _estimateGasForApproval,
-  cancelOrdersUpToNow as _cancelOrdersUpToNow,
-  getOrderInfo as _getOrderInfo,
-  getAssetsFromOrder as _getAssetsFromOrder,
+import type {
   TransactionOverrides,
   ApprovalStatus,
   SigningOptions,
-} from './v3/pure';
-import { normalizeOrder as _normalizeOrder } from '../utils/order';
-import {
+} from './pure';
+import type {
   Order,
   OrderInfo,
   OrderStatus,
   SignedOrder,
   SwappableAsset,
   TypedData,
-} from './v3/types';
-import { ExchangeContract } from '../contracts';
+} from './types';
+import type { ExchangeContract } from '../../contracts';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;
@@ -40,7 +26,7 @@ export interface NftSwapConfig {
   gasBufferMultiples?: { [chainId: number]: number };
 }
 
-export interface INftSwap {
+export interface INftSwapV3 {
   signOrder: (
     order: Order,
     signerAddress: string,
