@@ -50,8 +50,10 @@ describe('NFTSwapV4', () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const v4Erc721Order = nftSwapperMaker.buildOrder(
+      MAKER_ASSET,
       TAKER_ASSET,
-      MAKER_ASSET
+      'sell',
+      MAKER_WALLET_ADDRESS
       // {
       //   // Fix dates and salt so we have reproducible tests
       //   expiration: new Date(3000, 10, 1),

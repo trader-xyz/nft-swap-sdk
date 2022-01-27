@@ -183,7 +183,7 @@ class NftSwapV4 {
     }
   };
 
-  signOrder = (orderStruct: ERC721OrderStruct) => {
+  signOrder = (orderStruct: NftOrderV4) => {
     // do sign
     if (!this.signer) {
       throw new Error('Signed not defined');

@@ -2,6 +2,7 @@ import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { BytesLike, hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import { ContractTransaction } from 'ethers';
+import { NftSwapV4 } from '..';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -9,7 +10,12 @@ import {
 } from '../../contracts';
 import { UnexpectedAssetTypeError } from '../error';
 import { InterallySupportedAssetFormat, MAX_APPROVAL } from '../v3/pure';
-import { ECSignature, ERC721OrderStruct } from './types';
+import {
+  ECSignature,
+  ERC1155OrderStruct,
+  ERC721OrderStruct,
+  NftOrderV4,
+} from './types';
 
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
@@ -106,11 +112,14 @@ export enum OrderStatus {
 }
 
 export const signOrderWithEoaWallet = async (
-  order: ERC721OrderStruct,
+  order: NftOrderV4,
   signer: TypedDataSigner,
   chainId: number,
   exchangeContractAddress: string
 ) => {
+  if ((order as ERC1155OrderStruct).erc1155Token) {
+    throw new Error('ERC1155 not implemented yet');
+  }
   const domain = {
     chainId: chainId,
     verifyingContract: exchangeContractAddress,
