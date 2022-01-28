@@ -78,7 +78,10 @@ describe('NFTSwapV4', () => {
     const signature = await nftSwapperMaker.signOrder(v4Erc721Order);
     console.log('erc721 signatuee', signature);
 
-    // const fillTx = await nftSwapperMaker.fillOrder(v4Erc721Order, signature);
+    // const fillTx = await nftSwapperMaker.fillOrder(
+    //   { ...v4Erc721Order, signature: { foo: 'bar' } } as any,
+    //   signature
+    // );
     // const transactionHash = await fillTx.wait();
     // console.log('erc721 fill tx', transactionHash.transactionHash);
 

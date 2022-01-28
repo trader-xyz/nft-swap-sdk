@@ -3,8 +3,9 @@ import { BaseProvider } from '@ethersproject/providers';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { IZeroEx, IZeroEx__factory } from '../../contracts';
 import { NULL_ADDRESS } from '../../utils/eth';
-import { ApprovalStatus, BaseNftSwap } from '../common/types';
+import { ApprovalStatus, BaseNftSwap, SigningOptions } from '../common/types';
 import { UnexpectedAssetTypeError } from '../error';
+import { BuildOrderAdditionalConfig } from '../v3/INftSwapV3';
 import {
   approveAsset,
   parseRawSignature,
@@ -30,7 +31,7 @@ export enum SupportedChainIdsV4 {
 const EXCHANGE_PROXY_DEFAULT_ADDRESS_ROPSTEN =
   '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
 
-//  export interface INftSwapV4 extends BaseNftSwap {
+// export interface INftSwapV4 extends BaseNftSwap {
 //   signOrder: (
 //     order: NftOrderV4,
 //     signerAddress: string,
@@ -87,7 +88,7 @@ const EXCHANGE_PROXY_DEFAULT_ADDRESS_ROPSTEN =
 //     makerAssets: SwappableAsset[];
 //     takerAssets: SwappableAsset[];
 //   };
-//  }
+// }
 
 class NftSwapV4 {
   public provider: BaseProvider;
@@ -155,7 +156,7 @@ class NftSwapV4 {
           maker: makerWalletAddress,
           taker: NULL_ADDRESS,
           expiry: 1743224013,
-          nonce: 6969,
+          nonce: 69691,
           erc20Token: erc20.tokenAddress,
           erc20TokenAmount: erc20.amount,
           fees: [],
@@ -196,7 +197,7 @@ class NftSwapV4 {
     );
   };
 
-  fillOrder = async (order: ERC721OrderStruct, rawSignature: string) => {
+  fillOrder = async (order: NftOrderV4, rawSignature: string) => {
     // do fill
 
     const foo = parseRawSignature(rawSignature);
@@ -205,11 +206,15 @@ class NftSwapV4 {
       ...foo,
     };
 
+    if ((order as ERC1155OrderStruct).erc1155Token) {
+      throw new Error('not implemented yet');
+    }
+
     console.log('final signature', finalSignature);
 
     const gasPrice = (await this.provider.getGasPrice()).mul(2);
 
-    return this.exchangeProxy.buyERC721(order, finalSignature, '0x', {
+    return this.exchangeProxy.buyERC721(order as any, finalSignature, '0x', {
       gasLimit: 800000,
       gasPrice: gasPrice,
     });

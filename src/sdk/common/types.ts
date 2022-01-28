@@ -13,7 +13,7 @@ export interface BaseNftSwap {
   getOrderStatus: Function;
   getOrderInfo: Function;
   getOrderHash: Function;
-  getTypedDAta: Function;
+  getTypedData: Function;
   normalizeSignedOrder: Function;
   normalizeOrder: Function;
   checkIfOrderCanBeFilledWithNativeToken: Function;
