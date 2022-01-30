@@ -1,6 +1,6 @@
 export * from './v3/NftSwapV3';
 export * from './v4/NftSwapV4';
-// Default nftswap is v3. Can opt-into specific versions (v3 or v4) if desired
+// Default NftSwap is V3. Can opt-into specific versions (V3 or V4) if desired
 export { NftSwapV3 as NftSwap } from './v3/NftSwapV3';
 export * from './v3/types';
 export * from './v3/pure';

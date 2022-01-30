@@ -1,21 +1,27 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { BytesLike, hexDataLength, hexDataSlice } from '@ethersproject/bytes';
+import getUnixTime from 'date-fns/getUnixTime';
+import { v4 } from 'uuid';
 import { ContractTransaction } from 'ethers';
-import { NftSwapV4 } from '..';
+import { Erc721TradeableAsset, NftSwapV4 } from '..';
 import {
   ERC1155__factory,
   ERC20__factory,
   ERC721__factory,
 } from '../../contracts';
+import { NULL_ADDRESS } from '../../utils/eth';
 import { UnexpectedAssetTypeError } from '../error';
-import { InterallySupportedAssetFormat, MAX_APPROVAL } from '../v3/pure';
 import {
   ECSignature,
   ERC1155OrderStruct,
   ERC721OrderStruct,
   NftOrderV4,
+  OrderStructOptionsCommon,
+  OrderStructOptionsCommonStrict,
 } from './types';
+import { BaseProvider } from '@ethersproject/providers';
+import { ApprovalStatus } from '../common/types';
 
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
@@ -144,6 +150,76 @@ export const signOrderWithEoaWallet = async (
 };
 
 /**
+ *
+ * @param walletAddress Owner of the asset
+ * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
+ * @param asset
+ * @param provider
+ * @returns
+ */
+export const getApprovalStatus = async (
+  walletAddress: string,
+  exchangeProxyAddressForAsset: string,
+  asset: SwappableAsset,
+  provider: BaseProvider
+): Promise<ApprovalStatus> => {
+  switch (asset.type) {
+    case 'ERC20':
+      const erc20 = ERC20__factory.connect(asset.tokenAddress, provider);
+      const erc20AllowanceBigNumber: BigNumber = await erc20.allowance(
+        walletAddress,
+        exchangeProxyAddressForAsset
+      );
+      // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
+      const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
+        MAX_APPROVAL.toString()
+      ).sub('100000000000000000');
+      const approvedForMax = erc20AllowanceBigNumber.gte(
+        MAX_APPROVAL_WITH_BUFFER
+      );
+      return {
+        contractApproved: approvedForMax,
+      };
+    case 'ERC721':
+      const erc721 = ERC721__factory.connect(asset.tokenAddress, provider);
+      const erc721ApprovalForAllPromise = erc721.isApprovedForAll(
+        walletAddress,
+        exchangeProxyAddressForAsset
+      );
+      const erc721ApprovedAddressForIdPromise = erc721.getApproved(
+        asset.tokenId
+      );
+      const [erc721ApprovalForAll, erc721ApprovedAddressForId] =
+        await Promise.all([
+          erc721ApprovalForAllPromise,
+          erc721ApprovedAddressForIdPromise,
+        ]);
+      const tokenIdApproved =
+        erc721ApprovedAddressForId.toLowerCase() ===
+        exchangeProxyAddressForAsset.toLowerCase();
+      return {
+        contractApproved: erc721ApprovalForAll ?? false,
+        tokenIdApproved: tokenIdApproved,
+      };
+    case 'ERC1155':
+      const erc1155 = ERC1155__factory.connect(asset.tokenAddress, provider);
+      const erc1155ApprovalForAll = await erc1155.isApprovedForAll(
+        walletAddress,
+        exchangeProxyAddressForAsset
+      );
+      return {
+        contractApproved: erc1155ApprovalForAll ?? false,
+      };
+    default:
+      throw new UnexpectedAssetTypeError((asset as any).type);
+  }
+};
+
+// Some arbitrarily high number.
+// TODO(johnrjj) - Support custom ERC20 approval amounts
+export const MAX_APPROVAL = BigNumber.from(2).pow(118);
+
+/**
  * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
  * @param asset
  * @param signer Signer, must be a signer not a provider, as signed transactions are needed to approve
@@ -237,3 +313,60 @@ export function parseRawSignature(rawSignature: string): ECSignature {
     s: hexDataSlice(rawSignature, 33, 65),
   };
 }
+
+export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
+
+export const generateErc721Order = (
+  nft: UserFacingERC721AssetDataSerialized,
+  erc20: UserFacingERC20AssetDataSerialized,
+  orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
+): ERC721OrderStruct => {
+  const erc721Order: ERC721OrderStruct = {
+    erc721Token: nft.tokenAddress,
+    erc721TokenId: nft.tokenId,
+    direction: orderData.direction,
+    erc20Token: erc20.tokenAddress,
+    erc20TokenAmount: erc20.amount,
+    maker: orderData.maker,
+    // Defaults not required...
+    erc721TokenProperties: [],
+    fees: [],
+    expiry: orderData.expiry
+      ? getUnixTime(orderData.expiry)
+      : INFINITE_TIMESTAMP_SEC,
+    nonce: orderData.nonce ?? generateRandomNonce(),
+    taker: orderData.taker ?? NULL_ADDRESS,
+  };
+
+  return erc721Order;
+};
+
+export const generateErc1155Order = (
+  nft: UserFacingERC1155AssetDataSerializedNormalizedSingle,
+  erc20: UserFacingERC20AssetDataSerialized,
+  orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
+): ERC1155OrderStruct => {
+  const erc1155Order: ERC1155OrderStruct = {
+    erc1155Token: nft.tokenAddress,
+    erc1155TokenId: nft.tokenId,
+    erc1155TokenAmount: nft.amount ?? '1',
+    direction: orderData.direction,
+    erc20Token: erc20.tokenAddress,
+    erc20TokenAmount: erc20.amount,
+    maker: orderData.maker,
+    // Defaults not required...
+    erc1155TokenProperties: [],
+    fees: [],
+    expiry: orderData.expiry
+      ? getUnixTime(orderData.expiry)
+      : INFINITE_TIMESTAMP_SEC,
+    nonce: orderData.nonce ?? generateRandomNonce(),
+    taker: orderData.taker ?? NULL_ADDRESS,
+  };
+
+  return erc1155Order;
+};
+
+const generateRandomNonce = () => {
+  return v4().replace('-', '');
+};

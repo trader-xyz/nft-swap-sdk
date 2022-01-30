@@ -9,14 +9,13 @@ export interface BaseNftSwap {
   fillSignedOrder: Function;
   awaitTransactionHash: Function;
   cancelOrder: Function;
-  waitUntilOrderFilledOrCancelled: Function;
+  // waitUntilOrderFilledOrCancelled: Function;
   getOrderStatus: Function;
-  getOrderInfo: Function;
-  getOrderHash: Function;
-  getTypedData: Function;
-  normalizeSignedOrder: Function;
-  normalizeOrder: Function;
-  checkIfOrderCanBeFilledWithNativeToken: Function;
+  // getOrderHash: Function;
+  // getTypedData: Function;
+  // normalizeSignedOrder: Function;
+  // normalizeOrder: Function;
+  // checkIfOrderCanBeFilledWithNativeToken: Function;
 }
 
 // User facing

@@ -13,6 +13,7 @@ import type { ExchangeContract } from '../../contracts';
 import type {
   ApprovalStatus,
   BaseNftSwap,
+  PayableOverrides,
   SigningOptions,
   TransactionOverrides,
 } from '../common/types';
@@ -53,7 +54,8 @@ export interface INftSwapV3 extends BaseNftSwap {
   ) => Promise<ContractTransaction>;
   fillSignedOrder: (
     signedOrder: SignedOrder,
-    fillOrderOverrides?: Partial<FillOrderOverrides>
+    fillOrderOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides?: Partial<PayableOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
   cancelOrder: (order: Order) => Promise<ContractTransaction>;
