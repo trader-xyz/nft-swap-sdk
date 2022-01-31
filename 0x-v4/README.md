@@ -6,7 +6,9 @@ description: NFT Swap SDK now supports 0x Protocol v4! Try it out on Ropsten tod
 
 ### Overview
 
-Swapping with the Swap SDK just got even better. With the integration of 0x v4, swaps are now the cheapest available on Ethereum, giving developers' applications a competitive advantage. Both developers and users benefit from the 0x v4 upgrade.
+#### What's new?
+
+Swapping with the Swap SDK just got even better. With the new integration of 0x v4, **NFT trades that use the Swap SDK are the cheapest and most efficient swaps available on Ethereum.** Leverage the updated Swap SDK to ensure your users have the lowest possible gas fees anywhere. Read more about the gas optimizations below.&#x20;
 
 #### About Swap SDK
 
