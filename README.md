@@ -4,6 +4,8 @@
 
 The missing peer-to-peer swap library for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers. Trade tokens (ERC20s), NFTs, and other collectibles (ERC721 and ERC1155) with just a few lines of code. Seriously, easily trade anything on Ethereum with this library.
 
+**🎉 Update 1/31/22: Swap SDK now supports 0x v4, check out the [docs](https://docs.swapsdk.xyz/0x-v4). 🎉**
+
 ## Overview
 
 tl;dr: NFT Swap SDK is the easiest, most-powerful swap library available on the EVM. Supports Ethereum and EVM-compatible chains (Polygon, Avalanche, BSC, etc..). Works in both browser and node.js. Written in TypeScript, built using the 0x protocol. With this library, you can build support for NFT marketplaces, over-the-counter (OTC) exchange, and/or peer-to-peer exchange.
