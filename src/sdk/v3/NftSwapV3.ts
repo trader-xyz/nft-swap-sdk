@@ -42,6 +42,7 @@ import {
   BigNumberish,
   ERC20AssetDataSerialized,
   AssetProxyId,
+  SigningOptions,
 } from './types';
 import {
   ExchangeContract,
@@ -61,12 +62,7 @@ import {
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../../utils/v3/gas-buffer';
 import { sleep } from '../../utils/sleep';
 import addresses from './addresses.json';
-import {
-  ApprovalStatus,
-  PayableOverrides,
-  SigningOptions,
-  TransactionOverrides,
-} from '../common/types';
+import { PayableOverrides, TransactionOverrides } from '../common/types';
 
 export interface NftSwapConfig {
   exchangeContractAddress?: string;

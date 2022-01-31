@@ -76,10 +76,3 @@ export interface TransactionOverrides {
   accessList?: any;
   customData?: Record<string, any>;
 }
-
-export type AvailableSignatureTypes = 'eoa' | 'eip1271';
-
-export interface SigningOptions {
-  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
-  autodetectSignatureType: boolean;
-}

@@ -37,6 +37,7 @@ import { UnexpectedAssetTypeError } from '../error';
 import {
   AdditionalOrderConfig,
   AssetProxyId,
+  AvailableSignatureTypes,
   EIP712_TYPES,
   ERC1155AssetDataSerialized,
   ERC20AssetDataSerialized,
@@ -47,6 +48,7 @@ import {
   OrderStatus,
   SerializedAvailableAssetDataTypesDecoded,
   SignedOrder,
+  SigningOptions,
   SwappableAsset,
   UserFacingERC1155AssetDataSerializedNormalizedSingle,
   UserFacingERC20AssetDataSerialized,
@@ -58,9 +60,7 @@ import { EIP1271ZeroExDataAbi } from '../../utils/v3/eip1271';
 import { convertCollectionToBN } from '../../utils/bn/convert';
 import type {
   ApprovalStatus,
-  AvailableSignatureTypes,
   PayableOverrides,
-  SigningOptions,
   TransactionOverrides,
 } from '../common/types';
 

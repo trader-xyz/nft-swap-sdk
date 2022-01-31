@@ -138,3 +138,10 @@ export interface BuildOrderAdditionalConfig {
   expiry: BigNumberish;
   nonce: BigNumberish;
 }
+
+export type AvailableSignatureTypes = 'eoa'; // No EIP-1271 / preSign yet (soon though)
+
+export interface SigningOptions {
+  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
+  autodetectSignatureType: boolean;
+}

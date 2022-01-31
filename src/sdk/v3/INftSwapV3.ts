@@ -6,6 +6,7 @@ import type {
   OrderInfo,
   OrderStatus,
   SignedOrder,
+  SigningOptions,
   SwappableAsset,
   TypedData,
 } from './types';
@@ -14,7 +15,6 @@ import type {
   ApprovalStatus,
   BaseNftSwap,
   PayableOverrides,
-  SigningOptions,
   TransactionOverrides,
 } from '../common/types';
 

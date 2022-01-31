@@ -6,7 +6,6 @@ import type {
   ApprovalStatus,
   BaseNftSwap,
   PayableOverrides,
-  SigningOptions,
   TransactionOverrides,
 } from '../common/types';
 import { UnexpectedAssetTypeError } from '../error';
@@ -25,12 +24,12 @@ import {
 } from './pure';
 import type {
   ApprovalOverrides,
-  BuildOrderAdditionalConfig,
   FillOrderOverrides,
   NftOrderV4,
   OrderStatus,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
+  SigningOptions,
   SupportedChainIds,
 } from './types';
 

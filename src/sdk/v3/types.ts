@@ -486,3 +486,10 @@ export enum RevertReason {
   EqualLengthsRequired = 'EQUAL_LENGTHS_REQUIRED',
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
 }
+
+export type AvailableSignatureTypes = 'eoa' | 'eip1271';
+
+export interface SigningOptions {
+  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
+  autodetectSignatureType: boolean;
+}
