@@ -275,15 +275,14 @@ class NftSwapV4 implements INftSwapV4 {
         signedOrder.signature,
         1,
         '0x',
-        transactionOverrides
+        transactionOverrides ?? {}
       );
-      throw new Error('not implemented yet');
     } else if ('erc721Token' in signedOrder) {
       return this.exchangeProxy.buyERC721(
         signedOrder,
         signedOrder.signature,
         '0x',
-        transactionOverrides
+        transactionOverrides ?? {}
       );
     }
     console.log('unsupported order', signedOrder);

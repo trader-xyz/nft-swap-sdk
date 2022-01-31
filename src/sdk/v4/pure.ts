@@ -21,7 +21,7 @@ import {
   OrderStructOptionsCommonStrict,
 } from './types';
 import { BaseProvider } from '@ethersproject/providers';
-import { ApprovalStatus } from '../common/types';
+import { ApprovalStatus, TransactionOverrides } from '../common/types';
 
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
@@ -230,7 +230,7 @@ export const approveAsset = async (
   exchangeProxyAddressForAsset: string,
   asset: SwappableAsset,
   signer: Signer,
-  overrides: any = {},
+  overrides: Partial<TransactionOverrides> = {},
   approve: boolean = true
 ): Promise<ContractTransaction> => {
   switch (asset.type) {
@@ -338,6 +338,7 @@ export const generateErc721Order = (
     taker: orderData.taker ?? NULL_ADDRESS,
   };
 
+  console.log(erc721Order.nonce.toString());
   return erc721Order;
 };
 
@@ -368,5 +369,5 @@ export const generateErc1155Order = (
 };
 
 const generateRandomNonce = () => {
-  return v4().replace('-', '');
+  return `0x${v4().toString().split('-').join('')}`;
 };

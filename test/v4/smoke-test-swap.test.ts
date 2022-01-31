@@ -3,7 +3,7 @@ import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import { SwappableAsset } from '../../src/sdk/v4/pure';
 
-jest.setTimeout(60 * 1000);
+jest.setTimeout(90 * 1000);
 
 const MAKER_WALLET_ADDRESS = '0xabc23F70Df4F45dD3Df4EC6DA6827CB05853eC9b';
 const MAKER_PRIVATE_KEY =
@@ -60,6 +60,10 @@ describe('NFTSwapV4', () => {
       // }
     );
 
+    console.log('v4Erc721Order.nonce', v4Erc721Order.nonce.toString());
+
+    expect(v4Erc721Order.nonce.toString().includes('-')).toBeFalsy();
+
     // const makerapprovalTx = await nftSwapperMaker.approveTokenOrNftByAsset(
     //   MAKER_ASSET,
     //   MAKER_WALLET_ADDRESS,
@@ -75,15 +79,15 @@ describe('NFTSwapV4', () => {
     // const takerApprovalTxHash = await (await takerApprovalTx.wait()).transactionHash
     // console.log('taker approval tx hash', takerApprovalTxHash)
 
-    const signature = await nftSwapperMaker.signOrder(v4Erc721Order);
-    console.log('erc721 signatuee', signature);
+    const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+    console.log('erc721 signatuee', signedOrder.signature);
+    expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
-    // const fillTx = await nftSwapperMaker.fillOrder(
-    //   { ...v4Erc721Order, signature: { foo: 'bar' } } as any,
-    //   signature
-    // );
-    // const transactionHash = await fillTx.wait();
-    // console.log('erc721 fill tx', transactionHash.transactionHash);
+    // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
+    // const txReceipt = await fillTx.wait();
+    // console.log('erc721 fill tx', txReceipt.transactionHash);
+
+    // expect(txReceipt.transactionHash).toBeTruthy();
 
     // const normalizedOrder = normalizeOrder(order);
     // const signedOrder = await nftSwapperMaker.signOrder(
