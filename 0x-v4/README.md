@@ -44,6 +44,8 @@ Based on recent gas benchmarks, 0x v4 is significantly cheaper  to fill orders.
 
 NFT buys and sells (bids and asks) are both supported.
 
+![Analysis of Order support of leading NFT protocols](../.gitbook/assets/order-support.png)
+
 Note: Currently 0x v4 does not support NFT<>NFT swaps (e.g. ERC721<>ERC721). If required, you can use the 0x v3 protocol until v4 support is added.
 
 ### Installation
