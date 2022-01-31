@@ -1,17 +1,17 @@
 import { ethers } from 'ethers';
 import {
+  decodeAssetData,
   NftSwap,
   SupportedTokenTypes,
   SwappableAsset,
   UserFacingERC1155AssetDataSerializedNormalizedSingle,
   UserFacingERC20AssetDataSerialized,
-} from '../src';
+} from '../../src';
 import {
   convertDecodedAssetDataToUserFacingAssets,
   getAssetsFromOrder,
-} from '../src/sdk/pure';
-import { decodeAssetData } from '../src/utils/asset-data';
-import { NULL_ADDRESS } from '../src/utils/eth';
+} from '../../src/sdk/v3/pure';
+import { NULL_ADDRESS } from '../../src/utils/eth';
 
 jest.setTimeout(60 * 1000);
 

@@ -1,9 +1,14 @@
-import { UnsupportedChainId, UnexpectedAssetTypeError } from '../sdk/error';
-import type { AddressesForChain, SupportedTokenTypes } from '../sdk/types';
-import addresses from '../addresses.json';
+import { UnsupportedChainId, UnexpectedAssetTypeError } from '../../sdk/error';
+import type {
+  AddressesForChain,
+  ContractAddresses,
+  SupportedTokenTypes,
+} from '../../sdk/v3/types';
+import defaultAddresses from '../../sdk/v3/addresses.json';
 
 const getZeroExAddressesForChain = (
-  chainId: number
+  chainId: number,
+  addresses: ContractAddresses = defaultAddresses
 ): AddressesForChain | undefined => {
   const chainIdString = chainId.toString(10);
   const maybeAddressesForChain: AddressesForChain | undefined = (
@@ -14,9 +19,10 @@ const getZeroExAddressesForChain = (
 
 export const getProxyAddressForErcType = (
   assetType: SupportedTokenTypes,
-  chainId: number
+  chainId: number,
+  addresses: ContractAddresses = defaultAddresses
 ) => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
+  const zeroExAddresses = getZeroExAddressesForChain(chainId, addresses);
   if (!zeroExAddresses) {
     throw new UnsupportedChainId(chainId);
   }
@@ -32,15 +38,21 @@ export const getProxyAddressForErcType = (
   }
 };
 
-export const getForwarderAddress = (chainId: number) => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
+export const getForwarderAddress = (
+  chainId: number,
+  addresses: ContractAddresses = defaultAddresses
+) => {
+  const zeroExAddresses = getZeroExAddressesForChain(chainId, addresses);
   if (!zeroExAddresses) {
     throw new UnsupportedChainId(chainId);
   }
   return zeroExAddresses.forwarder;
 };
 
-export const getWrappedNativeToken = (chainId: number): string | null => {
-  const zeroExAddresses = getZeroExAddressesForChain(chainId);
+export const getWrappedNativeToken = (
+  chainId: number,
+  addresses: ContractAddresses = defaultAddresses
+): string | null => {
+  const zeroExAddresses = getZeroExAddressesForChain(chainId, addresses);
   return zeroExAddresses?.wrappedNativeToken ?? null;
 };

@@ -13,6 +13,10 @@ export interface AddressesForChain {
   wrappedNativeToken?: string | null;
 }
 
+export type ContractAddresses = {
+  [chainId: string]: AddressesForChain;
+};
+
 export interface Order {
   makerAddress: string;
   takerAddress: string;
@@ -481,4 +485,11 @@ export enum RevertReason {
   CustomTimeLockIncomplete = 'CUSTOM_TIME_LOCK_INCOMPLETE',
   EqualLengthsRequired = 'EQUAL_LENGTHS_REQUIRED',
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
+}
+
+export type AvailableSignatureTypes = 'eoa' | 'eip1271';
+
+export interface SigningOptions {
+  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
+  autodetectSignatureType: boolean;
 }

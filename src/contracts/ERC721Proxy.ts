@@ -18,6 +18,7 @@ import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface ERC721ProxyInterface extends utils.Interface {
+  contractName: 'ERC721Proxy';
   functions: {
     'addAuthorizedAddress(address)': FunctionFragment;
     'authorities(uint256)': FunctionFragment;
@@ -115,6 +116,7 @@ export type AuthorizedAddressRemovedEventFilter =
   TypedEventFilter<AuthorizedAddressRemovedEvent>;
 
 export interface ERC721Proxy extends BaseContract {
+  contractName: 'ERC721Proxy';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

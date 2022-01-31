@@ -36,7 +36,7 @@ class ModuleError extends Error {
 class UnexpectedAssetTypeError extends ModuleError {
   constructor(assetType: string) {
     const code = 'UnexpectedAssetTypeError';
-    super(`Unexpected asset type ${assetType}`, {
+    super(`Unexpected asset type ${assetType ?? 'unknown'}`, {
       expected: true,
       code,
     });

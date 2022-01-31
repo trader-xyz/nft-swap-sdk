@@ -8,6 +8,7 @@ export type { ExchangeContract } from './ExchangeContract';
 export type { Forwarder } from './Forwarder';
 export type { MultiAssetProxy } from './MultiAssetProxy';
 export type { StaticCallProxy } from './StaticCallProxy';
+export type { IZeroEx } from './IZeroEx';
 export type { ERC1155 } from './ERC1155';
 export type { ERC20 } from './ERC20';
 export type { ERC721 } from './ERC721';
@@ -19,6 +20,7 @@ export { ExchangeContract__factory } from './factories/ExchangeContract__factory
 export { Forwarder__factory } from './factories/Forwarder__factory';
 export { MultiAssetProxy__factory } from './factories/MultiAssetProxy__factory';
 export { StaticCallProxy__factory } from './factories/StaticCallProxy__factory';
+export { IZeroEx__factory } from './factories/IZeroEx__factory';
 export { ERC1155__factory } from './factories/ERC1155__factory';
 export { ERC20__factory } from './factories/ERC20__factory';
 export { ERC721__factory } from './factories/ERC721__factory';

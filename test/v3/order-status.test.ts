@@ -1,12 +1,7 @@
 import { ethers } from 'ethers';
-import {
-  estimateGasForFillOrder,
-  NftSwap,
-  SupportedChainIds,
-  SwappableAsset,
-} from '../src';
-import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../src/utils/gas-buffer';
-import { normalizeOrder } from '../src/utils/order';
+import { NftSwap, SwappableAsset } from '../../src';
+import { OrderStatus } from '../../src/sdk/v3/types';
+import { normalizeOrder } from '../../src/utils/v3/order';
 
 jest.setTimeout(60 * 1000);
 
@@ -14,12 +9,6 @@ const MAKER_WALLET_ADDRESS = '0xabc23F70Df4F45dD3Df4EC6DA6827CB05853eC9b';
 const MAKER_PRIVATE_KEY =
   'fc5db508b0a52da8fbcac3ab698088715595f8de9cccf2467d51952eec564ec9';
 // NOTE(johnrjj) - NEVER use these private keys for anything of value, testnets only!
-
-// TODO(johnrjj) - When Rinkeby faucet is working, separate out swap into two accounts.
-// Right now we'll just trade between the same account (it works for testing purposes)
-// const TAKER_WALLET_ADDRESS = "0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34";
-// const TAKER_PRIVATE_KEY =
-//   "a8d6d0643c732663bf5221f83df806a59ed54dbd9be02e226b1a11ff4de83de8";
 
 const WMATIC_TOKEN_ADDRESS_TESTNET =
   '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
@@ -29,15 +18,12 @@ const RPC_TESTNET =
   'https://polygon-mumbai.g.alchemy.com/v2/VMBpFqjMYv2w-MWnc9df92w3R2TpMvSG';
 
 const MAKER_WALLET = new ethers.Wallet(MAKER_PRIVATE_KEY);
-// const TAKER_WALLET = new ethers.Wallet(TAKER_PRIVATE_KEY);
 
 const PROVIDER = new ethers.providers.StaticJsonRpcProvider(RPC_TESTNET);
 
 const MAKER_SIGNER = MAKER_WALLET.connect(PROVIDER);
-// const TAKER_PROVIDER = TAKER_WALLET.connect(PROVIDER);
 
 const nftSwapperMaker = new NftSwap(MAKER_SIGNER as any, MAKER_SIGNER, 80001);
-// const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
 const TAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
@@ -51,10 +37,24 @@ const MAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwap', () => {
-  it('swaps 0.1 DAI and 0.1 WMATIC on mumbai test correctly', async () => {
+  fit('checks order status correctly before and after cancel', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const gasPrice = (await PROVIDER.getGasPrice()).mul(2);
+
+    // const approvalTxMaker = await nftSwapperMaker.approveTokenOrNftByAsset(
+    //   MAKER_ASSET,
+    //   MAKER_WALLET_ADDRESS
+    // );
+    // const makerApprovalTxReceipt = await approvalTxMaker.wait();
+
+    // expect(makerApprovalTxReceipt.transactionHash).toBeTruthy();
+
+    const makerApprovalStatus = await nftSwapperMaker.loadApprovalStatus(
+      MAKER_ASSET,
+      MAKER_WALLET_ADDRESS
+    );
+    // expect(makerApprovalStatus.contractApproved).toBe(true);
 
     // const approvalTxMaker = await nftSwapperMaker.approveTokenOrNftByAsset(
     //   MAKER_ASSET,
@@ -83,10 +83,20 @@ describe('NFTSwap', () => {
       {
         // Fix dates and salt so we have reproducible tests
         expiration: new Date(3000, 10, 1),
+        feeRecipientAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeE',
       }
     );
 
     const normalizedOrder = normalizeOrder(order);
+
+    expect(normalizedOrder.feeRecipientAddress).toBe(
+      '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    );
+
+    const orderInfo = await nftSwapperMaker.getOrderInfo(normalizedOrder);
+
+    expect(orderInfo.orderStatus).toBe(OrderStatus.Fillable);
+
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
       MAKER_WALLET_ADDRESS,
@@ -99,18 +109,22 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    // const estimatedGasLimit = await estimateGasForFillOrder(signedOrder, nftSwapperMaker.exchangeContract);
+    // const cancelTx = await nftSwapperMaker.cancelOrder(normalizedOrder);
+    // const cancelTxReceipt = await cancelTx.wait();
+    // expect(cancelTxReceipt.transactionHash).toBeTruthy();
+
+    // const orderInfoAfterCancel = await nftSwapperMaker.getOrderInfo(
+    //   normalizedOrder
+    // );
+    // expect(orderInfoAfterCancel.orderStatus).toBe(OrderStatus.Cancelled);
 
     // // Uncomment to actually fill order
     // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
     //   gasPrice,
+    //   gasLimit: '500000',
+    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
+    //   value: parseEther('0.0001'),
     // });
-
-    // const finalGasLimit = tx.gasLimit
-
-    // const expectedGasLimitWithBufferMultiple = Math.floor(estimatedGasLimit.toNumber() * (DEFAUTLT_GAS_BUFFER_MULTIPLES[SupportedChainIds.PolygonMumbai]))
-
-    // expect(finalGasLimit.toNumber()).toEqual(expectedGasLimitWithBufferMultiple)
 
     // const txReceipt = await tx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();

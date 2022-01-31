@@ -18,150 +18,157 @@ import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
-export type OrderStruct = {
-  makerAddress: string;
-  takerAddress: string;
-  feeRecipientAddress: string;
-  senderAddress: string;
-  makerAssetAmount: BigNumberish;
-  takerAssetAmount: BigNumberish;
-  makerFee: BigNumberish;
-  takerFee: BigNumberish;
-  expirationTimeSeconds: BigNumberish;
-  salt: BigNumberish;
-  makerAssetData: BytesLike;
-  takerAssetData: BytesLike;
-  makerFeeAssetData: BytesLike;
-  takerFeeAssetData: BytesLike;
-};
+export declare namespace LibOrder {
+  export type OrderStruct = {
+    makerAddress: string;
+    takerAddress: string;
+    feeRecipientAddress: string;
+    senderAddress: string;
+    makerAssetAmount: BigNumberish;
+    takerAssetAmount: BigNumberish;
+    makerFee: BigNumberish;
+    takerFee: BigNumberish;
+    expirationTimeSeconds: BigNumberish;
+    salt: BigNumberish;
+    makerAssetData: BytesLike;
+    takerAssetData: BytesLike;
+    makerFeeAssetData: BytesLike;
+    takerFeeAssetData: BytesLike;
+  };
 
-export type OrderStructOutput = [
-  string,
-  string,
-  string,
-  string,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  string,
-  string,
-  string,
-  string
-] & {
-  makerAddress: string;
-  takerAddress: string;
-  feeRecipientAddress: string;
-  senderAddress: string;
-  makerAssetAmount: BigNumber;
-  takerAssetAmount: BigNumber;
-  makerFee: BigNumber;
-  takerFee: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  salt: BigNumber;
-  makerAssetData: string;
-  takerAssetData: string;
-  makerFeeAssetData: string;
-  takerFeeAssetData: string;
-};
+  export type OrderStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    string,
+    string
+  ] & {
+    makerAddress: string;
+    takerAddress: string;
+    feeRecipientAddress: string;
+    senderAddress: string;
+    makerAssetAmount: BigNumber;
+    takerAssetAmount: BigNumber;
+    makerFee: BigNumber;
+    takerFee: BigNumber;
+    expirationTimeSeconds: BigNumber;
+    salt: BigNumber;
+    makerAssetData: string;
+    takerAssetData: string;
+    makerFeeAssetData: string;
+    takerFeeAssetData: string;
+  };
 
-export type ZeroExTransactionStruct = {
-  salt: BigNumberish;
-  expirationTimeSeconds: BigNumberish;
-  gasPrice: BigNumberish;
-  signerAddress: string;
-  data: BytesLike;
-};
+  export type OrderInfoStruct = {
+    orderStatus: BigNumberish;
+    orderHash: BytesLike;
+    orderTakerAssetFilledAmount: BigNumberish;
+  };
 
-export type ZeroExTransactionStructOutput = [
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  string,
-  string
-] & {
-  salt: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  gasPrice: BigNumber;
-  signerAddress: string;
-  data: string;
-};
+  export type OrderInfoStructOutput = [number, string, BigNumber] & {
+    orderStatus: number;
+    orderHash: string;
+    orderTakerAssetFilledAmount: BigNumber;
+  };
+}
 
-export type FillResultsStruct = {
-  makerAssetFilledAmount: BigNumberish;
-  takerAssetFilledAmount: BigNumberish;
-  makerFeePaid: BigNumberish;
-  takerFeePaid: BigNumberish;
-  protocolFeePaid: BigNumberish;
-};
+export declare namespace LibZeroExTransaction {
+  export type ZeroExTransactionStruct = {
+    salt: BigNumberish;
+    expirationTimeSeconds: BigNumberish;
+    gasPrice: BigNumberish;
+    signerAddress: string;
+    data: BytesLike;
+  };
 
-export type FillResultsStructOutput = [
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber
-] & {
-  makerAssetFilledAmount: BigNumber;
-  takerAssetFilledAmount: BigNumber;
-  makerFeePaid: BigNumber;
-  takerFeePaid: BigNumber;
-  protocolFeePaid: BigNumber;
-};
+  export type ZeroExTransactionStructOutput = [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string,
+    string
+  ] & {
+    salt: BigNumber;
+    expirationTimeSeconds: BigNumber;
+    gasPrice: BigNumber;
+    signerAddress: string;
+    data: string;
+  };
+}
 
-export type BatchMatchedFillResultsStruct = {
-  left: FillResultsStruct[];
-  right: FillResultsStruct[];
-  profitInLeftMakerAsset: BigNumberish;
-  profitInRightMakerAsset: BigNumberish;
-};
+export declare namespace LibFillResults {
+  export type FillResultsStruct = {
+    makerAssetFilledAmount: BigNumberish;
+    takerAssetFilledAmount: BigNumberish;
+    makerFeePaid: BigNumberish;
+    takerFeePaid: BigNumberish;
+    protocolFeePaid: BigNumberish;
+  };
 
-export type BatchMatchedFillResultsStructOutput = [
-  FillResultsStructOutput[],
-  FillResultsStructOutput[],
-  BigNumber,
-  BigNumber
-] & {
-  left: FillResultsStructOutput[];
-  right: FillResultsStructOutput[];
-  profitInLeftMakerAsset: BigNumber;
-  profitInRightMakerAsset: BigNumber;
-};
+  export type FillResultsStructOutput = [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    makerAssetFilledAmount: BigNumber;
+    takerAssetFilledAmount: BigNumber;
+    makerFeePaid: BigNumber;
+    takerFeePaid: BigNumber;
+    protocolFeePaid: BigNumber;
+  };
 
-export type OrderInfoStruct = {
-  orderStatus: BigNumberish;
-  orderHash: BytesLike;
-  orderTakerAssetFilledAmount: BigNumberish;
-};
+  export type BatchMatchedFillResultsStruct = {
+    left: LibFillResults.FillResultsStruct[];
+    right: LibFillResults.FillResultsStruct[];
+    profitInLeftMakerAsset: BigNumberish;
+    profitInRightMakerAsset: BigNumberish;
+  };
 
-export type OrderInfoStructOutput = [number, string, BigNumber] & {
-  orderStatus: number;
-  orderHash: string;
-  orderTakerAssetFilledAmount: BigNumber;
-};
+  export type BatchMatchedFillResultsStructOutput = [
+    LibFillResults.FillResultsStructOutput[],
+    LibFillResults.FillResultsStructOutput[],
+    BigNumber,
+    BigNumber
+  ] & {
+    left: LibFillResults.FillResultsStructOutput[];
+    right: LibFillResults.FillResultsStructOutput[];
+    profitInLeftMakerAsset: BigNumber;
+    profitInRightMakerAsset: BigNumber;
+  };
 
-export type MatchedFillResultsStruct = {
-  left: FillResultsStruct;
-  right: FillResultsStruct;
-  profitInLeftMakerAsset: BigNumberish;
-  profitInRightMakerAsset: BigNumberish;
-};
+  export type MatchedFillResultsStruct = {
+    left: LibFillResults.FillResultsStruct;
+    right: LibFillResults.FillResultsStruct;
+    profitInLeftMakerAsset: BigNumberish;
+    profitInRightMakerAsset: BigNumberish;
+  };
 
-export type MatchedFillResultsStructOutput = [
-  FillResultsStructOutput,
-  FillResultsStructOutput,
-  BigNumber,
-  BigNumber
-] & {
-  left: FillResultsStructOutput;
-  right: FillResultsStructOutput;
-  profitInLeftMakerAsset: BigNumber;
-  profitInRightMakerAsset: BigNumber;
-};
+  export type MatchedFillResultsStructOutput = [
+    LibFillResults.FillResultsStructOutput,
+    LibFillResults.FillResultsStructOutput,
+    BigNumber,
+    BigNumber
+  ] & {
+    left: LibFillResults.FillResultsStructOutput;
+    right: LibFillResults.FillResultsStructOutput;
+    profitInLeftMakerAsset: BigNumber;
+    profitInRightMakerAsset: BigNumber;
+  };
+}
 
 export interface ExchangeContractInterface extends utils.Interface {
+  contractName: 'ExchangeContract';
   functions: {
     'EIP1271_MAGIC_VALUE()': FunctionFragment;
     'EIP712_EXCHANGE_DOMAIN_HASH()': FunctionFragment;
@@ -222,35 +229,45 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelOrders',
-    values: [OrderStruct[]]
+    values: [LibOrder.OrderStruct[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchExecuteTransactions',
-    values: [ZeroExTransactionStruct[], BytesLike[]]
+    values: [LibZeroExTransaction.ZeroExTransactionStruct[], BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrKillOrders',
-    values: [OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrders',
-    values: [OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrdersNoThrow',
-    values: [OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchMatchOrders',
-    values: [OrderStruct[], OrderStruct[], BytesLike[], BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      LibOrder.OrderStruct[],
+      BytesLike[],
+      BytesLike[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchMatchOrdersWithMaximalFill',
-    values: [OrderStruct[], OrderStruct[], BytesLike[], BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      LibOrder.OrderStruct[],
+      BytesLike[],
+      BytesLike[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelOrder',
-    values: [OrderStruct]
+    values: [LibOrder.OrderStruct]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelOrdersUpTo',
@@ -270,15 +287,15 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'executeTransaction',
-    values: [ZeroExTransactionStruct, BytesLike]
+    values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'fillOrKillOrder',
-    values: [OrderStruct, BigNumberish, BytesLike]
+    values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'fillOrder',
-    values: [OrderStruct, BigNumberish, BytesLike]
+    values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: 'filled', values: [BytesLike]): string;
   encodeFunctionData(
@@ -287,7 +304,7 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'getOrderInfo',
-    values: [OrderStruct]
+    values: [LibOrder.OrderStruct]
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidHashSignature',
@@ -295,35 +312,35 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidOrderSignature',
-    values: [OrderStruct, BytesLike]
+    values: [LibOrder.OrderStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidTransactionSignature',
-    values: [ZeroExTransactionStruct, BytesLike]
+    values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersFillOrKill',
-    values: [OrderStruct[], BigNumberish, BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersNoThrow',
-    values: [OrderStruct[], BigNumberish, BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersFillOrKill',
-    values: [OrderStruct[], BigNumberish, BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersNoThrow',
-    values: [OrderStruct[], BigNumberish, BytesLike[]]
+    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'matchOrders',
-    values: [OrderStruct, OrderStruct, BytesLike, BytesLike]
+    values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'matchOrdersWithMaximalFill',
-    values: [OrderStruct, OrderStruct, BytesLike, BytesLike]
+    values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'orderEpoch',
@@ -659,6 +676,7 @@ export type TransactionExecutionEventFilter =
   TypedEventFilter<TransactionExecutionEvent>;
 
 export interface ExchangeContract extends BaseContract {
+  contractName: 'ExchangeContract';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -696,55 +714,55 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<[boolean]>;
 
     batchCancelOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchExecuteTransactions(
-      transactions: ZeroExTransactionStruct[],
+      transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrKillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchMatchOrders(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchMatchOrdersWithMaximalFill(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     cancelOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -762,20 +780,20 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<ContractTransaction>;
 
     executeTransaction(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     fillOrKillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     fillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -789,9 +807,13 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<[string]>;
 
     getOrderInfo(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: CallOverrides
-    ): Promise<[OrderInfoStructOutput] & { orderInfo: OrderInfoStructOutput }>;
+    ): Promise<
+      [LibOrder.OrderInfoStructOutput] & {
+        orderInfo: LibOrder.OrderInfoStructOutput;
+      }
+    >;
 
     isValidHashSignature(
       hash: BytesLike,
@@ -801,56 +823,56 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<[boolean] & { isValid: boolean }>;
 
     isValidOrderSignature(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
 
     isValidTransactionSignature(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
 
     marketBuyOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     marketBuyOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     marketSellOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     marketSellOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     matchOrders(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     matchOrdersWithMaximalFill(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -930,55 +952,55 @@ export interface ExchangeContract extends BaseContract {
   ): Promise<boolean>;
 
   batchCancelOrders(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchExecuteTransactions(
-    transactions: ZeroExTransactionStruct[],
+    transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrKillOrders(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     takerAssetFillAmounts: BigNumberish[],
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrders(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     takerAssetFillAmounts: BigNumberish[],
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrdersNoThrow(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     takerAssetFillAmounts: BigNumberish[],
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchMatchOrders(
-    leftOrders: OrderStruct[],
-    rightOrders: OrderStruct[],
+    leftOrders: LibOrder.OrderStruct[],
+    rightOrders: LibOrder.OrderStruct[],
     leftSignatures: BytesLike[],
     rightSignatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchMatchOrdersWithMaximalFill(
-    leftOrders: OrderStruct[],
-    rightOrders: OrderStruct[],
+    leftOrders: LibOrder.OrderStruct[],
+    rightOrders: LibOrder.OrderStruct[],
     leftSignatures: BytesLike[],
     rightSignatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   cancelOrder(
-    order: OrderStruct,
+    order: LibOrder.OrderStruct,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -996,20 +1018,20 @@ export interface ExchangeContract extends BaseContract {
   ): Promise<ContractTransaction>;
 
   executeTransaction(
-    transaction: ZeroExTransactionStruct,
+    transaction: LibZeroExTransaction.ZeroExTransactionStruct,
     signature: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   fillOrKillOrder(
-    order: OrderStruct,
+    order: LibOrder.OrderStruct,
     takerAssetFillAmount: BigNumberish,
     signature: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   fillOrder(
-    order: OrderStruct,
+    order: LibOrder.OrderStruct,
     takerAssetFillAmount: BigNumberish,
     signature: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1023,9 +1045,9 @@ export interface ExchangeContract extends BaseContract {
   ): Promise<string>;
 
   getOrderInfo(
-    order: OrderStruct,
+    order: LibOrder.OrderStruct,
     overrides?: CallOverrides
-  ): Promise<OrderInfoStructOutput>;
+  ): Promise<LibOrder.OrderInfoStructOutput>;
 
   isValidHashSignature(
     hash: BytesLike,
@@ -1035,56 +1057,56 @@ export interface ExchangeContract extends BaseContract {
   ): Promise<boolean>;
 
   isValidOrderSignature(
-    order: OrderStruct,
+    order: LibOrder.OrderStruct,
     signature: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   isValidTransactionSignature(
-    transaction: ZeroExTransactionStruct,
+    transaction: LibZeroExTransaction.ZeroExTransactionStruct,
     signature: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   marketBuyOrdersFillOrKill(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     makerAssetFillAmount: BigNumberish,
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   marketBuyOrdersNoThrow(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     makerAssetFillAmount: BigNumberish,
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   marketSellOrdersFillOrKill(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     takerAssetFillAmount: BigNumberish,
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   marketSellOrdersNoThrow(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     takerAssetFillAmount: BigNumberish,
     signatures: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   matchOrders(
-    leftOrder: OrderStruct,
-    rightOrder: OrderStruct,
+    leftOrder: LibOrder.OrderStruct,
+    rightOrder: LibOrder.OrderStruct,
     leftSignature: BytesLike,
     rightSignature: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   matchOrdersWithMaximalFill(
-    leftOrder: OrderStruct,
-    rightOrder: OrderStruct,
+    leftOrder: LibOrder.OrderStruct,
+    rightOrder: LibOrder.OrderStruct,
     leftSignature: BytesLike,
     rightSignature: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1164,54 +1186,57 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<boolean>;
 
     batchCancelOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     batchExecuteTransactions(
-      transactions: ZeroExTransactionStruct[],
+      transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
       signatures: BytesLike[],
       overrides?: CallOverrides
     ): Promise<string[]>;
 
     batchFillOrKillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput[]>;
+    ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchFillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput[]>;
+    ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchFillOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput[]>;
+    ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchMatchOrders(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<BatchMatchedFillResultsStructOutput>;
+    ): Promise<LibFillResults.BatchMatchedFillResultsStructOutput>;
 
     batchMatchOrdersWithMaximalFill(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<BatchMatchedFillResultsStructOutput>;
+    ): Promise<LibFillResults.BatchMatchedFillResultsStructOutput>;
 
-    cancelOrder(order: OrderStruct, overrides?: CallOverrides): Promise<void>;
+    cancelOrder(
+      order: LibOrder.OrderStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     cancelOrdersUpTo(
       targetOrderEpoch: BigNumberish,
@@ -1225,24 +1250,24 @@ export interface ExchangeContract extends BaseContract {
     detachProtocolFeeCollector(overrides?: CallOverrides): Promise<void>;
 
     executeTransaction(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<string>;
 
     fillOrKillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     fillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1252,9 +1277,9 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<string>;
 
     getOrderInfo(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: CallOverrides
-    ): Promise<OrderInfoStructOutput>;
+    ): Promise<LibOrder.OrderInfoStructOutput>;
 
     isValidHashSignature(
       hash: BytesLike,
@@ -1264,60 +1289,60 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<boolean>;
 
     isValidOrderSignature(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     isValidTransactionSignature(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     marketBuyOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketBuyOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketSellOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketSellOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: CallOverrides
-    ): Promise<FillResultsStructOutput>;
+    ): Promise<LibFillResults.FillResultsStructOutput>;
 
     matchOrders(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<MatchedFillResultsStructOutput>;
+    ): Promise<LibFillResults.MatchedFillResultsStructOutput>;
 
     matchOrdersWithMaximalFill(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<MatchedFillResultsStructOutput>;
+    ): Promise<LibFillResults.MatchedFillResultsStructOutput>;
 
     orderEpoch(
       arg0: string,
@@ -1508,55 +1533,55 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<BigNumber>;
 
     batchCancelOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchExecuteTransactions(
-      transactions: ZeroExTransactionStruct[],
+      transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchFillOrKillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchFillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchFillOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchMatchOrders(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchMatchOrdersWithMaximalFill(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     cancelOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1574,20 +1599,20 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<BigNumber>;
 
     executeTransaction(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     fillOrKillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     fillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1601,7 +1626,7 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<BigNumber>;
 
     getOrderInfo(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1613,56 +1638,56 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<BigNumber>;
 
     isValidOrderSignature(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     isValidTransactionSignature(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     marketBuyOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     marketBuyOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     marketSellOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     marketSellOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     matchOrders(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     matchOrdersWithMaximalFill(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1747,55 +1772,55 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     batchCancelOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchExecuteTransactions(
-      transactions: ZeroExTransactionStruct[],
+      transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrKillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrders(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmounts: BigNumberish[],
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchMatchOrders(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchMatchOrdersWithMaximalFill(
-      leftOrders: OrderStruct[],
-      rightOrders: OrderStruct[],
+      leftOrders: LibOrder.OrderStruct[],
+      rightOrders: LibOrder.OrderStruct[],
       leftSignatures: BytesLike[],
       rightSignatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1818,20 +1843,20 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     executeTransaction(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrKillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrder(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       takerAssetFillAmount: BigNumberish,
       signature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1848,7 +1873,7 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getOrderInfo(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1860,56 +1885,56 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     isValidOrderSignature(
-      order: OrderStruct,
+      order: LibOrder.OrderStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     isValidTransactionSignature(
-      transaction: ZeroExTransactionStruct,
+      transaction: LibZeroExTransaction.ZeroExTransactionStruct,
       signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersFillOrKill(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersNoThrow(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       takerAssetFillAmount: BigNumberish,
       signatures: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     matchOrders(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     matchOrdersWithMaximalFill(
-      leftOrder: OrderStruct,
-      rightOrder: OrderStruct,
+      leftOrder: LibOrder.OrderStruct,
+      rightOrder: LibOrder.OrderStruct,
       leftSignature: BytesLike,
       rightSignature: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }

@@ -19,25 +19,25 @@ import {
   generateTimeBasedSalt,
   getEipDomain,
   normalizeOrder,
-} from '../utils/order';
-import { NULL_ADDRESS } from '../utils/eth';
+} from '../../utils/v3/order';
+import { NULL_ADDRESS } from '../../utils/eth';
 import {
   decodeAssetData,
   encodeAssetData,
   encodeMultiAssetAssetData,
   getAmountFromAsset,
-} from '../utils/asset-data';
+} from '../../utils/v3/asset-data';
 import {
   ERC1155__factory,
   ERC20__factory,
   ERC721__factory,
   ExchangeContract,
-} from '../contracts';
-import { UnexpectedAssetTypeError } from './error';
+} from '../../contracts';
+import { UnexpectedAssetTypeError } from '../error';
 import {
   AdditionalOrderConfig,
   AssetProxyId,
-  BigNumberish,
+  AvailableSignatureTypes,
   EIP712_TYPES,
   ERC1155AssetDataSerialized,
   ERC20AssetDataSerialized,
@@ -48,15 +48,21 @@ import {
   OrderStatus,
   SerializedAvailableAssetDataTypesDecoded,
   SignedOrder,
+  SigningOptions,
   SwappableAsset,
   UserFacingERC1155AssetDataSerializedNormalizedSingle,
   UserFacingERC20AssetDataSerialized,
   UserFacingERC721AssetDataSerialized,
   UserFacingSerializedSingleAssetDataTypes,
 } from './types';
-import { encodeTypedDataHash, TypedData } from '../utils/typed-data';
-import { EIP1271ZeroExDataAbi } from '../utils/eip1271';
-import { convertCollectionToBN } from '../utils/bn/convert';
+import { encodeTypedDataHash, TypedData } from '../../utils/typed-data';
+import { EIP1271ZeroExDataAbi } from '../../utils/v3/eip1271';
+import { convertCollectionToBN } from '../../utils/bn/convert';
+import type {
+  ApprovalStatus,
+  PayableOverrides,
+  TransactionOverrides,
+} from '../common/types';
 
 export const cancelOrder = (
   exchangeContract: ExchangeContract,
@@ -107,13 +113,6 @@ export const hashOrder = (
 
 export type InterallySupportedAssetFormat =
   UserFacingSerializedSingleAssetDataTypes;
-
-export type AvailableSignatureTypes = 'eoa' | 'eip1271';
-
-export interface SigningOptions {
-  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
-  autodetectSignatureType: boolean;
-}
 
 export const signOrderWithEip1271 = async (
   order: Order,
@@ -385,10 +384,6 @@ export const buildOrder = (
   return order;
 };
 
-export interface PayableOverrides extends TransactionOverrides {
-  value?: BigNumberish | Promise<BigNumberish>;
-}
-
 export const fillSignedOrder = async (
   signedOrder: SignedOrder,
   exchangeContract: ExchangeContract,
@@ -400,25 +395,6 @@ export const fillSignedOrder = async (
     signedOrder.signature,
     overrides
   );
-};
-
-export const fillOrderWithEth = async () => {};
-
-/**
- * Approval status of an ERC20, ERC721, or ERC1155 asset/item.
- * The default approval spending address is the ExchangeProxy adapter specific to ERC type.
- */
-export type ApprovalStatus = {
-  /**
-   * contractApproved is the standard approval check.
-   * Equivalent to 'isApprovedForAll' for ERC721 and ERC1155, and is the normal allowance for ERC20
-   */
-  contractApproved: boolean;
-  /**
-   * Only exists for ERC721, tokenIdApproved checks if tokenId is approved. You can be in a state where tokenId is approved but isApprovedForAll is false
-   * In this case, you do not need to approve. ERC1155 does not have support for individual tokenId approvals. Not applicable for ERC20s since they are fungible
-   */
-  tokenIdApproved?: boolean;
 };
 
 /**
@@ -490,17 +466,6 @@ export const getApprovalStatus = async (
 // Some arbitrarily high number.
 // TODO(johnrjj) - Support custom ERC20 approval amounts
 export const MAX_APPROVAL = BigNumber.from(2).pow(118);
-
-export interface TransactionOverrides {
-  gasLimit?: BigNumberish | Promise<BigNumberish>;
-  gasPrice?: BigNumberish | Promise<BigNumberish>;
-  maxFeePerGas?: BigNumberish | Promise<BigNumberish>;
-  maxPriorityFeePerGas?: BigNumberish | Promise<BigNumberish>;
-  nonce?: BigNumberish | Promise<BigNumberish>;
-  type?: number;
-  accessList?: any;
-  customData?: Record<string, any>;
-}
 
 /**
  * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.

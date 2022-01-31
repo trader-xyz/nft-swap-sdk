@@ -18,6 +18,7 @@ import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface ERC1155Interface extends utils.Interface {
+  contractName: 'ERC1155';
   functions: {
     'balanceOf(address,uint256)': FunctionFragment;
     'balanceOfBatch(address[],uint256[])': FunctionFragment;
@@ -128,6 +129,7 @@ export type TransferSingleEvent = TypedEvent<
 export type TransferSingleEventFilter = TypedEventFilter<TransferSingleEvent>;
 
 export interface ERC1155 extends BaseContract {
+  contractName: 'ERC1155';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

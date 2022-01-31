@@ -18,56 +18,59 @@ import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import { Listener, Provider } from '@ethersproject/providers';
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
-export type OrderStruct = {
-  makerAddress: string;
-  takerAddress: string;
-  feeRecipientAddress: string;
-  senderAddress: string;
-  makerAssetAmount: BigNumberish;
-  takerAssetAmount: BigNumberish;
-  makerFee: BigNumberish;
-  takerFee: BigNumberish;
-  expirationTimeSeconds: BigNumberish;
-  salt: BigNumberish;
-  makerAssetData: BytesLike;
-  takerAssetData: BytesLike;
-  makerFeeAssetData: BytesLike;
-  takerFeeAssetData: BytesLike;
-};
+export declare namespace LibOrder {
+  export type OrderStruct = {
+    makerAddress: string;
+    takerAddress: string;
+    feeRecipientAddress: string;
+    senderAddress: string;
+    makerAssetAmount: BigNumberish;
+    takerAssetAmount: BigNumberish;
+    makerFee: BigNumberish;
+    takerFee: BigNumberish;
+    expirationTimeSeconds: BigNumberish;
+    salt: BigNumberish;
+    makerAssetData: BytesLike;
+    takerAssetData: BytesLike;
+    makerFeeAssetData: BytesLike;
+    takerFeeAssetData: BytesLike;
+  };
 
-export type OrderStructOutput = [
-  string,
-  string,
-  string,
-  string,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  BigNumber,
-  string,
-  string,
-  string,
-  string
-] & {
-  makerAddress: string;
-  takerAddress: string;
-  feeRecipientAddress: string;
-  senderAddress: string;
-  makerAssetAmount: BigNumber;
-  takerAssetAmount: BigNumber;
-  makerFee: BigNumber;
-  takerFee: BigNumber;
-  expirationTimeSeconds: BigNumber;
-  salt: BigNumber;
-  makerAssetData: string;
-  takerAssetData: string;
-  makerFeeAssetData: string;
-  takerFeeAssetData: string;
-};
+  export type OrderStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    string,
+    string
+  ] & {
+    makerAddress: string;
+    takerAddress: string;
+    feeRecipientAddress: string;
+    senderAddress: string;
+    makerAssetAmount: BigNumber;
+    takerAssetAmount: BigNumber;
+    makerFee: BigNumber;
+    takerFee: BigNumber;
+    expirationTimeSeconds: BigNumber;
+    salt: BigNumber;
+    makerAssetData: string;
+    takerAssetData: string;
+    makerFeeAssetData: string;
+    takerFeeAssetData: string;
+  };
+}
 
 export interface ForwarderInterface extends utils.Interface {
+  contractName: 'Forwarder';
   functions: {
     'ERC1155_BATCH_RECEIVED()': FunctionFragment;
     'ERC1155_RECEIVED()': FunctionFragment;
@@ -101,15 +104,27 @@ export interface ForwarderInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersWithEth',
-    values: [OrderStruct[], BigNumberish, BytesLike[], BigNumberish[], string[]]
+    values: [
+      LibOrder.OrderStruct[],
+      BigNumberish,
+      BytesLike[],
+      BigNumberish[],
+      string[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellAmountWithEth',
-    values: [OrderStruct[], BigNumberish, BytesLike[], BigNumberish[], string[]]
+    values: [
+      LibOrder.OrderStruct[],
+      BigNumberish,
+      BytesLike[],
+      BigNumberish[],
+      string[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersWithEth',
-    values: [OrderStruct[], BytesLike[], BigNumberish[], string[]]
+    values: [LibOrder.OrderStruct[], BytesLike[], BigNumberish[], string[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'onERC1155BatchReceived',
@@ -191,6 +206,7 @@ export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface Forwarder extends BaseContract {
+  contractName: 'Forwarder';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -229,7 +245,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<ContractTransaction>;
 
     marketBuyOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetBuyAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -238,7 +254,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<ContractTransaction>;
 
     marketSellAmountWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       ethSellAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -247,7 +263,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<ContractTransaction>;
 
     marketSellOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
       feeRecipients: string[],
@@ -298,7 +314,7 @@ export interface Forwarder extends BaseContract {
   ): Promise<ContractTransaction>;
 
   marketBuyOrdersWithEth(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     makerAssetBuyAmount: BigNumberish,
     signatures: BytesLike[],
     ethFeeAmounts: BigNumberish[],
@@ -307,7 +323,7 @@ export interface Forwarder extends BaseContract {
   ): Promise<ContractTransaction>;
 
   marketSellAmountWithEth(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     ethSellAmount: BigNumberish,
     signatures: BytesLike[],
     ethFeeAmounts: BigNumberish[],
@@ -316,7 +332,7 @@ export interface Forwarder extends BaseContract {
   ): Promise<ContractTransaction>;
 
   marketSellOrdersWithEth(
-    orders: OrderStruct[],
+    orders: LibOrder.OrderStruct[],
     signatures: BytesLike[],
     ethFeeAmounts: BigNumberish[],
     feeRecipients: string[],
@@ -367,7 +383,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<void>;
 
     marketBuyOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetBuyAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -381,7 +397,7 @@ export interface Forwarder extends BaseContract {
     >;
 
     marketSellAmountWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       ethSellAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -395,7 +411,7 @@ export interface Forwarder extends BaseContract {
     >;
 
     marketSellOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
       feeRecipients: string[],
@@ -463,7 +479,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<BigNumber>;
 
     marketBuyOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetBuyAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -472,7 +488,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<BigNumber>;
 
     marketSellAmountWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       ethSellAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -481,7 +497,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<BigNumber>;
 
     marketSellOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
       feeRecipients: string[],
@@ -537,7 +553,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       makerAssetBuyAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -546,7 +562,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     marketSellAmountWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       ethSellAmount: BigNumberish,
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
@@ -555,7 +571,7 @@ export interface Forwarder extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersWithEth(
-      orders: OrderStruct[],
+      orders: LibOrder.OrderStruct[],
       signatures: BytesLike[],
       ethFeeAmounts: BigNumberish[],
       feeRecipients: string[],

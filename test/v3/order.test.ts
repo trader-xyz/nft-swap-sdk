@@ -1,12 +1,12 @@
 import { InfuraProvider } from '@ethersproject/providers';
-import { AssetProxyId, NftSwap, SwappableAsset } from '../src';
-import { hashOrder } from '../src/sdk/pure';
+import { AssetProxyId, NftSwap, SwappableAsset } from '../../src';
+import { hashOrder } from '../../src/sdk/v3/pure';
 import {
   decodeErc1155AssetData,
   decodeErc20AssetData,
   decodeErc721AssetData,
-} from '../src/utils/asset-data';
-import { NULL_ADDRESS } from '../src/utils/eth';
+} from '../../src/utils/v3/asset-data';
+import { NULL_ADDRESS } from '../../src/utils/eth';
 
 describe('NFTSwap', () => {
   const chainId = 4;
