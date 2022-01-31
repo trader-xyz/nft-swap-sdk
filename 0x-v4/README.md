@@ -28,8 +28,10 @@ Since Swap SDK uses 0x v4 protocol under the hood, the Swap SDK is the the most 
 
 Based on recent gas benchmarks, 0x v4 is significantly cheaper  to fill orders.
 
-* **Over 40% cheaper than OpenSea , LooksRare, and Rarible for buying NFTs**
-* **35% cheaper than Zora to fill (>60% cheaper than Zora if including both party's gas fees)**
+* **40% cheaper than OpenSea, LooksRare, and Rarible for buying NFTs**
+* **35% cheaper than Zora to fill (>60% cheaper than Zora if including both parties' gas fees)**
+
+0x v4 supports both on-chain listings and off-chain listings so you can choose the best approach for your application.
 
 ### 📩  Order Support
 
