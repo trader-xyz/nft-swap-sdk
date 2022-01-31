@@ -64,16 +64,6 @@ const CRYPTOPUNK = {
 await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK, walletAddressMaker);
 ```
 
-### Signing Orders
-
-Once you've built an order, for it to be valid (and for it to be able to be filled by someone) it needs to be signed. The maker of the order signs the order, and the taker will fill the signed order.
-
-After building an order via `buildOrder` or `buildNftAndErc20Order` dpass the order object to the `signOrder` function to sign and confirm your order. Once signed, this order is active and can be filled as long as it is valid.
-
-```typescript
-const signedOrder = await nftSwapSdk.signOrder(order);
-```
-
 ### Cancelling Orders
 
 To cancel an order, call the `cancelOrder` function on the Swap SDK and pass it the order:
