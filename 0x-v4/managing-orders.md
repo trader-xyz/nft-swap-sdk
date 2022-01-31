@@ -1,10 +1,14 @@
+---
+description: Build, approve, sign, fill, cancel and save orders with the Swap SDK.
+---
+
 # Managing Orders
 
 ### Building Orders
 
 There are two ways to build orders wit the 0x v4 Swap SDK, **`buildOrder`** and **`buildNftAndErc20Order`**&#x20;
 
-#### \`buildOrder(makerAsset: NFT | ERC20, takerAsset: NFT | ERC20, makerAddress)\`
+
 
 **`buildOrder()`** accepts the traditional order format (specifying maker and taker assets).&#x20;
 
@@ -62,6 +66,31 @@ const CRYPTOPUNK = {
 };
 
 await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK, walletAddressMaker);
+```
+
+### Signing Orders
+
+Once you've built an order, for it to be valid (and for it to be able to be filled by someone) it needs to be signed. The maker of the order signs the order, and the taker will fill the signed order.
+
+After building an order via `buildOrder` or `buildNftAndErc20Order` dpass the order object to the `signOrder` function to sign and confirm your order. Once signed, this order is active and can be filled as long as it is valid.
+
+```typescript
+const signedOrder = await nftSwapSdk.signOrder(order);
+```
+
+### Filling an Order
+
+Now that we have a signed order, another wallet can fill that order (known as 'taking' the trade).
+
+To fill order, pass the signed order to the Swap SDK to the `fillSignedOrder` function
+
+After building an order via `buildOrder` or `buildNftAndErc20Order` dpass the order object to the `signOrder` function to sign and confirm your order. Once signed, this order is active and can be filled as long as it is valid.
+
+```typescript
+const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
+const txReceipt = await fillTx.wait();
+
+console.log('Filled order! 🎉', txReceipt.transactionHash);
 ```
 
 ### Cancelling Orders
