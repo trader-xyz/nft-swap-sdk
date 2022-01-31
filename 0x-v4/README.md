@@ -10,9 +10,13 @@ Swap SDK allows developers to build NFT swap functionality into their Ethereum (
 
 Swap SDK is a light, performant library built with [`ethers`](https://github.com/ethers-io/ethers.js/) to easily interact with the 0x v4 protocol. Swap SDK also offers a free, managed orderbook so you don't need to worry about building off-chain order persistance (unless you want to). Swap SDK provides all the functionality to build an NFT marketplace or peer-to-peer swap application, including building orders, approving orders, persisting orders, and filling orders. Just add a UI!
 
-#### ⛽ Gas Optimizations
+#### ⛽  Gas Optimizations
 
 > **0x v4 is the cheapest way to swap an NFT on Ethereum or any EVM-compatible chain.**
+
+Whether you prefer on-chain or off-chain orders, 0x v4 is the cheapest and most efficient way to swap NFTs to date.
+
+![Gas analysis as of 1/31/2022](../.gitbook/assets/0x-v4-gas-costs.jpg)
 
 Since Swap SDK uses 0x v4 protocol under the hood, the Swap SDK is the the most gas-efficient and cheapest way to swap NFTs on Ethereum. Build your app confidently knowing you're offering your users the best swapping experience available.
 
@@ -21,7 +25,7 @@ Based on recent gas benchmarks, 0x v4 is significantly cheaper  to fill orders.
 * **Over >50% cheaper than OpenSea , LooksRare, and Rarible**
 * **30% cheaper than Zora to fill (60% cheaper than Zora if including both party's gas fees)**
 
-#### 📩 Order Support
+#### 📩  Order Support
 
 0x v4 initially includes a rich set of swap functionality. More swap functionality (e.g. bundles) will be added over time
 
