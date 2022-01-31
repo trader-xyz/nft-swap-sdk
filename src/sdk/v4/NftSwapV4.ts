@@ -270,20 +270,52 @@ class NftSwapV4 implements INftSwapV4 {
   ) => {
     // do fill
     if ('erc1155Token' in signedOrder) {
-      return this.exchangeProxy.buyERC1155(
-        signedOrder,
-        signedOrder.signature,
-        1,
-        '0x',
-        transactionOverrides ?? {}
-      );
+      // If maker is selling an NFT, taker wants to 'buy' nft
+      if (signedOrder.direction === TradeDirection.SellNFT) {
+        return this.exchangeProxy.buyERC1155(
+          signedOrder,
+          signedOrder.signature,
+          1,
+          '0x',
+          transactionOverrides ?? {}
+        );
+      } else {
+        // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
+        let unwrapNativeToken: boolean = false;
+
+        // Otherwise, taker is selling the nft (and buying an ERC20)
+        return this.exchangeProxy.sellERC1155(
+          signedOrder,
+          signedOrder.signature,
+          signedOrder.erc1155TokenId,
+          signedOrder.erc20TokenAmount,
+          unwrapNativeToken,
+          '0x',
+          transactionOverrides ?? {}
+        );
+      }
     } else if ('erc721Token' in signedOrder) {
-      return this.exchangeProxy.buyERC721(
-        signedOrder,
-        signedOrder.signature,
-        '0x',
-        transactionOverrides ?? {}
-      );
+      // If maker is selling an NFT, taker wants to 'buy' nft
+      if (signedOrder.direction === TradeDirection.SellNFT) {
+        return this.exchangeProxy.buyERC721(
+          signedOrder,
+          signedOrder.signature,
+          '0x',
+          transactionOverrides ?? {}
+        );
+      } else {
+        // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
+        let unwrapNativeToken: boolean = false;
+
+        // Otherwise, taker is selling the nft (and buying an ERC20)
+        return this.exchangeProxy.sellERC721(
+          signedOrder,
+          signedOrder.signature,
+          signedOrder.erc721TokenId,
+          unwrapNativeToken,
+          '0x'
+        );
+      }
     }
     console.log('unsupported order', signedOrder);
     throw new Error('unsupport signedOrder type');

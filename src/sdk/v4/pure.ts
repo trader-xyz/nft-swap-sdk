@@ -23,6 +23,8 @@ import {
 import { BaseProvider } from '@ethersproject/providers';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
 
+export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
   tokenAddress: string;

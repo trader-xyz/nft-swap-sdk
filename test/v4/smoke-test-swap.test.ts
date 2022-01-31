@@ -52,7 +52,7 @@ describe('NFTSwapV4', () => {
     const v4Erc721Order = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
       TAKER_ASSET,
-      'sell',
+      'buy',
       MAKER_WALLET_ADDRESS
       // {
       //   // Fix dates and salt so we have reproducible tests
