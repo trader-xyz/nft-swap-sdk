@@ -94,21 +94,30 @@ const FOUR_HUNDRED_TWENTY_WETH = {
 // [Part 1: Maker (owner of the Punk) creates trade]
 const nftSwapSdk = new NftSwapV4(provider, signerForMaker, CHAIN_ID);
 const walletAddressMaker = '0x1234...';
+
+// Approve NFT to trade (if required)
 await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK, walletAddressMaker);
+
+// Build order
 const order = nftSwapSdk.buildOrder(
   CRYPTOPUNK, // Maker asset to swap
   FOUR_HUNDRED_TWENTY_WETH, // Taker asset to swap
   walletAddressMaker
 );
+// Sign order so order is now fillable
 const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
 
 // [Part 2: Taker that wants to buy the punk fills trade]
 const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);
 const walletAddressTaker = '0x9876...';
+
+// Approve USDC to trade (if required)
 await nftSwapSdk.approveTokenOrNftByAsset(FOUR_HUNDRED_TWENTY_WETH, walletAddressTaker);
+
+// Fill order :)
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
 const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx.hash);
-console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
+console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`)
 ```
 
 That's it! More examples and advanced usage can be found in the examples documentation.&#x20;
