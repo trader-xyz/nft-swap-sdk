@@ -82,14 +82,13 @@ const signedOrder = await nftSwapSdk.signOrder(order);
 
 Now that we have a signed order, another wallet can fill that order (known as 'taking' the trade).
 
-To fill order, pass the signed order to the Swap SDK to the `fillSignedOrder` function
+To fill order, pass the signed order to the Swap SDK to the `fillSignedOrder` function.
 
-After building an order via `buildOrder` or `buildNftAndErc20Order` dpass the order object to the `signOrder` function to sign and confirm your order. Once signed, this order is active and can be filled as long as it is valid.
+If the transaction succeeds, the trade went through, and the user can be notified.
 
 ```typescript
 const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
 const txReceipt = await fillTx.wait();
-
 console.log('Filled order! 🎉', txReceipt.transactionHash);
 ```
 
