@@ -54,6 +54,10 @@ export interface UserFacingERC1155AssetDataSerializedNormalizedSingle {
   amount?: string; // Will default to '1'
 }
 
+export type SwappableNft =
+  | UserFacingERC721AssetDataSerialized
+  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
+
 export type SwappableAsset =
   | UserFacingERC20AssetDataSerialized
   | UserFacingERC721AssetDataSerialized
@@ -372,4 +376,13 @@ export const generateErc1155Order = (
 
 const generateRandomNonce = () => {
   return `0x${v4().toString().split('-').join('')}`;
+};
+
+type DirectionMap = {
+  [key in TradeDirection]: 'buy' | 'sell' | undefined;
+};
+
+export const DIRECTION_MAPPING: DirectionMap = {
+  [TradeDirection.BuyNFT]: 'buy',
+  [TradeDirection.SellNFT]: 'sell',
 };

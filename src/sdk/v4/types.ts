@@ -145,3 +145,9 @@ export interface SigningOptions {
   signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
   autodetectSignatureType: boolean;
 }
+
+// Typings for addresses.json file
+export interface AddressesForChain {
+  exchange: string;
+  wrappedNativeToken: string;
+}

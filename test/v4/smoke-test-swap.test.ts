@@ -52,7 +52,6 @@ describe('NFTSwapV4', () => {
     const v4Erc721Order = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
       TAKER_ASSET,
-      'buy',
       MAKER_WALLET_ADDRESS
       // {
       //   // Fix dates and salt so we have reproducible tests
@@ -79,9 +78,9 @@ describe('NFTSwapV4', () => {
     // const takerApprovalTxHash = await (await takerApprovalTx.wait()).transactionHash
     // console.log('taker approval tx hash', takerApprovalTxHash)
 
-    const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
-    console.log('erc721 signatuee', signedOrder.signature);
-    expect(signedOrder.signature.signatureType.toString()).toEqual('2');
+    // const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+    // console.log('erc721 signatuee', signedOrder.signature);
+    // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
     // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
     // const txReceipt = await fillTx.wait();
