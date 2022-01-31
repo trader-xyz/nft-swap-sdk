@@ -46,7 +46,7 @@ const order = nftSwapSdk.buildNftAndErc20Order(
   nftToSwapUserA,
   usdcToSwapUserB,
   'sell',
-  walletAddressUserA
+  walletAddressOfUserA
 );
 ```
 
@@ -65,7 +65,7 @@ const CRYPTOPUNK = {
   type: 'ERC721', // Must be one of 'ERC20', 'ERC721', or 'ERC1155'
 };
 
-await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK, walletAddressMaker);
+await nftSwapSdk.approveTokenOrNftByAsset(CRYPTOPUNK, walletAddress);
 ```
 
 ### Signing Orders

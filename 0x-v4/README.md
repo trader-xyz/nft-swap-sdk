@@ -4,9 +4,7 @@ description: NFT Swap SDK now supports 0x Protocol v4! Try it out on Ropsten tod
 
 # 0x v4 Swap SDK
 
-###
-
-###
+![0x v4 Integration into Swap SDK is here!](<../.gitbook/assets/IMAGE 2022-01-31 141408.jpg>)
 
 ### Overview
 
