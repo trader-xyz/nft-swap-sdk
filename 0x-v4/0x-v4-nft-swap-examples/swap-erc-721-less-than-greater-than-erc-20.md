@@ -67,7 +67,6 @@ if (!approvalStatusForUserA.contractApproved) {
 const order = nftSwapSdk.buildOrder(
   nftToSwapUserA,
   usdcToSwapUserB,
-  'sell', // specify whether maker of trade wants to sell or buy nft
   walletAddressUserA
 );
 // Sign the order (User A signs since they are initiating the trade)
