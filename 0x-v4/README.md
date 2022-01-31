@@ -4,6 +4,10 @@ description: NFT Swap SDK now supports 0x Protocol v4! Try it out on Ropsten tod
 
 # 0x v4 Swap SDK
 
+###
+
+###
+
 ### Overview
 
 #### What's new?
@@ -12,9 +16,7 @@ Swapping with the Swap SDK just got even better. With the new integration of 0x 
 
 #### About Swap SDK
 
-Swap SDK allows developers to build NFT swap functionality into their Ethereum (or EVM-compatible chains) applications quickly and easily. Whether you're building a wallet, an NFT marketplace, or a peer-to-peer swap application, Swap SDK makes integrating NFT swap functionality easy and lightweight.
-
-Swap SDK is a light, performant library built with [`ethers`](https://github.com/ethers-io/ethers.js/) to easily interact with the 0x v4 protocol. Swap SDK also offers a free, managed orderbook so you don't need to worry about building off-chain order persistance (unless you want to). Swap SDK provides all the functionality to build an NFT marketplace or peer-to-peer swap application, including building orders, approving orders, persisting orders, and filling orders. Just add a UI!
+Swap SDK allows developers to build NFT swap functionality into their Ethereum (or EVM-compatible chains) applications quickly and easily. Whether you're building a wallet, an NFT marketplace, or a peer-to-peer swap application, Swap SDK makes integrating NFT swap functionality easy and lightweight. Just add your UI!&#x20;
 
 ### ⛽  Gas Optimizations
 
@@ -126,3 +128,10 @@ That's it! More examples and advanced usage can be found in the examples documen
 
 Happy swapping! :tada: :handshake:
 
+
+
+#### About Swap SDK
+
+Swap SDK is a light, performant library built with [`ethers`](https://github.com/ethers-io/ethers.js/) to easily interact with the 0x v4 protocol. Swap SDK also offers a free, managed orderbook so you don't need to worry about building off-chain order persistance (unless you want to). Swap SDK provides all the functionality to build an NFT marketplace or peer-to-peer swap application, including building orders, approving orders, persisting orders, and filling orders. Just add a UI!
+
+Swap SDK is a library made by developers for developers. Swap SDK is fully funded by a 0x DAO grant. We plan to support and mature this library, as well as continue to open-source more tooling, so developers can integrate the SwapSDK confidently.
