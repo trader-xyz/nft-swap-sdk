@@ -6,13 +6,19 @@ description: NFT Swap SDK now supports 0x Protocol v4! Try it out on Ropsten tod
 
 ### Overview
 
+Swapping with the Swap SDK just got even better. With the integration of 0x v4, swaps are now the cheapest available on Ethereum, giving developers' applications a competitive advantage. Both developers and users benefit from the 0x v4 upgrade.
+
+#### About Swap SDK
+
 Swap SDK allows developers to build NFT swap functionality into their Ethereum (or EVM-compatible chains) applications quickly and easily. Whether you're building a wallet, an NFT marketplace, or a peer-to-peer swap application, Swap SDK makes integrating NFT swap functionality easy and lightweight.
 
 Swap SDK is a light, performant library built with [`ethers`](https://github.com/ethers-io/ethers.js/) to easily interact with the 0x v4 protocol. Swap SDK also offers a free, managed orderbook so you don't need to worry about building off-chain order persistance (unless you want to). Swap SDK provides all the functionality to build an NFT marketplace or peer-to-peer swap application, including building orders, approving orders, persisting orders, and filling orders. Just add a UI!
 
-#### ⛽  Gas Optimizations
+### ⛽  Gas Optimizations
 
 > **0x v4 is the cheapest way to swap an NFT on Ethereum or any EVM-compatible chain.**
+
+![](../.gitbook/assets/gas-optimization-banner.png)
 
 Whether you prefer on-chain or off-chain orders, 0x v4 is the cheapest and most efficient way to swap NFTs to date.
 
@@ -22,17 +28,19 @@ Since Swap SDK uses 0x v4 protocol under the hood, the Swap SDK is the the most 
 
 Based on recent gas benchmarks, 0x v4 is significantly cheaper  to fill orders.
 
-* **Over >50% cheaper than OpenSea , LooksRare, and Rarible**
-* **30% cheaper than Zora to fill (60% cheaper than Zora if including both party's gas fees)**
+* **Over 40% cheaper than OpenSea , LooksRare, and Rarible for buying NFTs**
+* **35% cheaper than Zora to fill (>60% cheaper than Zora if including both party's gas fees)**
 
-#### 📩  Order Support
+### 📩  Order Support
 
 0x v4 initially includes a rich set of swap functionality. More swap functionality (e.g. bundles) will be added over time
 
 * :white\_check\_mark: ERC721 <> ERC20 swap
 * :white\_check\_mark: ERC1155 <> ERC20 swap
 
-Currently v4 does not support NFT<>NFT swaps (e.g. ERC721<>ERC721). For that, you can use the 0x v3 protocol until v4 support is added.
+NFT buys and sells (bids and asks) are both supported.
+
+Note: Currently 0x v4 does not support NFT<>NFT swaps (e.g. ERC721<>ERC721). If required, you can use the 0x v3 protocol until v4 support is added.
 
 ### Installation
 
