@@ -49,7 +49,7 @@ export interface INftSwapV4 extends BaseNftSwap {
     signer: Signer,
     signingOptions?: Partial<SigningOptions>
   ) => Promise<SignedNftOrderV4>;
-  buildSwapNftAndErc20: (
+  buildNftAndErc20Order: (
     nft:
       | UserFacingERC721AssetDataSerialized
       | UserFacingERC1155AssetDataSerializedNormalizedSingle,
@@ -269,7 +269,7 @@ class NftSwapV4 implements INftSwapV4 {
       direction === TradeDirection.BuyNFT ? makerAsset : takerAsset
     ) as UserFacingERC20AssetDataSerialized;
 
-    return this.buildSwapNftAndErc20(
+    return this.buildNftAndErc20Order(
       nft,
       erc20,
       DIRECTION_MAPPING[direction],
@@ -278,7 +278,7 @@ class NftSwapV4 implements INftSwapV4 {
     );
   }
 
-  buildSwapNftAndErc20 = (
+  buildNftAndErc20Order = (
     nft: SwappableNft,
     erc20: UserFacingERC20AssetDataSerialized,
     sellOrBuyNft: 'sell' | 'buy' = 'sell',

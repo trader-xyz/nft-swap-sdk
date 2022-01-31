@@ -22,7 +22,7 @@ const order = nftSwapSdk.buildOrder(
   [BORED_APE_69], // Taker asset(s) to swap
   walletAddressMaker
 );
-const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
+const signedOrder = await nftSwapSdk.signOrder(order);
 
 // [Part 2: Taker (owner of the BoredApe) fills trade]
 const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);

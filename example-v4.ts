@@ -23,7 +23,7 @@ const order = nftSwapSdk.buildOrder(
   FOUR_THOUSAND_TWENTY_WETH, // Taker asset to swap
   walletAddressMaker
 );
-const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
+const signedOrder = await nftSwapSdk.signOrder(order);
 
 // [Part 2: Taker (wants to buy the punk) fills trade]
 const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);
