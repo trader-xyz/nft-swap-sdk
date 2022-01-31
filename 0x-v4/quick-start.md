@@ -1,7 +1,5 @@
 ---
-description: >-
-  Easily get started integrating NFT trading or marketplace functionality into
-  your app.
+description: Get started integrating the Swap SDK into your app
 ---
 
 # Quick Start
