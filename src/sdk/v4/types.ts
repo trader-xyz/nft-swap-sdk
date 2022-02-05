@@ -1,18 +1,7 @@
-import { Signer } from '@ethersproject/abstract-signer';
+import type { Signer } from '@ethersproject/abstract-signer';
 import type { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { IZeroEx } from '../../contracts';
-
-export enum SupportedChainIds {
-  Ropsten = 3,
-}
-
-export enum OrderStatus {
-  Invalid = 0,
-  Fillable = 1,
-  Unfillable = 2,
-  Expired = 3,
-}
+import type { IZeroEx } from '../../contracts';
 
 export type FeeStruct = {
   recipient: string;

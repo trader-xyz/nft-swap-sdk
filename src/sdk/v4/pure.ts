@@ -1,10 +1,9 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { BytesLike, hexDataLength, hexDataSlice } from '@ethersproject/bytes';
+import { BigNumber } from '@ethersproject/bignumber';
+import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import getUnixTime from 'date-fns/getUnixTime';
-import { v4 } from 'uuid';
 import { ContractTransaction } from 'ethers';
-import { Erc721TradeableAsset, NftSwapV4 } from '..';
+import { v4 } from 'uuid';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -12,7 +11,7 @@ import {
 } from '../../contracts';
 import { NULL_ADDRESS } from '../../utils/eth';
 import { UnexpectedAssetTypeError } from '../error';
-import {
+import type {
   ECSignature,
   ERC1155OrderStruct,
   ERC721OrderStruct,
@@ -25,6 +24,9 @@ import { ApprovalStatus, TransactionOverrides } from '../common/types';
 
 export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
+export enum SupportedChainIds {
+  Ropsten = 3,
+}
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
   tokenAddress: string;
@@ -139,7 +141,6 @@ export const signOrderWithEoaWallet = async (
     version: '1.0.0',
   };
   const types = {
-    // EIP712Domain: EIP712_DOMAIN_PARAMETERS,
     [ERC721STRUCT_NAME]: ERC721ORDER_STRUCT_ABI,
     Fee: FEE_ABI,
     Property: PROPERTY_ABI,
