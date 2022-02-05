@@ -1,6 +1,9 @@
-import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BaseProvider, TransactionReceipt } from '@ethersproject/providers';
-import { ContractTransaction } from 'ethers';
+import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
+import type {
+  BaseProvider,
+  TransactionReceipt,
+} from '@ethersproject/providers';
+import type { ContractTransaction } from 'ethers';
 import { IZeroEx, IZeroEx__factory } from '../../contracts';
 import type {
   ApprovalStatus,
@@ -15,8 +18,10 @@ import {
   generateErc1155Order,
   generateErc721Order,
   getApprovalStatus,
+  OrderStatus,
   parseRawSignature,
   signOrderWithEoaWallet,
+  SupportedChainIds,
   SwappableAsset,
   SwappableNft,
   TradeDirection,
@@ -29,11 +34,9 @@ import type {
   ApprovalOverrides,
   FillOrderOverrides,
   NftOrderV4,
-  OrderStatus,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
   SigningOptions,
-  SupportedChainIds,
 } from './types';
 import addresses from './addresses.json';
 import invariant from 'tiny-invariant';
