@@ -1,9 +1,6 @@
-import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import type {
-  BaseProvider,
-  TransactionReceipt,
-} from '@ethersproject/providers';
-import type { ContractTransaction } from 'ethers';
+import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
+import { BaseProvider, TransactionReceipt } from '@ethersproject/providers';
+import { BigNumber, BigNumberish, ContractTransaction } from 'ethers';
 import { IZeroEx, IZeroEx__factory } from '../../contracts';
 import type {
   ApprovalStatus,
@@ -14,6 +11,7 @@ import type {
 import { UnexpectedAssetTypeError } from '../error';
 import {
   approveAsset,
+  CONTRACT_ORDER_VALIDATOR,
   DIRECTION_MAPPING,
   generateErc1155Order,
   generateErc721Order,
@@ -40,6 +38,7 @@ import type {
 } from './types';
 import addresses from './addresses.json';
 import invariant from 'tiny-invariant';
+import { NULL_ADDRESS } from '../../utils/eth';
 
 export enum SupportedChainIdsV4 {
   Ropsten = 3,
@@ -281,6 +280,30 @@ class NftSwapV4 implements INftSwapV4 {
     );
   }
 
+  buildCollectionBasedOrder = (
+    erc20ToSell: UserFacingERC20AssetDataSerialized,
+    nftCollectionToBid: {
+      tokenAddress: string;
+      type: 'ERC721' | 'ERC1155';
+    },
+    makerAddress: string
+  ) => {
+    return this.buildNftAndErc20Order(
+      {
+        ...nftCollectionToBid,
+        // Override tokenId to zero, tokenId is ignored when using token properties
+        tokenId: '0',
+      },
+      erc20ToSell,
+      'buy',
+      makerAddress,
+      {
+        // Add the token property of 'collection', so this order will be valid for any nft in the collection
+        tokenProperties: [CONTRACT_ORDER_VALIDATOR],
+      }
+    );
+  };
+
   buildNftAndErc20Order = (
     nft: SwappableNft,
     erc20: UserFacingERC20AssetDataSerialized,
@@ -341,6 +364,22 @@ class NftSwapV4 implements INftSwapV4 {
     return signedOrder;
   };
 
+  fillSignedCollectionOrder = async (
+    signedOrder: SignedNftOrderV4,
+    tokenId: BigNumberish,
+    fillOrderOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides?: Partial<PayableOverrides>
+  ) => {
+    return this.fillSignedOrder(
+      signedOrder,
+      {
+        tokenIdToSellForCollectionOrder: tokenId,
+        ...fillOrderOverrides,
+      },
+      transactionOverrides
+    );
+  };
+
   fillSignedOrder = async (
     signedOrder: SignedNftOrderV4,
     fillOrderOverrides?: Partial<FillOrderOverrides>,
@@ -359,13 +398,27 @@ class NftSwapV4 implements INftSwapV4 {
         );
       } else {
         // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
-        let unwrapNativeToken: boolean = false;
+        let unwrapNativeToken: boolean =
+          fillOrderOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken ??
+          false;
+
+        if (signedOrder.erc1155TokenProperties.length > 0) {
+          // property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
+          if (
+            fillOrderOverrides?.tokenIdToSellForCollectionOrder === undefined
+          ) {
+            throw new Error(
+              'Collection order missing NFT tokenId to fill with. Specify in fillOrderOverrides.tokenIdToSellForCollectionOrder'
+            );
+          }
+        }
 
         // Otherwise, taker is selling the nft (and buying an ERC20)
         return this.exchangeProxy.sellERC1155(
           signedOrder,
           signedOrder.signature,
-          signedOrder.erc1155TokenId,
+          fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
+            signedOrder.erc1155TokenId,
           signedOrder.erc20TokenAmount,
           unwrapNativeToken,
           '0x',
@@ -383,13 +436,27 @@ class NftSwapV4 implements INftSwapV4 {
         );
       } else {
         // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
-        let unwrapNativeToken: boolean = false;
+        let unwrapNativeToken: boolean =
+          fillOrderOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken ??
+          false;
+
+        if (signedOrder.erc721TokenProperties.length > 0) {
+          // property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
+          if (
+            fillOrderOverrides?.tokenIdToSellForCollectionOrder === undefined
+          ) {
+            throw new Error(
+              'Collection order missing NFT tokenId to fill with. Specify in fillOrderOverrides.tokenIdToSellForCollectionOrder'
+            );
+          }
+        }
 
         // Otherwise, taker is selling the nft (and buying an ERC20)
         return this.exchangeProxy.sellERC721(
           signedOrder,
           signedOrder.signature,
-          signedOrder.erc721TokenId,
+          fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
+            signedOrder.erc721TokenId,
           unwrapNativeToken,
           '0x'
         );
