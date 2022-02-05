@@ -39,23 +39,30 @@ const nftSwapperMaker = new NftSwapV4(
 const MAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
-  amount: '100000000000', // 1 USDC
+  amount: '420000000000000', // 1 USDC
 };
 
 const TAKER_ASSET: SwappableAsset = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
-  tokenId: '1',
+  tokenId: '11045',
 };
 
 describe('NFTSwapV4', () => {
-  it.only('collection orders test', async () => {
+  it.only('fees', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
-
-    const v4Erc721Order = nftSwapperMaker.buildCollectionBasedOrder(
-      MAKER_ASSET,
+    const v4Erc721Order = nftSwapperMaker.buildOrder(
       TAKER_ASSET,
-      MAKER_WALLET_ADDRESS
+      MAKER_ASSET,
+      MAKER_WALLET_ADDRESS,
+      {
+        fees: [
+          {
+            amount: '6900000000000',
+            recipient: '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34',
+          },
+        ],
+      }
       // {
       //   // Fix dates and salt so we have reproducible tests
       //   expiration: new Date(3000, 10, 1),
@@ -85,8 +92,8 @@ describe('NFTSwapV4', () => {
       v4Erc721Order
     )) as SignedERC721OrderStruct;
 
-    expect(signedOrder.erc721TokenProperties[0].propertyValidator).toEqual(
-      NULL_ADDRESS
+    expect(signedOrder.fees[0].recipient).toEqual(
+      '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34'
     );
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
@@ -117,16 +124,11 @@ describe('NFTSwapV4', () => {
     // );
 
     // Uncomment to actually fill order
-    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-    //   gasPrice,
-    //   gasLimit: '500000',
-    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-    //   value: parseEther('0.01'),
-    // });
+    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder)//, undefined, { gasLimit: '500000'})
 
     // const txReceipt = await tx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();
-    // console.log(`Swapped on Rinkeby (txHAsh: ${txReceipt.transactionIndex})`);
+    // console.log(`Swapped on Rinkeby (txHAsh: ${txReceipt.transactionHash})`);
   });
 });
 

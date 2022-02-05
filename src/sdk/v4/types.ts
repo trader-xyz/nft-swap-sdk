@@ -43,6 +43,14 @@ export type ERC721OrderStruct = {
   erc721TokenProperties: PropertyStruct[];
 };
 
+export type UserFacingFeeStruct = {
+  recipient: string;
+  amount: BigNumberish;
+  // Make fee data optional for devx (most folks don't use the feeData arg and it _needs_ to be '0x' if not being used).
+  // automatically defaults to '0x'
+  feeData?: BytesLike;
+};
+
 export interface OrderStructOptionsCommon {
   direction: BigNumberish;
   maker: string;
@@ -51,7 +59,7 @@ export interface OrderStructOptionsCommon {
   nonce: BigNumberish;
   // erc20Token: string;
   // erc20TokenAmount: BigNumberish;
-  fees: FeeStruct[];
+  fees: UserFacingFeeStruct[];
   tokenProperties: PropertyStruct[];
 }
 
@@ -63,7 +71,7 @@ export interface OrderStructOptionsCommonStrict {
   taker?: string;
   expiry?: Date | number;
   nonce?: BigNumberish;
-  fees?: FeeStruct[];
+  fees?: UserFacingFeeStruct[];
   tokenProperties?: PropertyStruct[];
 }
 
