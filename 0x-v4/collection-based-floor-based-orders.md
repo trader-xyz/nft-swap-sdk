@@ -16,7 +16,7 @@ Let's say a user wants to buy _any_ Bored Ape and they don't care which specific
 
 Create collection-based or floor-based orders easily:
 
-```
+```typescript
 // Maker creates an order for any NFT from a collection (you can think of it as a 'bid')
 // Specifically in this example, the maker will sell 1000 USDC for any NFT in the collection specificed
 const v4Erc721Order = nftSwapperMaker.buildCollectionBasedOrder(
