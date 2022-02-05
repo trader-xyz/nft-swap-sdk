@@ -1,6 +1,11 @@
-import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BaseProvider, TransactionReceipt } from '@ethersproject/providers';
-import { BigNumber, BigNumberish, ContractTransaction } from 'ethers';
+import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
+import type {
+  BaseProvider,
+  TransactionReceipt,
+} from '@ethersproject/providers';
+import type { BigNumberish, ContractTransaction } from 'ethers';
+import { Interface } from '@ethersproject/abi';
+import invariant from 'tiny-invariant';
 import {
   ERC1155__factory,
   ERC721__factory,
@@ -35,22 +40,17 @@ import {
 import type {
   AddressesForChain,
   ApprovalOverrides,
-  FeeStruct,
   FillOrderOverrides,
   NftOrderV4,
   OrderStructOptionsCommonStrict,
-  PropertyStruct,
   SignedNftOrderV4,
   SigningOptions,
 } from './types';
-import addresses from './addresses.json';
-import invariant from 'tiny-invariant';
-import { NULL_ADDRESS } from '../../utils/eth';
-import { defaultAbiCoder, Interface } from '@ethersproject/abi';
 import {
-  ERC1155_ENCODED_ORDER_DATA,
-  ERC721_ENCODED_ORDER_DATA,
+  ERC1155_TRANSFER_FROM_DATA,
+  ERC721_TRANSFER_FROM_DATA,
 } from './nft-safe-transfer-from-data';
+import addresses from './addresses.json';
 
 export enum SupportedChainIdsV4 {
   Ropsten = 3,
@@ -117,21 +117,6 @@ export interface INftSwapV4 extends BaseNftSwap {
   //   takerAssets: SwappableAsset[];
   // };
 }
-
-export type ERC1155OrderStruct = {
-  direction: BigNumberish;
-  maker: string;
-  taker: string;
-  expiry: BigNumberish;
-  nonce: BigNumberish;
-  erc20Token: string;
-  erc20TokenAmount: BigNumberish;
-  fees: FeeStruct[];
-  erc1155Token: string;
-  erc1155TokenId: BigNumberish;
-  erc1155TokenProperties: PropertyStruct[];
-  erc1155TokenAmount: BigNumberish;
-};
 
 export interface AdditionalSdkConfig {
   zeroExExchangeProxyContractAddress: string;
@@ -398,7 +383,7 @@ class NftSwapV4 implements INftSwapV4 {
    * @param tokenId NFT token id that taker of trade will sell
    * @param fillOrderOverrides Trade specific (SDK-level) overrides
    * @param transactionOverrides General transaction overrides from ethers (gasPrice, gasLimit, etc)
-   * @returns 
+   * @returns
    */
   fillBuyNftOrderWithoutApproval = async (
     signedOrder: SignedNftOrderV4,
@@ -429,7 +414,7 @@ class NftSwapV4 implements INftSwapV4 {
         this.signer
       );
 
-      const encodingIface = new Interface(ERC721_ENCODED_ORDER_DATA);
+      const encodingIface = new Interface(ERC721_TRANSFER_FROM_DATA);
 
       const fragment = encodingIface.getFunction('safeTransferFromErc721Data');
       const data = encodingIface._encodeParams(fragment.inputs, [
@@ -456,7 +441,7 @@ class NftSwapV4 implements INftSwapV4 {
         signedOrder.erc1155Token,
         this.signer
       );
-      const encodingIface = new Interface(ERC1155_ENCODED_ORDER_DATA);
+      const encodingIface = new Interface(ERC1155_TRANSFER_FROM_DATA);
 
       const fragment = encodingIface.getFunction('safeTransferFromErc1155Data');
       const data = encodingIface._encodeParams(fragment.inputs, [

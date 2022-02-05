@@ -1,4 +1,4 @@
-export const ERC721_ENCODED_ORDER_DATA = [
+export const ERC721_TRANSFER_FROM_DATA = [
   {
     inputs: [
       {
@@ -131,7 +131,7 @@ export const ERC721_ENCODED_ORDER_DATA = [
   },
 ];
 
-export const ERC1155_ENCODED_ORDER_DATA = [
+export const ERC1155_TRANSFER_FROM_DATA = [
   {
     inputs: [
       {
