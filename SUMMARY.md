@@ -7,4 +7,4 @@
   * [Swap NFT <> ERC-20 Example](0x-v4/swap-nft-less-than-greater-than-erc-20-example.md)
   * [ETH/Native Token support](0x-v4/eth-native-token-support.md)
   * [Royalties and Fee Configuration](0x-v4/royalties-and-fee-configuration.md)
-* [Collection-based/Floor-based orders](collection-based-floor-based-orders.md)
+  * [Collection-based/Floor-based orders](0x-v4/collection-based-floor-based-orders.md)
