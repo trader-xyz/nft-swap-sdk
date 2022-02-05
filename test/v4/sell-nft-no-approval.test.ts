@@ -80,16 +80,16 @@ describe('NFTSwapV4', () => {
       v4Erc721Order
     )) as SignedERC721OrderStruct;
 
-    const tx = await nftSwapperMaker.fillSellNftOrderWithoutApproval(
-      signedOrder,
-      '11045'
-    );
-    const txReceipt = await tx.wait();
+    // const tx = await nftSwapperMaker.fillBuyNftOrderWithoutApproval(
+    //   signedOrder,
+    //   '11045'
+    // );
+    // const txReceipt = await tx.wait();
 
-    expect(txReceipt.transactionHash).toBeTruthy();
-    console.log(
-      `Swapped on Rinkeby without approval using safeTransferFrom (txHAsh: ${txReceipt.transactionHash})`
-    );
+    // expect(txReceipt.transactionHash).toBeTruthy();
+    // console.log(
+    //   `Swapped on Rinkeby without approval using safeTransferFrom (txHAsh: ${txReceipt.transactionHash})`
+    // );
 
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
