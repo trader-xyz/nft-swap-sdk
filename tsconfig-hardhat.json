@@ -3,7 +3,7 @@
   "include": ["src", "types"],
   "files": ["hardhat.config.ts"],
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     // output .d.ts declaration files for consumers
