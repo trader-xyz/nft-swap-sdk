@@ -338,7 +338,14 @@ export const generateErc721Order = (
     maker: orderData.maker,
     // Defaults not required...
     erc721TokenProperties: orderData.tokenProperties ?? [],
-    fees: [],
+    fees:
+      orderData.fees?.map((x) => {
+        return {
+          amount: x.amount,
+          recipient: x.recipient,
+          feeData: x.feeData ?? '0x',
+        };
+      }) ?? [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry)
       : INFINITE_TIMESTAMP_SEC,
@@ -364,7 +371,14 @@ export const generateErc1155Order = (
     maker: orderData.maker,
     // Defaults not required...
     erc1155TokenProperties: orderData.tokenProperties ?? [],
-    fees: [],
+    fees:
+      orderData.fees?.map((x) => {
+        return {
+          amount: x.amount,
+          recipient: x.recipient,
+          feeData: x.feeData ?? '0x',
+        };
+      }) ?? [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry)
       : INFINITE_TIMESTAMP_SEC,
