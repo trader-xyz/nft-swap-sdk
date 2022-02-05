@@ -453,10 +453,8 @@ class NftSwapV4 implements INftSwapV4 {
       const transferFromTx = await erc1155Contract.safeTransferFrom(
         signerAddress,
         this.exchangeProxy.address,
-        tokenId,
-        fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
-          signedOrder.erc1155TokenAmount ??
-          '1',
+        fillOrderOverrides?.tokenIdToSellForCollectionOrder ?? tokenId,
+        signedOrder.erc1155TokenAmount ?? '1',
         data,
         transactionOverrides ?? {}
       );
