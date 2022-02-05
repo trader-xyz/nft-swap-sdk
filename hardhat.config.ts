@@ -11,10 +11,10 @@ import '@nomiclabs/hardhat-waffle';
 module.exports = {
   solidity: '0.7.3',
   networks: {
-    // hardhat: {
-    //   forking: {
-    //     url: "https://eth-mainnet.alchemyapi.io/v2/<key>",
-    //   }
-    // }
+    hardhat: {
+      forking: {
+        url: 'https://eth-ropsten.alchemyapi.io/v2/is1WqyAFM1nNFFx2aCozhTep7IxHVNGo',
+      },
+    },
   },
 };
