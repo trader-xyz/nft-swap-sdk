@@ -46,7 +46,7 @@ const MAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwapV4', () => {
-  it.only('v4 erc721 test', async () => {
+  it('v4 erc721 test', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const v4Erc721Order = nftSwapperMaker.buildOrder(

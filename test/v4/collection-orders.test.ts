@@ -49,7 +49,7 @@ const TAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwapV4', () => {
-  it.only('collection orders test', async () => {
+  it('collection orders test', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const v4Erc721Order = nftSwapperMaker.buildCollectionBasedOrder(

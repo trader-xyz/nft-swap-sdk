@@ -1,7 +1,12 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BaseProvider, TransactionReceipt } from '@ethersproject/providers';
 import { BigNumber, BigNumberish, ContractTransaction } from 'ethers';
-import { IZeroEx, IZeroEx__factory } from '../../contracts';
+import {
+  ERC1155__factory,
+  ERC721__factory,
+  IZeroEx,
+  IZeroEx__factory,
+} from '../../contracts';
 import type {
   ApprovalStatus,
   BaseNftSwap,
@@ -30,15 +35,22 @@ import {
 import type {
   AddressesForChain,
   ApprovalOverrides,
+  FeeStruct,
   FillOrderOverrides,
   NftOrderV4,
   OrderStructOptionsCommonStrict,
+  PropertyStruct,
   SignedNftOrderV4,
   SigningOptions,
 } from './types';
 import addresses from './addresses.json';
 import invariant from 'tiny-invariant';
 import { NULL_ADDRESS } from '../../utils/eth';
+import { defaultAbiCoder, Interface } from '@ethersproject/abi';
+import {
+  ERC1155_ENCODED_ORDER_DATA,
+  ERC721_ENCODED_ORDER_DATA,
+} from './nft-safe-transfer-from-data';
 
 export enum SupportedChainIdsV4 {
   Ropsten = 3,
@@ -105,6 +117,21 @@ export interface INftSwapV4 extends BaseNftSwap {
   //   takerAssets: SwappableAsset[];
   // };
 }
+
+export type ERC1155OrderStruct = {
+  direction: BigNumberish;
+  maker: string;
+  taker: string;
+  expiry: BigNumberish;
+  nonce: BigNumberish;
+  erc20Token: string;
+  erc20TokenAmount: BigNumberish;
+  fees: FeeStruct[];
+  erc1155Token: string;
+  erc1155TokenId: BigNumberish;
+  erc1155TokenProperties: PropertyStruct[];
+  erc1155TokenAmount: BigNumberish;
+};
 
 export interface AdditionalSdkConfig {
   zeroExExchangeProxyContractAddress: string;
@@ -362,6 +389,97 @@ class NftSwapV4 implements INftSwapV4 {
       },
     };
     return signedOrder;
+  };
+
+  /**
+   * Fill a 'Buy NFT' order (e.g. taker would be selling'their NFT to fill this order) without needing an approval
+   * Use case: Users can accept offers/bids for their NFTs without needing to approve their NFT! 🤯
+   * @param signedOrder Signed Buy Nft order (e.g. direction = 1)
+   * @param tokenId NFT token id that taker of trade will sell
+   * @param fillOrderOverrides Trade specific (SDK-level) overrides
+   * @param transactionOverrides General transaction overrides from ethers (gasPrice, gasLimit, etc)
+   * @returns 
+   */
+  fillBuyNftOrderWithoutApproval = async (
+    signedOrder: SignedNftOrderV4,
+    tokenId: string,
+    fillOrderOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides?: Partial<PayableOverrides>
+  ) => {
+    if (!this.signer) {
+      throw new Error(
+        'Signer undefined. Signer must be provided to fill order'
+      );
+    }
+    if (signedOrder.direction !== TradeDirection.BuyNFT) {
+      throw new Error(
+        'Only filling Buy NFT orders (direction=1) is valid for skipping approvals'
+      );
+    }
+
+    const signerAddress = await this.signer.getAddress();
+    const unwrapWeth =
+      fillOrderOverrides?.fillOrderWithNativeTokenInsteadOfWrappedToken ??
+      false;
+
+    // Handle ERC721
+    if ('erc721Token' in signedOrder) {
+      const erc721Contract = ERC721__factory.connect(
+        signedOrder.erc721Token,
+        this.signer
+      );
+
+      const encodingIface = new Interface(ERC721_ENCODED_ORDER_DATA);
+
+      const fragment = encodingIface.getFunction('safeTransferFromErc721Data');
+      const data = encodingIface._encodeParams(fragment.inputs, [
+        signedOrder,
+        signedOrder.signature,
+        unwrapWeth,
+      ]);
+
+      const transferFromTx = await erc721Contract[
+        'safeTransferFrom(address,address,uint256,bytes)'
+      ](
+        signerAddress,
+        this.exchangeProxy.address,
+        fillOrderOverrides?.tokenIdToSellForCollectionOrder ?? tokenId,
+        data,
+        transactionOverrides ?? {}
+      );
+      return transferFromTx;
+    }
+
+    // Handle ERC1155
+    if ('erc1155Token' in signedOrder) {
+      const erc1155Contract = ERC1155__factory.connect(
+        signedOrder.erc1155Token,
+        this.signer
+      );
+      const encodingIface = new Interface(ERC1155_ENCODED_ORDER_DATA);
+
+      const fragment = encodingIface.getFunction('safeTransferFromErc1155Data');
+      const data = encodingIface._encodeParams(fragment.inputs, [
+        signedOrder,
+        signedOrder.signature,
+        unwrapWeth,
+      ]);
+
+      const transferFromTx = await erc1155Contract.safeTransferFrom(
+        signerAddress,
+        this.exchangeProxy.address,
+        tokenId,
+        fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
+          signedOrder.erc1155TokenAmount ??
+          '1',
+        data,
+        transactionOverrides ?? {}
+      );
+      return transferFromTx;
+    }
+
+    // Unknown format (NFT neither ERC721 or ERC1155)
+    throw new Error('unknown order type');
   };
 
   fillSignedCollectionOrder = async (

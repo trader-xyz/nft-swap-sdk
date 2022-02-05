@@ -36,37 +36,25 @@ const nftSwapperMaker = new NftSwapV4(
 );
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
-const MAKER_ASSET: SwappableAsset = {
-  type: 'ERC20',
-  tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
-  amount: '420000000000000', // 1 USDC
-};
-
-const TAKER_ASSET: SwappableAsset = {
+const NFT_ASSET: SwappableAsset = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
   tokenId: '11045',
 };
 
+const ERC20_ASSET: SwappableAsset = {
+  type: 'ERC20',
+  tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
+  amount: '420000000000000', // 1 USDC
+};
+
 describe('NFTSwapV4', () => {
-  it('fees', async () => {
+  it('safeTransferFrom, accept bid for nft with no approval required', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const v4Erc721Order = nftSwapperMaker.buildOrder(
-      TAKER_ASSET,
-      MAKER_ASSET,
-      MAKER_WALLET_ADDRESS,
-      {
-        fees: [
-          {
-            amount: '6900000000000',
-            recipient: '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34',
-          },
-        ],
-      }
-      // {
-      //   // Fix dates and salt so we have reproducible tests
-      //   expiration: new Date(3000, 10, 1),
-      // }
+      ERC20_ASSET,
+      NFT_ASSET,
+      MAKER_WALLET_ADDRESS
     );
 
     // console.log('v4Erc721Order.nonce', v4Erc721Order.nonce.toString());
@@ -92,9 +80,17 @@ describe('NFTSwapV4', () => {
       v4Erc721Order
     )) as SignedERC721OrderStruct;
 
-    expect(signedOrder.fees[0].recipient).toEqual(
-      '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34'
+    const tx = await nftSwapperMaker.fillSellNftOrderWithoutApproval(
+      signedOrder,
+      '11045'
     );
+    const txReceipt = await tx.wait();
+
+    expect(txReceipt.transactionHash).toBeTruthy();
+    console.log(
+      `Swapped on Rinkeby without approval using safeTransferFrom (txHAsh: ${txReceipt.transactionHash})`
+    );
+
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
