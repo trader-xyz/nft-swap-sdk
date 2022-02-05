@@ -18,6 +18,7 @@ import type {
   NftOrderV4,
   OrderStructOptionsCommon,
   OrderStructOptionsCommonStrict,
+  PropertyStruct,
 } from './types';
 import { BaseProvider } from '@ethersproject/providers';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
@@ -336,7 +337,7 @@ export const generateErc721Order = (
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
     // Defaults not required...
-    erc721TokenProperties: [],
+    erc721TokenProperties: orderData.tokenProperties ?? [],
     fees: [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry)
@@ -345,7 +346,6 @@ export const generateErc721Order = (
     taker: orderData.taker ?? NULL_ADDRESS,
   };
 
-  console.log(erc721Order.nonce.toString());
   return erc721Order;
 };
 
@@ -363,7 +363,7 @@ export const generateErc1155Order = (
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
     // Defaults not required...
-    erc1155TokenProperties: [],
+    erc1155TokenProperties: orderData.tokenProperties ?? [],
     fees: [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry)
@@ -386,4 +386,9 @@ type DirectionMap = {
 export const DIRECTION_MAPPING: DirectionMap = {
   [TradeDirection.BuyNFT]: 'buy',
   [TradeDirection.SellNFT]: 'sell',
+};
+
+export const CONTRACT_ORDER_VALIDATOR: PropertyStruct = {
+  propertyValidator: NULL_ADDRESS,
+  propertyData: [],
 };

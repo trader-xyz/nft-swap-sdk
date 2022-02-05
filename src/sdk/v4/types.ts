@@ -52,6 +52,7 @@ export interface OrderStructOptionsCommon {
   // erc20Token: string;
   // erc20TokenAmount: BigNumberish;
   fees: FeeStruct[];
+  tokenProperties: PropertyStruct[];
 }
 
 export interface OrderStructOptionsCommonStrict {
@@ -63,6 +64,11 @@ export interface OrderStructOptionsCommonStrict {
   expiry?: Date | number;
   nonce?: BigNumberish;
   fees?: FeeStruct[];
+  tokenProperties?: PropertyStruct[];
+}
+
+interface OrderStructPropertyOptions {
+  tokenProperties: PropertyStruct[];
 }
 
 export interface Fee {
@@ -113,6 +119,7 @@ export interface ApprovalOverrides {
 export interface FillOrderOverrides {
   signer: Signer;
   exchangeContract: IZeroEx;
+  tokenIdToSellForCollectionOrder?: BigNumberish;
   /**
    * Fill order with native token if possible
    * e.g. If taker asset is WETH, allows order to be filled with ETH

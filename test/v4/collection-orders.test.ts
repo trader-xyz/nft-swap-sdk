@@ -2,6 +2,8 @@ import { ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import { SwappableAsset } from '../../src/sdk/v4/pure';
+import { SignedERC721OrderStruct } from '../../src/sdk/v4/types';
+import { NULL_ADDRESS } from '../../src/utils/eth';
 
 jest.setTimeout(90 * 1000);
 
@@ -34,22 +36,23 @@ const nftSwapperMaker = new NftSwapV4(
 );
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
-const TAKER_ASSET: SwappableAsset = {
+const MAKER_ASSET: SwappableAsset = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
   amount: '100000000000', // 1 USDC
 };
-const MAKER_ASSET: SwappableAsset = {
+
+const TAKER_ASSET: SwappableAsset = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
-  tokenId: '11045',
+  tokenId: '1',
 };
 
 describe('NFTSwapV4', () => {
   it.only('v4 erc721 test', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
-    const v4Erc721Order = nftSwapperMaker.buildOrder(
+    const v4Erc721Order = nftSwapperMaker.buildCollectionBasedOrder(
       MAKER_ASSET,
       TAKER_ASSET,
       MAKER_WALLET_ADDRESS
@@ -59,9 +62,10 @@ describe('NFTSwapV4', () => {
       // }
     );
 
+
     // console.log('v4Erc721Order.nonce', v4Erc721Order.nonce.toString());
 
-    expect(v4Erc721Order.nonce.toString().includes('-')).toBeFalsy();
+    // expect(v4Erc721Order.nonce.toString()./includes('-')).toBeFalsy();
 
     // const makerapprovalTx = await nftSwapperMaker.approveTokenOrNftByAsset(
     //   MAKER_ASSET,
@@ -78,11 +82,21 @@ describe('NFTSwapV4', () => {
     // const takerApprovalTxHash = await (await takerApprovalTx.wait()).transactionHash
     // console.log('taker approval tx hash', takerApprovalTxHash)
 
-    // const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+    const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order) as SignedERC721OrderStruct
+
+    expect(signedOrder.erc721TokenProperties[0].propertyValidator).toEqual(NULL_ADDRESS)
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
-    // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
+    // const fillTx = await nftSwapperMaker.fillSignedCollectionOrder(
+    //   signedOrder,
+    //   '11045',
+    //   {
+    //     fillOrderWithNativeTokenInsteadOfWrappedToken: false,
+    //     tokenIdToSellForCollectionOrder: '11045',
+    //   },
+    //   { gasLimit: '500000' }
+    // );
     // const txReceipt = await fillTx.wait();
     // console.log('erc721 fill tx', txReceipt.transactionHash);
 
