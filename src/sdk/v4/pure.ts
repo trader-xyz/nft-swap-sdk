@@ -14,7 +14,9 @@ import { UnexpectedAssetTypeError } from '../error';
 import type {
   ECSignature,
   ERC1155OrderStruct,
+  ERC1155OrderStructSerialized,
   ERC721OrderStruct,
+  ERC721OrderStructSerialized,
   NftOrderV4,
   OrderStructOptionsCommon,
   OrderStructOptionsCommonStrict,
@@ -328,28 +330,32 @@ export const generateErc721Order = (
   nft: UserFacingERC721AssetDataSerialized,
   erc20: UserFacingERC20AssetDataSerialized,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
-): ERC721OrderStruct => {
-  const erc721Order: ERC721OrderStruct = {
+): ERC721OrderStructSerialized => {
+  const erc721Order: ERC721OrderStructSerialized = {
     erc721Token: nft.tokenAddress,
     erc721TokenId: nft.tokenId,
-    direction: orderData.direction,
+    direction: orderData.direction.toString(10),
     erc20Token: erc20.tokenAddress,
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
     // Defaults not required...
-    erc721TokenProperties: orderData.tokenProperties ?? [],
+    erc721TokenProperties:
+      orderData.tokenProperties?.map((property) => ({
+        propertyData: property.propertyData.toString(),
+        propertyValidator: property.propertyValidator,
+      })) ?? [],
     fees:
       orderData.fees?.map((x) => {
         return {
-          amount: x.amount,
+          amount: x.amount.toString(),
           recipient: x.recipient,
-          feeData: x.feeData ?? '0x',
+          feeData: x.feeData?.toString() ?? '0x',
         };
       }) ?? [],
     expiry: orderData.expiry
-      ? getUnixTime(orderData.expiry)
-      : INFINITE_TIMESTAMP_SEC,
-    nonce: orderData.nonce ?? generateRandomNonce(),
+      ? getUnixTime(orderData.expiry).toString()
+      : INFINITE_TIMESTAMP_SEC.toString(),
+    nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
     taker: orderData.taker ?? NULL_ADDRESS,
   };
 
@@ -360,29 +366,33 @@ export const generateErc1155Order = (
   nft: UserFacingERC1155AssetDataSerializedNormalizedSingle,
   erc20: UserFacingERC20AssetDataSerialized,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
-): ERC1155OrderStruct => {
-  const erc1155Order: ERC1155OrderStruct = {
+): ERC1155OrderStructSerialized => {
+  const erc1155Order: ERC1155OrderStructSerialized = {
     erc1155Token: nft.tokenAddress,
     erc1155TokenId: nft.tokenId,
     erc1155TokenAmount: nft.amount ?? '1',
-    direction: orderData.direction,
+    direction: orderData.direction.toString(10),
     erc20Token: erc20.tokenAddress,
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
     // Defaults not required...
-    erc1155TokenProperties: orderData.tokenProperties ?? [],
+    erc1155TokenProperties:
+      orderData.tokenProperties?.map((property) => ({
+        propertyData: property.propertyData.toString(),
+        propertyValidator: property.propertyValidator,
+      })) ?? [],
     fees:
-      orderData.fees?.map((x) => {
+      orderData.fees?.map((fee) => {
         return {
-          amount: x.amount,
-          recipient: x.recipient,
-          feeData: x.feeData ?? '0x',
+          amount: fee.amount.toString(),
+          recipient: fee.recipient,
+          feeData: fee.feeData?.toString() ?? '0x',
         };
       }) ?? [],
     expiry: orderData.expiry
-      ? getUnixTime(orderData.expiry)
-      : INFINITE_TIMESTAMP_SEC,
-    nonce: orderData.nonce ?? generateRandomNonce(),
+      ? getUnixTime(orderData.expiry).toString()
+      : INFINITE_TIMESTAMP_SEC.toString(),
+    nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
     taker: orderData.taker ?? NULL_ADDRESS,
   };
 

@@ -350,13 +350,13 @@ class NftSwapV4 implements INftSwapV4 {
     }
   };
 
-  signOrder = async (orderStruct: NftOrderV4): Promise<SignedNftOrderV4> => {
+  signOrder = async (order: NftOrderV4): Promise<SignedNftOrderV4> => {
     if (!this.signer) {
       throw new Error('Signed not defined');
     }
 
     const rawSignature = await signOrderWithEoaWallet(
-      orderStruct,
+      order,
       this.signer as unknown as TypedDataSigner,
       this.chainId,
       this.exchangeProxy.address
@@ -365,7 +365,7 @@ class NftSwapV4 implements INftSwapV4 {
     const ecSignature = parseRawSignature(rawSignature);
 
     const signedOrder = {
-      ...orderStruct,
+      ...order,
       signature: {
         signatureType: 2,
         r: ecSignature.r,
