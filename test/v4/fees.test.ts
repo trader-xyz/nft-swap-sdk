@@ -93,7 +93,7 @@ describe('NFTSwapV4', () => {
     )) as SignedERC721OrderStruct;
 
     expect(signedOrder.fees[0].recipient).toEqual(
-      '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34'
+      '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34'.toLowerCase()
     );
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
