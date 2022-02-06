@@ -6,7 +6,7 @@ import type { IZeroEx } from '../../contracts';
 export type FeeStruct = {
   recipient: string;
   amount: BigNumberish;
-  feeData: BytesLike;
+  feeData: string | Array<number>;
 };
 
 export type FeeStructSerialized = {
@@ -17,12 +17,12 @@ export type FeeStructSerialized = {
 
 export type PropertyStruct = {
   propertyValidator: string;
-  propertyData: BytesLike;
+  propertyData: string | Array<number>;
 };
 
 export type PropertyStructSerialized = {
   propertyValidator: string;
-  propertyData: string;
+  propertyData: string | Array<number>;
 };
 
 export type ERC1155OrderStruct = {
@@ -70,7 +70,7 @@ export type ERC721OrderStruct = {
 };
 
 export type ERC721OrderStructSerialized = {
-  direction: string;
+  direction: number;
   maker: string;
   taker: string;
   expiry: string;
@@ -159,16 +159,16 @@ export type SignedNftOrderV4Serialized =
   | SignedERC1155OrderStructSerialized;
 
 export type ECSignature = {
-  v: BigNumberish;
-  r: BytesLike;
-  s: BytesLike;
+  v: string | number;
+  r: string | Array<number>;
+  s: string | Array<number>;
 };
 
 export type SignatureStruct = {
-  signatureType: BigNumberish; // 2 for EIP-712
-  v: BigNumberish;
-  r: BytesLike;
-  s: BytesLike;
+  signatureType: number | string; // 2 for EIP-712
+  v: number | string;
+  r: string | Array<number>;
+  s: string | Array<number>;
 };
 
 export type SignatureStructSerialized = {

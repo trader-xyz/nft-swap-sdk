@@ -334,14 +334,14 @@ export const generateErc721Order = (
   const erc721Order: ERC721OrderStructSerialized = {
     erc721Token: nft.tokenAddress,
     erc721TokenId: nft.tokenId,
-    direction: orderData.direction.toString(10),
+    direction: parseInt(orderData.direction.toString()), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
     erc20Token: erc20.tokenAddress,
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
     // Defaults not required...
     erc721TokenProperties:
       orderData.tokenProperties?.map((property) => ({
-        propertyData: property.propertyData.toString(),
+        propertyData: property.propertyData,
         propertyValidator: property.propertyValidator,
       })) ?? [],
     fees:
@@ -371,7 +371,7 @@ export const generateErc1155Order = (
     erc1155Token: nft.tokenAddress,
     erc1155TokenId: nft.tokenId,
     erc1155TokenAmount: nft.amount ?? '1',
-    direction: orderData.direction.toString(10),
+    direction: orderData.direction.toString(),
     erc20Token: erc20.tokenAddress,
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,
