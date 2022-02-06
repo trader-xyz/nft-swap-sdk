@@ -159,21 +159,21 @@ export type SignedNftOrderV4Serialized =
   | SignedERC1155OrderStructSerialized;
 
 export type ECSignature = {
-  v: string | number;
-  r: string | Array<number>;
-  s: string | Array<number>;
+  v: number;
+  r: string;
+  s: string;
 };
 
 export type SignatureStruct = {
-  signatureType: number | string; // 2 for EIP-712
-  v: number | string;
-  r: string | Array<number>;
-  s: string | Array<number>;
+  signatureType: number; // 2 for EIP-712
+  v: number;
+  r: string;
+  s: string;
 };
 
 export type SignatureStructSerialized = {
   signatureType: number; // 2 for EIP-712
-  v: string;
+  v: number;
   r: string;
   s: string;
 };
