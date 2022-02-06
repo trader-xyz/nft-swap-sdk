@@ -332,12 +332,12 @@ export const generateErc721Order = (
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC721OrderStructSerialized => {
   const erc721Order: ERC721OrderStructSerialized = {
-    erc721Token: nft.tokenAddress,
+    erc721Token: nft.tokenAddress.toLowerCase(),
     erc721TokenId: nft.tokenId,
     direction: parseInt(orderData.direction.toString()), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
-    erc20Token: erc20.tokenAddress,
+    erc20Token: erc20.tokenAddress.toLowerCase(),
     erc20TokenAmount: erc20.amount,
-    maker: orderData.maker,
+    maker: orderData.maker.toLowerCase(),
     // Defaults not required...
     erc721TokenProperties:
       orderData.tokenProperties?.map((property) => ({
@@ -348,7 +348,7 @@ export const generateErc721Order = (
       orderData.fees?.map((x) => {
         return {
           amount: x.amount.toString(),
-          recipient: x.recipient,
+          recipient: x.recipient.toLowerCase(),
           feeData: x.feeData?.toString() ?? '0x',
         };
       }) ?? [],
@@ -356,7 +356,7 @@ export const generateErc721Order = (
       ? getUnixTime(orderData.expiry).toString()
       : INFINITE_TIMESTAMP_SEC.toString(),
     nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
-    taker: orderData.taker ?? NULL_ADDRESS,
+    taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
   return erc721Order;
@@ -368,13 +368,13 @@ export const generateErc1155Order = (
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC1155OrderStructSerialized => {
   const erc1155Order: ERC1155OrderStructSerialized = {
-    erc1155Token: nft.tokenAddress,
+    erc1155Token: nft.tokenAddress.toLowerCase(),
     erc1155TokenId: nft.tokenId,
     erc1155TokenAmount: nft.amount ?? '1',
     direction: parseInt(orderData.direction.toString()), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
-    erc20Token: erc20.tokenAddress,
+    erc20Token: erc20.tokenAddress.toLowerCase(),
     erc20TokenAmount: erc20.amount,
-    maker: orderData.maker,
+    maker: orderData.maker.toLowerCase(),
     // Defaults not required...
     erc1155TokenProperties:
       orderData.tokenProperties?.map((property) => ({
@@ -385,7 +385,7 @@ export const generateErc1155Order = (
       orderData.fees?.map((fee) => {
         return {
           amount: fee.amount.toString(),
-          recipient: fee.recipient,
+          recipient: fee.recipient.toLowerCase(),
           feeData: fee.feeData?.toString() ?? '0x',
         };
       }) ?? [],
@@ -393,7 +393,7 @@ export const generateErc1155Order = (
       ? getUnixTime(orderData.expiry).toString()
       : INFINITE_TIMESTAMP_SEC.toString(),
     nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
-    taker: orderData.taker ?? NULL_ADDRESS,
+    taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
   return erc1155Order;
