@@ -371,7 +371,7 @@ export const generateErc1155Order = (
     erc1155Token: nft.tokenAddress,
     erc1155TokenId: nft.tokenId,
     erc1155TokenAmount: nft.amount ?? '1',
-    direction: orderData.direction.toString(),
+    direction: parseInt(orderData.direction.toString()), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
     erc20Token: erc20.tokenAddress,
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker,

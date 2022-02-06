@@ -41,7 +41,7 @@ export type ERC1155OrderStruct = {
 };
 
 export type ERC1155OrderStructSerialized = {
-  direction: string;
+  direction: number;
   maker: string;
   taker: string;
   expiry: string;
