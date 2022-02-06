@@ -6,12 +6,23 @@ import type { IZeroEx } from '../../contracts';
 export type FeeStruct = {
   recipient: string;
   amount: BigNumberish;
-  feeData: BytesLike;
+  feeData: string | Array<number>;
+};
+
+export type FeeStructSerialized = {
+  recipient: string;
+  amount: string;
+  feeData: string;
 };
 
 export type PropertyStruct = {
   propertyValidator: string;
-  propertyData: BytesLike;
+  propertyData: string | Array<number>;
+};
+
+export type PropertyStructSerialized = {
+  propertyValidator: string;
+  propertyData: string | Array<number>;
 };
 
 export type ERC1155OrderStruct = {
@@ -29,6 +40,21 @@ export type ERC1155OrderStruct = {
   erc1155TokenAmount: BigNumberish;
 };
 
+export type ERC1155OrderStructSerialized = {
+  direction: number;
+  maker: string;
+  taker: string;
+  expiry: string;
+  nonce: string;
+  erc20Token: string;
+  erc20TokenAmount: string;
+  fees: FeeStructSerialized[];
+  erc1155Token: string;
+  erc1155TokenId: string;
+  erc1155TokenProperties: PropertyStructSerialized[];
+  erc1155TokenAmount: string;
+};
+
 export type ERC721OrderStruct = {
   direction: BigNumberish;
   maker: string;
@@ -41,6 +67,20 @@ export type ERC721OrderStruct = {
   erc721Token: string;
   erc721TokenId: BigNumberish;
   erc721TokenProperties: PropertyStruct[];
+};
+
+export type ERC721OrderStructSerialized = {
+  direction: number;
+  maker: string;
+  taker: string;
+  expiry: string;
+  nonce: string;
+  erc20Token: string;
+  erc20TokenAmount: string;
+  fees: FeeStructSerialized[];
+  erc721Token: string;
+  erc721TokenId: string;
+  erc721TokenProperties: PropertyStructSerialized[];
 };
 
 export type UserFacingFeeStruct = {
@@ -75,10 +115,6 @@ export interface OrderStructOptionsCommonStrict {
   tokenProperties?: PropertyStruct[];
 }
 
-interface OrderStructPropertyOptions {
-  tokenProperties: PropertyStruct[];
-}
-
 export interface Fee {
   recipient: string;
   amount: BigNumber;
@@ -92,6 +128,10 @@ export interface Property {
 
 export type NftOrderV4 = ERC1155OrderStruct | ERC721OrderStruct;
 
+export type NftOrderV4Serialized =
+  | ERC1155OrderStructSerialized
+  | ERC721OrderStructSerialized;
+
 export interface SignedERC721OrderStruct extends ERC721OrderStruct {
   signature: SignatureStruct;
 }
@@ -100,21 +140,42 @@ export interface SignedERC1155OrderStruct extends ERC1155OrderStruct {
   signature: SignatureStruct;
 }
 
+export interface SignedERC721OrderStructSerialized
+  extends ERC721OrderStructSerialized {
+  signature: SignatureStructSerialized;
+}
+
+export interface SignedERC1155OrderStructSerialized
+  extends ERC1155OrderStructSerialized {
+  signature: SignatureStructSerialized;
+}
+
 export type SignedNftOrderV4 =
   | SignedERC721OrderStruct
   | SignedERC1155OrderStruct;
 
+export type SignedNftOrderV4Serialized =
+  | SignedERC721OrderStructSerialized
+  | SignedERC1155OrderStructSerialized;
+
 export type ECSignature = {
-  v: BigNumberish;
-  r: BytesLike;
-  s: BytesLike;
+  v: number;
+  r: string;
+  s: string;
 };
 
 export type SignatureStruct = {
-  signatureType: BigNumberish; // 2 for EIP-712
-  v: BigNumberish;
-  r: BytesLike;
-  s: BytesLike;
+  signatureType: number; // 2 for EIP-712
+  v: number;
+  r: string;
+  s: string;
+};
+
+export type SignatureStructSerialized = {
+  signatureType: number; // 2 for EIP-712
+  v: number;
+  r: string;
+  s: string;
 };
 
 export interface ApprovalOverrides {

@@ -42,6 +42,7 @@ import type {
   ApprovalOverrides,
   FillOrderOverrides,
   NftOrderV4,
+  NftOrderV4Serialized,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
   SigningOptions,
@@ -71,7 +72,7 @@ export interface INftSwapV4 extends BaseNftSwap {
     sellOrBuyNft: 'sell' | 'buy',
     makerAddress: string,
     userConfig?: Partial<OrderStructOptionsCommonStrict>
-  ) => NftOrderV4;
+  ) => NftOrderV4Serialized;
   loadApprovalStatus: (
     asset: SwappableAsset,
     walletAddress: string,
@@ -225,25 +226,25 @@ class NftSwapV4 implements INftSwapV4 {
     takerAsset: UserFacingERC20AssetDataSerialized,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
-  ): NftOrderV4;
+  ): NftOrderV4Serialized;
   buildOrder(
     makerAsset: UserFacingERC20AssetDataSerialized,
     takerAsset: UserFacingERC1155AssetDataSerializedNormalizedSingle,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
-  ): NftOrderV4;
+  ): NftOrderV4Serialized;
   buildOrder(
     makerAsset: UserFacingERC721AssetDataSerialized,
     takerAsset: UserFacingERC20AssetDataSerialized,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
-  ): NftOrderV4;
+  ): NftOrderV4Serialized;
   buildOrder(
     makerAsset: UserFacingERC20AssetDataSerialized,
     takerAsset: UserFacingERC721AssetDataSerialized,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
-  ): NftOrderV4;
+  ): NftOrderV4Serialized;
   buildOrder(
     makerAsset: SwappableAsset,
     takerAsset: SwappableAsset,
@@ -299,7 +300,7 @@ class NftSwapV4 implements INftSwapV4 {
       type: 'ERC721' | 'ERC1155';
     },
     makerAddress: string
-  ) => {
+  ): NftOrderV4Serialized => {
     return this.buildNftAndErc20Order(
       {
         ...nftCollectionToBid,
@@ -322,7 +323,7 @@ class NftSwapV4 implements INftSwapV4 {
     sellOrBuyNft: 'sell' | 'buy' = 'sell',
     makerAddress: string,
     userConfig?: Partial<OrderStructOptionsCommonStrict>
-  ): NftOrderV4 => {
+  ): NftOrderV4Serialized => {
     const defaultConfig = { chainId: this.chainId, makerAddress: makerAddress };
     const config = { ...defaultConfig, ...userConfig };
 
@@ -350,13 +351,13 @@ class NftSwapV4 implements INftSwapV4 {
     }
   };
 
-  signOrder = async (orderStruct: NftOrderV4): Promise<SignedNftOrderV4> => {
+  signOrder = async (order: NftOrderV4): Promise<SignedNftOrderV4> => {
     if (!this.signer) {
       throw new Error('Signed not defined');
     }
 
     const rawSignature = await signOrderWithEoaWallet(
-      orderStruct,
+      order,
       this.signer as unknown as TypedDataSigner,
       this.chainId,
       this.exchangeProxy.address
@@ -365,7 +366,7 @@ class NftSwapV4 implements INftSwapV4 {
     const ecSignature = parseRawSignature(rawSignature);
 
     const signedOrder = {
-      ...orderStruct,
+      ...order,
       signature: {
         signatureType: 2,
         r: ecSignature.r,

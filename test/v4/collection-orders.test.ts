@@ -97,8 +97,8 @@ describe('NFTSwapV4', () => {
     //   {
     //     fillOrderWithNativeTokenInsteadOfWrappedToken: false,
     //     tokenIdToSellForCollectionOrder: '11045',
-    //   },
-    //   { gasLimit: '500000' }
+    //   }
+    //   // { gasLimit: '500000' }
     // );
     // const txReceipt = await fillTx.wait();
     // console.log('erc721 fill tx', txReceipt.transactionHash);
