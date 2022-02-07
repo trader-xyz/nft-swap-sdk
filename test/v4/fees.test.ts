@@ -37,23 +37,23 @@ const nftSwapperMaker = new NftSwapV4(
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
 const MAKER_ASSET: SwappableAsset = {
-  type: 'ERC20',
-  tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
-  amount: '420000000000000', // 1 USDC
-};
-
-const TAKER_ASSET: SwappableAsset = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
   tokenId: '11045',
+};
+
+const TAKER_ASSET: SwappableAsset = {
+  type: 'ERC20',
+  tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
+  amount: '420000000000000', // 1 USDC
 };
 
 describe('NFTSwapV4', () => {
   it('fees', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const v4Erc721Order = nftSwapperMaker.buildOrder(
-      TAKER_ASSET,
       MAKER_ASSET,
+      TAKER_ASSET,
       MAKER_WALLET_ADDRESS,
       {
         fees: [
@@ -63,10 +63,6 @@ describe('NFTSwapV4', () => {
           },
         ],
       }
-      // {
-      //   // Fix dates and salt so we have reproducible tests
-      //   expiration: new Date(3000, 10, 1),
-      // }
     );
 
     // console.log('v4Erc721Order.nonce', v4Erc721Order.nonce.toString());
