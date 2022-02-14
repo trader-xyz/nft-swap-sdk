@@ -51,17 +51,13 @@ const MAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwapV4', () => {
-  it('v4 erc721 test', async () => {
+  it('v4 erc721 test with orderbook e2e', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const v4Erc721Order = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
       TAKER_ASSET,
       MAKER_WALLET_ADDRESS
-      // {
-      //   // Fix dates and salt so we have reproducible tests
-      //   expiration: new Date(3000, 10, 1),
-      // }
     );
 
     const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
@@ -70,76 +66,23 @@ describe('NFTSwapV4', () => {
 
     const createdOrder = await postOrderToOrderbook(
       signedOrder,
-      ROPSTEN_CHAIN_ID,
+      ROPSTEN_CHAIN_ID.toString(10),
       testMetadata
     );
 
-    expect(createdOrder.nonce).toEqual(v4Erc721Order.nonce);
+    expect(createdOrder.order.nonce).toEqual(v4Erc721Order.nonce);
 
-    const foundOrders = await searchOrderbook({
+    const orderSearch = await searchOrderbook({
       nonce: signedOrder.nonce.toString(),
     });
-    const maybeOrder = first(foundOrders);
+    const maybeOrder = first(orderSearch.orders);
 
     expect((maybeOrder as any).order.nonce).toEqual(signedOrder.nonce);
     expect((maybeOrder as any).metadata).toEqual(testMetadata);
 
     // const orderTofill = (maybeOrder as any).order as SignedNftOrderV4Serialized
-
     // const fillTx = await nftSwapperMaker.fillSignedOrder(orderTofill);
     // const txReceipt = await fillTx.wait();
-    // console.log('erc721 fill tx round trip with api', txReceipt.transactionHash);
-
-    // console.log('v4Erc721Order.nonce', v4Erc721Order.nonce.toString());
-
-    // const makerapprovalTx = await nftSwapperMaker.approveTokenOrNftByAsset(
-    //   MAKER_ASSET,
-    //   MAKER_WALLET_ADDRESS,
-    // )
-    // const makerApprovalTxHash = await (await makerapprovalTx.wait()).transactionHash
-    //   console.log('maker approval tx hash', makerApprovalTxHash)
-
-    // const takerApprovalTx = await nftSwapperMaker.approveTokenOrNftByAsset(
-    //   TAKER_ASSET,
-    //   MAKER_WALLET_ADDRESS,
-    // )
-
-    // const takerApprovalTxHash = await (await takerApprovalTx.wait()).transactionHash
-    // console.log('taker approval tx hash', takerApprovalTxHash)
-
-    // const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
-    // console.log('erc721 signatuee', signedOrder.signature);
-    // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
-
-    // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
-    // const txReceipt = await fillTx.wait();
-    // console.log('erc721 fill tx', txReceipt.transactionHash);
-
-    // expect(txReceipt.transactionHash).toBeTruthy();
-
-    // const normalizedOrder = normalizeOrder(order);
-    // const signedOrder = await nftSwapperMaker.signOrder(
-    //   normalizedOrder,
-    // );
-
-    // const normalizedSignedOrder = normalizeOrder(signedOrder);
-
-    // expect(normalizedSignedOrder.makerAddress.toLowerCase()).toBe(
-    //   MAKER_WALLET_ADDRESS.toLowerCase()
-    // );
-
-    // Uncomment to actually fill order
-    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-    //   gasPrice,
-    //   gasLimit: '500000',
-    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-    //   value: parseEther('0.01'),
-    // });
-
-    // const txReceipt = await tx.wait();
-    // expect(txReceipt.transactionHash).toBeTruthy();
-    // console.log(`Swapped on Rinkeby (txHAsh: ${txReceipt.transactionIndex})`);
+    // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
   });
 });
-
-// https://polygon-mumbai.g.alchemy.com/v2/VMBpFqjMYv2w-MWnc9df92w3R2TpMvSG

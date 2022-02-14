@@ -3,7 +3,7 @@ import type { SignedNftOrderV4, SignedNftOrderV4Serialized } from './types';
 import { stringify } from '../../utils/query-string';
 import { serializeNftOrder } from './pure';
 
-const PRODUCTION_ORDERBOOK_API_ROOT_URL = 'https://api.trader.xyz';
+export const ORDERBOOK_API_ROOT_URL_PRODUCTION = 'https://api.trader.xyz';
 
 interface OrderbookRequestOptions {
   rootUrl: string;
@@ -11,32 +11,54 @@ interface OrderbookRequestOptions {
 
 interface PostOrderRequestPayload {
   order: SignedNftOrderV4Serialized;
-  chainId: number;
+  chainId: string;
   metadata?: Record<string, string>;
+}
+
+export interface OrderDataPayload {
+  erc20Token: string;
+  erc20TokenAmount: string;
+  nftToken: string;
+  nftTokenId: string;
+  nftTokenAmount: string;
+  nftType: string;
+  sellOrBuyNft: 'buy' | 'sell';
+  chainId: string;
+  order: SignedNftOrderV4Serialized;
+  metadata: Record<string, string> | null;
+}
+
+type PostOrderResponsePayload = OrderDataPayload;
+
+interface SearchOrdersResponsePayload {
+  orders: Array<OrderDataPayload>;
 }
 
 const postOrderToOrderbook = async (
   signedOrder: SignedNftOrderV4,
-  chainId: number,
+  chainId: string,
   metadata: Record<string, string> = {},
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
-) => {
+): Promise<PostOrderResponsePayload> => {
   const payload: PostOrderRequestPayload = {
     order: serializeNftOrder(signedOrder),
     chainId,
     metadata,
   };
 
-  let rootUrl = requestOptions?.rootUrl ?? PRODUCTION_ORDERBOOK_API_ROOT_URL;
+  let rootUrl = requestOptions?.rootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 
-  const orderPostResult = await fetchFn(`${rootUrl}/orderbook/order`, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  })
+  const orderPostResult: PostOrderResponsePayload = await fetchFn(
+    `${rootUrl}/orderbook/order`,
+    {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }
+  )
     .then(async (res) => {
       if (!res.ok) {
         throw await res.json();
@@ -62,10 +84,10 @@ const searchOrderbook = async (
   filters: Partial<SearchParams>,
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
-) => {
+): Promise<SearchOrdersResponsePayload> => {
   const stringifiedQueryParams = stringify(filters);
 
-  let rootUrl = requestOptions?.rootUrl ?? PRODUCTION_ORDERBOOK_API_ROOT_URL;
+  let rootUrl = requestOptions?.rootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 
   const findOrdersResult = await fetchFn(
     `${rootUrl}/orderbook/orders?${stringifiedQueryParams}`

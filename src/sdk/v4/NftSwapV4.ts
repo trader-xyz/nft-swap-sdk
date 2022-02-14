@@ -45,6 +45,7 @@ import type {
   NftOrderV4Serialized,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
+  SignedNftOrderV4Serialized,
   SigningOptions,
 } from './types';
 import {
@@ -52,6 +53,10 @@ import {
   ERC721_TRANSFER_FROM_DATA,
 } from './nft-safe-transfer-from-data';
 import addresses from './addresses.json';
+import {
+  ORDERBOOK_API_ROOT_URL_PRODUCTION,
+  postOrderToOrderbook,
+} from './orderbook';
 
 export enum SupportedChainIdsV4 {
   Ropsten = 3,
@@ -121,6 +126,7 @@ export interface INftSwapV4 extends BaseNftSwap {
 
 export interface AdditionalSdkConfig {
   zeroExExchangeProxyContractAddress: string;
+  orderbookRootUrl: string;
 }
 
 class NftSwapV4 implements INftSwapV4 {
@@ -129,6 +135,8 @@ class NftSwapV4 implements INftSwapV4 {
   public chainId: number;
   public exchangeProxy: IZeroEx;
   public exchangeProxyContractAddress: string;
+
+  public orderbookRootUrl: string;
 
   constructor(
     provider: BaseProvider,
@@ -154,6 +162,9 @@ class NftSwapV4 implements INftSwapV4 {
     );
 
     this.exchangeProxyContractAddress = zeroExExchangeContractAddress;
+
+    this.orderbookRootUrl =
+      additionalConfig?.orderbookRootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 
     this.exchangeProxy = IZeroEx__factory.connect(
       zeroExExchangeContractAddress,
@@ -567,6 +578,18 @@ class NftSwapV4 implements INftSwapV4 {
     console.log('unsupported order', signedOrder);
     throw new Error('unsupport signedOrder type');
   };
+
+  postOrder = (
+    signedOrder: SignedNftOrderV4 | SignedNftOrderV4Serialized,
+    chainId: string,
+    metadata?: Record<string, string>
+  ) => {
+    postOrderToOrderbook(signedOrder, chainId, metadata, {
+      rootUrl: this.orderbookRootUrl,
+    });
+  };
+
+  getOrdersByWallet = () => {};
 }
 
 export { NftSwapV4 };
