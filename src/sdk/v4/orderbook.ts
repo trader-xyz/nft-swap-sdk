@@ -5,11 +5,11 @@ import { serializeNftOrder } from './pure';
 
 export const ORDERBOOK_API_ROOT_URL_PRODUCTION = 'https://api.trader.xyz';
 
-interface OrderbookRequestOptions {
+export interface OrderbookRequestOptions {
   rootUrl: string;
 }
 
-interface PostOrderRequestPayload {
+export interface PostOrderRequestPayload {
   order: SignedNftOrderV4Serialized;
   chainId: string;
   metadata?: Record<string, string>;
@@ -28,9 +28,9 @@ export interface OrderDataPayload {
   metadata: Record<string, string> | null;
 }
 
-type PostOrderResponsePayload = OrderDataPayload;
+export type PostOrderResponsePayload = OrderDataPayload;
 
-interface SearchOrdersResponsePayload {
+export interface SearchOrdersResponsePayload {
   orders: Array<OrderDataPayload>;
 }
 
@@ -76,16 +76,23 @@ const postOrderToOrderbook = async (
   return orderPostResult;
 };
 
-interface SearchParams {
+export interface SearchOrdersParams {
+  erc20Token: string;
+  nftTokenId: string;
+  nftToken: string;
+  nftType: string;
+  chainId: string;
+  maker: string;
+  taker: string;
   nonce: string;
 }
 
 const searchOrderbook = async (
-  filters: Partial<SearchParams>,
+  filters?: Partial<SearchOrdersParams>,
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ): Promise<SearchOrdersResponsePayload> => {
-  const stringifiedQueryParams = stringify(filters);
+  const stringifiedQueryParams = stringify(filters ?? {});
 
   let rootUrl = requestOptions?.rootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 

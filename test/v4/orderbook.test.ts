@@ -51,6 +51,14 @@ const MAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwapV4', () => {
+  it('orderbook should return orders', async () => {
+    const orders = await nftSwapperMaker.getOrders();
+
+    console.log(orders.orders.length);
+
+    expect(orders.orders.length).toBeGreaterThan(0);
+  });
+
   it('v4 erc721 test with orderbook e2e', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
@@ -70,6 +78,8 @@ describe('NFTSwapV4', () => {
       testMetadata
     );
 
+    console.log('createdOrder', createdOrder);
+
     expect(createdOrder.order.nonce).toEqual(v4Erc721Order.nonce);
 
     const orderSearch = await searchOrderbook({
@@ -77,8 +87,8 @@ describe('NFTSwapV4', () => {
     });
     const maybeOrder = first(orderSearch.orders);
 
-    expect((maybeOrder as any).order.nonce).toEqual(signedOrder.nonce);
-    expect((maybeOrder as any).metadata).toEqual(testMetadata);
+    expect(maybeOrder?.order.nonce).toEqual(signedOrder.nonce);
+    expect(maybeOrder?.metadata).toEqual(testMetadata);
 
     // const orderTofill = (maybeOrder as any).order as SignedNftOrderV4Serialized
     // const fillTx = await nftSwapperMaker.fillSignedOrder(orderTofill);

@@ -56,6 +56,8 @@ import addresses from './addresses.json';
 import {
   ORDERBOOK_API_ROOT_URL_PRODUCTION,
   postOrderToOrderbook,
+  searchOrderbook,
+  SearchOrdersParams,
 } from './orderbook';
 
 export enum SupportedChainIdsV4 {
@@ -580,7 +582,7 @@ class NftSwapV4 implements INftSwapV4 {
   };
 
   postOrder = (
-    signedOrder: SignedNftOrderV4 | SignedNftOrderV4Serialized,
+    signedOrder: SignedNftOrderV4,
     chainId: string,
     metadata?: Record<string, string>
   ) => {
@@ -589,7 +591,12 @@ class NftSwapV4 implements INftSwapV4 {
     });
   };
 
-  getOrdersByWallet = () => {};
+  getOrders = async (filters?: Partial<SearchOrdersParams>) => {
+    const orders = await searchOrderbook(filters, {
+      rootUrl: this.orderbookRootUrl,
+    });
+    return orders;
+  };
 }
 
 export { NftSwapV4 };
