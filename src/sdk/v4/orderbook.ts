@@ -5,6 +5,10 @@ import { serializeNftOrder } from './pure';
 
 const PRODUCTION_ORDERBOOK_API_ROOT_URL = 'https://api.trader.xyz';
 
+interface OrderbookRequestOptions {
+  rootUrl: string;
+}
+
 interface PostOrderRequestPayload {
   order: SignedNftOrderV4Serialized;
   chainId: number;
@@ -15,6 +19,7 @@ const postOrderToOrderbook = async (
   signedOrder: SignedNftOrderV4,
   chainId: number,
   metadata: Record<string, string> = {},
+  requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ) => {
   const payload: PostOrderRequestPayload = {
@@ -23,16 +28,15 @@ const postOrderToOrderbook = async (
     metadata,
   };
 
-  const orderPostResult = await fetchFn(
-    `${PRODUCTION_ORDERBOOK_API_ROOT_URL}/orderbook/order`,
-    {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    }
-  )
+  let rootUrl = requestOptions?.rootUrl ?? PRODUCTION_ORDERBOOK_API_ROOT_URL;
+
+  const orderPostResult = await fetchFn(`${rootUrl}/orderbook/order`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
     .then(async (res) => {
       if (!res.ok) {
         throw await res.json();
@@ -56,12 +60,15 @@ interface SearchParams {
 
 const searchOrderbook = async (
   filters: Partial<SearchParams>,
+  requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ) => {
   const stringifiedQueryParams = stringify(filters);
 
+  let rootUrl = requestOptions?.rootUrl ?? PRODUCTION_ORDERBOOK_API_ROOT_URL;
+
   const findOrdersResult = await fetchFn(
-    `${PRODUCTION_ORDERBOOK_API_ROOT_URL}/orderbook/orders?${stringifiedQueryParams}`
+    `${rootUrl}/orderbook/orders?${stringifiedQueryParams}`
   )
     .then(async (res) => {
       if (!res.ok) {
