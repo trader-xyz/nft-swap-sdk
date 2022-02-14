@@ -4,7 +4,6 @@ import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import getUnixTime from 'date-fns/getUnixTime';
 import { ContractTransaction } from 'ethers';
 import { v4 } from 'uuid';
-import unfetch from 'isomorphic-unfetch';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -26,7 +25,6 @@ import type {
 } from './types';
 import { BaseProvider } from '@ethersproject/providers';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
-import { stringify } from '../../utils/query-string';
 
 export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -420,12 +418,6 @@ export const CONTRACT_ORDER_VALIDATOR: PropertyStruct = {
   propertyData: [],
 };
 
-interface PostOrderRequestPayload {
-  order: SignedNftOrderV4Serialized;
-  chainId: number;
-  metadata?: Record<string, string>;
-}
-
 export const serializeNftOrder = (
   signedOrder: SignedNftOrderV4
 ): SignedNftOrderV4Serialized => {
@@ -465,73 +457,4 @@ export const serializeNftOrder = (
     );
     throw new Error('Unknown asset type');
   }
-};
-
-export const postOrderToOrderbook = async (
-  signedOrder: SignedNftOrderV4,
-  chainId: number,
-  metadata: Record<string, string> = {},
-  fetchFn: typeof unfetch = unfetch
-) => {
-  const payload: PostOrderRequestPayload = {
-    order: serializeNftOrder(signedOrder),
-    chainId,
-    metadata,
-  };
-
-  const orderPostResult = await fetchFn(
-    `https://api.trader.xyz/orderbook/order`,
-    {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    }
-  )
-    .then(async (res) => {
-      if (!res.ok) {
-        throw await res.json();
-      }
-      if (res.status >= 300) {
-        throw await res.json();
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      // err is not a promise
-      throw err;
-    });
-
-  return orderPostResult;
-};
-
-interface SearchParams {
-  nonce: string;
-}
-
-export const searchOrderbook = async (
-  filters: Partial<SearchParams>,
-  fetchFn: typeof unfetch = unfetch
-) => {
-  const stringified = stringify(filters);
-
-  const findOrdersResult = await fetchFn(
-    `https://api.trader.xyz/orderbook/orders?${stringified}`
-  )
-    .then(async (res) => {
-      if (!res.ok) {
-        throw await res.json();
-      }
-      if (res.status >= 300) {
-        throw await res.json();
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      // err is not a promise
-      throw err;
-    });
-
-  return findOrdersResult;
 };

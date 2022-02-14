@@ -5,12 +5,8 @@ import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 import {
   postOrderToOrderbook,
   searchOrderbook,
-  SwappableAsset,
-} from '../../src/sdk/v4/pure';
-import {
-  NftOrderV4Serialized,
-  SignedNftOrderV4Serialized,
-} from '../../src/sdk/v4/types';
+} from '../../src/sdk/v4/orderbook';
+import { SwappableAsset } from '../../src/sdk/v4/pure';
 
 jest.setTimeout(90 * 1000);
 
