@@ -1,7 +1,7 @@
 // From https://github.com/paulrberg/evm-bn
 import type { BigNumber } from '@ethersproject/bignumber';
 import { parseFixed } from '@ethersproject/bignumber';
-import fromExponential from 'from-exponential';
+import { fromExponential } from './fromExponential';
 
 /**
  * Convert a stringified fixed-point number to a big number with a custom number of decimals.
