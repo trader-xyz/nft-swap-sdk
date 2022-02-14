@@ -48,13 +48,13 @@
     }
   ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "7.0.5",
+    "@size-limit/preset-small-lib": "7.0.8",
     "@typechain/ethers-v5": "^9.0.0",
     "@types/lodash": "^4.14.178",
     "@types/uuid": "^8.3.4",
     "husky": "^7.0.2",
     "prettier": "^2.5.1",
-    "size-limit": "7.0.5",
+    "size-limit": "7.0.8",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
     "typechain": "^7.0.0",
