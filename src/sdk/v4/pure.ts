@@ -15,12 +15,13 @@ import type {
   ECSignature,
   ERC1155OrderStruct,
   ERC1155OrderStructSerialized,
-  ERC721OrderStruct,
   ERC721OrderStructSerialized,
   NftOrderV4,
   OrderStructOptionsCommon,
   OrderStructOptionsCommonStrict,
   PropertyStruct,
+  SignedNftOrderV4,
+  SignedNftOrderV4Serialized,
 } from './types';
 import { BaseProvider } from '@ethersproject/providers';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
@@ -415,4 +416,45 @@ export const DIRECTION_MAPPING: DirectionMap = {
 export const CONTRACT_ORDER_VALIDATOR: PropertyStruct = {
   propertyValidator: NULL_ADDRESS,
   propertyData: [],
+};
+
+export const serializeNftOrder = (
+  signedOrder: SignedNftOrderV4
+): SignedNftOrderV4Serialized => {
+  if ('erc721Token' in signedOrder) {
+    return {
+      ...signedOrder,
+      direction: parseInt(signedOrder.direction.toString()),
+      expiry: signedOrder.expiry.toString(),
+      nonce: signedOrder.nonce.toString(),
+      erc20TokenAmount: signedOrder.erc20TokenAmount.toString(),
+      fees: signedOrder.fees.map((fee) => ({
+        ...fee,
+        amount: fee.amount.toString(),
+        feeData: fee.feeData.toString(),
+      })),
+      erc721TokenId: signedOrder.erc721TokenId.toString(),
+    };
+  } else if ('erc1155Token' in signedOrder) {
+    return {
+      ...signedOrder,
+      direction: parseInt(signedOrder.direction.toString()),
+      expiry: signedOrder.expiry.toString(),
+      nonce: signedOrder.nonce.toString(),
+      erc20TokenAmount: signedOrder.erc20TokenAmount.toString(),
+      fees: signedOrder.fees.map((fee) => ({
+        ...fee,
+        amount: fee.amount.toString(),
+        feeData: fee.feeData.toString(),
+      })),
+      erc1155TokenAmount: signedOrder.erc1155TokenAmount.toString(),
+      erc1155TokenId: signedOrder.erc1155TokenId.toString(),
+    };
+  } else {
+    console.log(
+      'unknown order format type (not erc721 and not erc1155',
+      signedOrder
+    );
+    throw new Error('Unknown asset type');
+  }
 };
