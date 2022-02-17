@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Swap SDK Overview](README.md)
+* [0x v3 Swap SDK](README.md)
 * [0x v4 Swap SDK](0x-v4/README.md)
   * [Quick Start](0x-v4/quick-start.md)
   * [Managing Orders](0x-v4/managing-orders.md)
