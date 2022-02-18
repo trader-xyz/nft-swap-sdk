@@ -138,7 +138,7 @@ if (!approvalStatusForUserB.contractApproved) {
 // The taker approves the trade transaction and it will be submitted on the blockchain for settlement.
 // Once the transaction is confirmed, the trade will be settled and cannot be reversed.
 const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
-const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
+const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx.hash);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 ```
 
