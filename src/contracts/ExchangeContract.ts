@@ -13,10 +13,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
-import { Listener, Provider } from "@ethersproject/providers";
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
+} from 'ethers';
+import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
+import { Listener, Provider } from '@ethersproject/providers';
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace LibOrder {
   export type OrderStruct = {
@@ -168,87 +168,87 @@ export declare namespace LibFillResults {
 }
 
 export interface ExchangeContractInterface extends utils.Interface {
-  contractName: "ExchangeContract";
+  contractName: 'ExchangeContract';
   functions: {
-    "EIP1271_MAGIC_VALUE()": FunctionFragment;
-    "EIP712_EXCHANGE_DOMAIN_HASH()": FunctionFragment;
-    "allowedValidators(address,address)": FunctionFragment;
-    "batchCancelOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[])": FunctionFragment;
-    "batchExecuteTransactions((uint256,uint256,uint256,address,bytes)[],bytes[])": FunctionFragment;
-    "batchFillOrKillOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])": FunctionFragment;
-    "batchFillOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])": FunctionFragment;
-    "batchFillOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])": FunctionFragment;
-    "batchMatchOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],bytes[])": FunctionFragment;
-    "batchMatchOrdersWithMaximalFill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],bytes[])": FunctionFragment;
-    "cancelOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes))": FunctionFragment;
-    "cancelOrdersUpTo(uint256)": FunctionFragment;
-    "cancelled(bytes32)": FunctionFragment;
-    "currentContextAddress()": FunctionFragment;
-    "detachProtocolFeeCollector()": FunctionFragment;
-    "executeTransaction((uint256,uint256,uint256,address,bytes),bytes)": FunctionFragment;
-    "fillOrKillOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),uint256,bytes)": FunctionFragment;
-    "fillOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),uint256,bytes)": FunctionFragment;
-    "filled(bytes32)": FunctionFragment;
-    "getAssetProxy(bytes4)": FunctionFragment;
-    "getOrderInfo((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes))": FunctionFragment;
-    "isValidHashSignature(bytes32,address,bytes)": FunctionFragment;
-    "isValidOrderSignature((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes)": FunctionFragment;
-    "isValidTransactionSignature((uint256,uint256,uint256,address,bytes),bytes)": FunctionFragment;
-    "marketBuyOrdersFillOrKill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])": FunctionFragment;
-    "marketBuyOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])": FunctionFragment;
-    "marketSellOrdersFillOrKill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])": FunctionFragment;
-    "marketSellOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])": FunctionFragment;
-    "matchOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes,bytes)": FunctionFragment;
-    "matchOrdersWithMaximalFill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes,bytes)": FunctionFragment;
-    "orderEpoch(address,address)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "preSign(bytes32)": FunctionFragment;
-    "preSigned(bytes32,address)": FunctionFragment;
-    "protocolFeeCollector()": FunctionFragment;
-    "protocolFeeMultiplier()": FunctionFragment;
-    "registerAssetProxy(address)": FunctionFragment;
-    "setProtocolFeeCollectorAddress(address)": FunctionFragment;
-    "setProtocolFeeMultiplier(uint256)": FunctionFragment;
-    "setSignatureValidatorApproval(address,bool)": FunctionFragment;
-    "simulateDispatchTransferFromCalls(bytes[],address[],address[],uint256[])": FunctionFragment;
-    "transactionsExecuted(bytes32)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
+    'EIP1271_MAGIC_VALUE()': FunctionFragment;
+    'EIP712_EXCHANGE_DOMAIN_HASH()': FunctionFragment;
+    'allowedValidators(address,address)': FunctionFragment;
+    'batchCancelOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[])': FunctionFragment;
+    'batchExecuteTransactions((uint256,uint256,uint256,address,bytes)[],bytes[])': FunctionFragment;
+    'batchFillOrKillOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])': FunctionFragment;
+    'batchFillOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])': FunctionFragment;
+    'batchFillOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256[],bytes[])': FunctionFragment;
+    'batchMatchOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],bytes[])': FunctionFragment;
+    'batchMatchOrdersWithMaximalFill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],bytes[])': FunctionFragment;
+    'cancelOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes))': FunctionFragment;
+    'cancelOrdersUpTo(uint256)': FunctionFragment;
+    'cancelled(bytes32)': FunctionFragment;
+    'currentContextAddress()': FunctionFragment;
+    'detachProtocolFeeCollector()': FunctionFragment;
+    'executeTransaction((uint256,uint256,uint256,address,bytes),bytes)': FunctionFragment;
+    'fillOrKillOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),uint256,bytes)': FunctionFragment;
+    'fillOrder((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),uint256,bytes)': FunctionFragment;
+    'filled(bytes32)': FunctionFragment;
+    'getAssetProxy(bytes4)': FunctionFragment;
+    'getOrderInfo((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes))': FunctionFragment;
+    'isValidHashSignature(bytes32,address,bytes)': FunctionFragment;
+    'isValidOrderSignature((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes)': FunctionFragment;
+    'isValidTransactionSignature((uint256,uint256,uint256,address,bytes),bytes)': FunctionFragment;
+    'marketBuyOrdersFillOrKill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])': FunctionFragment;
+    'marketBuyOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])': FunctionFragment;
+    'marketSellOrdersFillOrKill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])': FunctionFragment;
+    'marketSellOrdersNoThrow((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[])': FunctionFragment;
+    'matchOrders((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes,bytes)': FunctionFragment;
+    'matchOrdersWithMaximalFill((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),(address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes),bytes,bytes)': FunctionFragment;
+    'orderEpoch(address,address)': FunctionFragment;
+    'owner()': FunctionFragment;
+    'preSign(bytes32)': FunctionFragment;
+    'preSigned(bytes32,address)': FunctionFragment;
+    'protocolFeeCollector()': FunctionFragment;
+    'protocolFeeMultiplier()': FunctionFragment;
+    'registerAssetProxy(address)': FunctionFragment;
+    'setProtocolFeeCollectorAddress(address)': FunctionFragment;
+    'setProtocolFeeMultiplier(uint256)': FunctionFragment;
+    'setSignatureValidatorApproval(address,bool)': FunctionFragment;
+    'simulateDispatchTransferFromCalls(bytes[],address[],address[],uint256[])': FunctionFragment;
+    'transactionsExecuted(bytes32)': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "EIP1271_MAGIC_VALUE",
+    functionFragment: 'EIP1271_MAGIC_VALUE',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "EIP712_EXCHANGE_DOMAIN_HASH",
+    functionFragment: 'EIP712_EXCHANGE_DOMAIN_HASH',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "allowedValidators",
+    functionFragment: 'allowedValidators',
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchCancelOrders",
+    functionFragment: 'batchCancelOrders',
     values: [LibOrder.OrderStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchExecuteTransactions",
+    functionFragment: 'batchExecuteTransactions',
     values: [LibZeroExTransaction.ZeroExTransactionStruct[], BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchFillOrKillOrders",
+    functionFragment: 'batchFillOrKillOrders',
     values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchFillOrders",
+    functionFragment: 'batchFillOrders',
     values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchFillOrdersNoThrow",
+    functionFragment: 'batchFillOrdersNoThrow',
     values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchMatchOrders",
+    functionFragment: 'batchMatchOrders',
     values: [
       LibOrder.OrderStruct[],
       LibOrder.OrderStruct[],
@@ -257,7 +257,7 @@ export interface ExchangeContractInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "batchMatchOrdersWithMaximalFill",
+    functionFragment: 'batchMatchOrdersWithMaximalFill',
     values: [
       LibOrder.OrderStruct[],
       LibOrder.OrderStruct[],
@@ -266,304 +266,304 @@ export interface ExchangeContractInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "cancelOrder",
+    functionFragment: 'cancelOrder',
     values: [LibOrder.OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "cancelOrdersUpTo",
+    functionFragment: 'cancelOrdersUpTo',
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "cancelled",
+    functionFragment: 'cancelled',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "currentContextAddress",
+    functionFragment: 'currentContextAddress',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "detachProtocolFeeCollector",
+    functionFragment: 'detachProtocolFeeCollector',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "executeTransaction",
+    functionFragment: 'executeTransaction',
     values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "fillOrKillOrder",
+    functionFragment: 'fillOrKillOrder',
     values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "fillOrder",
+    functionFragment: 'fillOrder',
     values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "filled", values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'filled', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "getAssetProxy",
+    functionFragment: 'getAssetProxy',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getOrderInfo",
+    functionFragment: 'getOrderInfo',
     values: [LibOrder.OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "isValidHashSignature",
+    functionFragment: 'isValidHashSignature',
     values: [BytesLike, string, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "isValidOrderSignature",
+    functionFragment: 'isValidOrderSignature',
     values: [LibOrder.OrderStruct, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "isValidTransactionSignature",
+    functionFragment: 'isValidTransactionSignature',
     values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketBuyOrdersFillOrKill",
+    functionFragment: 'marketBuyOrdersFillOrKill',
     values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketBuyOrdersNoThrow",
+    functionFragment: 'marketBuyOrdersNoThrow',
     values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketSellOrdersFillOrKill",
+    functionFragment: 'marketSellOrdersFillOrKill',
     values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketSellOrdersNoThrow",
+    functionFragment: 'marketSellOrdersNoThrow',
     values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "matchOrders",
+    functionFragment: 'matchOrders',
     values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "matchOrdersWithMaximalFill",
+    functionFragment: 'matchOrdersWithMaximalFill',
     values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "orderEpoch",
+    functionFragment: 'orderEpoch',
     values: [string, string]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "preSign", values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'preSign', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "preSigned",
+    functionFragment: 'preSigned',
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "protocolFeeCollector",
+    functionFragment: 'protocolFeeCollector',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "protocolFeeMultiplier",
+    functionFragment: 'protocolFeeMultiplier',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "registerAssetProxy",
+    functionFragment: 'registerAssetProxy',
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setProtocolFeeCollectorAddress",
+    functionFragment: 'setProtocolFeeCollectorAddress',
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setProtocolFeeMultiplier",
+    functionFragment: 'setProtocolFeeMultiplier',
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setSignatureValidatorApproval",
+    functionFragment: 'setSignatureValidatorApproval',
     values: [string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "simulateDispatchTransferFromCalls",
+    functionFragment: 'simulateDispatchTransferFromCalls',
     values: [BytesLike[], string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "transactionsExecuted",
+    functionFragment: 'transactionsExecuted',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
+    functionFragment: 'transferOwnership',
     values: [string]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "EIP1271_MAGIC_VALUE",
+    functionFragment: 'EIP1271_MAGIC_VALUE',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "EIP712_EXCHANGE_DOMAIN_HASH",
+    functionFragment: 'EIP712_EXCHANGE_DOMAIN_HASH',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "allowedValidators",
+    functionFragment: 'allowedValidators',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchCancelOrders",
+    functionFragment: 'batchCancelOrders',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchExecuteTransactions",
+    functionFragment: 'batchExecuteTransactions',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchFillOrKillOrders",
+    functionFragment: 'batchFillOrKillOrders',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchFillOrders",
+    functionFragment: 'batchFillOrders',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchFillOrdersNoThrow",
+    functionFragment: 'batchFillOrdersNoThrow',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchMatchOrders",
+    functionFragment: 'batchMatchOrders',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchMatchOrdersWithMaximalFill",
+    functionFragment: 'batchMatchOrdersWithMaximalFill',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "cancelOrder",
+    functionFragment: 'cancelOrder',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "cancelOrdersUpTo",
+    functionFragment: 'cancelOrdersUpTo',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "cancelled", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'cancelled', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "currentContextAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "detachProtocolFeeCollector",
+    functionFragment: 'currentContextAddress',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "executeTransaction",
+    functionFragment: 'detachProtocolFeeCollector',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "fillOrKillOrder",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "fillOrder", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "filled", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getAssetProxy",
+    functionFragment: 'executeTransaction',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOrderInfo",
+    functionFragment: 'fillOrKillOrder',
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: 'fillOrder', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'filled', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'getAssetProxy',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isValidHashSignature",
+    functionFragment: 'getOrderInfo',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isValidOrderSignature",
+    functionFragment: 'isValidHashSignature',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isValidTransactionSignature",
+    functionFragment: 'isValidOrderSignature',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketBuyOrdersFillOrKill",
+    functionFragment: 'isValidTransactionSignature',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketBuyOrdersNoThrow",
+    functionFragment: 'marketBuyOrdersFillOrKill',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketSellOrdersFillOrKill",
+    functionFragment: 'marketBuyOrdersNoThrow',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketSellOrdersNoThrow",
+    functionFragment: 'marketSellOrdersFillOrKill',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "matchOrders",
+    functionFragment: 'marketSellOrdersNoThrow',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "matchOrdersWithMaximalFill",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "orderEpoch", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "preSign", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "preSigned", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "protocolFeeCollector",
+    functionFragment: 'matchOrders',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "protocolFeeMultiplier",
+    functionFragment: 'matchOrdersWithMaximalFill',
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: 'orderEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'preSign', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'preSigned', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'protocolFeeCollector',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "registerAssetProxy",
+    functionFragment: 'protocolFeeMultiplier',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setProtocolFeeCollectorAddress",
+    functionFragment: 'registerAssetProxy',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setProtocolFeeMultiplier",
+    functionFragment: 'setProtocolFeeCollectorAddress',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setSignatureValidatorApproval",
+    functionFragment: 'setProtocolFeeMultiplier',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "simulateDispatchTransferFromCalls",
+    functionFragment: 'setSignatureValidatorApproval',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transactionsExecuted",
+    functionFragment: 'simulateDispatchTransferFromCalls',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: 'transactionsExecuted',
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: 'transferOwnership',
     data: BytesLike
   ): Result;
 
   events: {
-    "AssetProxyRegistered(bytes4,address)": EventFragment;
-    "Cancel(address,address,bytes,bytes,address,bytes32)": EventFragment;
-    "CancelUpTo(address,address,uint256)": EventFragment;
-    "Fill(address,address,bytes,bytes,bytes,bytes,bytes32,address,address,uint256,uint256,uint256,uint256,uint256)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
-    "ProtocolFeeCollectorAddress(address,address)": EventFragment;
-    "ProtocolFeeMultiplier(uint256,uint256)": EventFragment;
-    "SignatureValidatorApproval(address,address,bool)": EventFragment;
-    "TransactionExecution(bytes32)": EventFragment;
+    'AssetProxyRegistered(bytes4,address)': EventFragment;
+    'Cancel(address,address,bytes,bytes,address,bytes32)': EventFragment;
+    'CancelUpTo(address,address,uint256)': EventFragment;
+    'Fill(address,address,bytes,bytes,bytes,bytes,bytes32,address,address,uint256,uint256,uint256,uint256,uint256)': EventFragment;
+    'OwnershipTransferred(address,address)': EventFragment;
+    'ProtocolFeeCollectorAddress(address,address)': EventFragment;
+    'ProtocolFeeMultiplier(uint256,uint256)': EventFragment;
+    'SignatureValidatorApproval(address,address,bool)': EventFragment;
+    'TransactionExecution(bytes32)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "AssetProxyRegistered"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Cancel"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CancelUpTo"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Fill"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'AssetProxyRegistered'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Cancel'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'CancelUpTo'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Fill'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "ProtocolFeeCollectorAddress"
+    nameOrSignatureOrTopic: 'ProtocolFeeCollectorAddress'
   ): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ProtocolFeeMultiplier"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SignatureValidatorApproval"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TransactionExecution"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'ProtocolFeeMultiplier'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'SignatureValidatorApproval'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'TransactionExecution'): EventFragment;
 }
 
 export type AssetProxyRegisteredEvent = TypedEvent<
@@ -676,7 +676,7 @@ export type TransactionExecutionEventFilter =
   TypedEventFilter<TransactionExecutionEvent>;
 
 export interface ExchangeContract extends BaseContract {
-  contractName: "ExchangeContract";
+  contractName: 'ExchangeContract';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -1405,7 +1405,7 @@ export interface ExchangeContract extends BaseContract {
   };
 
   filters: {
-    "AssetProxyRegistered(bytes4,address)"(
+    'AssetProxyRegistered(bytes4,address)'(
       id?: null,
       assetProxy?: null
     ): AssetProxyRegisteredEventFilter;
@@ -1414,7 +1414,7 @@ export interface ExchangeContract extends BaseContract {
       assetProxy?: null
     ): AssetProxyRegisteredEventFilter;
 
-    "Cancel(address,address,bytes,bytes,address,bytes32)"(
+    'Cancel(address,address,bytes,bytes,address,bytes32)'(
       makerAddress?: string | null,
       feeRecipientAddress?: string | null,
       makerAssetData?: null,
@@ -1431,7 +1431,7 @@ export interface ExchangeContract extends BaseContract {
       orderHash?: BytesLike | null
     ): CancelEventFilter;
 
-    "CancelUpTo(address,address,uint256)"(
+    'CancelUpTo(address,address,uint256)'(
       makerAddress?: string | null,
       orderSenderAddress?: string | null,
       orderEpoch?: null
@@ -1442,7 +1442,7 @@ export interface ExchangeContract extends BaseContract {
       orderEpoch?: null
     ): CancelUpToEventFilter;
 
-    "Fill(address,address,bytes,bytes,bytes,bytes,bytes32,address,address,uint256,uint256,uint256,uint256,uint256)"(
+    'Fill(address,address,bytes,bytes,bytes,bytes,bytes32,address,address,uint256,uint256,uint256,uint256,uint256)'(
       makerAddress?: string | null,
       feeRecipientAddress?: string | null,
       makerAssetData?: null,
@@ -1475,7 +1475,7 @@ export interface ExchangeContract extends BaseContract {
       protocolFeePaid?: null
     ): FillEventFilter;
 
-    "OwnershipTransferred(address,address)"(
+    'OwnershipTransferred(address,address)'(
       previousOwner?: string | null,
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
@@ -1484,7 +1484,7 @@ export interface ExchangeContract extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "ProtocolFeeCollectorAddress(address,address)"(
+    'ProtocolFeeCollectorAddress(address,address)'(
       oldProtocolFeeCollector?: null,
       updatedProtocolFeeCollector?: null
     ): ProtocolFeeCollectorAddressEventFilter;
@@ -1493,7 +1493,7 @@ export interface ExchangeContract extends BaseContract {
       updatedProtocolFeeCollector?: null
     ): ProtocolFeeCollectorAddressEventFilter;
 
-    "ProtocolFeeMultiplier(uint256,uint256)"(
+    'ProtocolFeeMultiplier(uint256,uint256)'(
       oldProtocolFeeMultiplier?: null,
       updatedProtocolFeeMultiplier?: null
     ): ProtocolFeeMultiplierEventFilter;
@@ -1502,7 +1502,7 @@ export interface ExchangeContract extends BaseContract {
       updatedProtocolFeeMultiplier?: null
     ): ProtocolFeeMultiplierEventFilter;
 
-    "SignatureValidatorApproval(address,address,bool)"(
+    'SignatureValidatorApproval(address,address,bool)'(
       signerAddress?: string | null,
       validatorAddress?: string | null,
       isApproved?: null
@@ -1513,7 +1513,7 @@ export interface ExchangeContract extends BaseContract {
       isApproved?: null
     ): SignatureValidatorApprovalEventFilter;
 
-    "TransactionExecution(bytes32)"(
+    'TransactionExecution(bytes32)'(
       transactionHash?: BytesLike | null
     ): TransactionExecutionEventFilter;
     TransactionExecution(

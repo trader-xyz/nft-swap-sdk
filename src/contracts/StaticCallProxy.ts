@@ -10,38 +10,38 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import { FunctionFragment, Result } from "@ethersproject/abi";
-import { Listener, Provider } from "@ethersproject/providers";
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
+} from 'ethers';
+import { FunctionFragment, Result } from '@ethersproject/abi';
+import { Listener, Provider } from '@ethersproject/providers';
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface StaticCallProxyInterface extends utils.Interface {
-  contractName: "StaticCallProxy";
+  contractName: 'StaticCallProxy';
   functions: {
-    "transferFrom(bytes,address,address,uint256)": FunctionFragment;
-    "getProxyId()": FunctionFragment;
+    'transferFrom(bytes,address,address,uint256)': FunctionFragment;
+    'getProxyId()': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "transferFrom",
+    functionFragment: 'transferFrom',
     values: [BytesLike, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getProxyId",
+    functionFragment: 'getProxyId',
     values?: undefined
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "transferFrom",
+    functionFragment: 'transferFrom',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getProxyId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getProxyId', data: BytesLike): Result;
 
   events: {};
 }
 
 export interface StaticCallProxy extends BaseContract {
-  contractName: "StaticCallProxy";
+  contractName: 'StaticCallProxy';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;

@@ -98,7 +98,10 @@ export interface INftSwapV4 extends BaseNftSwap {
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
   // TODO(johnrjj) - Better cancel interface. Get feedback.
-  cancelOrder: (nonce: BigNumberish, orderType: 'ERC721' | 'ERC1155') => Promise<ContractTransaction>;
+  cancelOrder: (
+    nonce: BigNumberish,
+    orderType: 'ERC721' | 'ERC1155'
+  ) => Promise<ContractTransaction>;
   // waitUntilOrderFilledOrCancelled: (
   //   order: NftOrderV4,
   //   timeoutInMs?: number,
@@ -193,7 +196,10 @@ class NftSwapV4 implements INftSwapV4 {
     return this.provider.waitForTransaction(txHash);
   };
 
-  cancelOrder = (nonce: BigNumberish, orderType: 'ERC721' | 'ERC1155'): Promise<ContractTransaction> => {
+  cancelOrder = (
+    nonce: BigNumberish,
+    orderType: 'ERC721' | 'ERC1155'
+  ): Promise<ContractTransaction> => {
     if (orderType === 'ERC1155') {
       return this.exchangeProxy.cancelERC1155Order(nonce);
     }

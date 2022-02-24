@@ -2,261 +2,261 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import { Provider } from "@ethersproject/providers";
+import { Contract, Signer, utils } from 'ethers';
+import { Provider } from '@ethersproject/providers';
 import type {
   MultiAssetProxy,
   MultiAssetProxyInterface,
-} from "../MultiAssetProxy";
+} from '../MultiAssetProxy';
 
 const _abi = [
   {
     constant: true,
     inputs: [
       {
-        name: "",
-        type: "bytes4",
+        name: '',
+        type: 'bytes4',
       },
     ],
-    name: "assetProxies",
+    name: 'assetProxies',
     outputs: [
       {
-        name: "",
-        type: "address",
+        name: '',
+        type: 'address',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "target",
-        type: "address",
+        name: 'target',
+        type: 'address',
       },
     ],
-    name: "addAuthorizedAddress",
+    name: 'addAuthorizedAddress',
     outputs: [],
     payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: "",
-        type: "uint256",
+        name: '',
+        type: 'uint256',
       },
     ],
-    name: "authorities",
+    name: 'authorities',
     outputs: [
       {
-        name: "",
-        type: "address",
+        name: '',
+        type: 'address',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: "assetProxyId",
-        type: "bytes4",
+        name: 'assetProxyId',
+        type: 'bytes4',
       },
     ],
-    name: "getAssetProxy",
+    name: 'getAssetProxy',
     outputs: [
       {
-        name: "",
-        type: "address",
+        name: '',
+        type: 'address',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "target",
-        type: "address",
+        name: 'target',
+        type: 'address',
       },
     ],
-    name: "removeAuthorizedAddress",
+    name: 'removeAuthorizedAddress',
     outputs: [],
     payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "owner",
+    name: 'owner',
     outputs: [
       {
-        name: "",
-        type: "address",
+        name: '',
+        type: 'address',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "target",
-        type: "address",
+        name: 'target',
+        type: 'address',
       },
       {
-        name: "index",
-        type: "uint256",
+        name: 'index',
+        type: 'uint256',
       },
     ],
-    name: "removeAuthorizedAddressAtIndex",
+    name: 'removeAuthorizedAddressAtIndex',
     outputs: [],
     payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "getProxyId",
+    name: 'getProxyId',
     outputs: [
       {
-        name: "",
-        type: "bytes4",
+        name: '',
+        type: 'bytes4',
       },
     ],
     payable: false,
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: "",
-        type: "address",
+        name: '',
+        type: 'address',
       },
     ],
-    name: "authorized",
+    name: 'authorized',
     outputs: [
       {
-        name: "",
-        type: "bool",
+        name: '',
+        type: 'bool',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "assetProxy",
-        type: "address",
+        name: 'assetProxy',
+        type: 'address',
       },
     ],
-    name: "registerAssetProxy",
+    name: 'registerAssetProxy',
     outputs: [],
     payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "getAuthorizedAddresses",
+    name: 'getAuthorizedAddresses',
     outputs: [
       {
-        name: "",
-        type: "address[]",
+        name: '',
+        type: 'address[]',
       },
     ],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "newOwner",
-        type: "address",
+        name: 'newOwner',
+        type: 'address',
       },
     ],
-    name: "transferOwnership",
+    name: 'transferOwnership',
     outputs: [],
     payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     payable: false,
-    stateMutability: "nonpayable",
-    type: "fallback",
+    stateMutability: 'nonpayable',
+    type: 'fallback',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        name: "target",
-        type: "address",
+        name: 'target',
+        type: 'address',
       },
       {
         indexed: true,
-        name: "caller",
-        type: "address",
+        name: 'caller',
+        type: 'address',
       },
     ],
-    name: "AuthorizedAddressAdded",
-    type: "event",
+    name: 'AuthorizedAddressAdded',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        name: "target",
-        type: "address",
+        name: 'target',
+        type: 'address',
       },
       {
         indexed: true,
-        name: "caller",
-        type: "address",
+        name: 'caller',
+        type: 'address',
       },
     ],
-    name: "AuthorizedAddressRemoved",
-    type: "event",
+    name: 'AuthorizedAddressRemoved',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: false,
-        name: "id",
-        type: "bytes4",
+        name: 'id',
+        type: 'bytes4',
       },
       {
         indexed: false,
-        name: "assetProxy",
-        type: "address",
+        name: 'assetProxy',
+        type: 'address',
       },
     ],
-    name: "AssetProxyRegistered",
-    type: "event",
+    name: 'AssetProxyRegistered',
+    type: 'event',
   },
 ];
 

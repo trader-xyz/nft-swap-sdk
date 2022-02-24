@@ -2,53 +2,53 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import { Provider } from "@ethersproject/providers";
+import { Contract, Signer, utils } from 'ethers';
+import { Provider } from '@ethersproject/providers';
 import type {
   StaticCallProxy,
   StaticCallProxyInterface,
-} from "../StaticCallProxy";
+} from '../StaticCallProxy';
 
 const _abi = [
   {
     constant: true,
     inputs: [
       {
-        name: "assetData",
-        type: "bytes",
+        name: 'assetData',
+        type: 'bytes',
       },
       {
-        name: "from",
-        type: "address",
+        name: 'from',
+        type: 'address',
       },
       {
-        name: "to",
-        type: "address",
+        name: 'to',
+        type: 'address',
       },
       {
-        name: "amount",
-        type: "uint256",
+        name: 'amount',
+        type: 'uint256',
       },
     ],
-    name: "transferFrom",
+    name: 'transferFrom',
     outputs: [],
     payable: false,
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "getProxyId",
+    name: 'getProxyId',
     outputs: [
       {
-        name: "",
-        type: "bytes4",
+        name: '',
+        type: 'bytes4',
       },
     ],
     payable: false,
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
 ];
 

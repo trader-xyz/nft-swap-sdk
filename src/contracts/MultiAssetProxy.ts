@@ -12,120 +12,120 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
-import { Listener, Provider } from "@ethersproject/providers";
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
+} from 'ethers';
+import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
+import { Listener, Provider } from '@ethersproject/providers';
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface MultiAssetProxyInterface extends utils.Interface {
-  contractName: "MultiAssetProxy";
+  contractName: 'MultiAssetProxy';
   functions: {
-    "assetProxies(bytes4)": FunctionFragment;
-    "addAuthorizedAddress(address)": FunctionFragment;
-    "authorities(uint256)": FunctionFragment;
-    "getAssetProxy(bytes4)": FunctionFragment;
-    "removeAuthorizedAddress(address)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "removeAuthorizedAddressAtIndex(address,uint256)": FunctionFragment;
-    "getProxyId()": FunctionFragment;
-    "authorized(address)": FunctionFragment;
-    "registerAssetProxy(address)": FunctionFragment;
-    "getAuthorizedAddresses()": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
+    'assetProxies(bytes4)': FunctionFragment;
+    'addAuthorizedAddress(address)': FunctionFragment;
+    'authorities(uint256)': FunctionFragment;
+    'getAssetProxy(bytes4)': FunctionFragment;
+    'removeAuthorizedAddress(address)': FunctionFragment;
+    'owner()': FunctionFragment;
+    'removeAuthorizedAddressAtIndex(address,uint256)': FunctionFragment;
+    'getProxyId()': FunctionFragment;
+    'authorized(address)': FunctionFragment;
+    'registerAssetProxy(address)': FunctionFragment;
+    'getAuthorizedAddresses()': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "assetProxies",
+    functionFragment: 'assetProxies',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "addAuthorizedAddress",
+    functionFragment: 'addAuthorizedAddress',
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "authorities",
+    functionFragment: 'authorities',
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getAssetProxy",
+    functionFragment: 'getAssetProxy',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeAuthorizedAddress",
+    functionFragment: 'removeAuthorizedAddress',
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "removeAuthorizedAddressAtIndex",
+    functionFragment: 'removeAuthorizedAddressAtIndex',
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getProxyId",
+    functionFragment: 'getProxyId',
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "authorized", values: [string]): string;
+  encodeFunctionData(functionFragment: 'authorized', values: [string]): string;
   encodeFunctionData(
-    functionFragment: "registerAssetProxy",
+    functionFragment: 'registerAssetProxy',
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "getAuthorizedAddresses",
+    functionFragment: 'getAuthorizedAddresses',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
+    functionFragment: 'transferOwnership',
     values: [string]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "assetProxies",
+    functionFragment: 'assetProxies',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addAuthorizedAddress",
+    functionFragment: 'addAuthorizedAddress',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "authorities",
+    functionFragment: 'authorities',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getAssetProxy",
+    functionFragment: 'getAssetProxy',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeAuthorizedAddress",
+    functionFragment: 'removeAuthorizedAddress',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "removeAuthorizedAddressAtIndex",
+    functionFragment: 'removeAuthorizedAddressAtIndex',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getProxyId", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "authorized", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getProxyId', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'authorized', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "registerAssetProxy",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getAuthorizedAddresses",
+    functionFragment: 'registerAssetProxy',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: 'getAuthorizedAddresses',
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: 'transferOwnership',
     data: BytesLike
   ): Result;
 
   events: {
-    "AuthorizedAddressAdded(address,address)": EventFragment;
-    "AuthorizedAddressRemoved(address,address)": EventFragment;
-    "AssetProxyRegistered(bytes4,address)": EventFragment;
+    'AuthorizedAddressAdded(address,address)': EventFragment;
+    'AuthorizedAddressRemoved(address,address)': EventFragment;
+    'AssetProxyRegistered(bytes4,address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "AuthorizedAddressAdded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AuthorizedAddressRemoved"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AssetProxyRegistered"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'AuthorizedAddressAdded'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'AuthorizedAddressRemoved'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'AssetProxyRegistered'): EventFragment;
 }
 
 export type AuthorizedAddressAddedEvent = TypedEvent<
@@ -153,7 +153,7 @@ export type AssetProxyRegisteredEventFilter =
   TypedEventFilter<AssetProxyRegisteredEvent>;
 
 export interface MultiAssetProxy extends BaseContract {
-  contractName: "MultiAssetProxy";
+  contractName: 'MultiAssetProxy';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -316,7 +316,7 @@ export interface MultiAssetProxy extends BaseContract {
   };
 
   filters: {
-    "AuthorizedAddressAdded(address,address)"(
+    'AuthorizedAddressAdded(address,address)'(
       target?: string | null,
       caller?: string | null
     ): AuthorizedAddressAddedEventFilter;
@@ -325,7 +325,7 @@ export interface MultiAssetProxy extends BaseContract {
       caller?: string | null
     ): AuthorizedAddressAddedEventFilter;
 
-    "AuthorizedAddressRemoved(address,address)"(
+    'AuthorizedAddressRemoved(address,address)'(
       target?: string | null,
       caller?: string | null
     ): AuthorizedAddressRemovedEventFilter;
@@ -334,7 +334,7 @@ export interface MultiAssetProxy extends BaseContract {
       caller?: string | null
     ): AuthorizedAddressRemovedEventFilter;
 
-    "AssetProxyRegistered(bytes4,address)"(
+    'AssetProxyRegistered(bytes4,address)'(
       id?: null,
       assetProxy?: null
     ): AssetProxyRegisteredEventFilter;

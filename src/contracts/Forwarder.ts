@@ -13,10 +13,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
-import { Listener, Provider } from "@ethersproject/providers";
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
+} from 'ethers';
+import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
+import { Listener, Provider } from '@ethersproject/providers';
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace LibOrder {
   export type OrderStruct = {
@@ -70,40 +70,40 @@ export declare namespace LibOrder {
 }
 
 export interface ForwarderInterface extends utils.Interface {
-  contractName: "Forwarder";
+  contractName: 'Forwarder';
   functions: {
-    "ERC1155_BATCH_RECEIVED()": FunctionFragment;
-    "ERC1155_RECEIVED()": FunctionFragment;
-    "EXCHANGE_V2_ORDER_ID()": FunctionFragment;
-    "approveMakerAssetProxy(bytes)": FunctionFragment;
-    "marketBuyOrdersWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[],uint256[],address[])": FunctionFragment;
-    "marketSellAmountWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[],uint256[],address[])": FunctionFragment;
-    "marketSellOrdersWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],uint256[],address[])": FunctionFragment;
-    "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)": FunctionFragment;
-    "onERC1155Received(address,address,uint256,uint256,bytes)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "withdrawAsset(bytes,uint256)": FunctionFragment;
+    'ERC1155_BATCH_RECEIVED()': FunctionFragment;
+    'ERC1155_RECEIVED()': FunctionFragment;
+    'EXCHANGE_V2_ORDER_ID()': FunctionFragment;
+    'approveMakerAssetProxy(bytes)': FunctionFragment;
+    'marketBuyOrdersWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[],uint256[],address[])': FunctionFragment;
+    'marketSellAmountWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],uint256,bytes[],uint256[],address[])': FunctionFragment;
+    'marketSellOrdersWithEth((address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,bytes,bytes,bytes,bytes)[],bytes[],uint256[],address[])': FunctionFragment;
+    'onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)': FunctionFragment;
+    'onERC1155Received(address,address,uint256,uint256,bytes)': FunctionFragment;
+    'owner()': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
+    'withdrawAsset(bytes,uint256)': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "ERC1155_BATCH_RECEIVED",
+    functionFragment: 'ERC1155_BATCH_RECEIVED',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "ERC1155_RECEIVED",
+    functionFragment: 'ERC1155_RECEIVED',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "EXCHANGE_V2_ORDER_ID",
+    functionFragment: 'EXCHANGE_V2_ORDER_ID',
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "approveMakerAssetProxy",
+    functionFragment: 'approveMakerAssetProxy',
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketBuyOrdersWithEth",
+    functionFragment: 'marketBuyOrdersWithEth',
     values: [
       LibOrder.OrderStruct[],
       BigNumberish,
@@ -113,7 +113,7 @@ export interface ForwarderInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketSellAmountWithEth",
+    functionFragment: 'marketSellAmountWithEth',
     values: [
       LibOrder.OrderStruct[],
       BigNumberish,
@@ -123,78 +123,78 @@ export interface ForwarderInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketSellOrdersWithEth",
+    functionFragment: 'marketSellOrdersWithEth',
     values: [LibOrder.OrderStruct[], BytesLike[], BigNumberish[], string[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "onERC1155BatchReceived",
+    functionFragment: 'onERC1155BatchReceived',
     values: [string, string, BigNumberish[], BigNumberish[], BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "onERC1155Received",
+    functionFragment: 'onERC1155Received',
     values: [string, string, BigNumberish, BigNumberish, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
+    functionFragment: 'transferOwnership',
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "withdrawAsset",
+    functionFragment: 'withdrawAsset',
     values: [BytesLike, BigNumberish]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "ERC1155_BATCH_RECEIVED",
+    functionFragment: 'ERC1155_BATCH_RECEIVED',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "ERC1155_RECEIVED",
+    functionFragment: 'ERC1155_RECEIVED',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "EXCHANGE_V2_ORDER_ID",
+    functionFragment: 'EXCHANGE_V2_ORDER_ID',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "approveMakerAssetProxy",
+    functionFragment: 'approveMakerAssetProxy',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketBuyOrdersWithEth",
+    functionFragment: 'marketBuyOrdersWithEth',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketSellAmountWithEth",
+    functionFragment: 'marketSellAmountWithEth',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "marketSellOrdersWithEth",
+    functionFragment: 'marketSellOrdersWithEth',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "onERC1155BatchReceived",
+    functionFragment: 'onERC1155BatchReceived',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "onERC1155Received",
+    functionFragment: 'onERC1155Received',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: 'transferOwnership',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "withdrawAsset",
+    functionFragment: 'withdrawAsset',
     data: BytesLike
   ): Result;
 
   events: {
-    "OwnershipTransferred(address,address)": EventFragment;
+    'OwnershipTransferred(address,address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
 }
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -206,7 +206,7 @@ export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface Forwarder extends BaseContract {
-  contractName: "Forwarder";
+  contractName: 'Forwarder';
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -456,7 +456,7 @@ export interface Forwarder extends BaseContract {
   };
 
   filters: {
-    "OwnershipTransferred(address,address)"(
+    'OwnershipTransferred(address,address)'(
       previousOwner?: string | null,
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
