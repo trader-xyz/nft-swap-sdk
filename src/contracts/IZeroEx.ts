@@ -13,10 +13,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export declare namespace LibNFTOrder {
   export type FeeStruct = {
@@ -394,116 +394,116 @@ export declare namespace IMultiplexFeature {
 }
 
 export interface IZeroExInterface extends utils.Interface {
-  contractName: 'IZeroEx';
+  contractName: "IZeroEx";
   functions: {
-    '_fillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,address)': FunctionFragment;
-    '_fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,bool,address)': FunctionFragment;
-    '_fillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,bool,address)': FunctionFragment;
-    '_sellHeldTokenForTokenToUniswapV3(bytes,uint256,uint256,address)': FunctionFragment;
-    '_transformERC20((address,address,address,uint256,uint256,(uint32,bytes)[],bool,address))': FunctionFragment;
-    'batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)': FunctionFragment;
-    'batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bool)': FunctionFragment;
-    'batchCancelERC1155Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[])': FunctionFragment;
-    'batchCancelERC721Orders(uint256[])': FunctionFragment;
-    'batchCancelLimitOrders((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[])': FunctionFragment;
-    'batchCancelPairLimitOrders(address[],address[],uint256[])': FunctionFragment;
-    'batchCancelPairLimitOrdersWithSigner(address,address[],address[],uint256[])': FunctionFragment;
-    'batchCancelPairRfqOrders(address[],address[],uint256[])': FunctionFragment;
-    'batchCancelPairRfqOrdersWithSigner(address,address[],address[],uint256[])': FunctionFragment;
-    'batchCancelRfqOrders((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[])': FunctionFragment;
-    'batchExecuteMetaTransactions((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256)[],(uint8,uint8,bytes32,bytes32)[])': FunctionFragment;
-    'batchFillLimitOrders((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)': FunctionFragment;
-    'batchFillRfqOrders((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)': FunctionFragment;
-    'batchFillTakerSignedOtcOrders((address,address,uint128,uint128,address,address,address,uint256)[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[],bool[])': FunctionFragment;
-    'batchGetLimitOrderRelevantStates((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[])': FunctionFragment;
-    'batchGetRfqOrderRelevantStates((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[])': FunctionFragment;
-    'batchMatchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[])': FunctionFragment;
-    'buyERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint128,bytes)': FunctionFragment;
-    'buyERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),bytes)': FunctionFragment;
-    'cancelERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))': FunctionFragment;
-    'cancelERC721Order(uint256)': FunctionFragment;
-    'cancelLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'cancelPairLimitOrders(address,address,uint256)': FunctionFragment;
-    'cancelPairLimitOrdersWithSigner(address,address,address,uint256)': FunctionFragment;
-    'cancelPairRfqOrders(address,address,uint256)': FunctionFragment;
-    'cancelPairRfqOrdersWithSigner(address,address,address,uint256)': FunctionFragment;
-    'cancelRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'createTransformWallet()': FunctionFragment;
-    'executeMetaTransaction((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'extend(bytes4,address)': FunctionFragment;
-    'fillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillOrKillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillOrKillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillOtcOrderWithEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'fillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)': FunctionFragment;
-    'fillTakerSignedOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'fillTakerSignedOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'getERC1155OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))': FunctionFragment;
-    'getERC1155OrderInfo((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))': FunctionFragment;
-    'getERC721OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))': FunctionFragment;
-    'getERC721OrderStatus((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))': FunctionFragment;
-    'getERC721OrderStatusBitVector(address,uint248)': FunctionFragment;
-    'getLimitOrderHash((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'getLimitOrderInfo((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'getLimitOrderRelevantState((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'getMetaTransactionExecutedBlock((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256))': FunctionFragment;
-    'getMetaTransactionHash((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256))': FunctionFragment;
-    'getMetaTransactionHashExecutedBlock(bytes32)': FunctionFragment;
-    'getOtcOrderHash((address,address,uint128,uint128,address,address,address,uint256))': FunctionFragment;
-    'getOtcOrderInfo((address,address,uint128,uint128,address,address,address,uint256))': FunctionFragment;
-    'getProtocolFeeMultiplier()': FunctionFragment;
-    'getQuoteSigner()': FunctionFragment;
-    'getRfqOrderHash((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'getRfqOrderInfo((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
-    'getRfqOrderRelevantState((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'getRollbackEntryAtIndex(bytes4,uint256)': FunctionFragment;
-    'getRollbackLength(bytes4)': FunctionFragment;
-    'getTransformWallet()': FunctionFragment;
-    'getTransformerDeployer()': FunctionFragment;
-    'isValidOrderSigner(address,address)': FunctionFragment;
-    'lastOtcTxOriginNonce(address,uint64)': FunctionFragment;
-    'matchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'migrate(address,bytes,address)': FunctionFragment;
-    'multiplexBatchSellEthForToken(address,(uint8,uint256,bytes)[],uint256)': FunctionFragment;
-    'multiplexBatchSellTokenForEth(address,(uint8,uint256,bytes)[],uint256,uint256)': FunctionFragment;
-    'multiplexBatchSellTokenForToken(address,address,(uint8,uint256,bytes)[],uint256,uint256)': FunctionFragment;
-    'multiplexMultiHopSellEthForToken(address[],(uint8,bytes)[],uint256)': FunctionFragment;
-    'multiplexMultiHopSellTokenForEth(address[],(uint8,bytes)[],uint256,uint256)': FunctionFragment;
-    'multiplexMultiHopSellTokenForToken(address[],(uint8,bytes)[],uint256,uint256)': FunctionFragment;
-    'onERC1155Received(address,address,uint256,uint256,bytes)': FunctionFragment;
-    'onERC721Received(address,address,uint256,bytes)': FunctionFragment;
-    'owner()': FunctionFragment;
-    'preSignERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))': FunctionFragment;
-    'preSignERC721Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))': FunctionFragment;
-    'registerAllowedOrderSigner(address,bool)': FunctionFragment;
-    'registerAllowedRfqOrigins(address[],bool)': FunctionFragment;
-    'rollback(bytes4,address)': FunctionFragment;
-    'sellERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint256,uint128,bool,bytes)': FunctionFragment;
-    'sellERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),uint256,bool,bytes)': FunctionFragment;
-    'sellEthForTokenToUniswapV3(bytes,uint256,address)': FunctionFragment;
-    'sellToLiquidityProvider(address,address,address,address,uint256,uint256,bytes)': FunctionFragment;
-    'sellToPancakeSwap(address[],uint256,uint256,uint8)': FunctionFragment;
-    'sellToUniswap(address[],uint256,uint256,bool)': FunctionFragment;
-    'sellTokenForEthToUniswapV3(bytes,uint256,uint256,address)': FunctionFragment;
-    'sellTokenForTokenToUniswapV3(bytes,uint256,uint256,address)': FunctionFragment;
-    'setQuoteSigner(address)': FunctionFragment;
-    'setTransformerDeployer(address)': FunctionFragment;
-    'supportInterface(bytes4)': FunctionFragment;
-    'transferOwnership(address)': FunctionFragment;
-    'transferProtocolFeesForPools(bytes32[])': FunctionFragment;
-    'transferTrappedTokensTo(address,uint256,address)': FunctionFragment;
-    'transformERC20(address,address,uint256,uint256,(uint32,bytes)[])': FunctionFragment;
-    'uniswapV3SwapCallback(int256,int256,bytes)': FunctionFragment;
-    'validateERC1155OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),uint256)': FunctionFragment;
-    'validateERC1155OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
-    'validateERC721OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),uint256)': FunctionFragment;
-    'validateERC721OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32))': FunctionFragment;
+    "_fillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,address)": FunctionFragment;
+    "_fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,bool,address)": FunctionFragment;
+    "_fillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,bool,address)": FunctionFragment;
+    "_sellHeldTokenForTokenToUniswapV3(bytes,uint256,uint256,address)": FunctionFragment;
+    "_transformERC20((address,address,address,uint256,uint256,(uint32,bytes)[],bool,address))": FunctionFragment;
+    "batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bytes[],bool)": FunctionFragment;
+    "batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bytes[],bool)": FunctionFragment;
+    "batchCancelERC1155Orders(uint256[])": FunctionFragment;
+    "batchCancelERC721Orders(uint256[])": FunctionFragment;
+    "batchCancelLimitOrders((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[])": FunctionFragment;
+    "batchCancelPairLimitOrders(address[],address[],uint256[])": FunctionFragment;
+    "batchCancelPairLimitOrdersWithSigner(address,address[],address[],uint256[])": FunctionFragment;
+    "batchCancelPairRfqOrders(address[],address[],uint256[])": FunctionFragment;
+    "batchCancelPairRfqOrdersWithSigner(address,address[],address[],uint256[])": FunctionFragment;
+    "batchCancelRfqOrders((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[])": FunctionFragment;
+    "batchExecuteMetaTransactions((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256)[],(uint8,uint8,bytes32,bytes32)[])": FunctionFragment;
+    "batchFillLimitOrders((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)": FunctionFragment;
+    "batchFillRfqOrders((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)": FunctionFragment;
+    "batchFillTakerSignedOtcOrders((address,address,uint128,uint128,address,address,address,uint256)[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[],bool[])": FunctionFragment;
+    "batchGetLimitOrderRelevantStates((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[])": FunctionFragment;
+    "batchGetRfqOrderRelevantStates((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256)[],(uint8,uint8,bytes32,bytes32)[])": FunctionFragment;
+    "batchMatchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[])": FunctionFragment;
+    "buyERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint128,bytes)": FunctionFragment;
+    "buyERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),bytes)": FunctionFragment;
+    "cancelERC1155Order(uint256)": FunctionFragment;
+    "cancelERC721Order(uint256)": FunctionFragment;
+    "cancelLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "cancelPairLimitOrders(address,address,uint256)": FunctionFragment;
+    "cancelPairLimitOrdersWithSigner(address,address,address,uint256)": FunctionFragment;
+    "cancelPairRfqOrders(address,address,uint256)": FunctionFragment;
+    "cancelPairRfqOrdersWithSigner(address,address,address,uint256)": FunctionFragment;
+    "cancelRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "createTransformWallet()": FunctionFragment;
+    "executeMetaTransaction((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "extend(bytes4,address)": FunctionFragment;
+    "fillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillOrKillLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillOrKillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillOtcOrderWithEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "fillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128)": FunctionFragment;
+    "fillTakerSignedOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "fillTakerSignedOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "getERC1155OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))": FunctionFragment;
+    "getERC1155OrderInfo((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))": FunctionFragment;
+    "getERC721OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))": FunctionFragment;
+    "getERC721OrderStatus((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))": FunctionFragment;
+    "getERC721OrderStatusBitVector(address,uint248)": FunctionFragment;
+    "getLimitOrderHash((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "getLimitOrderInfo((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "getLimitOrderRelevantState((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "getMetaTransactionExecutedBlock((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256))": FunctionFragment;
+    "getMetaTransactionHash((address,address,uint256,uint256,uint256,uint256,bytes,uint256,address,uint256))": FunctionFragment;
+    "getMetaTransactionHashExecutedBlock(bytes32)": FunctionFragment;
+    "getOtcOrderHash((address,address,uint128,uint128,address,address,address,uint256))": FunctionFragment;
+    "getOtcOrderInfo((address,address,uint128,uint128,address,address,address,uint256))": FunctionFragment;
+    "getProtocolFeeMultiplier()": FunctionFragment;
+    "getQuoteSigner()": FunctionFragment;
+    "getRfqOrderHash((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "getRfqOrderInfo((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256))": FunctionFragment;
+    "getRfqOrderRelevantState((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "getRollbackEntryAtIndex(bytes4,uint256)": FunctionFragment;
+    "getRollbackLength(bytes4)": FunctionFragment;
+    "getTransformWallet()": FunctionFragment;
+    "getTransformerDeployer()": FunctionFragment;
+    "isValidOrderSigner(address,address)": FunctionFragment;
+    "lastOtcTxOriginNonce(address,uint64)": FunctionFragment;
+    "matchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "migrate(address,bytes,address)": FunctionFragment;
+    "multiplexBatchSellEthForToken(address,(uint8,uint256,bytes)[],uint256)": FunctionFragment;
+    "multiplexBatchSellTokenForEth(address,(uint8,uint256,bytes)[],uint256,uint256)": FunctionFragment;
+    "multiplexBatchSellTokenForToken(address,address,(uint8,uint256,bytes)[],uint256,uint256)": FunctionFragment;
+    "multiplexMultiHopSellEthForToken(address[],(uint8,bytes)[],uint256)": FunctionFragment;
+    "multiplexMultiHopSellTokenForEth(address[],(uint8,bytes)[],uint256,uint256)": FunctionFragment;
+    "multiplexMultiHopSellTokenForToken(address[],(uint8,bytes)[],uint256,uint256)": FunctionFragment;
+    "onERC1155Received(address,address,uint256,uint256,bytes)": FunctionFragment;
+    "onERC721Received(address,address,uint256,bytes)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "preSignERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))": FunctionFragment;
+    "preSignERC721Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))": FunctionFragment;
+    "registerAllowedOrderSigner(address,bool)": FunctionFragment;
+    "registerAllowedRfqOrigins(address[],bool)": FunctionFragment;
+    "rollback(bytes4,address)": FunctionFragment;
+    "sellERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint256,uint128,bool,bytes)": FunctionFragment;
+    "sellERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),uint256,bool,bytes)": FunctionFragment;
+    "sellEthForTokenToUniswapV3(bytes,uint256,address)": FunctionFragment;
+    "sellToLiquidityProvider(address,address,address,address,uint256,uint256,bytes)": FunctionFragment;
+    "sellToPancakeSwap(address[],uint256,uint256,uint8)": FunctionFragment;
+    "sellToUniswap(address[],uint256,uint256,bool)": FunctionFragment;
+    "sellTokenForEthToUniswapV3(bytes,uint256,uint256,address)": FunctionFragment;
+    "sellTokenForTokenToUniswapV3(bytes,uint256,uint256,address)": FunctionFragment;
+    "setQuoteSigner(address)": FunctionFragment;
+    "setTransformerDeployer(address)": FunctionFragment;
+    "supportInterface(bytes4)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "transferProtocolFeesForPools(bytes32[])": FunctionFragment;
+    "transferTrappedTokensTo(address,uint256,address)": FunctionFragment;
+    "transformERC20(address,address,uint256,uint256,(uint32,bytes)[])": FunctionFragment;
+    "uniswapV3SwapCallback(int256,int256,bytes)": FunctionFragment;
+    "validateERC1155OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),uint256)": FunctionFragment;
+    "validateERC1155OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
+    "validateERC721OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),uint256)": FunctionFragment;
+    "validateERC721OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32))": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: '_fillLimitOrder',
+    functionFragment: "_fillLimitOrder",
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
@@ -513,7 +513,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: '_fillOtcOrder',
+    functionFragment: "_fillOtcOrder",
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
@@ -524,7 +524,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: '_fillRfqOrder',
+    functionFragment: "_fillRfqOrder",
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
@@ -535,71 +535,73 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: '_sellHeldTokenForTokenToUniswapV3',
+    functionFragment: "_sellHeldTokenForTokenToUniswapV3",
     values: [BytesLike, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: '_transformERC20',
+    functionFragment: "_transformERC20",
     values: [ITransformERC20Feature.TransformERC20ArgsStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchBuyERC1155s',
+    functionFragment: "batchBuyERC1155s",
     values: [
       LibNFTOrder.ERC1155OrderStruct[],
       LibSignature.SignatureStruct[],
       BigNumberish[],
+      BytesLike[],
       boolean
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchBuyERC721s',
+    functionFragment: "batchBuyERC721s",
     values: [
       LibNFTOrder.ERC721OrderStruct[],
       LibSignature.SignatureStruct[],
+      BytesLike[],
       boolean
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelERC1155Orders',
-    values: [LibNFTOrder.ERC1155OrderStruct[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'batchCancelERC721Orders',
+    functionFragment: "batchCancelERC1155Orders",
     values: [BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelLimitOrders',
+    functionFragment: "batchCancelERC721Orders",
+    values: [BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "batchCancelLimitOrders",
     values: [LibNativeOrder.LimitOrderStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelPairLimitOrders',
+    functionFragment: "batchCancelPairLimitOrders",
     values: [string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelPairLimitOrdersWithSigner',
+    functionFragment: "batchCancelPairLimitOrdersWithSigner",
     values: [string, string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelPairRfqOrders',
+    functionFragment: "batchCancelPairRfqOrders",
     values: [string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelPairRfqOrdersWithSigner',
+    functionFragment: "batchCancelPairRfqOrdersWithSigner",
     values: [string, string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchCancelRfqOrders',
+    functionFragment: "batchCancelRfqOrders",
     values: [LibNativeOrder.RfqOrderStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchExecuteMetaTransactions',
+    functionFragment: "batchExecuteMetaTransactions",
     values: [
       IMetaTransactionsFeature.MetaTransactionDataStruct[],
       LibSignature.SignatureStruct[]
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchFillLimitOrders',
+    functionFragment: "batchFillLimitOrders",
     values: [
       LibNativeOrder.LimitOrderStruct[],
       LibSignature.SignatureStruct[],
@@ -608,7 +610,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchFillRfqOrders',
+    functionFragment: "batchFillRfqOrders",
     values: [
       LibNativeOrder.RfqOrderStruct[],
       LibSignature.SignatureStruct[],
@@ -617,7 +619,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchFillTakerSignedOtcOrders',
+    functionFragment: "batchFillTakerSignedOtcOrders",
     values: [
       LibNativeOrder.OtcOrderStruct[],
       LibSignature.SignatureStruct[],
@@ -626,15 +628,15 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchGetLimitOrderRelevantStates',
+    functionFragment: "batchGetLimitOrderRelevantStates",
     values: [LibNativeOrder.LimitOrderStruct[], LibSignature.SignatureStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchGetRfqOrderRelevantStates',
+    functionFragment: "batchGetRfqOrderRelevantStates",
     values: [LibNativeOrder.RfqOrderStruct[], LibSignature.SignatureStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'batchMatchERC721Orders',
+    functionFragment: "batchMatchERC721Orders",
     values: [
       LibNFTOrder.ERC721OrderStruct[],
       LibNFTOrder.ERC721OrderStruct[],
@@ -643,7 +645,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'buyERC1155',
+    functionFragment: "buyERC1155",
     values: [
       LibNFTOrder.ERC1155OrderStruct,
       LibSignature.SignatureStruct,
@@ -652,7 +654,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'buyERC721',
+    functionFragment: "buyERC721",
     values: [
       LibNFTOrder.ERC721OrderStruct,
       LibSignature.SignatureStruct,
@@ -660,54 +662,54 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelERC1155Order',
-    values: [LibNFTOrder.ERC1155OrderStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'cancelERC721Order',
+    functionFragment: "cancelERC1155Order",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelLimitOrder',
+    functionFragment: "cancelERC721Order",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "cancelLimitOrder",
     values: [LibNativeOrder.LimitOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelPairLimitOrders',
+    functionFragment: "cancelPairLimitOrders",
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelPairLimitOrdersWithSigner',
+    functionFragment: "cancelPairLimitOrdersWithSigner",
     values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelPairRfqOrders',
+    functionFragment: "cancelPairRfqOrders",
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelPairRfqOrdersWithSigner',
+    functionFragment: "cancelPairRfqOrdersWithSigner",
     values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'cancelRfqOrder',
+    functionFragment: "cancelRfqOrder",
     values: [LibNativeOrder.RfqOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'createTransformWallet',
+    functionFragment: "createTransformWallet",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'executeMetaTransaction',
+    functionFragment: "executeMetaTransaction",
     values: [
       IMetaTransactionsFeature.MetaTransactionDataStruct,
       LibSignature.SignatureStruct
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'extend',
+    functionFragment: "extend",
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillLimitOrder',
+    functionFragment: "fillLimitOrder",
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
@@ -715,7 +717,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillOrKillLimitOrder',
+    functionFragment: "fillOrKillLimitOrder",
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
@@ -723,7 +725,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillOrKillRfqOrder',
+    functionFragment: "fillOrKillRfqOrder",
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
@@ -731,7 +733,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillOtcOrder',
+    functionFragment: "fillOtcOrder",
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
@@ -739,7 +741,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillOtcOrderForEth',
+    functionFragment: "fillOtcOrderForEth",
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
@@ -747,11 +749,11 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillOtcOrderWithEth',
+    functionFragment: "fillOtcOrderWithEth",
     values: [LibNativeOrder.OtcOrderStruct, LibSignature.SignatureStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillRfqOrder',
+    functionFragment: "fillRfqOrder",
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
@@ -759,7 +761,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillTakerSignedOtcOrder',
+    functionFragment: "fillTakerSignedOtcOrder",
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
@@ -767,7 +769,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'fillTakerSignedOtcOrderForEth',
+    functionFragment: "fillTakerSignedOtcOrderForEth",
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
@@ -775,103 +777,103 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getERC1155OrderHash',
+    functionFragment: "getERC1155OrderHash",
     values: [LibNFTOrder.ERC1155OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getERC1155OrderInfo',
+    functionFragment: "getERC1155OrderInfo",
     values: [LibNFTOrder.ERC1155OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getERC721OrderHash',
+    functionFragment: "getERC721OrderHash",
     values: [LibNFTOrder.ERC721OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getERC721OrderStatus',
+    functionFragment: "getERC721OrderStatus",
     values: [LibNFTOrder.ERC721OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getERC721OrderStatusBitVector',
+    functionFragment: "getERC721OrderStatusBitVector",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getLimitOrderHash',
+    functionFragment: "getLimitOrderHash",
     values: [LibNativeOrder.LimitOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getLimitOrderInfo',
+    functionFragment: "getLimitOrderInfo",
     values: [LibNativeOrder.LimitOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getLimitOrderRelevantState',
+    functionFragment: "getLimitOrderRelevantState",
     values: [LibNativeOrder.LimitOrderStruct, LibSignature.SignatureStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getMetaTransactionExecutedBlock',
+    functionFragment: "getMetaTransactionExecutedBlock",
     values: [IMetaTransactionsFeature.MetaTransactionDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getMetaTransactionHash',
+    functionFragment: "getMetaTransactionHash",
     values: [IMetaTransactionsFeature.MetaTransactionDataStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getMetaTransactionHashExecutedBlock',
+    functionFragment: "getMetaTransactionHashExecutedBlock",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getOtcOrderHash',
+    functionFragment: "getOtcOrderHash",
     values: [LibNativeOrder.OtcOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getOtcOrderInfo',
+    functionFragment: "getOtcOrderInfo",
     values: [LibNativeOrder.OtcOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getProtocolFeeMultiplier',
+    functionFragment: "getProtocolFeeMultiplier",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'getQuoteSigner',
+    functionFragment: "getQuoteSigner",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'getRfqOrderHash',
+    functionFragment: "getRfqOrderHash",
     values: [LibNativeOrder.RfqOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getRfqOrderInfo',
+    functionFragment: "getRfqOrderInfo",
     values: [LibNativeOrder.RfqOrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getRfqOrderRelevantState',
+    functionFragment: "getRfqOrderRelevantState",
     values: [LibNativeOrder.RfqOrderStruct, LibSignature.SignatureStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getRollbackEntryAtIndex',
+    functionFragment: "getRollbackEntryAtIndex",
     values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getRollbackLength',
+    functionFragment: "getRollbackLength",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getTransformWallet',
+    functionFragment: "getTransformWallet",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'getTransformerDeployer',
+    functionFragment: "getTransformerDeployer",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'isValidOrderSigner',
+    functionFragment: "isValidOrderSigner",
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'lastOtcTxOriginNonce',
+    functionFragment: "lastOtcTxOriginNonce",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'matchERC721Orders',
+    functionFragment: "matchERC721Orders",
     values: [
       LibNFTOrder.ERC721OrderStruct,
       LibNFTOrder.ERC721OrderStruct,
@@ -880,15 +882,15 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'migrate',
+    functionFragment: "migrate",
     values: [string, BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'multiplexBatchSellEthForToken',
+    functionFragment: "multiplexBatchSellEthForToken",
     values: [string, IMultiplexFeature.BatchSellSubcallStruct[], BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'multiplexBatchSellTokenForEth',
+    functionFragment: "multiplexBatchSellTokenForEth",
     values: [
       string,
       IMultiplexFeature.BatchSellSubcallStruct[],
@@ -897,7 +899,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'multiplexBatchSellTokenForToken',
+    functionFragment: "multiplexBatchSellTokenForToken",
     values: [
       string,
       string,
@@ -907,7 +909,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'multiplexMultiHopSellEthForToken',
+    functionFragment: "multiplexMultiHopSellEthForToken",
     values: [
       string[],
       IMultiplexFeature.MultiHopSellSubcallStruct[],
@@ -915,16 +917,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'multiplexMultiHopSellTokenForEth',
-    values: [
-      string[],
-      IMultiplexFeature.MultiHopSellSubcallStruct[],
-      BigNumberish,
-      BigNumberish
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'multiplexMultiHopSellTokenForToken',
+    functionFragment: "multiplexMultiHopSellTokenForEth",
     values: [
       string[],
       IMultiplexFeature.MultiHopSellSubcallStruct[],
@@ -933,36 +926,45 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'onERC1155Received',
+    functionFragment: "multiplexMultiHopSellTokenForToken",
+    values: [
+      string[],
+      IMultiplexFeature.MultiHopSellSubcallStruct[],
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "onERC1155Received",
     values: [string, string, BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'onERC721Received',
+    functionFragment: "onERC721Received",
     values: [string, string, BigNumberish, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'preSignERC1155Order',
+    functionFragment: "preSignERC1155Order",
     values: [LibNFTOrder.ERC1155OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'preSignERC721Order',
+    functionFragment: "preSignERC721Order",
     values: [LibNFTOrder.ERC721OrderStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'registerAllowedOrderSigner',
+    functionFragment: "registerAllowedOrderSigner",
     values: [string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: 'registerAllowedRfqOrigins',
+    functionFragment: "registerAllowedRfqOrigins",
     values: [string[], boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: 'rollback',
+    functionFragment: "rollback",
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellERC1155',
+    functionFragment: "sellERC1155",
     values: [
       LibNFTOrder.ERC1155OrderStruct,
       LibSignature.SignatureStruct,
@@ -973,7 +975,7 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellERC721',
+    functionFragment: "sellERC721",
     values: [
       LibNFTOrder.ERC721OrderStruct,
       LibSignature.SignatureStruct,
@@ -983,11 +985,11 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellEthForTokenToUniswapV3',
+    functionFragment: "sellEthForTokenToUniswapV3",
     values: [BytesLike, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellToLiquidityProvider',
+    functionFragment: "sellToLiquidityProvider",
     values: [
       string,
       string,
@@ -999,47 +1001,47 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellToPancakeSwap',
+    functionFragment: "sellToPancakeSwap",
     values: [string[], BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellToUniswap',
+    functionFragment: "sellToUniswap",
     values: [string[], BigNumberish, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellTokenForEthToUniswapV3',
+    functionFragment: "sellTokenForEthToUniswapV3",
     values: [BytesLike, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'sellTokenForTokenToUniswapV3',
+    functionFragment: "sellTokenForTokenToUniswapV3",
     values: [BytesLike, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'setQuoteSigner',
+    functionFragment: "setQuoteSigner",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'setTransformerDeployer',
+    functionFragment: "setTransformerDeployer",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'supportInterface',
+    functionFragment: "supportInterface",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferOwnership',
+    functionFragment: "transferOwnership",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferProtocolFeesForPools',
+    functionFragment: "transferProtocolFeesForPools",
     values: [BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferTrappedTokensTo',
+    functionFragment: "transferTrappedTokensTo",
     values: [string, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transformERC20',
+    functionFragment: "transformERC20",
     values: [
       string,
       string,
@@ -1049,474 +1051,474 @@ export interface IZeroExInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'uniswapV3SwapCallback',
+    functionFragment: "uniswapV3SwapCallback",
     values: [BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'validateERC1155OrderProperties',
+    functionFragment: "validateERC1155OrderProperties",
     values: [LibNFTOrder.ERC1155OrderStruct, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'validateERC1155OrderSignature',
+    functionFragment: "validateERC1155OrderSignature",
     values: [LibNFTOrder.ERC1155OrderStruct, LibSignature.SignatureStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: 'validateERC721OrderProperties',
+    functionFragment: "validateERC721OrderProperties",
     values: [LibNFTOrder.ERC721OrderStruct, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'validateERC721OrderSignature',
+    functionFragment: "validateERC721OrderSignature",
     values: [LibNFTOrder.ERC721OrderStruct, LibSignature.SignatureStruct]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: '_fillLimitOrder',
+    functionFragment: "_fillLimitOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: '_fillOtcOrder',
+    functionFragment: "_fillOtcOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: '_fillRfqOrder',
+    functionFragment: "_fillRfqOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: '_sellHeldTokenForTokenToUniswapV3',
+    functionFragment: "_sellHeldTokenForTokenToUniswapV3",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: '_transformERC20',
+    functionFragment: "_transformERC20",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchBuyERC1155s',
+    functionFragment: "batchBuyERC1155s",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchBuyERC721s',
+    functionFragment: "batchBuyERC721s",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelERC1155Orders',
+    functionFragment: "batchCancelERC1155Orders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelERC721Orders',
+    functionFragment: "batchCancelERC721Orders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelLimitOrders',
+    functionFragment: "batchCancelLimitOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelPairLimitOrders',
+    functionFragment: "batchCancelPairLimitOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelPairLimitOrdersWithSigner',
+    functionFragment: "batchCancelPairLimitOrdersWithSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelPairRfqOrders',
+    functionFragment: "batchCancelPairRfqOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelPairRfqOrdersWithSigner',
+    functionFragment: "batchCancelPairRfqOrdersWithSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchCancelRfqOrders',
+    functionFragment: "batchCancelRfqOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchExecuteMetaTransactions',
+    functionFragment: "batchExecuteMetaTransactions",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchFillLimitOrders',
+    functionFragment: "batchFillLimitOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchFillRfqOrders',
+    functionFragment: "batchFillRfqOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchFillTakerSignedOtcOrders',
+    functionFragment: "batchFillTakerSignedOtcOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchGetLimitOrderRelevantStates',
+    functionFragment: "batchGetLimitOrderRelevantStates",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchGetRfqOrderRelevantStates',
+    functionFragment: "batchGetRfqOrderRelevantStates",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'batchMatchERC721Orders',
+    functionFragment: "batchMatchERC721Orders",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'buyERC1155', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'buyERC721', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "buyERC1155", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "buyERC721", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelERC1155Order',
+    functionFragment: "cancelERC1155Order",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelERC721Order',
+    functionFragment: "cancelERC721Order",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelLimitOrder',
+    functionFragment: "cancelLimitOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelPairLimitOrders',
+    functionFragment: "cancelPairLimitOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelPairLimitOrdersWithSigner',
+    functionFragment: "cancelPairLimitOrdersWithSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelPairRfqOrders',
+    functionFragment: "cancelPairRfqOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelPairRfqOrdersWithSigner',
+    functionFragment: "cancelPairRfqOrdersWithSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'cancelRfqOrder',
+    functionFragment: "cancelRfqOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'createTransformWallet',
+    functionFragment: "createTransformWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'executeMetaTransaction',
+    functionFragment: "executeMetaTransaction",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'extend', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "extend", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'fillLimitOrder',
+    functionFragment: "fillLimitOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillOrKillLimitOrder',
+    functionFragment: "fillOrKillLimitOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillOrKillRfqOrder',
+    functionFragment: "fillOrKillRfqOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillOtcOrder',
+    functionFragment: "fillOtcOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillOtcOrderForEth',
+    functionFragment: "fillOtcOrderForEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillOtcOrderWithEth',
+    functionFragment: "fillOtcOrderWithEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillRfqOrder',
+    functionFragment: "fillRfqOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillTakerSignedOtcOrder',
+    functionFragment: "fillTakerSignedOtcOrder",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'fillTakerSignedOtcOrderForEth',
+    functionFragment: "fillTakerSignedOtcOrderForEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getERC1155OrderHash',
+    functionFragment: "getERC1155OrderHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getERC1155OrderInfo',
+    functionFragment: "getERC1155OrderInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getERC721OrderHash',
+    functionFragment: "getERC721OrderHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getERC721OrderStatus',
+    functionFragment: "getERC721OrderStatus",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getERC721OrderStatusBitVector',
+    functionFragment: "getERC721OrderStatusBitVector",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLimitOrderHash',
+    functionFragment: "getLimitOrderHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLimitOrderInfo',
+    functionFragment: "getLimitOrderInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getLimitOrderRelevantState',
+    functionFragment: "getLimitOrderRelevantState",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getMetaTransactionExecutedBlock',
+    functionFragment: "getMetaTransactionExecutedBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getMetaTransactionHash',
+    functionFragment: "getMetaTransactionHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getMetaTransactionHashExecutedBlock',
+    functionFragment: "getMetaTransactionHashExecutedBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getOtcOrderHash',
+    functionFragment: "getOtcOrderHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getOtcOrderInfo',
+    functionFragment: "getOtcOrderInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getProtocolFeeMultiplier',
+    functionFragment: "getProtocolFeeMultiplier",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getQuoteSigner',
+    functionFragment: "getQuoteSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getRfqOrderHash',
+    functionFragment: "getRfqOrderHash",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getRfqOrderInfo',
+    functionFragment: "getRfqOrderInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getRfqOrderRelevantState',
+    functionFragment: "getRfqOrderRelevantState",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getRollbackEntryAtIndex',
+    functionFragment: "getRollbackEntryAtIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getRollbackLength',
+    functionFragment: "getRollbackLength",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getTransformWallet',
+    functionFragment: "getTransformWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'getTransformerDeployer',
+    functionFragment: "getTransformerDeployer",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'isValidOrderSigner',
+    functionFragment: "isValidOrderSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'lastOtcTxOriginNonce',
+    functionFragment: "lastOtcTxOriginNonce",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'matchERC721Orders',
+    functionFragment: "matchERC721Orders",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'migrate', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "migrate", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexBatchSellEthForToken',
+    functionFragment: "multiplexBatchSellEthForToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexBatchSellTokenForEth',
+    functionFragment: "multiplexBatchSellTokenForEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexBatchSellTokenForToken',
+    functionFragment: "multiplexBatchSellTokenForToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexMultiHopSellEthForToken',
+    functionFragment: "multiplexMultiHopSellEthForToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexMultiHopSellTokenForEth',
+    functionFragment: "multiplexMultiHopSellTokenForEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'multiplexMultiHopSellTokenForToken',
+    functionFragment: "multiplexMultiHopSellTokenForToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'onERC1155Received',
+    functionFragment: "onERC1155Received",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'onERC721Received',
+    functionFragment: "onERC721Received",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'preSignERC1155Order',
+    functionFragment: "preSignERC1155Order",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'preSignERC721Order',
+    functionFragment: "preSignERC721Order",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'registerAllowedOrderSigner',
+    functionFragment: "registerAllowedOrderSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'registerAllowedRfqOrigins',
+    functionFragment: "registerAllowedRfqOrigins",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'rollback', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "rollback", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'sellERC1155',
+    functionFragment: "sellERC1155",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'sellERC721', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "sellERC721", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'sellEthForTokenToUniswapV3',
+    functionFragment: "sellEthForTokenToUniswapV3",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'sellToLiquidityProvider',
+    functionFragment: "sellToLiquidityProvider",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'sellToPancakeSwap',
+    functionFragment: "sellToPancakeSwap",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'sellToUniswap',
+    functionFragment: "sellToUniswap",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'sellTokenForEthToUniswapV3',
+    functionFragment: "sellTokenForEthToUniswapV3",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'sellTokenForTokenToUniswapV3',
+    functionFragment: "sellTokenForTokenToUniswapV3",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'setQuoteSigner',
+    functionFragment: "setQuoteSigner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'setTransformerDeployer',
+    functionFragment: "setTransformerDeployer",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'supportInterface',
+    functionFragment: "supportInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferOwnership',
+    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferProtocolFeesForPools',
+    functionFragment: "transferProtocolFeesForPools",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferTrappedTokensTo',
+    functionFragment: "transferTrappedTokensTo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transformERC20',
+    functionFragment: "transformERC20",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'uniswapV3SwapCallback',
+    functionFragment: "uniswapV3SwapCallback",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'validateERC1155OrderProperties',
+    functionFragment: "validateERC1155OrderProperties",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'validateERC1155OrderSignature',
+    functionFragment: "validateERC1155OrderSignature",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'validateERC721OrderProperties',
+    functionFragment: "validateERC721OrderProperties",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'validateERC721OrderSignature',
+    functionFragment: "validateERC721OrderSignature",
     data: BytesLike
   ): Result;
 
   events: {
-    'ERC1155OrderCancelled(bytes32,address)': EventFragment;
-    'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)': EventFragment;
-    'ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[],uint128)': EventFragment;
-    'ERC721OrderCancelled(address,uint256)': EventFragment;
-    'ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)': EventFragment;
-    'ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[])': EventFragment;
-    'LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)': EventFragment;
-    'LiquidityProviderSwap(address,address,uint256,uint256,address,address)': EventFragment;
-    'MetaTransactionExecuted(bytes32,bytes4,address,address)': EventFragment;
-    'Migrated(address,address,address)': EventFragment;
-    'OrderCancelled(bytes32,address)': EventFragment;
-    'OrderSignerRegistered(address,address,bool)': EventFragment;
-    'OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)': EventFragment;
-    'OwnershipTransferred(address,address)': EventFragment;
-    'PairCancelledLimitOrders(address,address,address,uint256)': EventFragment;
-    'PairCancelledRfqOrders(address,address,address,uint256)': EventFragment;
-    'ProxyFunctionUpdated(bytes4,address,address)': EventFragment;
-    'QuoteSignerUpdated(address)': EventFragment;
-    'RfqOrderFilled(bytes32,address,address,address,address,uint128,uint128,bytes32)': EventFragment;
-    'RfqOrderOriginsAllowed(address,address[],bool)': EventFragment;
-    'TransformedERC20(address,address,address,uint256,uint256)': EventFragment;
-    'TransformerDeployerUpdated(address)': EventFragment;
+    "ERC1155OrderCancelled(address,uint256)": EventFragment;
+    "ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)": EventFragment;
+    "ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[],uint128)": EventFragment;
+    "ERC721OrderCancelled(address,uint256)": EventFragment;
+    "ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)": EventFragment;
+    "ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[])": EventFragment;
+    "LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)": EventFragment;
+    "LiquidityProviderSwap(address,address,uint256,uint256,address,address)": EventFragment;
+    "MetaTransactionExecuted(bytes32,bytes4,address,address)": EventFragment;
+    "Migrated(address,address,address)": EventFragment;
+    "OrderCancelled(bytes32,address)": EventFragment;
+    "OrderSignerRegistered(address,address,bool)": EventFragment;
+    "OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "PairCancelledLimitOrders(address,address,address,uint256)": EventFragment;
+    "PairCancelledRfqOrders(address,address,address,uint256)": EventFragment;
+    "ProxyFunctionUpdated(bytes4,address,address)": EventFragment;
+    "QuoteSignerUpdated(address)": EventFragment;
+    "RfqOrderFilled(bytes32,address,address,address,address,uint128,uint128,bytes32)": EventFragment;
+    "RfqOrderOriginsAllowed(address,address[],bool)": EventFragment;
+    "TransformedERC20(address,address,address,uint256,uint256)": EventFragment;
+    "TransformerDeployerUpdated(address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'ERC1155OrderCancelled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ERC1155OrderFilled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ERC1155OrderPreSigned'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ERC721OrderCancelled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ERC721OrderFilled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ERC721OrderPreSigned'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'LimitOrderFilled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'LiquidityProviderSwap'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'MetaTransactionExecuted'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'Migrated'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OrderCancelled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OrderSignerRegistered'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OtcOrderFilled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'PairCancelledLimitOrders'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'PairCancelledRfqOrders'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ProxyFunctionUpdated'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'QuoteSignerUpdated'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'RfqOrderFilled'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'RfqOrderOriginsAllowed'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'TransformedERC20'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'TransformerDeployerUpdated'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC1155OrderCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC1155OrderFilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC1155OrderPreSigned"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC721OrderCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC721OrderFilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ERC721OrderPreSigned"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LimitOrderFilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LiquidityProviderSwap"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MetaTransactionExecuted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Migrated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrderCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrderSignerRegistered"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OtcOrderFilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PairCancelledLimitOrders"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PairCancelledRfqOrders"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ProxyFunctionUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "QuoteSignerUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RfqOrderFilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RfqOrderOriginsAllowed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransformedERC20"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransformerDeployerUpdated"): EventFragment;
 }
 
 export type ERC1155OrderCancelledEvent = TypedEvent<
-  [string, string],
-  { orderHash: string; maker: string }
+  [string, BigNumber],
+  { maker: string; nonce: BigNumber }
 >;
 
 export type ERC1155OrderCancelledEventFilter =
@@ -1843,7 +1845,7 @@ export type TransformerDeployerUpdatedEventFilter =
   TypedEventFilter<TransformerDeployerUpdatedEvent>;
 
 export interface IZeroEx extends BaseContract {
-  contractName: 'IZeroEx';
+  contractName: "IZeroEx";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -1916,6 +1918,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -1923,12 +1926,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2055,7 +2059,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<ContractTransaction>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2631,6 +2635,7 @@ export interface IZeroEx extends BaseContract {
     sellOrders: LibNFTOrder.ERC1155OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
     erc1155TokenAmounts: BigNumberish[],
+    callbackData: BytesLike[],
     revertIfIncomplete: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -2638,12 +2643,13 @@ export interface IZeroEx extends BaseContract {
   batchBuyERC721s(
     sellOrders: LibNFTOrder.ERC721OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
+    callbackData: BytesLike[],
     revertIfIncomplete: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelERC1155Orders(
-    orders: LibNFTOrder.ERC1155OrderStruct[],
+    orderNonces: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2770,7 +2776,7 @@ export interface IZeroEx extends BaseContract {
   ): Promise<ContractTransaction>;
 
   cancelERC1155Order(
-    order: LibNFTOrder.ERC1155OrderStruct,
+    orderNonce: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -3335,6 +3341,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
@@ -3342,12 +3349,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3486,7 +3494,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<void>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -4014,16 +4022,16 @@ export interface IZeroEx extends BaseContract {
   };
 
   filters: {
-    'ERC1155OrderCancelled(bytes32,address)'(
-      orderHash?: null,
-      maker?: null
+    "ERC1155OrderCancelled(address,uint256)"(
+      maker?: null,
+      nonce?: null
     ): ERC1155OrderCancelledEventFilter;
     ERC1155OrderCancelled(
-      orderHash?: null,
-      maker?: null
+      maker?: null,
+      nonce?: null
     ): ERC1155OrderCancelledEventFilter;
 
-    'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)'(
+    "ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)"(
       direction?: null,
       maker?: null,
       taker?: null,
@@ -4048,7 +4056,7 @@ export interface IZeroEx extends BaseContract {
       matcher?: null
     ): ERC1155OrderFilledEventFilter;
 
-    'ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[],uint128)'(
+    "ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[],uint128)"(
       direction?: null,
       maker?: null,
       taker?: null,
@@ -4077,7 +4085,7 @@ export interface IZeroEx extends BaseContract {
       erc1155TokenAmount?: null
     ): ERC1155OrderPreSignedEventFilter;
 
-    'ERC721OrderCancelled(address,uint256)'(
+    "ERC721OrderCancelled(address,uint256)"(
       maker?: null,
       nonce?: null
     ): ERC721OrderCancelledEventFilter;
@@ -4086,7 +4094,7 @@ export interface IZeroEx extends BaseContract {
       nonce?: null
     ): ERC721OrderCancelledEventFilter;
 
-    'ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)'(
+    "ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)"(
       direction?: null,
       maker?: null,
       taker?: null,
@@ -4109,7 +4117,7 @@ export interface IZeroEx extends BaseContract {
       matcher?: null
     ): ERC721OrderFilledEventFilter;
 
-    'ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[])'(
+    "ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[])"(
       direction?: null,
       maker?: null,
       taker?: null,
@@ -4136,7 +4144,7 @@ export interface IZeroEx extends BaseContract {
       erc721TokenProperties?: null
     ): ERC721OrderPreSignedEventFilter;
 
-    'LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)'(
+    "LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)"(
       orderHash?: null,
       maker?: null,
       taker?: null,
@@ -4163,7 +4171,7 @@ export interface IZeroEx extends BaseContract {
       pool?: null
     ): LimitOrderFilledEventFilter;
 
-    'LiquidityProviderSwap(address,address,uint256,uint256,address,address)'(
+    "LiquidityProviderSwap(address,address,uint256,uint256,address,address)"(
       inputToken?: null,
       outputToken?: null,
       inputTokenAmount?: null,
@@ -4180,7 +4188,7 @@ export interface IZeroEx extends BaseContract {
       recipient?: null
     ): LiquidityProviderSwapEventFilter;
 
-    'MetaTransactionExecuted(bytes32,bytes4,address,address)'(
+    "MetaTransactionExecuted(bytes32,bytes4,address,address)"(
       hash?: null,
       selector?: BytesLike | null,
       signer?: null,
@@ -4193,7 +4201,7 @@ export interface IZeroEx extends BaseContract {
       sender?: null
     ): MetaTransactionExecutedEventFilter;
 
-    'Migrated(address,address,address)'(
+    "Migrated(address,address,address)"(
       caller?: null,
       migrator?: null,
       newOwner?: null
@@ -4204,13 +4212,13 @@ export interface IZeroEx extends BaseContract {
       newOwner?: null
     ): MigratedEventFilter;
 
-    'OrderCancelled(bytes32,address)'(
+    "OrderCancelled(bytes32,address)"(
       orderHash?: null,
       maker?: null
     ): OrderCancelledEventFilter;
     OrderCancelled(orderHash?: null, maker?: null): OrderCancelledEventFilter;
 
-    'OrderSignerRegistered(address,address,bool)'(
+    "OrderSignerRegistered(address,address,bool)"(
       maker?: null,
       signer?: null,
       allowed?: null
@@ -4221,7 +4229,7 @@ export interface IZeroEx extends BaseContract {
       allowed?: null
     ): OrderSignerRegisteredEventFilter;
 
-    'OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)'(
+    "OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)"(
       orderHash?: null,
       maker?: null,
       taker?: null,
@@ -4240,7 +4248,7 @@ export interface IZeroEx extends BaseContract {
       takerTokenFilledAmount?: null
     ): OtcOrderFilledEventFilter;
 
-    'OwnershipTransferred(address,address)'(
+    "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
@@ -4249,7 +4257,7 @@ export interface IZeroEx extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    'PairCancelledLimitOrders(address,address,address,uint256)'(
+    "PairCancelledLimitOrders(address,address,address,uint256)"(
       maker?: null,
       makerToken?: null,
       takerToken?: null,
@@ -4262,7 +4270,7 @@ export interface IZeroEx extends BaseContract {
       minValidSalt?: null
     ): PairCancelledLimitOrdersEventFilter;
 
-    'PairCancelledRfqOrders(address,address,address,uint256)'(
+    "PairCancelledRfqOrders(address,address,address,uint256)"(
       maker?: null,
       makerToken?: null,
       takerToken?: null,
@@ -4275,7 +4283,7 @@ export interface IZeroEx extends BaseContract {
       minValidSalt?: null
     ): PairCancelledRfqOrdersEventFilter;
 
-    'ProxyFunctionUpdated(bytes4,address,address)'(
+    "ProxyFunctionUpdated(bytes4,address,address)"(
       selector?: BytesLike | null,
       oldImpl?: null,
       newImpl?: null
@@ -4286,12 +4294,12 @@ export interface IZeroEx extends BaseContract {
       newImpl?: null
     ): ProxyFunctionUpdatedEventFilter;
 
-    'QuoteSignerUpdated(address)'(
+    "QuoteSignerUpdated(address)"(
       quoteSigner?: null
     ): QuoteSignerUpdatedEventFilter;
     QuoteSignerUpdated(quoteSigner?: null): QuoteSignerUpdatedEventFilter;
 
-    'RfqOrderFilled(bytes32,address,address,address,address,uint128,uint128,bytes32)'(
+    "RfqOrderFilled(bytes32,address,address,address,address,uint128,uint128,bytes32)"(
       orderHash?: null,
       maker?: null,
       taker?: null,
@@ -4312,7 +4320,7 @@ export interface IZeroEx extends BaseContract {
       pool?: null
     ): RfqOrderFilledEventFilter;
 
-    'RfqOrderOriginsAllowed(address,address[],bool)'(
+    "RfqOrderOriginsAllowed(address,address[],bool)"(
       origin?: null,
       addrs?: null,
       allowed?: null
@@ -4323,7 +4331,7 @@ export interface IZeroEx extends BaseContract {
       allowed?: null
     ): RfqOrderOriginsAllowedEventFilter;
 
-    'TransformedERC20(address,address,address,uint256,uint256)'(
+    "TransformedERC20(address,address,address,uint256,uint256)"(
       taker?: string | null,
       inputToken?: null,
       outputToken?: null,
@@ -4338,7 +4346,7 @@ export interface IZeroEx extends BaseContract {
       outputTokenAmount?: null
     ): TransformedERC20EventFilter;
 
-    'TransformerDeployerUpdated(address)'(
+    "TransformerDeployerUpdated(address)"(
       transformerDeployer?: null
     ): TransformerDeployerUpdatedEventFilter;
     TransformerDeployerUpdated(
@@ -4393,6 +4401,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -4400,12 +4409,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -4520,7 +4530,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -5059,6 +5069,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -5066,12 +5077,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -5186,7 +5198,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

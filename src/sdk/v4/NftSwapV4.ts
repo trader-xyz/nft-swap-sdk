@@ -97,7 +97,8 @@ export interface INftSwapV4 extends BaseNftSwap {
     transactionOverrides?: Partial<PayableOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
-  cancelOrder: (order: NftOrderV4) => Promise<ContractTransaction>;
+  // TODO(johnrjj) - Better cancel interface. Get feedback.
+  cancelOrder: (nonce: BigNumberish, orderType: 'ERC721' | 'ERC1155') => Promise<ContractTransaction>;
   // waitUntilOrderFilledOrCancelled: (
   //   order: NftOrderV4,
   //   timeoutInMs?: number,
@@ -192,14 +193,14 @@ class NftSwapV4 implements INftSwapV4 {
     return this.provider.waitForTransaction(txHash);
   };
 
-  cancelOrder = (order: NftOrderV4): Promise<ContractTransaction> => {
-    if ('erc1155Token' in order) {
-      return this.exchangeProxy.cancelERC1155Order(order);
+  cancelOrder = (nonce: BigNumberish, orderType: 'ERC721' | 'ERC1155'): Promise<ContractTransaction> => {
+    if (orderType === 'ERC1155') {
+      return this.exchangeProxy.cancelERC1155Order(nonce);
     }
-    if ('erc721Token' in order) {
-      return this.exchangeProxy.cancelERC721Order(order.nonce);
+    if (orderType === 'ERC721') {
+      return this.exchangeProxy.cancelERC721Order(nonce);
     }
-    console.log('unsupported order', order);
+    console.log('unsupported order', orderType);
     throw new Error('unsupport order');
   };
 

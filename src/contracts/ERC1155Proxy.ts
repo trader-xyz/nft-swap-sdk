@@ -12,100 +12,100 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export interface ERC1155ProxyInterface extends utils.Interface {
-  contractName: 'ERC1155Proxy';
+  contractName: "ERC1155Proxy";
   functions: {
-    'addAuthorizedAddress(address)': FunctionFragment;
-    'authorities(uint256)': FunctionFragment;
-    'removeAuthorizedAddress(address)': FunctionFragment;
-    'owner()': FunctionFragment;
-    'removeAuthorizedAddressAtIndex(address,uint256)': FunctionFragment;
-    'transferFrom(bytes,address,address,uint256)': FunctionFragment;
-    'getProxyId()': FunctionFragment;
-    'authorized(address)': FunctionFragment;
-    'getAuthorizedAddresses()': FunctionFragment;
-    'transferOwnership(address)': FunctionFragment;
+    "addAuthorizedAddress(address)": FunctionFragment;
+    "authorities(uint256)": FunctionFragment;
+    "removeAuthorizedAddress(address)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "removeAuthorizedAddressAtIndex(address,uint256)": FunctionFragment;
+    "transferFrom(bytes,address,address,uint256)": FunctionFragment;
+    "getProxyId()": FunctionFragment;
+    "authorized(address)": FunctionFragment;
+    "getAuthorizedAddresses()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'addAuthorizedAddress',
+    functionFragment: "addAuthorizedAddress",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'authorities',
+    functionFragment: "authorities",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'removeAuthorizedAddress',
+    functionFragment: "removeAuthorizedAddress",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'removeAuthorizedAddressAtIndex',
+    functionFragment: "removeAuthorizedAddressAtIndex",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferFrom',
+    functionFragment: "transferFrom",
     values: [BytesLike, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'getProxyId',
+    functionFragment: "getProxyId",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'authorized', values: [string]): string;
+  encodeFunctionData(functionFragment: "authorized", values: [string]): string;
   encodeFunctionData(
-    functionFragment: 'getAuthorizedAddresses',
+    functionFragment: "getAuthorizedAddresses",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferOwnership',
+    functionFragment: "transferOwnership",
     values: [string]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: 'addAuthorizedAddress',
+    functionFragment: "addAuthorizedAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'authorities',
+    functionFragment: "authorities",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'removeAuthorizedAddress',
+    functionFragment: "removeAuthorizedAddress",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'removeAuthorizedAddressAtIndex',
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: 'transferFrom',
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: 'getProxyId', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'authorized', data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: 'getAuthorizedAddresses',
+    functionFragment: "removeAuthorizedAddressAtIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferOwnership',
+    functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getProxyId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "authorized", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAuthorizedAddresses",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
 
   events: {
-    'AuthorizedAddressAdded(address,address)': EventFragment;
-    'AuthorizedAddressRemoved(address,address)': EventFragment;
+    "AuthorizedAddressAdded(address,address)": EventFragment;
+    "AuthorizedAddressRemoved(address,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'AuthorizedAddressAdded'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'AuthorizedAddressRemoved'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AuthorizedAddressAdded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AuthorizedAddressRemoved"): EventFragment;
 }
 
 export type AuthorizedAddressAddedEvent = TypedEvent<
@@ -125,7 +125,7 @@ export type AuthorizedAddressRemovedEventFilter =
   TypedEventFilter<AuthorizedAddressRemovedEvent>;
 
 export interface ERC1155Proxy extends BaseContract {
-  contractName: 'ERC1155Proxy';
+  contractName: "ERC1155Proxy";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -276,7 +276,7 @@ export interface ERC1155Proxy extends BaseContract {
   };
 
   filters: {
-    'AuthorizedAddressAdded(address,address)'(
+    "AuthorizedAddressAdded(address,address)"(
       target?: string | null,
       caller?: string | null
     ): AuthorizedAddressAddedEventFilter;
@@ -285,7 +285,7 @@ export interface ERC1155Proxy extends BaseContract {
       caller?: string | null
     ): AuthorizedAddressAddedEventFilter;
 
-    'AuthorizedAddressRemoved(address,address)'(
+    "AuthorizedAddressRemoved(address,address)"(
       target?: string | null,
       caller?: string | null
     ): AuthorizedAddressRemovedEventFilter;
