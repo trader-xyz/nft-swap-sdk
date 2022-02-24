@@ -401,9 +401,9 @@ export interface IZeroExInterface extends utils.Interface {
     '_fillRfqOrder((address,address,uint128,uint128,address,address,address,bytes32,uint64,uint256),(uint8,uint8,bytes32,bytes32),uint128,address,bool,address)': FunctionFragment;
     '_sellHeldTokenForTokenToUniswapV3(bytes,uint256,uint256,address)': FunctionFragment;
     '_transformERC20((address,address,address,uint256,uint256,(uint32,bytes)[],bool,address))': FunctionFragment;
-    'batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bool)': FunctionFragment;
-    'batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bool)': FunctionFragment;
-    'batchCancelERC1155Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[])': FunctionFragment;
+    'batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bytes[],bool)': FunctionFragment;
+    'batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bytes[],bool)': FunctionFragment;
+    'batchCancelERC1155Orders(uint256[])': FunctionFragment;
     'batchCancelERC721Orders(uint256[])': FunctionFragment;
     'batchCancelLimitOrders((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256)[])': FunctionFragment;
     'batchCancelPairLimitOrders(address[],address[],uint256[])': FunctionFragment;
@@ -420,7 +420,7 @@ export interface IZeroExInterface extends utils.Interface {
     'batchMatchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[])': FunctionFragment;
     'buyERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint128,bytes)': FunctionFragment;
     'buyERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),bytes)': FunctionFragment;
-    'cancelERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))': FunctionFragment;
+    'cancelERC1155Order(uint256)': FunctionFragment;
     'cancelERC721Order(uint256)': FunctionFragment;
     'cancelLimitOrder((address,address,uint128,uint128,uint128,address,address,address,address,bytes32,uint64,uint256))': FunctionFragment;
     'cancelPairLimitOrders(address,address,uint256)': FunctionFragment;
@@ -548,6 +548,7 @@ export interface IZeroExInterface extends utils.Interface {
       LibNFTOrder.ERC1155OrderStruct[],
       LibSignature.SignatureStruct[],
       BigNumberish[],
+      BytesLike[],
       boolean
     ]
   ): string;
@@ -556,12 +557,13 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC721OrderStruct[],
       LibSignature.SignatureStruct[],
+      BytesLike[],
       boolean
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelERC1155Orders',
-    values: [LibNFTOrder.ERC1155OrderStruct[]]
+    values: [BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelERC721Orders',
@@ -661,7 +663,7 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelERC1155Order',
-    values: [LibNFTOrder.ERC1155OrderStruct]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelERC721Order',
@@ -1466,7 +1468,7 @@ export interface IZeroExInterface extends utils.Interface {
   ): Result;
 
   events: {
-    'ERC1155OrderCancelled(bytes32,address)': EventFragment;
+    'ERC1155OrderCancelled(address,uint256)': EventFragment;
     'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)': EventFragment;
     'ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,tuple[],address,uint256,tuple[],uint128)': EventFragment;
     'ERC721OrderCancelled(address,uint256)': EventFragment;
@@ -1515,8 +1517,8 @@ export interface IZeroExInterface extends utils.Interface {
 }
 
 export type ERC1155OrderCancelledEvent = TypedEvent<
-  [string, string],
-  { orderHash: string; maker: string }
+  [string, BigNumber],
+  { maker: string; nonce: BigNumber }
 >;
 
 export type ERC1155OrderCancelledEventFilter =
@@ -1916,6 +1918,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -1923,12 +1926,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2055,7 +2059,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<ContractTransaction>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -2631,6 +2635,7 @@ export interface IZeroEx extends BaseContract {
     sellOrders: LibNFTOrder.ERC1155OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
     erc1155TokenAmounts: BigNumberish[],
+    callbackData: BytesLike[],
     revertIfIncomplete: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -2638,12 +2643,13 @@ export interface IZeroEx extends BaseContract {
   batchBuyERC721s(
     sellOrders: LibNFTOrder.ERC721OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
+    callbackData: BytesLike[],
     revertIfIncomplete: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelERC1155Orders(
-    orders: LibNFTOrder.ERC1155OrderStruct[],
+    orderNonces: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -2770,7 +2776,7 @@ export interface IZeroEx extends BaseContract {
   ): Promise<ContractTransaction>;
 
   cancelERC1155Order(
-    order: LibNFTOrder.ERC1155OrderStruct,
+    orderNonce: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -3335,6 +3341,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
@@ -3342,12 +3349,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3486,7 +3494,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<void>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -4014,13 +4022,13 @@ export interface IZeroEx extends BaseContract {
   };
 
   filters: {
-    'ERC1155OrderCancelled(bytes32,address)'(
-      orderHash?: null,
-      maker?: null
+    'ERC1155OrderCancelled(address,uint256)'(
+      maker?: null,
+      nonce?: null
     ): ERC1155OrderCancelledEventFilter;
     ERC1155OrderCancelled(
-      orderHash?: null,
-      maker?: null
+      maker?: null,
+      nonce?: null
     ): ERC1155OrderCancelledEventFilter;
 
     'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)'(
@@ -4393,6 +4401,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -4400,12 +4409,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -4520,7 +4530,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -5059,6 +5069,7 @@ export interface IZeroEx extends BaseContract {
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
       erc1155TokenAmounts: BigNumberish[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -5066,12 +5077,13 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
+      callbackData: BytesLike[],
       revertIfIncomplete: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelERC1155Orders(
-      orders: LibNFTOrder.ERC1155OrderStruct[],
+      orderNonces: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -5186,7 +5198,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     cancelERC1155Order(
-      order: LibNFTOrder.ERC1155OrderStruct,
+      orderNonce: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

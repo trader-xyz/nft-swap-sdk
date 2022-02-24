@@ -12,15 +12,15 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: 'bytes32',
-        name: 'orderHash',
-        type: 'bytes32',
-      },
-      {
-        indexed: false,
         internalType: 'address',
         name: 'maker',
         type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'nonce',
+        type: 'uint256',
       },
     ],
     name: 'ERC1155OrderCancelled',
@@ -1499,6 +1499,11 @@ const _abi = [
         type: 'uint128[]',
       },
       {
+        internalType: 'bytes[]',
+        name: 'callbackData',
+        type: 'bytes[]',
+      },
+      {
         internalType: 'bool',
         name: 'revertIfIncomplete',
         type: 'bool',
@@ -1636,6 +1641,11 @@ const _abi = [
         type: 'tuple[]',
       },
       {
+        internalType: 'bytes[]',
+        name: 'callbackData',
+        type: 'bytes[]',
+      },
+      {
         internalType: 'bool',
         name: 'revertIfIncomplete',
         type: 'bool',
@@ -1655,100 +1665,9 @@ const _abi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: 'enum LibNFTOrder.TradeDirection',
-            name: 'direction',
-            type: 'uint8',
-          },
-          {
-            internalType: 'address',
-            name: 'maker',
-            type: 'address',
-          },
-          {
-            internalType: 'address',
-            name: 'taker',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'expiry',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'nonce',
-            type: 'uint256',
-          },
-          {
-            internalType: 'contract IERC20TokenV06',
-            name: 'erc20Token',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'erc20TokenAmount',
-            type: 'uint256',
-          },
-          {
-            components: [
-              {
-                internalType: 'address',
-                name: 'recipient',
-                type: 'address',
-              },
-              {
-                internalType: 'uint256',
-                name: 'amount',
-                type: 'uint256',
-              },
-              {
-                internalType: 'bytes',
-                name: 'feeData',
-                type: 'bytes',
-              },
-            ],
-            internalType: 'struct LibNFTOrder.Fee[]',
-            name: 'fees',
-            type: 'tuple[]',
-          },
-          {
-            internalType: 'contract IERC1155Token',
-            name: 'erc1155Token',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'erc1155TokenId',
-            type: 'uint256',
-          },
-          {
-            components: [
-              {
-                internalType: 'contract IPropertyValidator',
-                name: 'propertyValidator',
-                type: 'address',
-              },
-              {
-                internalType: 'bytes',
-                name: 'propertyData',
-                type: 'bytes',
-              },
-            ],
-            internalType: 'struct LibNFTOrder.Property[]',
-            name: 'erc1155TokenProperties',
-            type: 'tuple[]',
-          },
-          {
-            internalType: 'uint128',
-            name: 'erc1155TokenAmount',
-            type: 'uint128',
-          },
-        ],
-        internalType: 'struct LibNFTOrder.ERC1155Order[]',
-        name: 'orders',
-        type: 'tuple[]',
+        internalType: 'uint256[]',
+        name: 'orderNonces',
+        type: 'uint256[]',
       },
     ],
     name: 'batchCancelERC1155Orders',
@@ -3255,100 +3174,9 @@ const _abi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: 'enum LibNFTOrder.TradeDirection',
-            name: 'direction',
-            type: 'uint8',
-          },
-          {
-            internalType: 'address',
-            name: 'maker',
-            type: 'address',
-          },
-          {
-            internalType: 'address',
-            name: 'taker',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'expiry',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'nonce',
-            type: 'uint256',
-          },
-          {
-            internalType: 'contract IERC20TokenV06',
-            name: 'erc20Token',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'erc20TokenAmount',
-            type: 'uint256',
-          },
-          {
-            components: [
-              {
-                internalType: 'address',
-                name: 'recipient',
-                type: 'address',
-              },
-              {
-                internalType: 'uint256',
-                name: 'amount',
-                type: 'uint256',
-              },
-              {
-                internalType: 'bytes',
-                name: 'feeData',
-                type: 'bytes',
-              },
-            ],
-            internalType: 'struct LibNFTOrder.Fee[]',
-            name: 'fees',
-            type: 'tuple[]',
-          },
-          {
-            internalType: 'contract IERC1155Token',
-            name: 'erc1155Token',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'erc1155TokenId',
-            type: 'uint256',
-          },
-          {
-            components: [
-              {
-                internalType: 'contract IPropertyValidator',
-                name: 'propertyValidator',
-                type: 'address',
-              },
-              {
-                internalType: 'bytes',
-                name: 'propertyData',
-                type: 'bytes',
-              },
-            ],
-            internalType: 'struct LibNFTOrder.Property[]',
-            name: 'erc1155TokenProperties',
-            type: 'tuple[]',
-          },
-          {
-            internalType: 'uint128',
-            name: 'erc1155TokenAmount',
-            type: 'uint128',
-          },
-        ],
-        internalType: 'struct LibNFTOrder.ERC1155Order',
-        name: 'order',
-        type: 'tuple',
+        internalType: 'uint256',
+        name: 'orderNonce',
+        type: 'uint256',
       },
     ],
     name: 'cancelERC1155Order',
