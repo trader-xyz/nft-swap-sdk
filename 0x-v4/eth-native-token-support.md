@@ -28,7 +28,7 @@ From there, you can fill this order as usual (e.g. `nftSwap.fillSignedOrder(...)
 
 ### Native Tokens
 
-Native token can vary with the EVM chain, although the underlying concept remains the same.
+Native token can vary with the EVM chain, although the underlying concept remains the same. It is the primary token that is used to pay gas fees and other transaction fees.
 
 Mainnet: `ETH`
 
