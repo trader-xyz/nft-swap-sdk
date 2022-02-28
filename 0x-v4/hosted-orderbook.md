@@ -4,7 +4,7 @@ description: >-
   automatically. The orderbook handles order status, order fills
 ---
 
-# Orderbook
+# Hosted Orderbook
 
 POST to https://api.trader.xyz/orderbook/order
 

@@ -16,17 +16,15 @@ Fees unlock all sorts of use cases:
 
 🔥 **Under 120k gas for a NFT swap with one fee, the cheapest on the EVM** 🔥
 
-
-
 ### Usage&#x20;
 
 Fees can be specified by:
 
 ```ts
 interface Fee {
-    recipient: string // The address to send the fee to
-    amount: string // The amount (based in the same erc20Token) to charge for fee
-    feeData?: string | undefined; // optional feeData callback
+  recipient: string // The address to send the fee to
+  amount: string // The amount (based in the same erc20Token) to charge for fee
+  feeData?: string | undefined; // optional feeData callback
 }
 ```
 
