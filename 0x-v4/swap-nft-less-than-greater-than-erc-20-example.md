@@ -2,7 +2,7 @@
 description: End-to-end example demonstrating swap a CryptoPunk for USDC
 ---
 
-# Swap ERC-721 <> ERC-20
+# Swap NFT <> ERC-20 Example
 
 Let's swap a NFT (an [`ERC721`](https://eips.ethereum.org/EIPS/eip-721)) for USDC (an [`ERC20`](https://ethereum.org/en/developers/docs/standards/tokens/erc-20/)).
 
@@ -102,3 +102,9 @@ const fillTx = await nftSwapSdk.fillSignedOrder(signedOrder);
 const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx);
 console.log(`🎉 🥳 Order filled. TxHash: ${fillTxReceipt.transactionHash}`);
 ```
+
+
+
+### Trade Lifecycle
+
+![Diagram of a order lifecycle being filled](../.gitbook/assets/trade-lifecycle.png)
