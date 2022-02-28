@@ -30,7 +30,9 @@ export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export enum SupportedChainIds {
   Ropsten = 3,
+  Mainnet = 1,
 }
+
 // User facing
 export interface UserFacingERC20AssetDataSerialized {
   tokenAddress: string;

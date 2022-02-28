@@ -164,7 +164,7 @@ class NftSwapV4 implements INftSwapV4 {
 
     invariant(
       zeroExExchangeContractAddress,
-      '0x V3 Exchange Contract Address not set. Exchange Contract is required to load NftSwap'
+      '0x V4 Exchange Contract Address not set. Exchange Contract is required to load NftSwap'
     );
 
     this.exchangeProxyContractAddress = zeroExExchangeContractAddress;
