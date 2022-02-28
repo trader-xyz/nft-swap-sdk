@@ -26,7 +26,9 @@ import { NftSwapV4 } from '@traderxyz/nft-swap-sdk';
 const nftSwapSdk = new NftSwapV4(provider, signer, chainId);
 ```
 
-Note: 0x v4 contracts with NFT support are currently only live on the Ropsten. Mainnet will be released to mainnet chains soon.
+Note: 0x v4 contracts with NFT support are currently only live on Mainnet and Ropsten.&#x20;
+
+Polygon, Optimism, Aribtrum, BSC, Fantom, and Celo will be supported very soon.&#x20;
 
 ### Quick Start
 
