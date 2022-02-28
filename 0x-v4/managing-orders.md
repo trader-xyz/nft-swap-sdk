@@ -6,7 +6,7 @@ description: Build, approve, sign, fill, cancel and save orders with the Swap SD
 
 ### Building Orders
 
-There are two ways to build orders wit the 0x v4 Swap SDK, **`buildOrder`** and **`buildNftAndErc20Order`**&#x20;
+There are two ways to build orders with the 0x v4 Swap SDK, **`buildOrder`** and **`buildNftAndErc20Order`**&#x20;
 
 
 
@@ -112,7 +112,33 @@ Documentation coming soon
 
 **Swap SDK offers integrators their own free, publicly hosted orderbook to use for their application.** This allows developers to persist orders off-chain without having to manage any additional infrastructure. Leverage the power of off-chain orders without any of the work!&#x20;
 
-Docs coming soon, hop in to discord to test drive your own free off-chain orderbook today.
+#### Save Order
 
-Developers can always bring their own orderbook/order persistance infrastructure if they'd prefer.
+To save an order to the hosted orderbook:
+
+```typescript
+await nftSwapSdk.saveOrder(signedOrder);
+```
+
+#### Fetch Order(s)
+
+To fetch order(s) from the orderbook, you can use the SDK.&#x20;
+
+```typescript
+// Search the orderbook for all offers to sell this NFT (CryptoCoven #9757)
+const orders = await nftSwap.getOrders({
+  nftToken: "0x5180db8f5c931aae63c74266b211f580155ecac8",
+  nftTokenId: "9757",
+  sellOrBuyNft: "sell", // Only show asks (sells) for this NFT (excludes asks)
+});
+ 
+// Or search by unique nonce
+const orders = await nftSwap.getOrders({
+  nonce: "0x31f42841c2db5173425b5223809cf3a38fede360",
+});ype
+```
+
+
+
+Developers can always bring their own orderbook/order persistance infrastructure if they'd prefer. There is no lock in for using the hosted orderbook.
 
