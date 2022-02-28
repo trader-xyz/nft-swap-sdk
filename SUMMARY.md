@@ -9,3 +9,4 @@
   * [ETH/Native Token support](0x-v4/eth-native-token-support.md)
   * [Royalties and Fee Configuration](0x-v4/royalties-and-fee-configuration.md)
   * [Collection-based/Floor-based orders](0x-v4/collection-based-floor-based-orders.md)
+* [Other Resources](other-resources.md)
