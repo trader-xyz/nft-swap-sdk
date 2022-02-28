@@ -21,3 +21,5 @@ const orderWithEth = nftSwap.buildOrder(
   MAKER_WALLET_ADDRESS,
 );
 ```
+
+From there, you can fill this order as usual (e.g. `nftSwap.fillSignedOrder(...)`)
