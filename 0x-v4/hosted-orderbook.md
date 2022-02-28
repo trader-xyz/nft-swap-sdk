@@ -6,6 +6,10 @@ description: >-
 
 # Hosted Orderbook
 
+Orderbook API docs WIP -- Join discord for priority help with the orderbook.
+
+
+
 POST to https://api.trader.xyz/orderbook/order
 
 
