@@ -1,6 +1,7 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BigNumber } from '@ethersproject/bignumber';
 import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
+import { BaseProvider } from '@ethersproject/providers';
 import getUnixTime from 'date-fns/getUnixTime';
 import { ContractTransaction } from 'ethers';
 import { v4 } from 'uuid';
@@ -19,117 +20,20 @@ import type {
   NftOrderV4,
   OrderStructOptionsCommon,
   OrderStructOptionsCommonStrict,
-  PropertyStruct,
   SignedNftOrderV4,
   SignedNftOrderV4Serialized,
+  SwappableAssetV4,
+  UserFacingERC1155AssetDataSerializedV4,
+  UserFacingERC20AssetDataSerializedV4,
+  UserFacingERC721AssetDataSerializedV4,
 } from './types';
-import { BaseProvider } from '@ethersproject/providers';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
-
-export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-
-export enum SupportedChainIds {
-  Ropsten = 3,
-  Mainnet = 1,
-}
-
-// User facing
-export interface UserFacingERC20AssetDataSerialized {
-  tokenAddress: string;
-  type: 'ERC20';
-  amount: string;
-}
-
-export interface UserFacingERC721AssetDataSerialized {
-  tokenAddress: string;
-  tokenId: string;
-  type: 'ERC721';
-}
-
-//   export interface UserFacingERC1155AssetDataSerialized {
-//     tokenAddress: string;
-//     tokens: Array<{ tokenId: string; tokenValue: string }>;
-//     type: 'ERC1155';
-//   }
-
-/**
- * Mimic the erc721 duck type
- */
-export interface UserFacingERC1155AssetDataSerializedNormalizedSingle {
-  tokenAddress: string;
-  tokenId: string;
-  type: 'ERC1155';
-  amount?: string; // Will default to '1'
-}
-
-export type SwappableNft =
-  | UserFacingERC721AssetDataSerialized
-  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
-
-export type SwappableAsset =
-  | UserFacingERC20AssetDataSerialized
-  | UserFacingERC721AssetDataSerialized
-  | UserFacingERC1155AssetDataSerializedNormalizedSingle;
-
-// export type ERC721Order = {
-//     direction: 0 | 1 | '0' | '1'; // sell = 0, buy = 1
-//     maker: string;
-//     taker: string;
-//     expiry: string;
-//     nonce: string;
-//     erc20Token: string;
-//     erc20TokenAmount: string;
-//     fees: FeeStruct[];
-//     erc721Token: string;
-//     erc721TokenId: string;
-//     erc721TokenProperties: string[];
-//   };
-
-export const EIP712_DOMAIN_PARAMETERS = [
-  { name: 'name', type: 'string' },
-  { name: 'version', type: 'string' },
-  { name: 'chainId', type: 'uint256' },
-  { name: 'verifyingContract', type: 'address' },
-];
-
-const ERC721ORDER_STRUCT_ABI = [
-  { type: 'uint8', name: 'direction' },
-  { type: 'address', name: 'maker' },
-  { type: 'address', name: 'taker' },
-  { type: 'uint256', name: 'expiry' },
-  { type: 'uint256', name: 'nonce' },
-  { type: 'address', name: 'erc20Token' },
-  { type: 'uint256', name: 'erc20TokenAmount' },
-  { type: 'Fee[]', name: 'fees' },
-  { type: 'address', name: 'erc721Token' },
-  { type: 'uint256', name: 'erc721TokenId' },
-  { type: 'Property[]', name: 'erc721TokenProperties' },
-];
-
-const FEE_ABI = [
-  { type: 'address', name: 'recipient' },
-  { type: 'uint256', name: 'amount' },
-  { type: 'bytes', name: 'feeData' },
-];
-
-const PROPERTY_ABI = [
-  { type: 'address', name: 'propertyValidator' },
-  { type: 'bytes', name: 'propertyData' },
-];
-
-const ERC721STRUCT_NAME = 'ERC721Order';
-
-export enum TradeDirection {
-  SellNFT = 0,
-  BuyNFT = 1,
-}
-
-export enum OrderStatus {
-  Invalid = 0,
-  Fillable = 1,
-  Unfillable = 2,
-  Expired = 3,
-}
+import {
+  ERC721STRUCT_NAME,
+  ERC721ORDER_STRUCT_ABI,
+  FEE_ABI,
+  PROPERTY_ABI,
+} from './constants';
 
 export const signOrderWithEoaWallet = async (
   order: NftOrderV4,
@@ -173,7 +77,7 @@ export const signOrderWithEoaWallet = async (
 export const getApprovalStatus = async (
   walletAddress: string,
   exchangeProxyAddressForAsset: string,
-  asset: SwappableAsset,
+  asset: SwappableAssetV4,
   provider: BaseProvider
 ): Promise<ApprovalStatus> => {
   switch (asset.type) {
@@ -241,7 +145,7 @@ export const MAX_APPROVAL = BigNumber.from(2).pow(118);
  */
 export const approveAsset = async (
   exchangeProxyAddressForAsset: string,
-  asset: SwappableAsset,
+  asset: SwappableAssetV4,
   signer: Signer,
   overrides: Partial<TransactionOverrides> = {},
   approve: boolean = true
@@ -330,8 +234,8 @@ export function parseRawSignature(rawSignature: string): ECSignature {
 export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
 
 export const generateErc721Order = (
-  nft: UserFacingERC721AssetDataSerialized,
-  erc20: UserFacingERC20AssetDataSerialized,
+  nft: UserFacingERC721AssetDataSerializedV4,
+  erc20: UserFacingERC20AssetDataSerializedV4,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC721OrderStructSerialized => {
   const erc721Order: ERC721OrderStructSerialized = {
@@ -366,8 +270,8 @@ export const generateErc721Order = (
 };
 
 export const generateErc1155Order = (
-  nft: UserFacingERC1155AssetDataSerializedNormalizedSingle,
-  erc20: UserFacingERC20AssetDataSerialized,
+  nft: UserFacingERC1155AssetDataSerializedV4,
+  erc20: UserFacingERC20AssetDataSerializedV4,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC1155OrderStructSerialized => {
   const erc1155Order: ERC1155OrderStructSerialized = {
@@ -404,20 +308,6 @@ export const generateErc1155Order = (
 
 const generateRandomNonce = () => {
   return `0x${v4().toString().split('-').join('')}`;
-};
-
-type DirectionMap = {
-  [key in TradeDirection]: 'buy' | 'sell' | undefined;
-};
-
-export const DIRECTION_MAPPING: DirectionMap = {
-  [TradeDirection.BuyNFT]: 'buy',
-  [TradeDirection.SellNFT]: 'sell',
-};
-
-export const CONTRACT_ORDER_VALIDATOR: PropertyStruct = {
-  propertyValidator: NULL_ADDRESS,
-  propertyData: [],
 };
 
 export const serializeNftOrder = (

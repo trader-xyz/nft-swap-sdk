@@ -1,6 +1,6 @@
 import { UnsupportedChainId, UnexpectedAssetTypeError } from '../../sdk/error';
 import type {
-  AddressesForChain,
+  AddressesForChainV3,
   ContractAddresses,
   SupportedTokenTypes,
 } from '../../sdk/v3/types';
@@ -9,10 +9,10 @@ import defaultAddresses from '../../sdk/v3/addresses.json';
 const getZeroExAddressesForChain = (
   chainId: number,
   addresses: ContractAddresses = defaultAddresses
-): AddressesForChain | undefined => {
+): AddressesForChainV3 | undefined => {
   const chainIdString = chainId.toString(10);
-  const maybeAddressesForChain: AddressesForChain | undefined = (
-    addresses as { [key: string]: AddressesForChain }
+  const maybeAddressesForChain: AddressesForChainV3 | undefined = (
+    addresses as { [key: string]: AddressesForChainV3 }
   )[chainIdString];
   return maybeAddressesForChain;
 };

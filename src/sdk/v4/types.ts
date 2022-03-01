@@ -204,15 +204,47 @@ export interface BuildOrderAdditionalConfig {
   nonce: BigNumberish;
 }
 
-export type AvailableSignatureTypes = 'eoa'; // No EIP-1271 / preSign yet (soon though)
+export type AvailableSignatureTypesV4 = 'eoa'; // No EIP-1271 / preSign yet (soon though)
 
-export interface SigningOptions {
-  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
+export interface SigningOptionsV4 {
+  signatureType: AvailableSignatureTypesV4; // | 'autodetect' ? and remove autodetectSignatureType maybe?
   autodetectSignatureType: boolean;
 }
 
 // Typings for addresses.json file
-export interface AddressesForChain {
+export interface AddressesForChainV4 {
   exchange: string;
   wrappedNativeToken: string;
 }
+
+// User facing
+export interface UserFacingERC20AssetDataSerializedV4 {
+  tokenAddress: string;
+  type: 'ERC20';
+  amount: string;
+}
+
+export interface UserFacingERC721AssetDataSerializedV4 {
+  tokenAddress: string;
+  tokenId: string;
+  type: 'ERC721';
+}
+
+/**
+ * Mimic the erc721 duck type
+ */
+export interface UserFacingERC1155AssetDataSerializedV4 {
+  tokenAddress: string;
+  tokenId: string;
+  type: 'ERC1155';
+  amount?: string; // Will default to '1'
+}
+
+export type SwappableNftV4 =
+  | UserFacingERC721AssetDataSerializedV4
+  | UserFacingERC1155AssetDataSerializedV4;
+
+export type SwappableAssetV4 =
+  | UserFacingERC20AssetDataSerializedV4
+  | UserFacingERC721AssetDataSerializedV4
+  | UserFacingERC1155AssetDataSerializedV4;

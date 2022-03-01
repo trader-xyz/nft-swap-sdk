@@ -3,7 +3,7 @@ import type { Bytes } from '@ethersproject/bytes';
 
 export type BigNumberish = BigNumber | Bytes | bigint | string | number;
 
-export interface AddressesForChain {
+export interface AddressesForChainV3 {
   exchange: string;
   erc20Proxy: string;
   erc721Proxy: string;
@@ -14,7 +14,7 @@ export interface AddressesForChain {
 }
 
 export type ContractAddresses = {
-  [chainId: string]: AddressesForChain;
+  [chainId: string]: AddressesForChainV3;
 };
 
 export interface Order {
@@ -60,7 +60,7 @@ export enum AssetProxyId {
   ERC20Bridge = '0xdc1600f3',
 }
 
-export enum SupportedChainIds {
+export enum SupportedChainIdsV3 {
   Mainnet = 1,
   Ropsten = 3,
   Rinkeby = 4,
@@ -72,13 +72,13 @@ export enum SupportedChainIds {
   Avalanche = 43114,
 }
 
-export interface OrderInfo {
-  orderStatus: OrderStatus;
+export interface OrderInfoV3 {
+  orderStatus: OrderStatusV3;
   orderHash: string;
   orderTakerAssetFilledAmount: BigNumber;
 }
 
-export enum OrderStatus {
+export enum OrderStatusV3 {
   Invalid = 0,
   InvalidMakerAssetAmount,
   InvalidTakerAssetAmount,
@@ -487,9 +487,9 @@ export enum RevertReason {
   OnlyCallableByWallet = 'ONLY_CALLABLE_BY_WALLET',
 }
 
-export type AvailableSignatureTypes = 'eoa' | 'eip1271';
+export type AvailableSignatureTypesV3 = 'eoa' | 'eip1271';
 
-export interface SigningOptions {
-  signatureType: AvailableSignatureTypes; // | 'autodetect' ? and remove autodetectSignatureType maybe?
+export interface SigningOptionsV3 {
+  signatureType: AvailableSignatureTypesV3; // | 'autodetect' ? and remove autodetectSignatureType maybe?
   autodetectSignatureType: boolean;
 }
