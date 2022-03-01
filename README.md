@@ -206,7 +206,7 @@ const order = nftSwapSdk.buildOrder(
   assetsToSwapUserB,
   walletAddressUserA
 );
-const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
+const signedOrder = await nftSwapSdk.signOrder(order, makerAddress);
 
 // ............................
 // Part 2 of the trade -- User B (the 'taker') accepts and fills order from User A and completes trade
