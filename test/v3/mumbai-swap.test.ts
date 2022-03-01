@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import {
   estimateGasForFillOrder,
   NftSwap,
-  SupportedChainIds,
+  SupportedChainIdsV3,
   SwappableAsset,
 } from '../../src';
 import { DEFAUTLT_GAS_BUFFER_MULTIPLES } from '../../src/utils/v3/gas-buffer';

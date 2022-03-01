@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
-import { SwappableAsset } from '../../src/sdk/v4/pure';
+import { SwappableAssetV4 } from '../../src/sdk/v4/types';
 import { SignedERC721OrderStruct } from '../../src/sdk/v4/types';
 import { NULL_ADDRESS } from '../../src/utils/eth';
 
@@ -36,13 +36,13 @@ const nftSwapperMaker = new NftSwapV4(
 );
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
-const NFT_ASSET: SwappableAsset = {
+const NFT_ASSET: SwappableAssetV4 = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
   tokenId: '11045',
 };
 
-const ERC20_ASSET: SwappableAsset = {
+const ERC20_ASSET: SwappableAssetV4 = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
   amount: '420000000000000', // 1 USDC

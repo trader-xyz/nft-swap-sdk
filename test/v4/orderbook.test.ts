@@ -6,7 +6,7 @@ import {
   postOrderToOrderbook,
   searchOrderbook,
 } from '../../src/sdk/v4/orderbook';
-import { SwappableAsset } from '../../src/sdk/v4/pure';
+import { SwappableAssetV4 } from '../../src/sdk';
 
 jest.setTimeout(90 * 1000);
 
@@ -39,12 +39,12 @@ const nftSwapperMaker = new NftSwapV4(
 );
 // const nftSwapperTaker = new NftSwap(TAKER_PROVIDER as any, 4);
 
-const TAKER_ASSET: SwappableAsset = {
+const TAKER_ASSET: SwappableAssetV4 = {
   type: 'ERC20',
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
   amount: '100000000000', // 1 USDC
 };
-const MAKER_ASSET: SwappableAsset = {
+const MAKER_ASSET: SwappableAssetV4 = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
   tokenId: '11045',

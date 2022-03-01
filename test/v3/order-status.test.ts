@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { NftSwap, SwappableAsset } from '../../src';
-import { OrderStatus } from '../../src/sdk/v3/types';
+import { OrderStatusV3 } from '../../src/sdk/v3/types';
 import { normalizeOrder } from '../../src/utils/v3/order';
 
 jest.setTimeout(60 * 1000);
@@ -95,7 +95,7 @@ describe('NFTSwap', () => {
 
     const orderInfo = await nftSwapperMaker.getOrderInfo(normalizedOrder);
 
-    expect(orderInfo.orderStatus).toBe(OrderStatus.Fillable);
+    expect(orderInfo.orderStatus).toBe(OrderStatusV3.Fillable);
 
     const signedOrder = await nftSwapperMaker.signOrder(
       normalizedOrder,
