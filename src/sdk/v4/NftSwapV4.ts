@@ -56,7 +56,9 @@ import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 
 export enum SupportedChainIdsV4 {
+  Mainnet = 1,
   Ropsten = 3,
+  Ganache = 1337,
 }
 
 export interface INftSwapV4 extends BaseNftSwap {
