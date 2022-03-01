@@ -109,7 +109,7 @@ const order = nftSwapSdk.buildOrder(
   walletAddressUserA
 );
 // Sign the order (User A signs since they are initiating the trade)
-const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
+const signedOrder = await nftSwapSdk.signOrder(order, makerAddress);
 // Part 1 Complete. User A is now done. Now we send the `signedOrder` to User B to complete the trade.
 
 // ............................
