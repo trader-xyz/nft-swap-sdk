@@ -29,20 +29,20 @@ import type {
   INftSwapV3,
 } from './INftSwapV3';
 import {
-  SupportedChainIds,
+  SupportedChainIdsV3,
   EIP712_TYPES,
   Order,
-  OrderInfo,
-  OrderStatus,
+  OrderInfoV3,
+  OrderStatusV3,
   OrderStatusCodeLookup,
   SignedOrder,
   SupportedTokenTypes,
   SwappableAsset,
-  AddressesForChain,
+  AddressesForChainV3,
   BigNumberish,
   ERC20AssetDataSerialized,
   AssetProxyId,
-  SigningOptions,
+  SigningOptionsV3,
 } from './types';
 import {
   ExchangeContract,
@@ -99,10 +99,10 @@ class NftSwapV3 implements INftSwapV3 {
     this.provider = provider;
     this.signer = signer;
     this.chainId =
-      chainId ?? (this.provider._network.chainId as SupportedChainIds);
+      chainId ?? (this.provider._network.chainId as SupportedChainIdsV3);
 
-    const chainDefaultContractAddresses: AddressesForChain | undefined =
-      addresses[this.chainId as SupportedChainIds];
+    const chainDefaultContractAddresses: AddressesForChainV3 | undefined =
+      addresses[this.chainId as SupportedChainIdsV3];
 
     const zeroExExchangeContractAddress =
       additionalConfig?.exchangeContractAddress ??
@@ -185,43 +185,44 @@ class NftSwapV3 implements INftSwapV3 {
     timeoutInMs: number = 60 * 1000,
     pollOrderStatusFrequencyInMs: number = 10_000,
     throwIfStatusOtherThanFillableOrFilled: boolean = false
-  ): Promise<OrderInfo | null> => {
+  ): Promise<OrderInfoV3 | null> => {
     let settled = false;
 
     const timeoutPromise = sleep(timeoutInMs).then((_) => null);
 
-    const orderStatusRefreshPromiseFn = async (): Promise<OrderInfo | null> => {
-      while (!settled) {
-        const orderInfo = await this.getOrderInfo(order);
-        if (orderInfo.orderStatus === OrderStatus.Fillable) {
-          await sleep(pollOrderStatusFrequencyInMs);
-          continue;
-        } else if (orderInfo.orderStatus === OrderStatus.FullyFilled) {
-          return orderInfo;
-        } else {
-          // expired, bad order, etc
-          if (throwIfStatusOtherThanFillableOrFilled) {
-            throw new Error(
-              OrderStatusCodeLookup[orderInfo.orderStatus] ??
-                orderInfo.orderStatus ??
-                'Unknown status'
-            );
+    const orderStatusRefreshPromiseFn =
+      async (): Promise<OrderInfoV3 | null> => {
+        while (!settled) {
+          const orderInfo = await this.getOrderInfo(order);
+          if (orderInfo.orderStatus === OrderStatusV3.Fillable) {
+            await sleep(pollOrderStatusFrequencyInMs);
+            continue;
+          } else if (orderInfo.orderStatus === OrderStatusV3.FullyFilled) {
+            return orderInfo;
+          } else {
+            // expired, bad order, etc
+            if (throwIfStatusOtherThanFillableOrFilled) {
+              throw new Error(
+                OrderStatusCodeLookup[orderInfo.orderStatus] ??
+                  orderInfo.orderStatus ??
+                  'Unknown status'
+              );
+            }
+            return orderInfo;
           }
-          return orderInfo;
         }
-      }
-      return null;
-    };
+        return null;
+      };
     const fillEventListenerFn = async () => {
       // TODO(johnrjj)
       await sleep(timeoutInMs * 2);
       return null;
     };
 
-    const orderStatusRefreshPromiseLoop: Promise<OrderInfo | null> =
+    const orderStatusRefreshPromiseLoop: Promise<OrderInfoV3 | null> =
       orderStatusRefreshPromiseFn();
 
-    const fillEventPromise: Promise<OrderInfo | null> = fillEventListenerFn();
+    const fillEventPromise: Promise<OrderInfoV3 | null> = fillEventListenerFn();
 
     const orderInfo = await Promise.any([
       timeoutPromise,
@@ -233,11 +234,11 @@ class NftSwapV3 implements INftSwapV3 {
     return orderInfo;
   };
 
-  public getOrderInfo = async (order: Order): Promise<OrderInfo> => {
+  public getOrderInfo = async (order: Order): Promise<OrderInfoV3> => {
     return _getOrderInfo(this.exchangeContract, order);
   };
 
-  public getOrderStatus = async (order: Order): Promise<OrderStatus> => {
+  public getOrderStatus = async (order: Order): Promise<OrderStatusV3> => {
     const orderInfo = await this.getOrderInfo(order);
     return orderInfo.orderStatus;
   };
@@ -250,7 +251,7 @@ class NftSwapV3 implements INftSwapV3 {
     order: Order,
     addressOfWalletSigningOrder: string,
     signerOverride?: Signer,
-    signingOptions?: Partial<SigningOptions>
+    signingOptions?: Partial<SigningOptionsV3>
   ) => {
     const signerToUser = signerOverride ?? this.signer;
     if (!signerToUser) {

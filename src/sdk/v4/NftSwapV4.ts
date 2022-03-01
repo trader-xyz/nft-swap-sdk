@@ -21,32 +21,25 @@ import type {
 import { UnexpectedAssetTypeError } from '../error';
 import {
   approveAsset,
-  CONTRACT_ORDER_VALIDATOR,
-  DIRECTION_MAPPING,
   generateErc1155Order,
   generateErc721Order,
   getApprovalStatus,
-  OrderStatus,
   parseRawSignature,
   signOrderWithEoaWallet,
-  SupportedChainIds,
-  SwappableAsset,
-  SwappableNft,
-  TradeDirection,
-  UserFacingERC1155AssetDataSerializedNormalizedSingle,
-  UserFacingERC20AssetDataSerialized,
-  UserFacingERC721AssetDataSerialized,
 } from './pure';
 import type {
-  AddressesForChain,
+  AddressesForChainV4,
   ApprovalOverrides,
   FillOrderOverrides,
   NftOrderV4,
   NftOrderV4Serialized,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
-  SignedNftOrderV4Serialized,
-  SigningOptions,
+  SigningOptionsV4,
+  SwappableAssetV4,
+  UserFacingERC1155AssetDataSerializedV4,
+  UserFacingERC20AssetDataSerializedV4,
+  UserFacingERC721AssetDataSerializedV4,
 } from './types';
 import {
   ERC1155_TRANSFER_FROM_DATA,
@@ -59,6 +52,8 @@ import {
   searchOrderbook,
   SearchOrdersParams,
 } from './orderbook';
+import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
+import { CONTRACT_ORDER_VALIDATOR } from './properties';
 
 export enum SupportedChainIdsV4 {
   Ropsten = 3,
@@ -69,24 +64,24 @@ export interface INftSwapV4 extends BaseNftSwap {
     order: NftOrderV4,
     signerAddress: string,
     signer: Signer,
-    signingOptions?: Partial<SigningOptions>
+    signingOptions?: Partial<SigningOptionsV4>
   ) => Promise<SignedNftOrderV4>;
   buildNftAndErc20Order: (
     nft:
-      | UserFacingERC721AssetDataSerialized
-      | UserFacingERC1155AssetDataSerializedNormalizedSingle,
-    erc20: UserFacingERC20AssetDataSerialized,
+      | UserFacingERC721AssetDataSerializedV4
+      | UserFacingERC1155AssetDataSerializedV4,
+    erc20: UserFacingERC20AssetDataSerializedV4,
     sellOrBuyNft: 'sell' | 'buy',
     makerAddress: string,
     userConfig?: Partial<OrderStructOptionsCommonStrict>
   ) => NftOrderV4Serialized;
   loadApprovalStatus: (
-    asset: SwappableAsset,
+    asset: SwappableAssetV4,
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides>
   ) => Promise<ApprovalStatus>;
   approveTokenOrNftByAsset: (
-    asset: SwappableAsset,
+    asset: SwappableAssetV4,
     walletAddress: string,
     approvalTransactionOverrides?: Partial<TransactionOverrides>,
     approvalOverrides?: Partial<ApprovalOverrides>
@@ -97,10 +92,9 @@ export interface INftSwapV4 extends BaseNftSwap {
     transactionOverrides?: Partial<PayableOverrides>
   ) => Promise<ContractTransaction>;
   awaitTransactionHash: (txHash: string) => Promise<TransactionReceipt>;
-  // TODO(johnrjj) - Better cancel interface. Get feedback.
   cancelOrder: (
     nonce: BigNumberish,
-    orderType: 'ERC721' | 'ERC1155'
+    orderType: 'ERC721' | 'ERC1155' // Can we make this optional
   ) => Promise<ContractTransaction>;
   // waitUntilOrderFilledOrCancelled: (
   //   order: NftOrderV4,
@@ -108,7 +102,7 @@ export interface INftSwapV4 extends BaseNftSwap {
   //   pollOrderStatusFrequencyInMs?: number,
   //   throwIfStatusOtherThanFillableOrFilled?: boolean
   // ) => Promise<OrderStatus | null>;
-  getOrderStatus: (order: NftOrderV4) => Promise<OrderStatus>;
+  getOrderStatus: (order: NftOrderV4) => Promise<OrderStatusV4>;
   // getOrderHash: (order: NftOrderV4) => string;
   // getTypedData: (
   //   chainId: number,
@@ -135,6 +129,8 @@ export interface AdditionalSdkConfig {
   orderbookRootUrl: string;
 }
 
+export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
 class NftSwapV4 implements INftSwapV4 {
   public provider: BaseProvider;
   public signer: Signer | undefined;
@@ -153,10 +149,10 @@ class NftSwapV4 implements INftSwapV4 {
     this.provider = provider;
     this.signer = signer;
     this.chainId =
-      chainId ?? (this.provider._network.chainId as SupportedChainIds);
+      chainId ?? (this.provider._network.chainId as SupportedChainIdsV4);
 
-    const defaultAddressesForChain: AddressesForChain | undefined =
-      addresses[this.chainId as SupportedChainIds];
+    const defaultAddressesForChain: AddressesForChainV4 | undefined =
+      addresses[this.chainId as SupportedChainIdsV4];
 
     const zeroExExchangeContractAddress =
       additionalConfig?.zeroExExchangeProxyContractAddress ??
@@ -179,7 +175,7 @@ class NftSwapV4 implements INftSwapV4 {
   }
 
   loadApprovalStatus = (
-    asset: SwappableAsset,
+    asset: SwappableAssetV4,
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides> | undefined
   ) => {
@@ -230,7 +226,10 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unsupport order');
   };
 
-  approveTokenOrNftByAsset = (asset: SwappableAsset, walletAddress: string) => {
+  approveTokenOrNftByAsset = (
+    asset: SwappableAssetV4,
+    walletAddress: string
+  ) => {
     if (!this.signer) {
       throw new Error('Signed not defined');
     }
@@ -242,32 +241,32 @@ class NftSwapV4 implements INftSwapV4 {
   // // ERC1155<>ERC20
   // // Below ensures type-safe for those specific combinations
   buildOrder(
-    makerAsset: UserFacingERC1155AssetDataSerializedNormalizedSingle,
-    takerAsset: UserFacingERC20AssetDataSerialized,
+    makerAsset: UserFacingERC1155AssetDataSerializedV4,
+    takerAsset: UserFacingERC20AssetDataSerializedV4,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
   ): NftOrderV4Serialized;
   buildOrder(
-    makerAsset: UserFacingERC20AssetDataSerialized,
-    takerAsset: UserFacingERC1155AssetDataSerializedNormalizedSingle,
+    makerAsset: UserFacingERC20AssetDataSerializedV4,
+    takerAsset: UserFacingERC1155AssetDataSerializedV4,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
   ): NftOrderV4Serialized;
   buildOrder(
-    makerAsset: UserFacingERC721AssetDataSerialized,
-    takerAsset: UserFacingERC20AssetDataSerialized,
+    makerAsset: UserFacingERC721AssetDataSerializedV4,
+    takerAsset: UserFacingERC20AssetDataSerializedV4,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
   ): NftOrderV4Serialized;
   buildOrder(
-    makerAsset: UserFacingERC20AssetDataSerialized,
-    takerAsset: UserFacingERC721AssetDataSerialized,
+    makerAsset: UserFacingERC20AssetDataSerializedV4,
+    takerAsset: UserFacingERC721AssetDataSerializedV4,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
   ): NftOrderV4Serialized;
   buildOrder(
-    makerAsset: SwappableAsset,
-    takerAsset: SwappableAsset,
+    makerAsset: SwappableAssetV4,
+    takerAsset: SwappableAssetV4,
     makerAddress: string,
     orderConfig?: Partial<OrderStructOptionsCommonStrict>
   ) {
@@ -299,10 +298,10 @@ class NftSwapV4 implements INftSwapV4 {
 
     const nft = (
       direction === TradeDirection.BuyNFT ? takerAsset : makerAsset
-    ) as SwappableNft;
+    ) as SwappableAssetV4;
     const erc20 = (
       direction === TradeDirection.BuyNFT ? makerAsset : takerAsset
-    ) as UserFacingERC20AssetDataSerialized;
+    ) as UserFacingERC20AssetDataSerializedV4;
 
     return this.buildNftAndErc20Order(
       nft,
@@ -314,7 +313,7 @@ class NftSwapV4 implements INftSwapV4 {
   }
 
   buildCollectionBasedOrder = (
-    erc20ToSell: UserFacingERC20AssetDataSerialized,
+    erc20ToSell: UserFacingERC20AssetDataSerializedV4,
     nftCollectionToBid: {
       tokenAddress: string;
       type: 'ERC721' | 'ERC1155';
@@ -338,8 +337,8 @@ class NftSwapV4 implements INftSwapV4 {
   };
 
   buildNftAndErc20Order = (
-    nft: SwappableNft,
-    erc20: UserFacingERC20AssetDataSerialized,
+    nft: SwappableAssetV4,
+    erc20: UserFacingERC20AssetDataSerializedV4,
     sellOrBuyNft: 'sell' | 'buy' = 'sell',
     makerAddress: string,
     userConfig?: Partial<OrderStructOptionsCommonStrict>

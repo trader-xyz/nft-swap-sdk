@@ -3,10 +3,10 @@ import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
 import type {
   Order,
-  OrderInfo,
-  OrderStatus,
+  OrderInfoV3,
+  OrderStatusV3,
   SignedOrder,
-  SigningOptions,
+  SigningOptionsV3,
   SwappableAsset,
   TypedData,
 } from './types';
@@ -33,7 +33,7 @@ export interface INftSwapV3 extends BaseNftSwap {
     order: Order,
     signerAddress: string,
     signer: Signer,
-    signingOptions?: Partial<SigningOptions>
+    signingOptions?: Partial<SigningOptionsV3>
   ) => Promise<SignedOrder>;
   buildOrder: (
     makerAssets: Array<SwappableAsset>,
@@ -64,9 +64,9 @@ export interface INftSwapV3 extends BaseNftSwap {
     timeoutInMs?: number,
     pollOrderStatusFrequencyInMs?: number,
     throwIfStatusOtherThanFillableOrFilled?: boolean
-  ) => Promise<OrderInfo | null>;
-  getOrderStatus: (order: Order) => Promise<OrderStatus>;
-  getOrderInfo: (order: Order) => Promise<OrderInfo>;
+  ) => Promise<OrderInfoV3 | null>;
+  getOrderStatus: (order: Order) => Promise<OrderStatusV3>;
+  getOrderInfo: (order: Order) => Promise<OrderInfoV3>;
   getOrderHash: (order: Order) => string;
   getTypedData: (
     chainId: number,

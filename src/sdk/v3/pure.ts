@@ -37,18 +37,18 @@ import { UnexpectedAssetTypeError } from '../error';
 import {
   AdditionalOrderConfig,
   AssetProxyId,
-  AvailableSignatureTypes,
+  AvailableSignatureTypesV3,
   EIP712_TYPES,
   ERC1155AssetDataSerialized,
   ERC20AssetDataSerialized,
   ERC721AssetDataSerialized,
   MultiAssetDataSerializedRecursivelyDecoded,
   Order,
-  OrderInfo,
-  OrderStatus,
+  OrderInfoV3,
+  OrderStatusV3,
   SerializedAvailableAssetDataTypesDecoded,
   SignedOrder,
-  SigningOptions,
+  SigningOptionsV3,
   SwappableAsset,
   UserFacingERC1155AssetDataSerializedNormalizedSingle,
   UserFacingERC20AssetDataSerialized,
@@ -74,17 +74,17 @@ export const cancelOrder = (
 export const getOrderInfo = async (
   exchangeContract: ExchangeContract,
   order: Order
-): Promise<OrderInfo> => {
+): Promise<OrderInfoV3> => {
   const orderInfo = await exchangeContract.getOrderInfo(order);
-  return orderInfo as OrderInfo;
+  return orderInfo as OrderInfoV3;
 };
 
 export const getOrderStatus = async (
   exchangeContract: ExchangeContract,
   order: Order
-): Promise<OrderStatus> => {
+): Promise<OrderStatusV3> => {
   const orderInfo = await exchangeContract.getOrderInfo(order);
-  return orderInfo.orderStatus as OrderStatus;
+  return orderInfo.orderStatus as OrderStatusV3;
 };
 
 export const cancelOrders = (
@@ -201,10 +201,10 @@ export const signOrder = async (
   provider: Provider,
   chainId: number,
   exchangeContractAddress: string,
-  signingOptions?: Partial<SigningOptions>
+  signingOptions?: Partial<SigningOptionsV3>
 ): Promise<SignedOrder> => {
   try {
-    let method: AvailableSignatureTypes = 'eoa';
+    let method: AvailableSignatureTypesV3 = 'eoa';
     // If we have any specific signature type overrides, prefer those
     if (signingOptions?.signatureType === 'eip1271') {
       method = 'eip1271';
