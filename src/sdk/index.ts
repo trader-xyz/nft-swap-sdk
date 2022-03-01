@@ -6,6 +6,7 @@ export * from './v3/types';
 export * from './v3/pure';
 export * from './v4/types';
 export * from './v4/enums';
+export * from './v4/constants';
 export * from '../utils/v3/asset-data';
 // Export contracts for advanced mode
 export * as ExchangeContract from '../contracts/ExchangeContract';
