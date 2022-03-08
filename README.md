@@ -259,7 +259,7 @@ const App = () => {
   - Rinkeby (4)
   - Polygon (137)
   - Binance Smart Chain (56)
-  - Avalance (43114)
+  - Avalanche (43114)
 
 - What protocol does this library?
 
