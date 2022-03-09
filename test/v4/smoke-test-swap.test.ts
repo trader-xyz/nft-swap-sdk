@@ -78,7 +78,9 @@ describe('NFTSwapV4', () => {
     // const takerApprovalTxHash = await (await takerApprovalTx.wait()).transactionHash
     // console.log('taker approval tx hash', takerApprovalTxHash)
 
-    // const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+    const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+
+    await nftSwapperMaker.postOrder(signedOrder, '3');
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 

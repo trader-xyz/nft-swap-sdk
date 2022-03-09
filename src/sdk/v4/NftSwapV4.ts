@@ -98,6 +98,11 @@ export interface INftSwapV4 extends BaseNftSwap {
     nonce: BigNumberish,
     orderType: 'ERC721' | 'ERC1155' // Can we make this optional
   ) => Promise<ContractTransaction>;
+  matchOrders: (
+    sellOrder: SignedNftOrderV4,
+    buyOrder: SignedNftOrderV4,
+    transactionOverrides?: Partial<PayableOverrides>
+  ) => Promise<ContractTransaction>;
   // waitUntilOrderFilledOrCancelled: (
   //   order: NftOrderV4,
   //   timeoutInMs?: number,
@@ -604,6 +609,29 @@ class NftSwapV4 implements INftSwapV4 {
       rootUrl: this.orderbookRootUrl,
     });
     return orders;
+  };
+
+  // NOTE(johnrjj)- Should these types be SignedERC721OrderStruct directly since only 712 is supported for matching
+  matchOrders = async (
+    sellOrder: SignedNftOrderV4,
+    buyOrder: SignedNftOrderV4,
+    transactionOverrides?: Partial<PayableOverrides>
+  ) => {
+    if ('erc721Token' in sellOrder && 'erc721Token' in buyOrder) {
+      // TODO(johnrjj) - More validation here before we match on-chain
+      const contractTx = await this.exchangeProxy.matchERC721Orders(
+        sellOrder,
+        buyOrder,
+        sellOrder.signature,
+        buyOrder.signature,
+        transactionOverrides ?? {}
+      );
+      return contractTx;
+    }
+
+    throw new Error(
+      'Only ERC721 Orders are currently supported for matching. Please ensure both the sellOrder and buyOrder are ERC721 orders'
+    );
   };
 }
 

@@ -1,11 +1,5 @@
 import { ethers } from 'ethers';
-import { first } from 'lodash';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
-
-import {
-  postOrderToOrderbook,
-  searchOrderbook,
-} from '../../src/sdk/v4/orderbook';
 import { SwappableAssetV4 } from '../../src/sdk';
 
 jest.setTimeout(90 * 1000);
@@ -15,7 +9,6 @@ const MAKER_PRIVATE_KEY =
   'fc5db508b0a52da8fbcac3ab698088715595f8de9cccf2467d51952eec564ec9';
 // NOTE(johnrjj) - NEVER use these private keys for anything of value, testnets only!
 
-const WETH_TOKEN_ADDRESS_TESTNET = '0xc778417e063141139fce010982780140aa0cd5ab';
 const DAI_TOKEN_ADDRESS_TESTNET = '0x31f42841c2db5173425b5223809cf3a38fede360';
 const TEST_NFT_CONTRACT_ADDRESS = '0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b'; // https://ropsten.etherscan.io/token/0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b?a=0xabc23F70Df4F45dD3Df4EC6DA6827CB05853eC9b
 
@@ -44,50 +37,38 @@ const TAKER_ASSET: SwappableAssetV4 = {
   tokenAddress: DAI_TOKEN_ADDRESS_TESTNET,
   amount: '100000000000', // 1 USDC
 };
-const MAKER_ASSET: SwappableAssetV4 = {
+const NFT_ASSET: SwappableAssetV4 = {
   type: 'ERC721',
   tokenAddress: TEST_NFT_CONTRACT_ADDRESS,
   tokenId: '11045',
 };
 
 describe('NFTSwapV4', () => {
-  it('orderbook should return orders', async () => {
-    const orders = await nftSwapperMaker.getOrders();
-
-    expect(orders.orders.length).toBeGreaterThan(0);
-  });
-
-  it('v4 erc721 test with orderbook e2e', async () => {
+  it('order matching should work', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
-    const v4Erc721Order = nftSwapperMaker.buildOrder(
-      MAKER_ASSET,
+
+    const v4Erc721OrderSellNft = nftSwapperMaker.buildOrder(
+      NFT_ASSET,
       TAKER_ASSET,
       MAKER_WALLET_ADDRESS
     );
 
-    const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
-
-    const testMetadata = { testData: 'unit-test' };
-
-    const createdOrder = await postOrderToOrderbook(
-      signedOrder,
-      ROPSTEN_CHAIN_ID.toString(10),
-      testMetadata
+    const v4Erc721OrderBuyNft = nftSwapperMaker.buildOrder(
+      TAKER_ASSET,
+      NFT_ASSET,
+      MAKER_WALLET_ADDRESS
     );
 
-    expect(createdOrder.order.nonce).toEqual(v4Erc721Order.nonce);
+    const signedOrderSellNft = await nftSwapperMaker.signOrder(
+      v4Erc721OrderSellNft
+    );
+    const signedOrderBuyNft = await nftSwapperMaker.signOrder(
+      v4Erc721OrderBuyNft
+    );
 
-    const orderSearch = await searchOrderbook({
-      nonce: signedOrder.nonce.toString(),
-    });
-    const maybeOrder = first(orderSearch.orders);
+    // const contractTx = await nftSwapperMaker.matchOrders(signedOrderSellNft, signedOrderBuyNft);
+    // const txReceipt = await contractTx.wait()
 
-    expect(maybeOrder?.order.nonce).toEqual(signedOrder.nonce);
-    expect(maybeOrder?.metadata).toEqual(testMetadata);
-
-    // const orderTofill = (maybeOrder as any).order as SignedNftOrderV4Serialized
-    // const fillTx = await nftSwapperMaker.fillSignedOrder(orderTofill);
-    // const txReceipt = await fillTx.wait();
-    // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
+    // console.log(`Matched NFT ERC721 Orders. Tx Hash: ${txReceipt.transactionHash}`)
   });
 });
