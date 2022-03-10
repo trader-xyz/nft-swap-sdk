@@ -57,4 +57,4 @@ await nftSwap.fillSignedOrder(foundOrder.order);
 
 ### Monitoring Orderbook Status
 
-The status page for the orderbook can be found here: https://status.trader.xyz
+The status page for the orderbook can be found here: [https://status.trader.xyz](https://status.trader.xyz)
