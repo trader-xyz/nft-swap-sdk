@@ -1,4 +1,10 @@
-import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
+import {
+  hexConcat,
+  hexDataLength,
+  hexDataSlice,
+  joinSignature,
+  splitSignature,
+} from '@ethersproject/bytes';
 import { ethers } from 'ethers';
 import { NftSwap, SwappableAsset } from '../../src';
 import {
@@ -76,24 +82,13 @@ describe('NFTSwap', () => {
       MAKER_WALLET_ADDRESS.toLowerCase()
     );
 
-    const rawSignature = await signOrderWithEoaWallet(
-      order,
-      nftSwapperMaker.signer as any,
-      nftSwapperMaker.chainId,
-      nftSwapperMaker.exchangeContractAddress
-    );
-
-    const length = hexDataLength(signedOrder.signature);
-    const signatureType = hexDataSlice(signedOrder.signature, length - 1);
-
-    expect(signatureType).toBe('0x02');
-
     const isValidSignature = await verifyOrderSignature(
       normalizedSignedOrder,
-      rawSignature,
+      signedOrder.signature,
       80001,
       nftSwapperMaker.exchangeContract.address
     );
+
     expect(isValidSignature).toBe(true);
   });
 });
