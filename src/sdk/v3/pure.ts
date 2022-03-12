@@ -7,6 +7,7 @@ import {
   hexDataLength,
   hexDataSlice,
   hexlify,
+  joinSignature,
   splitSignature,
 } from '@ethersproject/bytes';
 import { verifyTypedData } from '@ethersproject/wallet';
@@ -312,15 +313,25 @@ export const verifyOrderSignature = (
   const EIP712_DOMAIN = getEipDomain(chainId, exchangeContractAddress);
   try {
     const maker = order.makerAddress.toLowerCase();
+    const length = hexDataLength(signature);
+    // Grab the V (exists at index 0 for 0x orders)
+    const slicedSigV = hexDataSlice(signature, 0, 1);
+    // Grab the R and S (index 1 through length - 1 b/c the end hex is the signature type so we strip that too)
+    const slicedSig = hexDataSlice(signature, 1, length - 1);
+
+    const derivedSignatureHex = hexConcat([slicedSig, slicedSigV]);
+    const derivedSignature = joinSignature(derivedSignatureHex);
+
     const signer = verifyTypedData(
       EIP712_DOMAIN,
       EIP712_TYPES,
       order,
-      signature
+      derivedSignature
     );
 
     return maker.toLowerCase() === signer.toLowerCase();
-  } catch {
+  } catch (e) {
+    console.log(e);
     return false;
   }
 };
