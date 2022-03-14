@@ -6,7 +6,7 @@ description: >-
 
 # 0x v4 Swap SDK
 
-![0x v4 Integration into Swap SDK is here!](<../.gitbook/assets/IMAGE 2022-01-31 141408.jpg>)
+![0x v4 Integration into Swap SDK is here!](<.gitbook/assets/IMAGE 2022-01-31 141408.jpg>)
 
 ### Overview
 
@@ -14,9 +14,7 @@ description: >-
 
 Swapping with the Swap SDK just got even better. With the new integration of 0x v4, **NFT trades that use the Swap SDK are the cheapest and most efficient swaps available on Ethereum.** Leverage the updated Swap SDK to ensure your users have the lowest possible gas fees anywhere. Read more about the gas optimizations below.&#x20;
 
-**Currently 0x v4 NFT is available on Mainnet and Ropsten Testnet.**
-
-Polygon, Optimism, Aribtrum, BSC, Fantom, and Celo will be supported very soon and just awaiting final deployment(s). When ready, the NFT Swap SDK will automatically support those networks and offer hosted orderbooks for the respective chain.
+**0x v4 NFT is available on Ethereum Mainnet,  Polygon, Optimism, BSC, Fantom, and Celo, and Ropsten Testnet.** Arbitrum will be supported very soon and just awaiting final deployment.
 
 #### About Swap SDK
 
@@ -26,11 +24,11 @@ Swap SDK allows developers to build NFT swap functionality into their Ethereum (
 
 > **0x v4 is the cheapest way to swap an NFT on Ethereum or any EVM-compatible chain.**
 
-![](../.gitbook/assets/gas-optimization-banner.png)
+![](.gitbook/assets/gas-optimization-banner.png)
 
 Whether you prefer on-chain or off-chain orders, 0x v4 is the cheapest and most efficient way to swap NFTs to date.
 
-![Gas analysis as of 1/31/2022](../.gitbook/assets/0x-v4-gas-costs.jpg)
+![Gas analysis as of 1/31/2022](.gitbook/assets/0x-v4-gas-costs.jpg)
 
 Since Swap SDK uses 0x v4 protocol under the hood, the Swap SDK is the the most gas-efficient and cheapest way to swap NFTs on Ethereum. Build your app confidently knowing you're offering your users the best swapping experience available.
 
@@ -50,7 +48,7 @@ Based on recent gas benchmarks, 0x v4 is significantly cheaper  to fill orders.
 
 NFT buys and sells (bids and asks) are both supported.
 
-![Analysis of Order support of leading NFT protocols](../.gitbook/assets/order-support.png)
+![Analysis of Order support of leading NFT protocols](.gitbook/assets/order-support.png)
 
 Note: Currently 0x v4 does not support NFT<>NFT swaps (e.g. ERC721<>ERC721). If required, you can use the 0x v3 protocol until v4 support is added.
 
