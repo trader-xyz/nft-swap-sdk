@@ -282,14 +282,20 @@ const App = () => {
 - How do I store a `SignedOrder`
   - That's up to you. This library has no opinions on how to store orders. You can throw them in a centralized SQL database, save them to localstorage, use a decentralized messaging solution -- it's really up to you and your app concerns. You can even serialize and compress an order to fit in a tweet or shareable URL! 🤯
 
+## Support
+
+For personalized help, please join the #dev-help channel in our Discord: https://discord.gg/RTvpQcxn4V
+
+For general documentation, check out https://docs.swapsdk.xyz
+
 ## Roadmap
 
 We're currently working on the following features for the next iteration of this library
 
-- Persistent data store of orders (off-the-shelf storage in trader.xyz's public order storage server). Think of it as a public good
-- Property-based orders
-- Order validation
-- Live order status
+- ✅ LIVE -- Persistent data store of orders (off-the-shelf storage in trader.xyz's public order storage server). Think of it as a public good
+- ✅ LIVE -- Property-based orders
+- ✅ LIVE -- Order validation
+- ✅ LIVE -- Live order status
 - Order event streaming via websockets
 
 If you have feature requests, reach out in our [Discord](https://discord.gg/GCf5rSX6).
