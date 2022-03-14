@@ -6,6 +6,7 @@ import type {
 import type { BigNumberish, ContractTransaction } from 'ethers';
 import { Interface } from '@ethersproject/abi';
 import invariant from 'tiny-invariant';
+import warning from 'tiny-warning';
 import {
   ERC1155__factory,
   ERC721__factory,
@@ -59,7 +60,22 @@ export enum SupportedChainIdsV4 {
   Mainnet = 1,
   Ropsten = 3,
   Ganache = 1337,
+  Polygon = 137,
+  BSC = 56,
+  Optimism = 10,
+  Fantom = 250,
+  Celo = 42220,
+  Avalance = 43114,
+  // Arbitrum = 42161, // soon
 }
+
+export const SupportedChainsForV4OrderbookStatusMonitoring = [
+  SupportedChainIdsV4.Ropsten,
+  SupportedChainIdsV4.Polygon,
+  SupportedChainIdsV4.Mainnet,
+  SupportedChainIdsV4.Optimism,
+  // SupportedChainIdsV4.Arbitrum,
+];
 
 export interface INftSwapV4 extends BaseNftSwap {
   signOrder: (
@@ -599,6 +615,13 @@ class NftSwapV4 implements INftSwapV4 {
     chainId: string,
     metadata?: Record<string, string>
   ) => {
+    const supportsMonitoring = SupportedChainsForV4OrderbookStatusMonitoring.includes(
+      parseInt(chainId)
+    );
+    warning(
+      supportsMonitoring,
+      `Chain ${chainId} does not support live orderbook status monitoring. Orders can be posted to be persisted, but status wont be monitored (e.g. updating status on a fill, cancel, or expiry.)`
+    );
     postOrderToOrderbook(signedOrder, chainId, metadata, {
       rootUrl: this.orderbookRootUrl,
     });
