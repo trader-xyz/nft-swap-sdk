@@ -8,7 +8,9 @@ Let's swap a NFT (an [`ERC721`](https://eips.ethereum.org/EIPS/eip-721)) for USD
 
 
 
-In this first example, we're going to do a 1:1 NFT swap. We're going to swap User A's CryptoPunk NFT for User B's Bored Ape NFT.
+In this first example, we're going to do an ERC20<>NFT swap. We're going to swap User A's CryptoPunk NFT for 69 USDC.&#x20;
+
+This is a common scenario on NFT marketplaces -- User A lists an NFT for sale in exchange for a certain amount of a token (commonly ETH or USDC). Anyone can fill the order (e.g. buy the NFT that is listed for sale) as long as they have enough token balance of the required token.
 
 > **Terminology**: `maker`: Since User A will initiate the trade, we'll refer to User A as the `maker` of the trade.
 
