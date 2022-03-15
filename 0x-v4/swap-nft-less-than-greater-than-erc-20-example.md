@@ -6,11 +6,9 @@ description: End-to-end example demonstrating swap a CryptoPunk for USDC
 
 Let's swap a NFT (an [`ERC721`](https://eips.ethereum.org/EIPS/eip-721)) for USDC (an [`ERC20`](https://ethereum.org/en/developers/docs/standards/tokens/erc-20/)).
 
+In this first example, we're going to do an NFT<>ERC20 swap. We're going to swap User A's CryptoPunk NFT for 69 USDC.&#x20;
 
-
-In this first example, we're going to do an ERC20<>NFT swap. We're going to swap User A's CryptoPunk NFT for 69 USDC.&#x20;
-
-This is a common scenario on NFT marketplaces -- User A lists an NFT for sale in exchange for a certain amount of a token (commonly ETH or USDC). Anyone can fill the order (e.g. buy the NFT that is listed for sale) as long as they have enough token balance of the required token.
+This is a common scenario on NFT marketplaces -- User A lists an NFT for sale in exchange for a certain amount of a token (in this example, 69 USDC). Anyone can then fill the order (i.e. buy the NFT that is listed for sale) as long as they have enough token balance.
 
 > **Terminology**: `maker`: Since User A will initiate the trade, we'll refer to User A as the `maker` of the trade.
 
