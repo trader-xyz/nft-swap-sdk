@@ -77,14 +77,14 @@ const postOrderToOrderbook = async (
 };
 
 export interface SearchOrdersParams {
-  erc20Token: string;
-  nftTokenId: string;
-  nftToken: string;
-  nftType: string;
-  chainId: string;
-  maker: string;
-  taker: string;
-  nonce: string;
+  erc20Token?: string;
+  nftTokenId?: string;
+  nftToken?: string;
+  nftType?: string;
+  chainId?: string;
+  maker?: string;
+  taker?: string;
+  nonce?: string;
 }
 
 const searchOrderbook = async (
