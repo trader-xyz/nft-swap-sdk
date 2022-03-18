@@ -536,7 +536,7 @@ class NftSwapV4 implements INftSwapV4 {
         return this.exchangeProxy.buyERC1155(
           signedOrder,
           signedOrder.signature,
-          1,
+          signedOrder.erc1155TokenAmount,
           '0x',
           transactionOverrides ?? {}
         );
@@ -563,7 +563,7 @@ class NftSwapV4 implements INftSwapV4 {
           signedOrder.signature,
           fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
             signedOrder.erc1155TokenId,
-          signedOrder.erc20TokenAmount,
+          signedOrder.erc1155TokenAmount,
           unwrapNativeToken,
           '0x',
           transactionOverrides ?? {}
