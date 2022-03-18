@@ -14,26 +14,30 @@ import { NULL_ADDRESS } from '../../utils/eth';
 import { UnexpectedAssetTypeError } from '../error';
 import type {
   ECSignature,
+  ERC721OrderStruct,
+  ERC721OrderStructSerialized,
   ERC1155OrderStruct,
   ERC1155OrderStructSerialized,
-  ERC721OrderStructSerialized,
   NftOrderV4,
   OrderStructOptionsCommon,
   OrderStructOptionsCommonStrict,
   SignedNftOrderV4,
   SignedNftOrderV4Serialized,
   SwappableAssetV4,
-  UserFacingERC1155AssetDataSerializedV4,
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
+  UserFacingERC1155AssetDataSerializedV4,
 } from './types';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
 import {
-  ERC721STRUCT_NAME,
+  ERC721ORDER_STRUCT_NAME,
   ERC721ORDER_STRUCT_ABI,
+  ERC1155ORDER_STRUCT_NAME,
+  ERC1155ORDER_STRUCT_ABI,
   FEE_ABI,
   PROPERTY_ABI,
 } from './constants';
+import warning from 'tiny-warning';
 
 export const signOrderWithEoaWallet = async (
   order: NftOrderV4,
@@ -42,28 +46,53 @@ export const signOrderWithEoaWallet = async (
   exchangeContractAddress: string
 ) => {
   if ((order as ERC1155OrderStruct).erc1155Token) {
-    throw new Error('ERC1155 not implemented yet');
+    const domain = {
+      chainId: chainId,
+      verifyingContract: exchangeContractAddress,
+      name: 'ZeroEx',
+      version: '1.0.0',
+    };
+    const types = {
+      [ERC1155ORDER_STRUCT_NAME]: ERC1155ORDER_STRUCT_ABI,
+      Fee: FEE_ABI,
+      Property: PROPERTY_ABI,
+    };
+    const value = order;
+
+    const rawSignatureFromEoaWallet = await signer._signTypedData(
+      domain,
+      types,
+      value
+    );
+
+    return rawSignatureFromEoaWallet;
   }
-  const domain = {
-    chainId: chainId,
-    verifyingContract: exchangeContractAddress,
-    name: 'ZeroEx',
-    version: '1.0.0',
-  };
-  const types = {
-    [ERC721STRUCT_NAME]: ERC721ORDER_STRUCT_ABI,
-    Fee: FEE_ABI,
-    Property: PROPERTY_ABI,
-  };
-  const value = order;
 
-  const rawSignatureFromEoaWallet = await signer._signTypedData(
-    domain,
-    types,
-    value
-  );
+  if ((order as ERC721OrderStruct).erc721Token) {
+    const domain = {
+      chainId: chainId,
+      verifyingContract: exchangeContractAddress,
+      name: 'ZeroEx',
+      version: '1.0.0',
+    };
+    const types = {
+      [ERC721ORDER_STRUCT_NAME]: ERC721ORDER_STRUCT_ABI,
+      Fee: FEE_ABI,
+      Property: PROPERTY_ABI,
+    };
+    const value = order;
 
-  return rawSignatureFromEoaWallet;
+    const rawSignatureFromEoaWallet = await signer._signTypedData(
+      domain,
+      types,
+      value
+    );
+
+    return rawSignatureFromEoaWallet;
+  }
+
+  warning(!order, 'Unknown order type');
+  throw new Error(`Unknown order type`);
 };
 
 /**

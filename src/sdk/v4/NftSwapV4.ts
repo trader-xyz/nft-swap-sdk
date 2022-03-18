@@ -615,9 +615,8 @@ class NftSwapV4 implements INftSwapV4 {
     chainId: string,
     metadata?: Record<string, string>
   ) => {
-    const supportsMonitoring = SupportedChainsForV4OrderbookStatusMonitoring.includes(
-      parseInt(chainId)
-    );
+    const supportsMonitoring =
+      SupportedChainsForV4OrderbookStatusMonitoring.includes(parseInt(chainId));
     warning(
       supportsMonitoring,
       `Chain ${chainId} does not support live orderbook status monitoring. Orders can be posted to be persisted, but status wont be monitored (e.g. updating status on a fill, cancel, or expiry.)`
