@@ -85,6 +85,7 @@ export interface SearchOrdersParams {
   maker?: string;
   taker?: string;
   nonce?: string;
+  status?: 'open' | 'filled' | 'expired' | 'cancelled' | 'all';
 }
 
 const searchOrderbook = async (
