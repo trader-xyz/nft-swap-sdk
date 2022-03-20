@@ -85,6 +85,7 @@ export interface SearchOrdersParams {
   maker?: string;
   taker?: string;
   nonce?: string;
+  // Defaults to only 'open' orders
   status?: 'open' | 'filled' | 'expired' | 'cancelled' | 'all';
 }
 
