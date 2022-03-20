@@ -1,16 +1,18 @@
 import { ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
-import { SwappableAssetV4 } from '../../src/sdk/v4/types';
+import {
+  SignedERC721OrderStruct,
+  SwappableAssetV4,
+} from '../../src/sdk/v4/types';
 
-jest.setTimeout(90 * 1000);
+jest.setTimeout(120 * 1000);
 
 const MAKER_WALLET_ADDRESS = '0xabc23F70Df4F45dD3Df4EC6DA6827CB05853eC9b';
 const MAKER_PRIVATE_KEY =
   'fc5db508b0a52da8fbcac3ab698088715595f8de9cccf2467d51952eec564ec9';
 // NOTE(johnrjj) - NEVER use these private keys for anything of value, testnets only!
 
-const WETH_TOKEN_ADDRESS_TESTNET = '0xc778417e063141139fce010982780140aa0cd5ab';
 const DAI_TOKEN_ADDRESS_TESTNET = '0x31f42841c2db5173425b5223809cf3a38fede360';
 const TEST_NFT_CONTRACT_ADDRESS = '0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b'; // https://ropsten.etherscan.io/token/0xf5de760f2e916647fd766b4ad9e85ff943ce3a2b?a=0xabc23F70Df4F45dD3Df4EC6DA6827CB05853eC9b
 
@@ -80,6 +82,19 @@ describe('NFTSwapV4', () => {
 
     const signedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
 
+    // Cast to assert easily
+    const signedOrderErc1155 = signedOrder as SignedERC721OrderStruct;
+
+    expect(signedOrderErc1155.erc721Token).toBe(MAKER_ASSET.tokenAddress);
+    expect(signedOrderErc1155.erc721TokenId.toString()).toBe(
+      MAKER_ASSET.tokenId
+    );
+
+    expect(signedOrderErc1155.erc20Token).toBe(TAKER_ASSET.tokenAddress);
+    expect(signedOrderErc1155.erc20TokenAmount).toBe(TAKER_ASSET.amount);
+
+    expect(signedOrderErc1155.direction.toString()).toBe('0');
+
     await nftSwapperMaker.postOrder(signedOrder, '3');
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
@@ -111,8 +126,6 @@ describe('NFTSwapV4', () => {
 
     // const txReceipt = await tx.wait();
     // expect(txReceipt.transactionHash).toBeTruthy();
-    // console.log(`Swapped on Rinkeby (txHAsh: ${txReceipt.transactionIndex})`);
+    // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
   });
 });
-
-// https://polygon-mumbai.g.alchemy.com/v2/VMBpFqjMYv2w-MWnc9df92w3R2TpMvSG
