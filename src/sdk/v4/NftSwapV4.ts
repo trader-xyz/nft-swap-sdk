@@ -532,7 +532,9 @@ class NftSwapV4 implements INftSwapV4 {
         tokenIdToSellForCollectionOrder: tokenId,
         ...fillOrderOverrides,
       },
-      transactionOverrides
+      {
+        ...transactionOverrides,
+      }
     );
   };
 
