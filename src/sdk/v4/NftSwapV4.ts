@@ -48,10 +48,11 @@ import {
 } from './nft-safe-transfer-from-data';
 import addresses from './addresses.json';
 import {
-  ORDERBOOK_API_ROOT_URL_PRODUCTION,
-  postOrderToOrderbook,
   searchOrderbook,
+  postOrderToOrderbook,
+  PostOrderResponsePayload,
   SearchOrdersParams,
+  ORDERBOOK_API_ROOT_URL_PRODUCTION,
 } from './orderbook';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
@@ -614,14 +615,14 @@ class NftSwapV4 implements INftSwapV4 {
     signedOrder: SignedNftOrderV4,
     chainId: string,
     metadata?: Record<string, string>
-  ) => {
+  ): Promise<PostOrderResponsePayload> => {
     const supportsMonitoring =
       SupportedChainsForV4OrderbookStatusMonitoring.includes(parseInt(chainId));
     warning(
       supportsMonitoring,
       `Chain ${chainId} does not support live orderbook status monitoring. Orders can be posted to be persisted, but status wont be monitored (e.g. updating status on a fill, cancel, or expiry.)`
     );
-    postOrderToOrderbook(signedOrder, chainId, metadata, {
+    return postOrderToOrderbook(signedOrder, chainId, metadata, {
       rootUrl: this.orderbookRootUrl,
     });
   };
