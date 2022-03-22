@@ -15,7 +15,7 @@ export interface PostOrderRequestPayload {
   metadata?: Record<string, string>;
 }
 
-export interface OrderDataPayload {
+export interface PostOrderResponsePayload {
   erc20Token: string;
   erc20TokenAmount: string;
   nftToken: string;
@@ -28,10 +28,8 @@ export interface OrderDataPayload {
   metadata: Record<string, string> | null;
 }
 
-export type PostOrderResponsePayload = OrderDataPayload;
-
 export interface SearchOrdersResponsePayload {
-  orders: Array<OrderDataPayload>;
+  orders: Array<PostOrderResponsePayload>;
 }
 
 const postOrderToOrderbook = async (
