@@ -252,12 +252,23 @@ class NftSwapV4 implements INftSwapV4 {
 
   approveTokenOrNftByAsset = (
     asset: SwappableAssetV4,
-    walletAddress: string
+    _walletAddress: string, // Remove in next release
+    approvalTransactionOverrides?: Partial<TransactionOverrides>,
+    otherOverrides?: Partial<ApprovalOverrides>
   ) => {
-    if (!this.signer) {
+    const signedToUse = otherOverrides?.signer ?? this.signer;
+    if (!signedToUse) {
       throw new Error('Signed not defined');
     }
-    return approveAsset(this.exchangeProxy.address, asset, this.signer);
+    return approveAsset(
+      this.exchangeProxy.address,
+      asset,
+      signedToUse,
+      {
+        ...approvalTransactionOverrides,
+      },
+      otherOverrides?.approve ?? true
+    );
   };
 
   // // TyPeSaFeTy: Order types supported:
