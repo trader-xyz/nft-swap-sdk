@@ -54,3 +54,6 @@ export const PROPERTY_ABI = [
   { type: 'address', name: 'propertyValidator' },
   { type: 'bytes', name: 'propertyData' },
 ];
+
+export const ETH_ADDRESS_AS_ERC20 =
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
