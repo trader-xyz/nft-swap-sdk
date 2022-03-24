@@ -3,8 +3,11 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { ERC721Proxy, ERC721ProxyInterface } from '../ERC721Proxy';
+import type { Provider } from '@ethersproject/providers';
+import type {
+  ERC1155Proxy,
+  ERC1155ProxyInterface,
+} from '../../../ZeroEx/v3/ERC1155Proxy';
 
 const _abi = [
   {
@@ -87,6 +90,32 @@ const _abi = [
     type: 'function',
   },
   {
+    constant: false,
+    inputs: [
+      {
+        name: 'assetData',
+        type: 'bytes',
+      },
+      {
+        name: 'from',
+        type: 'address',
+      },
+      {
+        name: 'to',
+        type: 'address',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     constant: true,
     inputs: [],
     name: 'getProxyId',
@@ -148,11 +177,6 @@ const _abi = [
     type: 'function',
   },
   {
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'fallback',
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -188,15 +212,15 @@ const _abi = [
   },
 ];
 
-export class ERC721Proxy__factory {
+export class ERC1155Proxy__factory {
   static readonly abi = _abi;
-  static createInterface(): ERC721ProxyInterface {
-    return new utils.Interface(_abi) as ERC721ProxyInterface;
+  static createInterface(): ERC1155ProxyInterface {
+    return new utils.Interface(_abi) as ERC1155ProxyInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC721Proxy {
-    return new Contract(address, _abi, signerOrProvider) as ERC721Proxy;
+  ): ERC1155Proxy {
+    return new Contract(address, _abi, signerOrProvider) as ERC1155Proxy;
   }
 }

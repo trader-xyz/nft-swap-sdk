@@ -3,32 +3,13 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
+import type { Provider } from '@ethersproject/providers';
 import type {
-  MultiAssetProxy,
-  MultiAssetProxyInterface,
-} from '../MultiAssetProxy';
+  ERC20Proxy,
+  ERC20ProxyInterface,
+} from '../../../ZeroEx/v3/ERC20Proxy';
 
 const _abi = [
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'bytes4',
-      },
-    ],
-    name: 'assetProxies',
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
   {
     constant: false,
     inputs: [
@@ -52,25 +33,6 @@ const _abi = [
       },
     ],
     name: 'authorities',
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: 'assetProxyId',
-        type: 'bytes4',
-      },
-    ],
-    name: 'getAssetProxy',
     outputs: [
       {
         name: '',
@@ -161,20 +123,6 @@ const _abi = [
     type: 'function',
   },
   {
-    constant: false,
-    inputs: [
-      {
-        name: 'assetProxy',
-        type: 'address',
-      },
-    ],
-    name: 'registerAssetProxy',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     constant: true,
     inputs: [],
     name: 'getAuthorizedAddresses',
@@ -241,34 +189,17 @@ const _abi = [
     name: 'AuthorizedAddressRemoved',
     type: 'event',
   },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'id',
-        type: 'bytes4',
-      },
-      {
-        indexed: false,
-        name: 'assetProxy',
-        type: 'address',
-      },
-    ],
-    name: 'AssetProxyRegistered',
-    type: 'event',
-  },
 ];
 
-export class MultiAssetProxy__factory {
+export class ERC20Proxy__factory {
   static readonly abi = _abi;
-  static createInterface(): MultiAssetProxyInterface {
-    return new utils.Interface(_abi) as MultiAssetProxyInterface;
+  static createInterface(): ERC20ProxyInterface {
+    return new utils.Interface(_abi) as ERC20ProxyInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): MultiAssetProxy {
-    return new Contract(address, _abi, signerOrProvider) as MultiAssetProxy;
+  ): ERC20Proxy {
+    return new Contract(address, _abi, signerOrProvider) as ERC20Proxy;
   }
 }

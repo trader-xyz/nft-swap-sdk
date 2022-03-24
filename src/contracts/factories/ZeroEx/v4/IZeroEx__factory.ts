@@ -3,8 +3,8 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { IZeroEx, IZeroExInterface } from '../IZeroEx';
+import type { Provider } from '@ethersproject/providers';
+import type { IZeroEx, IZeroExInterface } from '../../../ZeroEx/v4/IZeroEx';
 
 const _abi = [
   {

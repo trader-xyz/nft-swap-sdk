@@ -350,7 +350,7 @@ class NftSwapV4 implements INftSwapV4 {
 
   getWrappedTokenAddress = (chainId: number | string) => {
     return getWrappedNativeToken(chainId);
-  }
+  };
 
   buildCollectionBasedOrder = (
     erc20ToSell: UserFacingERC20AssetDataSerializedV4,
