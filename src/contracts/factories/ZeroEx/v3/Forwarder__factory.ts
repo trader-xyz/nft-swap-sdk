@@ -3,8 +3,11 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { Forwarder, ForwarderInterface } from '../Forwarder';
+import type { Provider } from '@ethersproject/providers';
+import type {
+  Forwarder,
+  ForwarderInterface,
+} from '../../../ZeroEx/v3/Forwarder';
 
 const _abi = [
   {

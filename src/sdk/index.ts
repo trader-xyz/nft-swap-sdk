@@ -9,5 +9,5 @@ export * from './v4/enums';
 export * from './v4/constants';
 export * from '../utils/v3/asset-data';
 // Export contracts for advanced mode
-export * as ExchangeContract from '../contracts/ExchangeContract';
-export * as ExchangeProxy from '../contracts/IZeroEx';
+export * as V4ExchangeProxy from '../contracts/ZeroEx/v4/IZeroEx';
+export * as V3ExchangeContract from '../contracts/ZeroEx/v3/ExchangeContract';

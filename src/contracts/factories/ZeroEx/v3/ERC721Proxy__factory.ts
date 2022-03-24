@@ -3,8 +3,11 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { ERC20Proxy, ERC20ProxyInterface } from '../ERC20Proxy';
+import type { Provider } from '@ethersproject/providers';
+import type {
+  ERC721Proxy,
+  ERC721ProxyInterface,
+} from '../../../ZeroEx/v3/ERC721Proxy';
 
 const _abi = [
   {
@@ -188,15 +191,15 @@ const _abi = [
   },
 ];
 
-export class ERC20Proxy__factory {
+export class ERC721Proxy__factory {
   static readonly abi = _abi;
-  static createInterface(): ERC20ProxyInterface {
-    return new utils.Interface(_abi) as ERC20ProxyInterface;
+  static createInterface(): ERC721ProxyInterface {
+    return new utils.Interface(_abi) as ERC721ProxyInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC20Proxy {
-    return new Contract(address, _abi, signerOrProvider) as ERC20Proxy;
+  ): ERC721Proxy {
+    return new Contract(address, _abi, signerOrProvider) as ERC721Proxy;
   }
 }

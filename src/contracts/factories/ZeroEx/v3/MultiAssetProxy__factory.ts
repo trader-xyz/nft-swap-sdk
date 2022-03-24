@@ -3,10 +3,32 @@
 /* eslint-disable */
 
 import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
-import type { ERC1155Proxy, ERC1155ProxyInterface } from '../ERC1155Proxy';
+import type { Provider } from '@ethersproject/providers';
+import type {
+  MultiAssetProxy,
+  MultiAssetProxyInterface,
+} from '../../../ZeroEx/v3/MultiAssetProxy';
 
 const _abi = [
+  {
+    constant: true,
+    inputs: [
+      {
+        name: '',
+        type: 'bytes4',
+      },
+    ],
+    name: 'assetProxies',
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
   {
     constant: false,
     inputs: [
@@ -30,6 +52,25 @@ const _abi = [
       },
     ],
     name: 'authorities',
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: 'assetProxyId',
+        type: 'bytes4',
+      },
+    ],
+    name: 'getAssetProxy',
     outputs: [
       {
         name: '',
@@ -87,32 +128,6 @@ const _abi = [
     type: 'function',
   },
   {
-    constant: false,
-    inputs: [
-      {
-        name: 'assetData',
-        type: 'bytes',
-      },
-      {
-        name: 'from',
-        type: 'address',
-      },
-      {
-        name: 'to',
-        type: 'address',
-      },
-      {
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'transferFrom',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     constant: true,
     inputs: [],
     name: 'getProxyId',
@@ -146,6 +161,20 @@ const _abi = [
     type: 'function',
   },
   {
+    constant: false,
+    inputs: [
+      {
+        name: 'assetProxy',
+        type: 'address',
+      },
+    ],
+    name: 'registerAssetProxy',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     constant: true,
     inputs: [],
     name: 'getAuthorizedAddresses',
@@ -172,6 +201,11 @@ const _abi = [
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
+  },
+  {
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'fallback',
   },
   {
     anonymous: false,
@@ -207,17 +241,34 @@ const _abi = [
     name: 'AuthorizedAddressRemoved',
     type: 'event',
   },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        name: 'id',
+        type: 'bytes4',
+      },
+      {
+        indexed: false,
+        name: 'assetProxy',
+        type: 'address',
+      },
+    ],
+    name: 'AssetProxyRegistered',
+    type: 'event',
+  },
 ];
 
-export class ERC1155Proxy__factory {
+export class MultiAssetProxy__factory {
   static readonly abi = _abi;
-  static createInterface(): ERC1155ProxyInterface {
-    return new utils.Interface(_abi) as ERC1155ProxyInterface;
+  static createInterface(): MultiAssetProxyInterface {
+    return new utils.Interface(_abi) as MultiAssetProxyInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC1155Proxy {
-    return new Contract(address, _abi, signerOrProvider) as ERC1155Proxy;
+  ): MultiAssetProxy {
+    return new Contract(address, _abi, signerOrProvider) as MultiAssetProxy;
   }
 }
