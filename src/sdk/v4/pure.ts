@@ -36,6 +36,7 @@ import {
   ERC1155ORDER_STRUCT_ABI,
   FEE_ABI,
   PROPERTY_ABI,
+  ETH_ADDRESS_AS_ERC20,
 } from './constants';
 import warning from 'tiny-warning';
 
@@ -111,6 +112,12 @@ export const getApprovalStatus = async (
 ): Promise<ApprovalStatus> => {
   switch (asset.type) {
     case 'ERC20':
+      // ETH (ERC20 representation) requires no approvals, we can shortcut here
+      if (asset.tokenAddress.toLowerCase() === ETH_ADDRESS_AS_ERC20) {
+        return {
+          contractApproved: true,
+        };
+      }
       const erc20 = ERC20__factory.connect(asset.tokenAddress, provider);
       const erc20AllowanceBigNumber: BigNumber = await erc20.allowance(
         walletAddress,

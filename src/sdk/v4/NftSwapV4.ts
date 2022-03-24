@@ -383,6 +383,16 @@ class NftSwapV4 implements INftSwapV4 {
 
     const direction =
       sellOrBuyNft === 'sell' ? TradeDirection.SellNFT : TradeDirection.BuyNFT;
+
+    // Validate that a bid does not use ETH.
+    if (direction === TradeDirection.BuyNFT) {
+      if (erc20.tokenAddress.toLowerCase() === FAKE_ETH_ADDRESS) {
+        throw new Error(
+          'NFT Bids cannot use the native token (e.g. ETH). Please use the wrapped native token (e.g. WETH)'
+        );
+      }
+    }
+
     switch (nft.type) {
       // Build ERC721 order
       case 'ERC721':
