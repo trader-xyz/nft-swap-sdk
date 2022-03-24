@@ -56,6 +56,7 @@ import {
 } from './orderbook';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
+import { getWrappedNativeToken } from '../../utils/addresses';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -345,6 +346,10 @@ class NftSwapV4 implements INftSwapV4 {
       makerAddress,
       orderConfig
     );
+  }
+
+  getWrappedTokenAddress = (chainId: number | string) => {
+    return getWrappedNativeToken(chainId);
   }
 
   buildCollectionBasedOrder = (
