@@ -10,3 +10,4 @@
   * [Collection-based/Floor-based orders](0x-v4/collection-based-floor-based-orders.md)
   * [Other Resources](0x-v4/other-resources.md)
 * [0x v3 Swap SDK](<README (1).md>)
+* [V3 or V4 - Which version should I use?](v3-or-v4-which-version-should-i-use.md)
