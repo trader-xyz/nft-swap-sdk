@@ -200,11 +200,11 @@ class NftSwapV4 implements INftSwapV4 {
     );
   }
 
-  loadApprovalStatus(
+  loadApprovalStatus = (
     asset: SwappableAssetV4,
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides> | undefined
-  ): Promise<ApprovalStatus> {
+  ): Promise<ApprovalStatus> => {
     // TODO(johnrjj) - Fix to pass thru more args...
     return getApprovalStatus(
       walletAddress,
@@ -212,7 +212,7 @@ class NftSwapV4 implements INftSwapV4 {
       asset,
       this.provider
     );
-  }
+  };
 
   awaitTransactionHash = async (txHash: string) => {
     return this.provider.waitForTransaction(txHash);
@@ -703,51 +703,6 @@ class NftSwapV4 implements INftSwapV4 {
       'Only ERC721 Orders are currently supported for matching. Please ensure both the sellOrder and buyOrder are ERC721 orders'
     );
   };
-
-  getTakerAsset = (order: NftOrderV4): SwappableAssetV4 => {
-    // return {
-    //   tokenAddress: '',
-    //   tokenId: ''
-    // }
-  };
-
-  getMakerAsset = (order: NftOrderV4): SwappableAssetV4 => {
-    // return {
-    //   tokenAddress: '',
-    //   tokenId: ''
-    // }
-  };
-
-  // todo: consolidate
-  // todo: use these to power validation for the api
-  checkOrderCanBeFilledMakerSide = (order: NftOrderV4) => {};
-
-  checkOrderCanBeFilledTakerSide = (
-    order: NftOrderV4,
-    override?: VerifyOrderOptionsOverrides
-  ) => {
-    const shouldLoadApprovalStatus = override?.verifyApproval ?? true;
-    const shouldLoadBalance = override?.verifyBalance ?? true;
-
-    const direction = parseInt(order.direction.toString(10));
-    if (direction === TradeDirection.SellNFT) {
-      if ('erc721Token' in order) {
-        this.loadApprovalStatus();
-
-        const { erc721Token, erc721TokenId } = order;
-
-        // TODO(johnrjj) - More validation here before we match on-chain
-      } else if ('erc1155Token' in order) {
-        const { erc1155TokenAmount, erc1155Token, erc1155TokenId } = order;
-      }
-    } else if (direction === TradeDirection.BuyNFT) {
-    }
-  };
-}
-
-interface VerifyOrderOptionsOverrides {
-  verifyApproval?: boolean;
-  verifyBalance: boolean;
 }
 
 export { NftSwapV4 };
