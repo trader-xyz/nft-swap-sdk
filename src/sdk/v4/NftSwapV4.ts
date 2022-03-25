@@ -57,6 +57,7 @@ import {
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 import { getWrappedNativeToken } from '../../utils/addresses';
+import { ETH_ADDRESS_AS_ERC20 } from './constants';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -203,7 +204,7 @@ class NftSwapV4 implements INftSwapV4 {
     asset: SwappableAssetV4,
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides> | undefined
-  ) => {
+  ): Promise<ApprovalStatus> => {
     // TODO(johnrjj) - Fix to pass thru more args...
     return getApprovalStatus(
       walletAddress,
@@ -562,12 +563,18 @@ class NftSwapV4 implements INftSwapV4 {
     if ('erc1155Token' in signedOrder) {
       // If maker is selling an NFT, taker wants to 'buy' nft
       if (signedOrder.direction === TradeDirection.SellNFT) {
+        const needsEthAttached =
+          signedOrder.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
+
         return this.exchangeProxy.buyERC1155(
           signedOrder,
           signedOrder.signature,
           signedOrder.erc1155TokenAmount,
           '0x',
-          transactionOverrides ?? {}
+          {
+            value: needsEthAttached ? signedOrder.erc20TokenAmount : undefined,
+            ...transactionOverrides,
+          }
         );
       } else {
         // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
@@ -595,17 +602,26 @@ class NftSwapV4 implements INftSwapV4 {
           signedOrder.erc1155TokenAmount,
           unwrapNativeToken,
           '0x',
-          transactionOverrides ?? {}
+          {
+            ...transactionOverrides,
+          }
         );
       }
     } else if ('erc721Token' in signedOrder) {
       // If maker is selling an NFT, taker wants to 'buy' nft
+
       if (signedOrder.direction === TradeDirection.SellNFT) {
+        const needsEthAttached =
+          signedOrder.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
+
         return this.exchangeProxy.buyERC721(
           signedOrder,
           signedOrder.signature,
           '0x',
-          transactionOverrides ?? {}
+          {
+            value: needsEthAttached ? signedOrder.erc20TokenAmount : undefined,
+            ...transactionOverrides,
+          }
         );
       } else {
         // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
@@ -631,7 +647,10 @@ class NftSwapV4 implements INftSwapV4 {
           fillOrderOverrides?.tokenIdToSellForCollectionOrder ??
             signedOrder.erc721TokenId,
           unwrapNativeToken,
-          '0x'
+          '0x',
+          {
+            ...transactionOverrides,
+          }
         );
       }
     }
