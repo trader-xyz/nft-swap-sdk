@@ -160,7 +160,7 @@ export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 class NftSwapV4 implements INftSwapV4 {
   public provider: BaseProvider;
   public signer: Signer | undefined;
-  public chainId: number;
+  public chainId: number | undefined;
   public exchangeProxy: IZeroEx;
   public exchangeProxyContractAddress: string;
 
@@ -175,7 +175,7 @@ class NftSwapV4 implements INftSwapV4 {
     this.provider = provider;
     this.signer = signer;
     this.chainId =
-      chainId ?? (this.provider._network.chainId as SupportedChainIdsV4);
+      chainId ?? (this.provider?._network.chainId as SupportedChainIdsV4);
 
     const defaultAddressesForChain: AddressesForChainV4 | undefined =
       addresses[this.chainId as SupportedChainIdsV4];
@@ -423,6 +423,9 @@ class NftSwapV4 implements INftSwapV4 {
 
   signOrder = async (order: NftOrderV4): Promise<SignedNftOrderV4> => {
     if (!this.signer) {
+      throw new Error('Signed not defined');
+    }
+    if (!this.chainId) {
       throw new Error('Signed not defined');
     }
 
