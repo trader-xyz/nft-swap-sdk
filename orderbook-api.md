@@ -165,3 +165,65 @@ const tx = await exchangeProxy.buyERC721(
 );
 
 ```
+
+
+
+### Posting orders
+
+{% swagger method="post" path="/order" baseUrl="https://api.trader.xyz/orderbook" summary="" %}
+{% swagger-description %}
+Add a signed 0x V4 NFT order to the open orderbook
+{% endswagger-description %}
+
+{% swagger-parameter in="body" name="chainId" required="true" %}
+Chain that the order is for
+
+(e.g. `1` for mainnet or `137` for Polygon
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="order" required="true" %}
+Signed, Fillable 0x v4 NFT order
+{% endswagger-parameter %}
+
+{% swagger-response status="200: OK" description="Order payload" %}
+```javascript
+{
+  "erc20Token": "0x31f42841c2db5173425b5223809cf3a38fede360",
+  "erc20TokenAmount": "100000000000",
+  "nftToken": "0x080ac75de7c348ae5898d6f03b894c6b2740179f",
+  "nftTokenId": "1",
+  "nftTokenAmount": "5",
+  "nftType": "ERC1155",
+  "sellOrBuyNft": "sell",
+  "chainId": "3",
+  "order": {
+    "direction": 0,
+    "erc20Token": "0x31f42841c2db5173425b5223809cf3a38fede360",
+    "erc20TokenAmount": "100000000000",
+    "erc1155Token": "0x080ac75de7c348ae5898d6f03b894c6b2740179f",
+    "erc1155TokenId": "1",
+    "erc1155TokenAmount": "5",
+    "erc1155TokenProperties": [],
+    "expiry": "2524604400",
+    "fees": [],
+    "maker": "0xabc23f70df4f45dd3df4ec6da6827cb05853ec9b",
+    "nonce": "0x95cb442a6c40447397735b97a6265507",
+    "signature": {
+      "r": "0x40d064b246aaa46f7fc6f0b21d11329d62aa822b9ef0a848a64e68c12c25f8ee",
+      "s": "0x74dac794840285584a30c88c37aaafe113642be3133651a375672b695c362861",
+      "v": 27,
+      "signatureType": 2
+    },
+    "taker": "0x0000000000000000000000000000000000000000"
+  },
+  "orderStatus": {
+    "status": null,
+    "transactionHash": null,
+    "blockNumber": null
+  },
+  "metadata": {}
+}
+
+```
+{% endswagger-response %}
+{% endswagger %}
