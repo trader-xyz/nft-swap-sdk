@@ -137,3 +137,29 @@ Defaults to `200`. Max is `1000`
 ```
 {% endswagger-response %}
 {% endswagger %}
+
+Upon finding an order you like. use the order field as the order object to fill on 0x v4.
+
+E.g.&#x20;
+
+```typescript
+const nftOrders = await fetch(`https://api.trader.xyz/orderbook/orders?chainId=1&nftToken=0x5Af0D9827E0c53E4799BB226655A1de152A425a5&status=open`)
+
+// Find the first order
+const nftOrder = nftOrders[0]
+
+const fillableZeroExOrder = nftOrder.order
+
+// Fill order with Swap SDK or ethers/exchange proxy directly:
+// Fill via Swap SdK
+const swapSdk = new SwapSdkV4(provider, signer);
+const tx = await swapSdk.fillSignedOrder(fillableZeroExOrder);
+
+// Fill via ExchangeProxy (need to generate the ExchangeProxy ABI via ethers)
+const tx = await exchangeProxy.buyERC721(
+  signedOrder,
+  signedOrder.signature,
+  '0x',
+);
+
+```
