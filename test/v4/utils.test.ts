@@ -92,6 +92,11 @@ describe('NFTSwapV4', () => {
       v4Erc721SignedOrder.maker
     );
     expect(makerApprovalStatus.contractApproved).toBe(true);
+
+    const isSignatureValid = await nftSwapperMaker.validateSignature(
+      v4Erc721SignedOrder
+    );
+    expect(isSignatureValid).toBe(true);
   });
 
   it('utility functions on class work properly with erc721 buy order', async () => {
@@ -138,5 +143,10 @@ describe('NFTSwapV4', () => {
       v4Erc721SignedOrder.maker
     );
     expect(makerApprovalStatus.contractApproved).toBe(true);
+
+    const isSignatureValid = await nftSwapperMaker.validateSignature(
+      v4Erc721SignedOrder
+    );
+    expect(isSignatureValid).toBe(true);
   });
 });

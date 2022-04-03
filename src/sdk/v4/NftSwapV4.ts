@@ -860,17 +860,23 @@ class NftSwapV4 implements INftSwapV4 {
    * @param signedOrder A 0x v4 signed order to validate signature for
    * @returns
    */
-  validateSignature = async (signedOrder: SignedNftOrderV4) => {
+  validateSignature = async (
+    signedOrder: SignedNftOrderV4
+  ): Promise<boolean> => {
     if ('erc721Token' in signedOrder) {
-      return this.exchangeProxy.validateERC721OrderSignature(
+      // Validate functions on-chain return void if successful
+      await this.exchangeProxy.validateERC721OrderSignature(
         signedOrder,
         signedOrder.signature
       );
+      return true;
     } else if ('erc1155Token' in signedOrder) {
-      return this.exchangeProxy.validateERC1155OrderSignature(
+      // Validate functions on-chain return void if successful
+      await this.exchangeProxy.validateERC1155OrderSignature(
         signedOrder,
         signedOrder.signature
       );
+      return true;
     } else {
       throw new Error('Unknown order type (not ERC721 or ERC1155)');
     }
