@@ -974,7 +974,7 @@ class NftSwapV4 implements INftSwapV4 {
   };
 
   /**
-   * Calculates total order cost. 
+   * Calculates total order cost.
    * In 0x v4, fees are additive (i.e. they are not deducted from the order amount, but added on top of)
    * @param order A 0x v4 order;
    * @returns BigNumber of order total cost in erc20 unit amount
