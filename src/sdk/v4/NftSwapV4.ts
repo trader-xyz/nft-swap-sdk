@@ -61,6 +61,7 @@ import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 import { getWrappedNativeToken } from '../../utils/addresses';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
+import { ZERO_AMOUNT } from '../../utils/eth';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -970,6 +971,25 @@ class NftSwapV4 implements INftSwapV4 {
       hasBalance,
       canOrderBeFilled,
     };
+  };
+
+  /**
+   * Calculates total order cost. 
+   * In 0x v4, fees are additive (i.e. they are not deducted from the order amount, but added on top of)
+   * @param order A 0x v4 order;
+   * @returns BigNumber of order total cost in erc20 unit amount
+   */
+  getErc20TotalIncludingFees = (order: NftOrderV4): BigNumber => {
+    const fees = order.fees;
+    // In 0x v4, fees are additive (not included in the original erc20 amount)
+    let feesTotal = ZERO_AMOUNT;
+    fees.forEach((fee) => {
+      feesTotal = ZERO_AMOUNT.add(BigNumber.from(fee.amount));
+    });
+    const orderTotalCost = BigNumber.from(order.erc20TokenAmount).add(
+      feesTotal
+    );
+    return orderTotalCost;
   };
 }
 
