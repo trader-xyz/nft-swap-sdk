@@ -907,7 +907,7 @@ class NftSwapV4 implements INftSwapV4 {
     }
   };
 
-  // todo: consolidate
+  // TODO(johnrjj) Consolidate w/ checkOrderCanBeFilledMakerSide
   checkOrderCanBeFilledTakerSide = async (
     order: NftOrderV4,
     takerWalletAddress: string
