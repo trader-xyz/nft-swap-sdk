@@ -181,6 +181,7 @@ export type SignatureStructSerialized = {
 export interface ApprovalOverrides {
   signer: Signer;
   approve: boolean;
+  approvalOnlyTokenIdIfErc721: boolean;
   exchangeContractAddress: string;
   chainId: number;
 }
@@ -248,3 +249,8 @@ export type SwappableAssetV4 =
   | UserFacingERC20AssetDataSerializedV4
   | UserFacingERC721AssetDataSerializedV4
   | UserFacingERC1155AssetDataSerializedV4;
+
+export interface VerifyOrderOptionsOverrides {
+  verifyApproval?: boolean;
+  verifyBalance?: boolean;
+}

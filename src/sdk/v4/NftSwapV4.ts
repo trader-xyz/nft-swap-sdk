@@ -3,13 +3,14 @@ import type {
   BaseProvider,
   TransactionReceipt,
 } from '@ethersproject/providers';
-import type { BigNumberish, ContractTransaction } from 'ethers';
+import { BigNumber, BigNumberish, ContractTransaction } from 'ethers';
 import { Interface } from '@ethersproject/abi';
 import invariant from 'tiny-invariant';
 import warning from 'tiny-warning';
 import {
   ERC1155__factory,
   ERC721__factory,
+  ERC20__factory,
   IZeroEx,
   IZeroEx__factory,
 } from '../../contracts';
@@ -41,6 +42,7 @@ import type {
   UserFacingERC1155AssetDataSerializedV4,
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
+  VerifyOrderOptionsOverrides,
 } from './types';
 import {
   ERC1155_TRANSFER_FROM_DATA,
@@ -53,6 +55,7 @@ import {
   PostOrderResponsePayload,
   SearchOrdersParams,
   ORDERBOOK_API_ROOT_URL_PRODUCTION,
+  SearchOrdersResponsePayload,
 } from './orderbook';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
@@ -200,6 +203,14 @@ class NftSwapV4 implements INftSwapV4 {
     );
   }
 
+  /**
+   * Checks if an asset is approved for trading with 0x v4
+   * If an asset is not approved, call approveTokenOrNftByAsset to approve.
+   * @param asset A tradeable asset (ERC20, ERC721, or ERC1155)
+   * @param walletAddress The wallet address that owns the asset
+   * @param approvalOverrides Optional config options for approving
+   * @returns
+   */
   loadApprovalStatus = (
     asset: SwappableAssetV4,
     walletAddress: string,
@@ -214,10 +225,23 @@ class NftSwapV4 implements INftSwapV4 {
     );
   };
 
+  /**
+   * Convenience function to await a transaction hash.
+   * During a fill order call, you can get the pending transaction hash and await it manually via this method.
+   * @param txHash Transaction hash to await
+   * @returns
+   */
   awaitTransactionHash = async (txHash: string) => {
     return this.provider.waitForTransaction(txHash);
   };
 
+  /**
+   * Cancels an 0x v4 order. Once cancelled, the order no longer fillable.
+   * Requires a signer
+   * @param nonce
+   * @param orderType
+   * @returns Transaciton Receipt
+   */
   cancelOrder = (
     nonce: BigNumberish,
     orderType: 'ERC721' | 'ERC1155'
@@ -232,7 +256,18 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unsupport order');
   };
 
-  getOrderStatus = async (order: NftOrderV4) => {
+  /**
+   * Looks up the order status for a given 0x v4 order.
+   * (Available states for an order are 'filled', 'expired', )
+   * @param order An 0x v4 NFT order
+   * @returns A number the corresponds to the enum OrderStatusV4
+   * Valid order states:
+   * Invalid = 0
+   * Fillable = 1,
+   * Unfillable = 2,
+   * Expired = 3,
+   */
+  getOrderStatus = async (order: NftOrderV4): Promise<number> => {
     if ('erc1155Token' in order) {
       const [
         _erc1155OrderHash,
@@ -252,12 +287,20 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unsupport order');
   };
 
+  /**
+   * Convenience function to approve an asset (ERC20, ERC721, or ERC1155) for trading with 0x v4
+   * @param asset
+   * @param _walletAddress
+   * @param approvalTransactionOverrides
+   * @param otherOverrides
+   * @returns An ethers contract transaction
+   */
   approveTokenOrNftByAsset = (
     asset: SwappableAssetV4,
     _walletAddress: string, // Remove in next release
     approvalTransactionOverrides?: Partial<TransactionOverrides>,
     otherOverrides?: Partial<ApprovalOverrides>
-  ) => {
+  ): Promise<ContractTransaction> => {
     const signedToUse = otherOverrides?.signer ?? this.signer;
     if (!signedToUse) {
       throw new Error('Signed not defined');
@@ -269,7 +312,7 @@ class NftSwapV4 implements INftSwapV4 {
       {
         ...approvalTransactionOverrides,
       },
-      otherOverrides?.approve ?? true
+      otherOverrides
     );
   };
 
@@ -277,6 +320,13 @@ class NftSwapV4 implements INftSwapV4 {
   // // ERC721<>ERC20
   // // ERC1155<>ERC20
   // // Below ensures type-safe for those specific combinations
+  /**
+   * Builds a 0x order given two assets (either NFT<>ERC20 or ERC20<>NFT)
+   * @param makerAsset An asset (ERC20, ERC721, or ERC1155) the user has
+   * @param takerAsset An asset (ERC20, ERC721, or ERC1155) the user wants
+   * @param makerAddress The address of the wallet creating the order
+   * @param orderConfig Various order configuration options (e.g. expiration, nonce)
+   */
   buildOrder(
     makerAsset: UserFacingERC1155AssetDataSerializedV4,
     takerAsset: UserFacingERC20AssetDataSerializedV4,
@@ -421,6 +471,13 @@ class NftSwapV4 implements INftSwapV4 {
     }
   };
 
+  /**
+   * Signs a 0x order. Requires a signer (e.g. wallet or private key)
+   * Once signed, the order becomes fillable (as long as the order is valid)
+   * 0x orders require a signature to fill.
+   * @param order A 0x v4 order
+   * @returns A signed 0x v4 order
+   */
   signOrder = async (order: NftOrderV4): Promise<SignedNftOrderV4> => {
     if (!this.signer) {
       throw new Error('Signed not defined');
@@ -536,6 +593,14 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unknown order type');
   };
 
+  /**
+   * Fills a 'collection'-based order (e.g. a bid for any nft belonging to a particulat collection)
+   * @param signedOrder A 0x signed collection order
+   * @param tokenId The token id to fill for the collection order
+   * @param fillOrderOverrides Various fill options
+   * @param transactionOverrides Ethers transaction overrides
+   * @returns
+   */
   fillSignedCollectionOrder = async (
     signedOrder: SignedNftOrderV4,
     tokenId: BigNumberish,
@@ -658,6 +723,15 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unsupport signedOrder type');
   };
 
+  /**
+   * Posts a 0x order to the Trader.xyz NFT open orderbook
+   * @param signedOrder A valid 0x v4 signed order
+   * @param chainId The chain id (e.g. '1' for mainnet, or '137' for polygon mainnet)
+   * @param metadata An optional record object (key: string, value: string) that will be stored alongside the order in the orderbook
+   * This is helpful for webapp builders, as they can save app-level order metadata
+   * (e.g. maybe save a 'bidMessage' alongside the order, or extra image metadata)
+   * @returns
+   */
   postOrder = (
     signedOrder: SignedNftOrderV4,
     chainId: string,
@@ -674,15 +748,30 @@ class NftSwapV4 implements INftSwapV4 {
     });
   };
 
-  getOrders = async (filters?: Partial<SearchOrdersParams>) => {
+  /**
+   * Gets orders from the Trader.xyz Open NFT Orderbook
+   * By default will find all order, active orders.
+   * @param filters Various options to filter an order search
+   * @returns An object that includes `orders` key with an array of orders that meet the search critera
+   */
+  getOrders = async (
+    filters?: Partial<SearchOrdersParams>
+  ): Promise<SearchOrdersResponsePayload> => {
     const orders = await searchOrderbook(filters, {
       rootUrl: this.orderbookRootUrl,
     });
     return orders;
   };
 
-  // NOTE(johnrjj)- Should these types be SignedERC721OrderStruct directly since only 712 is supported for matching
+  /**
+   *
+   * @param sellOrder ERC721 Order to sell an NFT
+   * @param buyOrder ERC721 Order to buy an NFT
+   * @param transactionOverrides Ethers transaction overrides
+   * @returns
+   */
   matchOrders = async (
+    // NOTE(johnrjj)- Should these types be SignedERC721OrderStruct directly since only 712 is supported for matching
     sellOrder: SignedNftOrderV4,
     buyOrder: SignedNftOrderV4,
     transactionOverrides?: Partial<PayableOverrides>
@@ -703,50 +792,185 @@ class NftSwapV4 implements INftSwapV4 {
       'Only ERC721 Orders are currently supported for matching. Please ensure both the sellOrder and buyOrder are ERC721 orders'
     );
   };
-  getTakerAsset = (order: NftOrderV4): SwappableAssetV4 => {
-    // return {
-    //   tokenAddress: '',
-    //   tokenId: ''
-    // }
-  };
 
   getMakerAsset = (order: NftOrderV4): SwappableAssetV4 => {
-    // return {
-    //   tokenAddress: '',
-    //   tokenId: ''
-    // }
+    // Buy NFT - So maker asset is an ERC20
+    if (order.direction.toString(10) === TradeDirection.BuyNFT.toString()) {
+      return {
+        tokenAddress: order.erc20Token,
+        amount: order.erc20TokenAmount.toString(10),
+        type: 'ERC20' as const,
+      };
+    } else if (
+      order.direction.toString(10) === TradeDirection.SellNFT.toString()
+    ) {
+      // Sell NFT - So maker asset is an NFT (either ERC721 or ERC1155)
+      if ('erc721Token' in order) {
+        return {
+          tokenAddress: order.erc721Token,
+          tokenId: order.erc721TokenId.toString(10),
+          type: 'ERC721' as const,
+        };
+      } else if ('erc1155Token' in order) {
+        return {
+          tokenAddress: order.erc1155Token,
+          tokenId: order.erc1155TokenId.toString(10),
+          amount: order.erc1155TokenAmount.toString(10),
+          type: 'ERC1155' as const,
+        };
+      }
+    }
+    throw new Error(`Unknown order direction ${order.direction}`);
+  };
+
+  getTakerAsset = (order: NftOrderV4): SwappableAssetV4 => {
+    // Buy NFT - So taker asset is an NFT [ERC721 or ERC1155] (because the taker is the NFT owner 'accepting' a buy order)
+    if (order.direction.toString(10) === TradeDirection.BuyNFT.toString()) {
+      if ('erc721Token' in order) {
+        return {
+          tokenAddress: order.erc721Token,
+          tokenId: order.erc721TokenId.toString(10),
+          type: 'ERC721' as const,
+        };
+      } else if ('erc1155Token' in order) {
+        return {
+          tokenAddress: order.erc1155Token,
+          tokenId: order.erc1155TokenId.toString(10),
+          amount: order.erc1155TokenAmount.toString(10),
+          type: 'ERC1155' as const,
+        };
+      }
+    } else if (
+      order.direction.toString(10) === TradeDirection.SellNFT.toString()
+    ) {
+      // Sell NFT - So taker asset is an ERC20 -- because the taker here is 'buying' the sell NFT order
+      return {
+        tokenAddress: order.erc20Token,
+        amount: order.erc20TokenAmount.toString(10),
+        type: 'ERC20' as const,
+      };
+    }
+    throw new Error(`Unknown order direction ${order.direction}`);
+  };
+
+  /**
+   * Validate an order signature given a signed order
+   * Throws if invalid
+   * @param signedOrder A 0x v4 signed order to validate signature for
+   * @returns
+   */
+  validateSignature = async (signedOrder: SignedNftOrderV4) => {
+    if ('erc721Token' in signedOrder) {
+      return this.exchangeProxy.validateERC721OrderSignature(
+        signedOrder,
+        signedOrder.signature
+      );
+    } else if ('erc1155Token' in signedOrder) {
+      return this.exchangeProxy.validateERC1155OrderSignature(
+        signedOrder,
+        signedOrder.signature
+      );
+    } else {
+      throw new Error('Unknown order type (not ERC721 or ERC1155)');
+    }
+  };
+
+  /**
+   * Fetches the balance of an asset for a given wallet address
+   * @param asset A Tradeable asset -- An ERC20, ERC721, or ERC1155
+   * @param walletAddress A wallet address ('0x1234...6789')
+   * @param provider Optional, defaults to the class's provider but can be overridden
+   * @returns A BigNumber balance (e.g. 1 or 0 for ERC721s. ERC20 and ERC1155s can have balances greater than 1)
+   */
+  fetchBalanceForAsset = async (
+    asset: SwappableAssetV4,
+    walletAddress: string,
+    provider: BaseProvider = this.provider
+  ): Promise<BigNumber> => {
+    switch (asset.type) {
+      case 'ERC20':
+        const erc20 = ERC20__factory.connect(asset.tokenAddress, provider);
+        return erc20.balanceOf(walletAddress);
+      case 'ERC721':
+        const erc721 = ERC721__factory.connect(asset.tokenAddress, provider);
+        const owner = await erc721.ownerOf(asset.tokenId);
+        if (owner.toLowerCase() === walletAddress.toLowerCase()) {
+          return BigNumber.from(1);
+        }
+        return BigNumber.from(0);
+      case 'ERC1155':
+        const erc1155 = ERC1155__factory.connect(asset.tokenAddress, provider);
+        return erc1155.balanceOf(walletAddress, asset.tokenId);
+      default:
+        throw new Error(`Asset type unknown ${(asset as any).type}`);
+    }
   };
 
   // todo: consolidate
-  // todo: use these to power validation for the api
-  checkOrderCanBeFilledMakerSide = (order: NftOrderV4) => {};
-
-  checkOrderCanBeFilledTakerSide = (
+  checkOrderCanBeFilledTakerSide = async (
     order: NftOrderV4,
-    override?: VerifyOrderOptionsOverrides
+    takerWalletAddress: string
   ) => {
-    const shouldLoadApprovalStatus = override?.verifyApproval ?? true;
-    const shouldLoadBalance = override?.verifyBalance ?? true;
+    const takerAsset = this.getTakerAsset(order);
+    const takerApprovalStatus = await this.loadApprovalStatus(
+      takerAsset,
+      takerWalletAddress
+    );
+    const takerBalance = await this.fetchBalanceForAsset(
+      this.getTakerAsset(order),
+      takerWalletAddress
+    );
 
-    const direction = parseInt(order.direction.toString(10));
-    if (direction === TradeDirection.SellNFT) {
-      if ('erc721Token' in order) {
-        this.loadApprovalStatus();
+    const hasBalance: boolean = takerBalance.gte(
+      (takerAsset as UserFacingERC20AssetDataSerializedV4).amount ?? 1
+    );
+    const isApproved: boolean =
+      takerApprovalStatus.tokenIdApproved ??
+      takerApprovalStatus.contractApproved ??
+      false;
+    const canOrderBeFilled: boolean = hasBalance && isApproved;
 
-        const { erc721Token, erc721TokenId } = order;
-
-        // TODO(johnrjj) - More validation here before we match on-chain
-      } else if ('erc1155Token' in order) {
-        const { erc1155TokenAmount, erc1155Token, erc1155TokenId } = order;
-      }
-    } else if (direction === TradeDirection.BuyNFT) {
-    }
+    return {
+      approvalStatus: takerApprovalStatus,
+      balance: takerBalance.toString(),
+      isApproved,
+      hasBalance,
+      canOrderBeFilled,
+    };
   };
-}
 
-interface VerifyOrderOptionsOverrides {
-  verifyApproval?: boolean;
-  verifyBalance: boolean;
+  checkOrderCanBeFilledMakerSide = async (
+    order: NftOrderV4
+    // override?: Partial<VerifyOrderOptionsOverrides>
+  ) => {
+    const makerAddress = order.maker;
+    const makerAsset = this.getMakerAsset(order);
+    const makerApprovalStatus = await this.loadApprovalStatus(
+      makerAsset,
+      makerAddress
+    );
+    const makerBalance = await this.fetchBalanceForAsset(
+      this.getMakerAsset(order),
+      makerAddress
+    );
+
+    const hasBalance: boolean = makerBalance.gte(
+      (makerAsset as UserFacingERC20AssetDataSerializedV4).amount ?? 1
+    );
+    const isApproved: boolean =
+      makerApprovalStatus.tokenIdApproved ??
+      makerApprovalStatus.contractApproved ??
+      false;
+    const canOrderBeFilled: boolean = hasBalance && isApproved;
+
+    return {
+      approvalStatus: makerApprovalStatus,
+      balance: makerBalance.toString(),
+      isApproved,
+      hasBalance,
+      canOrderBeFilled,
+    };
+  };
 }
 
 export { NftSwapV4 };

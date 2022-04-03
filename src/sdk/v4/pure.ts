@@ -27,6 +27,7 @@ import type {
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
   UserFacingERC1155AssetDataSerializedV4,
+  ApprovalOverrides,
 } from './types';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
 import {
@@ -183,9 +184,11 @@ export const approveAsset = async (
   exchangeProxyAddressForAsset: string,
   asset: SwappableAssetV4,
   signer: Signer,
-  overrides: Partial<TransactionOverrides> = {},
-  approve: boolean = true
+  txOverrides: Partial<TransactionOverrides> = {},
+  approvalOrderrides?: Partial<ApprovalOverrides>
 ): Promise<ContractTransaction> => {
+  const approve = approvalOrderrides?.approve ?? true;
+
   switch (asset.type) {
     case 'ERC20':
       const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
@@ -193,27 +196,40 @@ export const approveAsset = async (
         exchangeProxyAddressForAsset,
         approve ? MAX_APPROVAL.toString() : 0,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc20ApprovalTxPromise;
     case 'ERC721':
       const erc721 = ERC721__factory.connect(asset.tokenAddress, signer);
+      // If consumer prefers only to approve the tokenId, only approve tokenId
+      if (approvalOrderrides?.approvalOnlyTokenIdIfErc721) {
+        const erc721ApprovalForOnlyTokenId = erc721.approve(
+          exchangeProxyAddressForAsset,
+          asset.tokenId,
+          {
+            ...txOverrides,
+          }
+        );
+        return erc721ApprovalForOnlyTokenId;
+      }
+      // Otherwise default to approving entire contract
       const erc721ApprovalForAllPromise = erc721.setApprovalForAll(
         exchangeProxyAddressForAsset,
         approve,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc721ApprovalForAllPromise;
     case 'ERC1155':
       const erc1155 = ERC1155__factory.connect(asset.tokenAddress, signer);
+      // ERC1155s can only approval all
       const erc1155ApprovalForAll = await erc1155.setApprovalForAll(
         exchangeProxyAddressForAsset,
         approve,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc1155ApprovalForAll;
