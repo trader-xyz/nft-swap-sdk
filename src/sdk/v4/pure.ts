@@ -27,6 +27,7 @@ import type {
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
   UserFacingERC1155AssetDataSerializedV4,
+  ApprovalOverrides,
 } from './types';
 import { ApprovalStatus, TransactionOverrides } from '../common/types';
 import {
@@ -183,9 +184,11 @@ export const approveAsset = async (
   exchangeProxyAddressForAsset: string,
   asset: SwappableAssetV4,
   signer: Signer,
-  overrides: Partial<TransactionOverrides> = {},
-  approve: boolean = true
+  txOverrides: Partial<TransactionOverrides> = {},
+  approvalOrderrides?: Partial<ApprovalOverrides>
 ): Promise<ContractTransaction> => {
+  const approve = approvalOrderrides?.approve ?? true;
+
   switch (asset.type) {
     case 'ERC20':
       const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
@@ -193,27 +196,40 @@ export const approveAsset = async (
         exchangeProxyAddressForAsset,
         approve ? MAX_APPROVAL.toString() : 0,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc20ApprovalTxPromise;
     case 'ERC721':
       const erc721 = ERC721__factory.connect(asset.tokenAddress, signer);
+      // If consumer prefers only to approve the tokenId, only approve tokenId
+      if (approvalOrderrides?.approvalOnlyTokenIdIfErc721) {
+        const erc721ApprovalForOnlyTokenId = erc721.approve(
+          exchangeProxyAddressForAsset,
+          asset.tokenId,
+          {
+            ...txOverrides,
+          }
+        );
+        return erc721ApprovalForOnlyTokenId;
+      }
+      // Otherwise default to approving entire contract
       const erc721ApprovalForAllPromise = erc721.setApprovalForAll(
         exchangeProxyAddressForAsset,
         approve,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc721ApprovalForAllPromise;
     case 'ERC1155':
       const erc1155 = ERC1155__factory.connect(asset.tokenAddress, signer);
+      // ERC1155s can only approval all
       const erc1155ApprovalForAll = await erc1155.setApprovalForAll(
         exchangeProxyAddressForAsset,
         approve,
         {
-          ...overrides,
+          ...txOverrides,
         }
       );
       return erc1155ApprovalForAll;
@@ -267,7 +283,7 @@ export function parseRawSignature(rawSignature: string): ECSignature {
   };
 }
 
-export const INFINITE_TIMESTAMP_SEC = BigNumber.from(2524604400);
+export const INFINITE_EXPIRATION_TIMESTAMP_SEC = BigNumber.from(2524604400);
 
 export const generateErc721Order = (
   nft: UserFacingERC721AssetDataSerializedV4,
@@ -297,7 +313,7 @@ export const generateErc721Order = (
       }) ?? [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry).toString()
-      : INFINITE_TIMESTAMP_SEC.toString(),
+      : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
     nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
@@ -314,7 +330,7 @@ export const generateErc1155Order = (
     erc1155Token: nft.tokenAddress.toLowerCase(),
     erc1155TokenId: nft.tokenId,
     erc1155TokenAmount: nft.amount ?? '1',
-    direction: parseInt(orderData.direction.toString()), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
+    direction: parseInt(orderData.direction.toString(10)), // KLUDGE(johnrjj) - There's some footgun here when only doing orderData.direction.toString(), need to parseInt it
     erc20Token: erc20.tokenAddress.toLowerCase(),
     erc20TokenAmount: erc20.amount,
     maker: orderData.maker.toLowerCase(),
@@ -334,7 +350,7 @@ export const generateErc1155Order = (
       }) ?? [],
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry).toString()
-      : INFINITE_TIMESTAMP_SEC.toString(),
+      : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
     nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };

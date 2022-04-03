@@ -40,7 +40,7 @@
   "size-limit": [
     {
       "path": "dist/nft-swap-sdk.cjs.production.min.js",
-      "limit": "250 KB"
+      "limit": "275 KB"
     },
     {
       "path": "dist/nft-swap-sdk.esm.js",
@@ -53,7 +53,7 @@
     "@types/lodash": "^4.14.181",
     "@types/uuid": "^8.3.4",
     "husky": "^7.0.2",
-    "prettier": "^2.6.1",
+    "prettier": "^2.6.2",
     "size-limit": "7.0.8",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",

@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import { SwappableAssetV4 } from '../../src/sdk/v4/types';
@@ -95,6 +95,16 @@ describe('NFTSwapV4', () => {
     expect(signedOrder.fees[0].recipient).toEqual(
       '0xaaa1388cD71e88Ae3D8432f16bed3c603a58aD34'.toLowerCase()
     );
+
+    // Ensure getErc20TotalIncludingFees helper function works properly w/ fees.
+    const total = nftSwapperMaker
+      .getErc20TotalIncludingFees(signedOrder)
+      .toString();
+    const handCountedTotal = BigNumber.from(signedOrder.erc20TokenAmount).add(
+      BigNumber.from(signedOrder.fees[0].amount)
+    );
+    expect(total).toBe(handCountedTotal.toString());
+
     // console.log('erc721 signatuee', signedOrder.signature);
     // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
