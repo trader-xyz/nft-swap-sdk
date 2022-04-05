@@ -931,10 +931,12 @@ class NftSwapV4 implements INftSwapV4 {
     const hasBalance: boolean = takerBalance.gte(
       (takerAsset as UserFacingERC20AssetDataSerializedV4).amount ?? 1
     );
+
     const isApproved: boolean =
-      takerApprovalStatus.tokenIdApproved ??
-      takerApprovalStatus.contractApproved ??
+      takerApprovalStatus.contractApproved ||
+      takerApprovalStatus.tokenIdApproved ||
       false;
+
     const canOrderBeFilled: boolean = hasBalance && isApproved;
 
     return {
@@ -965,8 +967,8 @@ class NftSwapV4 implements INftSwapV4 {
       (makerAsset as UserFacingERC20AssetDataSerializedV4).amount ?? 1
     );
     const isApproved: boolean =
-      makerApprovalStatus.tokenIdApproved ??
-      makerApprovalStatus.contractApproved ??
+      makerApprovalStatus.tokenIdApproved ||
+      makerApprovalStatus.contractApproved ||
       false;
     const canOrderBeFilled: boolean = hasBalance && isApproved;
 
