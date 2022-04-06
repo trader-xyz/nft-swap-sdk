@@ -94,7 +94,6 @@ describe('NFTSwapV4', () => {
   });
 
   it('v4 orderbook rejects invalid order (maker token address on non-existant token)', async () => {
-    // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const invalidOrder = nftSwapperMaker.buildOrder(
       // Has 'invalid' erc721 token address
       {
@@ -127,13 +126,8 @@ describe('NFTSwapV4', () => {
   });
 
   it('v4 orderbook rejects invalid order (signature invalid)', async () => {
-    // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const validOrder = nftSwapperMaker.buildOrder(
-      // Has 'invalid' erc721 token address
-      {
-        ...MAKER_ASSET,
-        tokenAddress: '0x5Af0D9827E0c53E4799BB226655A1de152A425a5',
-      },
+      MAKER_ASSET,
       TAKER_ASSET,
       MAKER_WALLET_ADDRESS
     );
@@ -164,14 +158,12 @@ describe('NFTSwapV4', () => {
   });
 
   it('v4 orderbook rejects invalid order (order expired)', async () => {
-    // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const expiredOrder = nftSwapperMaker.buildOrder(
-      // Has 'invalid' erc721 token address
       MAKER_ASSET,
       TAKER_ASSET,
       MAKER_WALLET_ADDRESS,
       {
-        // Make expire yesterday
+        // Make order expire yesterday
         expiry: getUnixTime(sub(new Date(), { days: 1 })),
       }
     );
