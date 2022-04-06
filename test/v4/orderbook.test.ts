@@ -7,6 +7,8 @@ import {
   searchOrderbook,
 } from '../../src/sdk/v4/orderbook';
 import { SwappableAssetV4 } from '../../src/sdk';
+import getUnixTime from 'date-fns/getUnixTime';
+import sub from 'date-fns/sub';
 
 jest.setTimeout(90 * 1000);
 
@@ -89,5 +91,97 @@ describe('NFTSwapV4', () => {
     // const fillTx = await nftSwapperMaker.fillSignedOrder(orderTofill);
     // const txReceipt = await fillTx.wait();
     // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
+  });
+
+  it('v4 orderbook rejects invalid order (maker token address on non-existant token)', async () => {
+    const invalidOrder = nftSwapperMaker.buildOrder(
+      // Has 'invalid' erc721 token address
+      {
+        ...MAKER_ASSET,
+        tokenAddress: '0x5Af0D9827E0c53E4799BB226655A1de152A425a5',
+      },
+      TAKER_ASSET,
+      MAKER_WALLET_ADDRESS
+    );
+
+    const invalidSignedOrder = await nftSwapperMaker.signOrder(invalidOrder);
+
+    const testMetadata = { testData: 'unit-test' };
+
+    const postOrderPromiseThatShouldFail = nftSwapperMaker.postOrder(
+      invalidSignedOrder,
+      ROPSTEN_CHAIN_ID.toString(10),
+      testMetadata
+    );
+    try {
+      await postOrderPromiseThatShouldFail;
+      expect('this line to never be hit').toBeFalsy();
+    } catch (e) {
+      expect(e).toEqual({
+        errorCode: 'ERROR_FETCHING_ORDER_DATA',
+        errorMessage:
+          'Error looking up maker balance and approval data. Order may be using incorrect/bad token 0x5af0d9827e0c53e4799bb226655a1de152a425a5, chainId: 3.',
+      });
+    }
+  });
+
+  it('v4 orderbook rejects invalid order (signature invalid)', async () => {
+    const validOrder = nftSwapperMaker.buildOrder(
+      MAKER_ASSET,
+      TAKER_ASSET,
+      MAKER_WALLET_ADDRESS
+    );
+
+    const signedValidOrder = await nftSwapperMaker.signOrder(validOrder);
+
+    const invalidSignedOrder = { ...signedValidOrder };
+    // intentionally invalidate (otherwise valid) signature
+    invalidSignedOrder.signature.r =
+      '0xe071f804c045fa2065c188151192ce1239ec03c2252ffebb2ef57fa72ecad822';
+
+    const testMetadata = { testData: 'unit-test' };
+
+    const postOrderPromiseThatShouldFail = nftSwapperMaker.postOrder(
+      invalidSignedOrder,
+      ROPSTEN_CHAIN_ID.toString(10),
+      testMetadata
+    );
+    try {
+      await postOrderPromiseThatShouldFail;
+      expect('this line to never be hit').toBeFalsy();
+    } catch (e) {
+      expect(e).toEqual({
+        errorCode: 'INVALID_ORDER_SIGNATURE',
+        errorMessage: 'Signature on signed order is invalid',
+      });
+    }
+  });
+
+  it('v4 orderbook rejects invalid order (order expired)', async () => {
+    const expiredOrder = nftSwapperMaker.buildOrder(
+      MAKER_ASSET,
+      TAKER_ASSET,
+      MAKER_WALLET_ADDRESS,
+      {
+        // Make order expire yesterday
+        expiry: getUnixTime(sub(new Date(), { days: 1 })),
+      }
+    );
+
+    const signedExpiredOrder = await nftSwapperMaker.signOrder(expiredOrder);
+
+    const testMetadata = { testData: 'unit-test' };
+
+    const postOrderPromiseThatShouldFail = nftSwapperMaker.postOrder(
+      signedExpiredOrder,
+      ROPSTEN_CHAIN_ID.toString(10),
+      testMetadata
+    );
+    try {
+      await postOrderPromiseThatShouldFail;
+      expect('this line to never be hit').toBeFalsy();
+    } catch (e: any) {
+      expect(e.errorCode).toBe('ORDER_EXPIRED');
+    }
   });
 });
