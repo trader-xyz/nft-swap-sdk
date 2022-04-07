@@ -1,10 +1,11 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BigNumber } from '@ethersproject/bignumber';
 import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
-import { BaseProvider } from '@ethersproject/providers';
+import type { BaseProvider } from '@ethersproject/providers';
+import type { ContractTransaction } from '@ethersproject/contracts';
 import getUnixTime from 'date-fns/getUnixTime';
-import { ContractTransaction } from 'ethers';
 import { v4 } from 'uuid';
+import warning from 'tiny-warning';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -39,7 +40,6 @@ import {
   PROPERTY_ABI,
   ETH_ADDRESS_AS_ERC20,
 } from './constants';
-import warning from 'tiny-warning';
 
 export const signOrderWithEoaWallet = async (
   order: NftOrderV4,
@@ -314,7 +314,7 @@ export const generateErc721Order = (
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry).toString()
       : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
-    nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
+    nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
@@ -351,15 +351,21 @@ export const generateErc1155Order = (
     expiry: orderData.expiry
       ? getUnixTime(orderData.expiry).toString()
       : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
-    nonce: orderData.nonce?.toString() ?? generateRandomNonce(),
+    nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
   return erc1155Order;
 };
 
-const generateRandomNonce = () => {
-  return `0x${v4().toString().split('-').join('')}`;
+/**
+ * @returns 128bit nonce as string (0x orders can handle up to 256 bit nonce)
+ */
+export const generateRandomV4OrderNonce = (): string => {
+  const hex = '0x' + v4().replace(/-/g, '');
+  const value = BigInt(hex);
+  const decimal = value.toString(); // don't convert this to a number, will lose precision
+  return decimal;
 };
 
 export const serializeNftOrder = (

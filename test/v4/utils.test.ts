@@ -1,10 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
-import {
-  SignedERC721OrderStruct,
-  SwappableAssetV4,
-} from '../../src/sdk/v4/types';
+import { SwappableAssetV4 } from '../../src/sdk/v4/types';
 
 jest.setTimeout(120 * 1000);
 
