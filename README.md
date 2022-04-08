@@ -83,7 +83,7 @@ Let's walk through the most common NFT swap case: swapping an NFT (ERC721 or ERC
 ```typescript
 import { NftSwapV4 } from '@traderxyz/nft-swap-sdk';
 
-// Scenario: User A wants to sell their CryptoPunk for 420 WETH 
+// Scenario: User A wants to sell their CryptoPunk for 420 WETH
 
 // Set up the assets we want to swap (CryptoPunk #69 and 420 WETH)
 const CRYPTOPUNK = {
@@ -111,7 +111,7 @@ const order = nftSwapSdk.buildOrder(
   walletAddressMaker
 );
 // Sign order so order is now fillable
-const signedOrder = await nftSwapSdk.signOrder(order, takerAddress);
+const signedOrder = await nftSwapSdk.signOrder(order);
 
 // [Part 2: Taker that wants to buy the punk fills trade]
 const nftSwapSdk = new NftSwap(provider, signerForTaker, CHAIN_ID);
