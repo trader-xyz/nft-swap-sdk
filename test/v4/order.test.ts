@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import {
@@ -70,6 +70,9 @@ describe('NFTSwapV4', () => {
     );
 
     const v4Erc721SignedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
-    expect(v4Erc721SignedOrder.expiry.toString()).toEqual('1897016400');
+
+    const expiryBn = BigNumber.from(v4Erc721SignedOrder.expiry);
+    // Depending on where this test is run it'll vary by a few hours. This assets on a valid range (24hrs)
+    expect(expiryBn.sub('1897016400').abs().toNumber()).toBeLessThan(24_000);
   });
 });
