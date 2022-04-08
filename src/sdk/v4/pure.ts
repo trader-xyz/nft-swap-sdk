@@ -290,6 +290,16 @@ export const generateErc721Order = (
   erc20: UserFacingERC20AssetDataSerializedV4,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC721OrderStructSerialized => {
+  let expiry = INFINITE_EXPIRATION_TIMESTAMP_SEC.toString();
+  if (orderData.expiry) {
+    // If number is provided, assume given as unix timestamp
+    if (typeof orderData.expiry === 'number') {
+      expiry = orderData.expiry.toString();
+    } else {
+      // If date is provided, convert to unix timestamp
+      expiry = getUnixTime(orderData.expiry).toString();
+    }
+  }
   const erc721Order: ERC721OrderStructSerialized = {
     erc721Token: nft.tokenAddress.toLowerCase(),
     erc721TokenId: nft.tokenId,
@@ -311,9 +321,7 @@ export const generateErc721Order = (
           feeData: x.feeData?.toString() ?? '0x',
         };
       }) ?? [],
-    expiry: orderData.expiry
-      ? getUnixTime(orderData.expiry).toString()
-      : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
+    expiry: expiry,
     nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
@@ -326,6 +334,16 @@ export const generateErc1155Order = (
   erc20: UserFacingERC20AssetDataSerializedV4,
   orderData: Partial<OrderStructOptionsCommon> & OrderStructOptionsCommonStrict
 ): ERC1155OrderStructSerialized => {
+  let expiry = INFINITE_EXPIRATION_TIMESTAMP_SEC.toString();
+  if (orderData.expiry) {
+    // If number is provided, assume given as unix timestamp
+    if (typeof orderData.expiry === 'number') {
+      expiry = orderData.expiry.toString();
+    } else {
+      // If date is provided, convert to unix timestamp
+      expiry = getUnixTime(orderData.expiry).toString();
+    }
+  }
   const erc1155Order: ERC1155OrderStructSerialized = {
     erc1155Token: nft.tokenAddress.toLowerCase(),
     erc1155TokenId: nft.tokenId,
@@ -348,9 +366,7 @@ export const generateErc1155Order = (
           feeData: fee.feeData?.toString() ?? '0x',
         };
       }) ?? [],
-    expiry: orderData.expiry
-      ? getUnixTime(orderData.expiry).toString()
-      : INFINITE_EXPIRATION_TIMESTAMP_SEC.toString(),
+    expiry: expiry,
     nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
