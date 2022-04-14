@@ -42,7 +42,6 @@ import type {
   UserFacingERC1155AssetDataSerializedV4,
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
-  VerifyOrderOptionsOverrides,
 } from './types';
 import {
   ERC1155_TRANSFER_FROM_DATA,
@@ -57,9 +56,9 @@ import {
   ORDERBOOK_API_ROOT_URL_PRODUCTION,
   SearchOrdersResponsePayload,
 } from './orderbook';
+import { getWrappedNativeToken } from '../../utils/addresses';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
-import { getWrappedNativeToken } from '../../utils/addresses';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
 
@@ -158,8 +157,6 @@ export interface AdditionalSdkConfig {
   zeroExExchangeProxyContractAddress: string;
   orderbookRootUrl: string;
 }
-
-export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 class NftSwapV4 implements INftSwapV4 {
   public provider: BaseProvider;
@@ -443,7 +440,7 @@ class NftSwapV4 implements INftSwapV4 {
 
     // Validate that a bid does not use ETH.
     if (direction === TradeDirection.BuyNFT) {
-      if (erc20.tokenAddress.toLowerCase() === FAKE_ETH_ADDRESS) {
+      if (erc20.tokenAddress.toLowerCase() === ETH_ADDRESS_AS_ERC20) {
         throw new Error(
           'NFT Bids cannot use the native token (e.g. ETH). Please use the wrapped native token (e.g. WETH)'
         );
@@ -629,10 +626,13 @@ class NftSwapV4 implements INftSwapV4 {
     fillOrderOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides?: Partial<PayableOverrides>
   ) => {
-    const isNativeToken = this.isErc20NativeToken(signedOrder);
-    const eligibleToFillInNativeToken =
+    // Only Sell orders can be filled with ETH
+    const canOrderTypeBeFilledWithNativeToken =
       signedOrder.direction === TradeDirection.SellNFT;
-    const needsEthAttached = isNativeToken && eligibleToFillInNativeToken;
+    // Is ERC20 being traded the native token
+    const isNativeToken = this.isErc20NativeToken(signedOrder);
+    const needsEthAttached =
+      isNativeToken && canOrderTypeBeFilledWithNativeToken;
     const erc20TotalAmount = this.getErc20TotalIncludingFees(signedOrder);
 
     // do fill

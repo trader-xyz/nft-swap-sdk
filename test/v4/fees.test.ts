@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
-import { FAKE_ETH_ADDRESS, NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
+import { ETH_ADDRESS_AS_ERC20 } from '../../src/sdk';
+import { NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import { SwappableAssetV4 } from '../../src/sdk/v4/types';
 import { SignedERC721OrderStruct } from '../../src/sdk/v4/types';
@@ -38,7 +39,7 @@ const DAI_ASSET: SwappableAssetV4 = {
 
 const ETH_ASSET: SwappableAssetV4 = {
   type: 'ERC20',
-  tokenAddress: FAKE_ETH_ADDRESS,
+  tokenAddress: ETH_ADDRESS_AS_ERC20,
   amount: '420000000000000', // 1 USDC
 };
 
