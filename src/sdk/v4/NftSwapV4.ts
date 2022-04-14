@@ -645,6 +645,7 @@ class NftSwapV4 implements INftSwapV4 {
           signedOrder.erc1155TokenAmount,
           '0x',
           {
+            // If we're filling an order with ETH, be sure to include the value with fees added
             value: needsEthAttached ? erc20TotalAmount : undefined,
             ...transactionOverrides,
           }
@@ -688,6 +689,7 @@ class NftSwapV4 implements INftSwapV4 {
           signedOrder.signature,
           '0x',
           {
+            // If we're filling an order with ETH, be sure to include the value with fees added
             value: needsEthAttached ? erc20TotalAmount : undefined,
             ...transactionOverrides,
           }

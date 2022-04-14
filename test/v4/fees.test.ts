@@ -3,7 +3,6 @@ import { FAKE_ETH_ADDRESS, NftSwapV4 } from '../../src/sdk/v4/NftSwapV4';
 
 import { SwappableAssetV4 } from '../../src/sdk/v4/types';
 import { SignedERC721OrderStruct } from '../../src/sdk/v4/types';
-import { NULL_ADDRESS } from '../../src/utils/eth';
 
 jest.setTimeout(90 * 1000);
 
@@ -178,11 +177,11 @@ describe('NFTSwapV4', () => {
     expect(handCountedTotal).toBe('433900000000000');
 
     // Uncomment to actually fill order
-    const tx = await nftSwapperMaker.fillSignedOrder(signedOrder);
-    const txReceipt = await tx.wait();
-    expect(txReceipt.transactionHash).toBeTruthy();
-    console.log(
-      `Swapped tx eth with multiple fees on Ropsten (txHAsh: ${txReceipt.transactionHash})`
-    );
+    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder);
+    // const txReceipt = await tx.wait();
+    // expect(txReceipt.transactionHash).toBeTruthy();
+    // console.log(
+    //   `Swapped tx eth with multiple fees on Ropsten (txHAsh: ${txReceipt.transactionHash})`
+    // );
   });
 });
