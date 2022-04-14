@@ -42,7 +42,6 @@ import type {
   UserFacingERC1155AssetDataSerializedV4,
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
-  VerifyOrderOptionsOverrides,
 } from './types';
 import {
   ERC1155_TRANSFER_FROM_DATA,
@@ -57,9 +56,9 @@ import {
   ORDERBOOK_API_ROOT_URL_PRODUCTION,
   SearchOrdersResponsePayload,
 } from './orderbook';
+import { getWrappedNativeToken } from '../../utils/addresses';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
-import { getWrappedNativeToken } from '../../utils/addresses';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
 
@@ -158,8 +157,6 @@ export interface AdditionalSdkConfig {
   zeroExExchangeProxyContractAddress: string;
   orderbookRootUrl: string;
 }
-
-export const FAKE_ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 class NftSwapV4 implements INftSwapV4 {
   public provider: BaseProvider;
@@ -443,7 +440,7 @@ class NftSwapV4 implements INftSwapV4 {
 
     // Validate that a bid does not use ETH.
     if (direction === TradeDirection.BuyNFT) {
-      if (erc20.tokenAddress.toLowerCase() === FAKE_ETH_ADDRESS) {
+      if (erc20.tokenAddress.toLowerCase() === ETH_ADDRESS_AS_ERC20) {
         throw new Error(
           'NFT Bids cannot use the native token (e.g. ETH). Please use the wrapped native token (e.g. WETH)'
         );
@@ -620,25 +617,36 @@ class NftSwapV4 implements INftSwapV4 {
     );
   };
 
+  isErc20NativeToken = (order: NftOrderV4): boolean => {
+    return order.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
+  };
+
   fillSignedOrder = async (
     signedOrder: SignedNftOrderV4,
     fillOrderOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides?: Partial<PayableOverrides>
   ) => {
+    // Only Sell orders can be filled with ETH
+    const canOrderTypeBeFilledWithNativeToken =
+      signedOrder.direction === TradeDirection.SellNFT;
+    // Is ERC20 being traded the native token
+    const isNativeToken = this.isErc20NativeToken(signedOrder);
+    const needsEthAttached =
+      isNativeToken && canOrderTypeBeFilledWithNativeToken;
+    const erc20TotalAmount = this.getErc20TotalIncludingFees(signedOrder);
+
     // do fill
     if ('erc1155Token' in signedOrder) {
       // If maker is selling an NFT, taker wants to 'buy' nft
       if (signedOrder.direction === TradeDirection.SellNFT) {
-        const needsEthAttached =
-          signedOrder.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
-
         return this.exchangeProxy.buyERC1155(
           signedOrder,
           signedOrder.signature,
           signedOrder.erc1155TokenAmount,
           '0x',
           {
-            value: needsEthAttached ? signedOrder.erc20TokenAmount : undefined,
+            // If we're filling an order with ETH, be sure to include the value with fees added
+            value: needsEthAttached ? erc20TotalAmount : undefined,
             ...transactionOverrides,
           }
         );
@@ -675,17 +683,14 @@ class NftSwapV4 implements INftSwapV4 {
       }
     } else if ('erc721Token' in signedOrder) {
       // If maker is selling an NFT, taker wants to 'buy' nft
-
       if (signedOrder.direction === TradeDirection.SellNFT) {
-        const needsEthAttached =
-          signedOrder.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
-
         return this.exchangeProxy.buyERC721(
           signedOrder,
           signedOrder.signature,
           '0x',
           {
-            value: needsEthAttached ? signedOrder.erc20TokenAmount : undefined,
+            // If we're filling an order with ETH, be sure to include the value with fees added
+            value: needsEthAttached ? erc20TotalAmount : undefined,
             ...transactionOverrides,
           }
         );
@@ -982,18 +987,30 @@ class NftSwapV4 implements INftSwapV4 {
   };
 
   /**
-   * Calculates total order cost.
-   * In 0x v4, fees are additive (i.e. they are not deducted from the order amount, but added on top of)
-   * @param order A 0x v4 order;
-   * @returns BigNumber of order total cost in erc20 unit amount
+   * Convenience function to sum all fees. Total fees denominated in erc20 token amount.
+   * @param order A 0x v4 order (signed or un-signed);
+   * @returns Total summed fees for a 0x v4 order. Amount is represented in Erc20 token units.
    */
-  getErc20TotalIncludingFees = (order: NftOrderV4): BigNumber => {
+  getTotalFees = (order: NftOrderV4): BigNumber => {
     const fees = order.fees;
     // In 0x v4, fees are additive (not included in the original erc20 amount)
     let feesTotal = ZERO_AMOUNT;
     fees.forEach((fee) => {
-      feesTotal = ZERO_AMOUNT.add(BigNumber.from(fee.amount));
+      feesTotal = feesTotal.add(BigNumber.from(fee.amount));
     });
+    return feesTotal;
+  };
+
+  /**
+   * Calculates total order cost.
+   * In 0x v4, fees are additive (i.e. they are not deducted from the order amount, but added on top of)
+   * @param order A 0x v4 order;
+   * @returns Total cost of an order (base amount + fees). Amount is represented in Erc20 token units. Does not include gas costs.
+   */
+  getErc20TotalIncludingFees = (order: NftOrderV4): BigNumber => {
+    const fees = order.fees;
+    // In 0x v4, fees are additive (not included in the original erc20 amount)
+    let feesTotal = this.getTotalFees(order);
     const orderTotalCost = BigNumber.from(order.erc20TokenAmount).add(
       feesTotal
     );

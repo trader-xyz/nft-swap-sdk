@@ -57,3 +57,6 @@ export const PROPERTY_ABI = [
 
 export const ETH_ADDRESS_AS_ERC20 =
   '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
