@@ -2,3 +2,6 @@
 .DS_Store
 node_modules
 local-scripts
+nft-swap-sdk-banner.jpg
+example.ts
+example-v4.ts
