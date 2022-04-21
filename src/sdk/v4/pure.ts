@@ -399,7 +399,7 @@ const RESERVED_APP_ID_PREFIX_DIGITS = RESERVED_APP_ID_PREFIX.length;
 
 export const DEFAULT_APP_ID = '314159';
 
-const verifyAppIdOrThrow = (appId: string) => {
+export const verifyAppIdOrThrow = (appId: string) => {
   const isCorrectLength =
     appId.length <= ONE_TWENTY_EIGHT_BIT_LENGTH - RESERVED_APP_ID_PREFIX_DIGITS;
   const hasOnlyNumbers = checkIfStringContainsOnlyNumbers(appId);

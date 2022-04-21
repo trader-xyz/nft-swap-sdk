@@ -29,6 +29,7 @@ import {
   getApprovalStatus,
   parseRawSignature,
   signOrderWithEoaWallet,
+  verifyAppIdOrThrow,
 } from './pure';
 import type {
   AddressesForChainV4,
@@ -164,15 +165,23 @@ export interface AdditionalSdkConfig {
 }
 
 class NftSwapV4 implements INftSwapV4 {
+  // RPC provider
   public provider: BaseProvider;
+  // Wallet signer
   public signer: Signer | undefined;
+  // Chain Id for this instance of NftSwapV4.
+  // To switch chains, instantiate a new version of NftSWapV4 with the updated chain id.
   public chainId: number;
-  public exchangeProxy: IZeroEx;
+
+  // ZeroEx ExchangeProxy contract address to reference
   public exchangeProxyContractAddress: string;
+  // Generated ZeroEx ExchangeProxy contracts
+  public exchangeProxy: IZeroEx;
 
   // Unique identifier for app. Must be a positive integer between 1 and 2**128
   public appId: string;
 
+  // Orderbook URL
   public orderbookRootUrl: string;
 
   constructor(
@@ -204,6 +213,7 @@ class NftSwapV4 implements INftSwapV4 {
       additionalConfig?.orderbookRootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 
     this.appId = additionalConfig?.appId ?? DEFAULT_APP_ID;
+    verifyAppIdOrThrow(this.appId);
 
     this.exchangeProxy = IZeroEx__factory.connect(
       zeroExExchangeContractAddress,
