@@ -23,11 +23,13 @@ import type {
 import { UnexpectedAssetTypeError } from '../error';
 import {
   approveAsset,
+  DEFAULT_APP_ID,
   generateErc1155Order,
   generateErc721Order,
   getApprovalStatus,
   parseRawSignature,
   signOrderWithEoaWallet,
+  verifyAppIdOrThrow,
 } from './pure';
 import type {
   AddressesForChainV4,
@@ -154,17 +156,32 @@ export interface INftSwapV4 extends BaseNftSwap {
 }
 
 export interface AdditionalSdkConfig {
+  // Identify your app fills with distinct integer
+  appId: string;
+  // Custom zeroex proxy contract address (defaults to the canonical contracts deployed by 0x Labs core team)
   zeroExExchangeProxyContractAddress: string;
+  // Custom orderbook url. Defaults to using Trader.xyz's multi-chain open orderbook
   orderbookRootUrl: string;
 }
 
 class NftSwapV4 implements INftSwapV4 {
+  // RPC provider
   public provider: BaseProvider;
+  // Wallet signer
   public signer: Signer | undefined;
+  // Chain Id for this instance of NftSwapV4.
+  // To switch chains, instantiate a new version of NftSWapV4 with the updated chain id.
   public chainId: number;
-  public exchangeProxy: IZeroEx;
-  public exchangeProxyContractAddress: string;
 
+  // ZeroEx ExchangeProxy contract address to reference
+  public exchangeProxyContractAddress: string;
+  // Generated ZeroEx ExchangeProxy contracts
+  public exchangeProxy: IZeroEx;
+
+  // Unique identifier for app. Must be a positive integer between 1 and 2**128
+  public appId: string;
+
+  // Orderbook URL
   public orderbookRootUrl: string;
 
   constructor(
@@ -194,6 +211,9 @@ class NftSwapV4 implements INftSwapV4 {
 
     this.orderbookRootUrl =
       additionalConfig?.orderbookRootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
+
+    this.appId = additionalConfig?.appId ?? DEFAULT_APP_ID;
+    verifyAppIdOrThrow(this.appId);
 
     this.exchangeProxy = IZeroEx__factory.connect(
       zeroExExchangeContractAddress,
@@ -432,7 +452,11 @@ class NftSwapV4 implements INftSwapV4 {
     makerAddress: string,
     userConfig?: Partial<OrderStructOptionsCommonStrict>
   ): NftOrderV4Serialized => {
-    const defaultConfig = { chainId: this.chainId, makerAddress: makerAddress };
+    const defaultConfig = {
+      chainId: this.chainId,
+      makerAddress: makerAddress,
+      appId: this.appId,
+    };
     const config = { ...defaultConfig, ...userConfig };
 
     const direction =

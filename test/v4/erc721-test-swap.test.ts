@@ -96,8 +96,8 @@ describe('NFTSwapV4', () => {
     expect(signedOrderErc1155.direction.toString()).toBe('0');
 
     await nftSwapperMaker.postOrder(signedOrder, '3');
-    // console.log('erc721 signatuee', signedOrder.signature);
-    // expect(signedOrder.signature.signatureType.toString()).toEqual('2');
+
+    expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 
     // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
     // const txReceipt = await fillTx.wait();
@@ -105,27 +105,6 @@ describe('NFTSwapV4', () => {
 
     // expect(txReceipt.transactionHash).toBeTruthy();
 
-    // const normalizedOrder = normalizeOrder(order);
-    // const signedOrder = await nftSwapperMaker.signOrder(
-    //   normalizedOrder,
-    // );
-
-    // const normalizedSignedOrder = normalizeOrder(signedOrder);
-
-    // expect(normalizedSignedOrder.makerAddress.toLowerCase()).toBe(
-    //   MAKER_WALLET_ADDRESS.toLowerCase()
-    // );
-
-    // Uncomment to actually fill order
-    // const tx = await nftSwapperMaker.fillSignedOrder(signedOrder, undefined, {
-    //   gasPrice,
-    //   gasLimit: '500000',
-    //   // HACK(johnnrjj) - Rinkeby still has protocol fees, so we give it a little bit of ETH so its happy.
-    //   value: parseEther('0.01'),
-    // });
-
-    // const txReceipt = await tx.wait();
-    // expect(txReceipt.transactionHash).toBeTruthy();
     // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
   });
 });

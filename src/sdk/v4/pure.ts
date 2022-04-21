@@ -6,6 +6,9 @@ import type { ContractTransaction } from '@ethersproject/contracts';
 import getUnixTime from 'date-fns/getUnixTime';
 import { v4 } from 'uuid';
 import warning from 'tiny-warning';
+import invariant from 'tiny-invariant';
+import padEnd from 'lodash/padEnd';
+import padStart from 'lodash/padStart';
 import {
   ERC1155__factory,
   ERC20__factory,
@@ -322,7 +325,9 @@ export const generateErc721Order = (
         };
       }) ?? [],
     expiry: expiry,
-    nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
+    nonce:
+      orderData.nonce?.toString() ??
+      generateRandomV4OrderNonce(orderData.appId),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
@@ -367,21 +372,81 @@ export const generateErc1155Order = (
         };
       }) ?? [],
     expiry: expiry,
-    nonce: orderData.nonce?.toString() ?? generateRandomV4OrderNonce(),
+    nonce:
+      orderData.nonce?.toString() ??
+      generateRandomV4OrderNonce(orderData.appId),
     taker: orderData.taker?.toLowerCase() ?? NULL_ADDRESS,
   };
 
   return erc1155Order;
 };
 
+// Number of digits in base 10 128bit nonce
+// floor(log_10(2^128 - 1)) + 1
+export const ONE_TWENTY_EIGHT_BIT_LENGTH = 39;
+
+// Max nonce digit length in base 10
+// floor(log_10(2^256 - 1)) + 1
+export const TWO_FIFTY_SIX_BIT_LENGTH = 78;
+
+const checkIfStringContainsOnlyNumbers = (val: string) => {
+  const onlyNumbers = /^\d+$/.test(val);
+  return onlyNumbers;
+};
+
+export const RESERVED_APP_ID_PREFIX = '1001';
+const RESERVED_APP_ID_PREFIX_DIGITS = RESERVED_APP_ID_PREFIX.length;
+
+export const DEFAULT_APP_ID = '314159';
+
+export const verifyAppIdOrThrow = (appId: string) => {
+  const isCorrectLength =
+    appId.length <= ONE_TWENTY_EIGHT_BIT_LENGTH - RESERVED_APP_ID_PREFIX_DIGITS;
+  const hasOnlyNumbers = checkIfStringContainsOnlyNumbers(appId);
+  invariant(isCorrectLength, 'appId must be 39 digits or less');
+  invariant(
+    hasOnlyNumbers,
+    'appId must be numeric only (no alpha or special characters, only numbers)'
+  );
+};
+
 /**
+ * Generates a 256bit nonce.
+ * The format:
+ *   First 128bits:  ${SDK_PREFIX}${APP_ID}000000 (right padded zeroes to fill)
+ *   Second 128bits: ${RANDOM_GENERATED_128BIT_ORDER_HASH}
  * @returns 128bit nonce as string (0x orders can handle up to 256 bit nonce)
  */
-export const generateRandomV4OrderNonce = (): string => {
+export const generateRandomV4OrderNonce = (
+  appId: string = DEFAULT_APP_ID
+): string => {
+  if (appId) {
+    verifyAppIdOrThrow(appId);
+  }
+  const order128 = padStart(
+    generateRandom128BitNumber(),
+    ONE_TWENTY_EIGHT_BIT_LENGTH,
+    '0'
+  );
+  const appId128 = padEnd(
+    `${RESERVED_APP_ID_PREFIX}${appId}`,
+    ONE_TWENTY_EIGHT_BIT_LENGTH,
+    '0'
+  );
+  const final256BitNonce = `${appId128}${order128}`;
+  invariant(
+    final256BitNonce.length <= TWO_FIFTY_SIX_BIT_LENGTH,
+    'Invalid nonce size'
+  );
+  return final256BitNonce;
+};
+
+// uuids are 128bits
+export const generateRandom128BitNumber = (base = 10): string => {
   const hex = '0x' + v4().replace(/-/g, '');
   const value = BigInt(hex);
-  const decimal = value.toString(); // don't convert this to a number, will lose precision
-  return decimal;
+  const valueBase10String = value.toString(base); // don't convert this to a number, will lose precision
+  return valueBase10String;
 };
 
 export const serializeNftOrder = (
