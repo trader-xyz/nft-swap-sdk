@@ -1,6 +1,6 @@
 import unfetch from 'isomorphic-unfetch';
+import { stringify } from 'query-string';
 import type { SignedNftOrderV4, SignedNftOrderV4Serialized } from './types';
-import { stringify } from '../../utils/query-string';
 import { serializeNftOrder } from './pure';
 
 export const ORDERBOOK_API_ROOT_URL_PRODUCTION = 'https://api.trader.xyz';
@@ -76,13 +76,13 @@ const postOrderToOrderbook = async (
 
 export interface SearchOrdersParams {
   erc20Token?: string;
-  nftTokenId?: string;
+  nftTokenId?: string | string[];
   nftToken?: string;
   nftType?: string;
   chainId?: string;
   maker?: string;
   taker?: string;
-  nonce?: string;
+  nonce?: string | string[];
   // Defaults to only 'open' orders
   status?: 'open' | 'filled' | 'expired' | 'cancelled' | 'all';
 }
@@ -92,7 +92,10 @@ const searchOrderbook = async (
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ): Promise<SearchOrdersResponsePayload> => {
-  const stringifiedQueryParams = stringify(filters ?? {});
+  // https://github.com/sindresorhus/query-string#arrayformat
+  const stringifiedQueryParams = stringify(filters ?? {}, {
+    arrayFormat: 'none',
+  });
 
   let rootUrl = requestOptions?.rootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 
