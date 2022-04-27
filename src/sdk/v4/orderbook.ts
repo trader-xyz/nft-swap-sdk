@@ -1,6 +1,6 @@
 import unfetch from 'isomorphic-unfetch';
+import { stringify } from 'query-string';
 import type { SignedNftOrderV4, SignedNftOrderV4Serialized } from './types';
-import { stringify } from '../../utils/query-string';
 import { serializeNftOrder } from './pure';
 
 export const ORDERBOOK_API_ROOT_URL_PRODUCTION = 'https://api.trader.xyz';
@@ -74,25 +74,44 @@ const postOrderToOrderbook = async (
   return orderPostResult;
 };
 
+/**
+ * Available query parameters for searching the orderbook
+ */
 export interface SearchOrdersParams {
-  erc20Token?: string;
-  nftTokenId?: string;
-  nftToken?: string;
-  nftType?: string;
-  chainId?: string;
-  maker?: string;
-  taker?: string;
-  nonce?: string;
+  nftTokenId: string | string[];
+  erc20Token: string | string[];
+  nftToken: string | string[];
+  nftType: 'ERC721' | 'ERC1155';
+  chainId: string | number | string[] | number[];
+  maker: string;
+  taker: string;
+  nonce: string | string[];
+  offset: string | number;
+  limit: string | number;
+  sellOrBuyNft: 'sell' | 'buy';
+  direction: '0' | '1';
   // Defaults to only 'open' orders
-  status?: 'open' | 'filled' | 'expired' | 'cancelled' | 'all';
+  status: 'open' | 'filled' | 'expired' | 'cancelled' | 'all';
+  visibility: 'public' | 'private';
+  valid: 'valid' | 'all';
 }
 
+/**
+ * Search through the public hosted orderbook
+ * @param filters Optional query param filters
+ * @param requestOptions Fetch options/overrides
+ * @param fetchFn Optional fetch function override. Uses unfetch by default.
+ * @returns
+ */
 const searchOrderbook = async (
   filters?: Partial<SearchOrdersParams>,
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ): Promise<SearchOrdersResponsePayload> => {
-  const stringifiedQueryParams = stringify(filters ?? {});
+  // https://github.com/sindresorhus/query-string#arrayformat
+  const stringifiedQueryParams = stringify(filters ?? {}, {
+    arrayFormat: 'none',
+  });
 
   let rootUrl = requestOptions?.rootUrl ?? ORDERBOOK_API_ROOT_URL_PRODUCTION;
 

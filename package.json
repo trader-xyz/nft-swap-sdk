@@ -73,6 +73,7 @@
     "isomorphic-unfetch": "^3.1.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "query-string": "^7.1.1",
     "tiny-invariant": "^1.2.0",
     "tiny-warning": "^1.0.3",
     "uuid": "^8.3.2"
