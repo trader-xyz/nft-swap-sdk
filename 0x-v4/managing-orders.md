@@ -117,7 +117,7 @@ Documentation coming soon
 To save an order to the hosted orderbook:
 
 ```typescript
-await nftSwapSdk.saveOrder(signedOrder);
+await nftSwapSdk.postOrder(signedOrder);
 ```
 
 #### Fetch Order(s)
