@@ -187,13 +187,14 @@ class NftSwapV4 implements INftSwapV4 {
   constructor(
     provider: BaseProvider,
     signer: Signer,
-    chainId?: number,
+    chainId?: number | string,
     additionalConfig?: Partial<AdditionalSdkConfig>
   ) {
     this.provider = provider;
     this.signer = signer;
-    this.chainId =
-      chainId ?? (this.provider._network.chainId as SupportedChainIdsV4);
+    this.chainId = chainId
+      ? parseInt(chainId.toString(10), 10)
+      : (this.provider._network.chainId as SupportedChainIdsV4);
 
     const defaultAddressesForChain: AddressesForChainV4 | undefined =
       addresses[this.chainId as SupportedChainIdsV4];
@@ -616,7 +617,7 @@ class NftSwapV4 implements INftSwapV4 {
   };
 
   /**
-   * Fills a 'collection'-based order (e.g. a bid for any nft belonging to a particulat collection)
+   * Fills a 'collection'-based order (e.g. a bid for any nft belonging to a particular collection)
    * @param signedOrder A 0x signed collection order
    * @param tokenId The token id to fill for the collection order
    * @param fillOrderOverrides Various fill options
@@ -645,6 +646,13 @@ class NftSwapV4 implements INftSwapV4 {
     return order.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20;
   };
 
+  /**
+   * Fills a signed order
+   * @param signedOrder A signed 0x v4 order
+   * @param fillOrderOverrides Optional configuration on possible ways to fill the order
+   * @param transactionOverrides Ethers transaction overrides (e.g. gas price)
+   * @returns
+   */
   fillSignedOrder = async (
     signedOrder: SignedNftOrderV4,
     fillOrderOverrides?: Partial<FillOrderOverrides>,
@@ -764,16 +772,17 @@ class NftSwapV4 implements INftSwapV4 {
    */
   postOrder = (
     signedOrder: SignedNftOrderV4,
-    chainId: string,
+    chainId: string | number,
     metadata?: Record<string, string>
   ): Promise<PostOrderResponsePayload> => {
+    const parsedChainId = parseInt(chainId.toString(10), 10);
     const supportsMonitoring =
-      SupportedChainsForV4OrderbookStatusMonitoring.includes(parseInt(chainId));
+      SupportedChainsForV4OrderbookStatusMonitoring.includes(parsedChainId);
     warning(
       supportsMonitoring,
       `Chain ${chainId} does not support live orderbook status monitoring. Orders can be posted to be persisted, but status wont be monitored (e.g. updating status on a fill, cancel, or expiry.)`
     );
-    return postOrderToOrderbook(signedOrder, chainId, metadata, {
+    return postOrderToOrderbook(signedOrder, parsedChainId, metadata, {
       rootUrl: this.orderbookRootUrl,
     });
   };

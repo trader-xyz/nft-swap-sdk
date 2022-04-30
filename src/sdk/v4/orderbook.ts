@@ -34,14 +34,14 @@ export interface SearchOrdersResponsePayload {
 
 const postOrderToOrderbook = async (
   signedOrder: SignedNftOrderV4,
-  chainId: string,
+  chainId: string | number,
   metadata: Record<string, string> = {},
   requestOptions?: Partial<OrderbookRequestOptions>,
   fetchFn: typeof unfetch = unfetch
 ): Promise<PostOrderResponsePayload> => {
   const payload: PostOrderRequestPayload = {
     order: serializeNftOrder(signedOrder),
-    chainId,
+    chainId: chainId.toString(10),
     metadata,
   };
 
