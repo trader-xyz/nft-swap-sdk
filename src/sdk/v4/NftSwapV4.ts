@@ -34,6 +34,10 @@ import {
 import type {
   AddressesForChainV4,
   ApprovalOverrides,
+  ERC1155OrderStruct,
+  ERC1155OrderStructSerialized,
+  ERC721OrderStruct,
+  ERC721OrderStructSerialized,
   FillOrderOverrides,
   NftOrderV4,
   NftOrderV4Serialized,
@@ -265,13 +269,28 @@ class NftSwapV4 implements INftSwapV4 {
     nonce: BigNumberish,
     orderType: 'ERC721' | 'ERC1155'
   ): Promise<ContractTransaction> => {
-    if (orderType === 'ERC1155') {
-      return this.exchangeProxy.cancelERC1155Order(nonce);
-    }
     if (orderType === 'ERC721') {
       return this.exchangeProxy.cancelERC721Order(nonce);
     }
+    if (orderType === 'ERC1155') {
+      return this.exchangeProxy.cancelERC1155Order(nonce);
+    }
     console.log('unsupported order', orderType);
+    throw new Error('unsupport order');
+  };
+
+  /**
+   * Derives order hash from order (currently requires a provider to derive)
+   * @param order A 0x v4 order (signed or unsigned)
+   * @returns Order hash
+   */
+  getOrderHash = (order: NftOrderV4Serialized): Promise<string> => {
+    if ('erc721Token' in order) {
+      return this.exchangeProxy.getERC721OrderHash(order);
+    }
+    if ('erc1155Token' in order) {
+      return this.exchangeProxy.getERC1155OrderHash(order);
+    }
     throw new Error('unsupport order');
   };
 
@@ -287,6 +306,12 @@ class NftSwapV4 implements INftSwapV4 {
    * Expired = 3,
    */
   getOrderStatus = async (order: NftOrderV4): Promise<number> => {
+    if ('erc721Token' in order) {
+      const erc721OrderStatus = await this.exchangeProxy.getERC721OrderStatus(
+        order
+      );
+      return erc721OrderStatus;
+    }
     if ('erc1155Token' in order) {
       const [
         _erc1155OrderHash,
@@ -295,12 +320,6 @@ class NftSwapV4 implements INftSwapV4 {
         _erc1155OrderAmountReminaing,
       ] = await this.exchangeProxy.getERC1155OrderInfo(order);
       return erc1155OrderStatus;
-    }
-    if ('erc721Token' in order) {
-      const erc721OrderStatus = await this.exchangeProxy.getERC721OrderStatus(
-        order
-      );
-      return erc721OrderStatus;
     }
     console.log('unsupported order', order);
     throw new Error('unsupport order');
