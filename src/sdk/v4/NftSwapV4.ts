@@ -34,10 +34,6 @@ import {
 import type {
   AddressesForChainV4,
   ApprovalOverrides,
-  ERC1155OrderStruct,
-  ERC1155OrderStructSerialized,
-  ERC721OrderStruct,
-  ERC721OrderStructSerialized,
   FillOrderOverrides,
   NftOrderV4,
   NftOrderV4Serialized,
