@@ -2,13 +2,13 @@
 
 # Swap SDK
 
-The missing peer-to-peer swap library for Ethereum and EVM compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers. Trade tokens (ERC20s), NFTs, and other collectibles (ERC721 and ERC1155) with just a few lines of code. Seriously, easily trade anything on Ethereum with this library.
+The missing peer-to-peer swap library for Ethereum and EVM-compatible chains, powered by the [0x protocol](https://0x.org), written in TypeScript for web3 developers. Trade tokens (ERC20s), NFTs, and other collectibles (ERC721 and ERC1155) with just a few lines of code. Seriously, easily trade anything on Ethereum with this library.
 
 **🎉 Update 1/31/22: Swap SDK now supports 0x v4, check out the [docs](https://docs.swapsdk.xyz/0x-v4). 🎉**
 
 ## Overview
 
-tl;dr: NFT Swap SDK is the easiest, most-powerful swap library available on the EVM. Supports Ethereum and EVM-compatible chains (Polygon, Avalanche, BSC, etc..). Works in both browser and node.js. Written in TypeScript, built using the 0x protocol. With this library, you can build support for NFT marketplaces, over-the-counter (OTC) exchange, and/or peer-to-peer exchange.
+tl;dr: NFT Swap SDK is the easiest, most-powerful swap library available on the EVM. Supports Ethereum and EVM-compatible chains (Polygon, Avalanche, BSC, etc.). Works in both browser and Node.js. Written in TypeScript, built using the 0x protocol. With this library, you can build support for NFT marketplaces, over-the-counter (OTC) exchanges, and/or peer-to-peer exchanges.
 
 The NFT Swap SDK developed by [Trader.xyz](https://trader.xyz) offers swap support for ERC20s, ERC721s, and ERC1155s. Exchange NFTs for NFTs, NFTs for ERC20 tokens, or bundles of NFTs and tokens. This library provides the ultimate swap flexibility combined with a simple API surface area so you can be productive immediately and focus on building your web3 app.
 
@@ -41,7 +41,7 @@ import { NftSwap } from '@traderxyz/nft-swap-sdk';
 const nftSwapSdk = new NftSwap(provider, signer, chainId);
 ```
 
-Now you're setup and ready to use the SDK in your program. Check out the examples for how to swap with the library.
+Now you're set up and ready to use the SDK in your program. Check out the examples below to learn how to swap with the library.
 
 ## Examples
 
@@ -153,7 +153,7 @@ More concrete example: We can swap `[2 CryptoPunks and 1,000 DAI] for [420 WETH 
 This is just one example. In reality, you can swap as many things as you'd like, any way you'd like. The underlying 0x protocol is extremely flexible, and the NFT swap library abstracts all the complexity away so you don't have to worry about protocol nuances.
 
 ```tsx
-// Setup the sample data for the swap...
+// Set up the sample data for the swap...
 const CHAIN_ID = 1; // Mainnet
 
 const CRYPTOPUNK_420 = {
@@ -248,7 +248,7 @@ const App = () => {
 
 ## FAQ
 
-- Which ERCs does this library support
+- Which ERCs does this library support?
 
   - ERC20, ERC721, and ERC1155
 
@@ -261,7 +261,7 @@ const App = () => {
   - Binance Smart Chain (56)
   - Avalanche (43114)
 
-- What protocol does this library?
+- What protocol does this library use?
 
   - trader.xyz and trader.xyz libraries are powered by 0x v3 Protocol. This protocol is mature and lindy, and has been extremely well-audited.
   - Check out the 0x v3 spec [here](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md)
@@ -290,13 +290,13 @@ For general documentation, check out https://docs.swapsdk.xyz
 
 ## Roadmap
 
-We're currently working on the following features for the next iteration of this library
+We're currently working on the following features for the next iteration of this library:
 
 - ✅ LIVE -- Persistent data store of orders (off-the-shelf storage in trader.xyz's public order storage server). Think of it as a public good
 - ✅ LIVE -- Property-based orders
 - ✅ LIVE -- Order validation
 - ✅ LIVE -- Live order status
-- Order event streaming via websockets
+- Order event streaming via WebSockets
 
 If you have feature requests, reach out in our [Discord](https://discord.gg/GCf5rSX6).
 
