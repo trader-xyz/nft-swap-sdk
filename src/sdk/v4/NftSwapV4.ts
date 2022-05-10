@@ -69,6 +69,7 @@ export enum SupportedChainIdsV4 {
   Ropsten = 3,
   Ganache = 1337,
   Polygon = 137,
+  PolygonMumbai = 80001,
   BSC = 56,
   Optimism = 10,
   Fantom = 250,
@@ -80,9 +81,9 @@ export enum SupportedChainIdsV4 {
 export const SupportedChainsForV4OrderbookStatusMonitoring = [
   SupportedChainIdsV4.Ropsten,
   SupportedChainIdsV4.Polygon,
+  SupportedChainIdsV4.PolygonMumbai,
   SupportedChainIdsV4.Mainnet,
   SupportedChainIdsV4.Optimism,
-  // SupportedChainIdsV4.Arbitrum,
 ];
 
 export interface INftSwapV4 extends BaseNftSwap {
