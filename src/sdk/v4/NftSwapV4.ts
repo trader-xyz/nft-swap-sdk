@@ -34,10 +34,15 @@ import {
 import type {
   AddressesForChainV4,
   ApprovalOverrides,
+  ERC721OrderStruct,
   FillOrderOverrides,
   NftOrderV4,
   NftOrderV4Serialized,
   OrderStructOptionsCommonStrict,
+  SignedERC1155OrderStruct,
+  SignedERC1155OrderStructSerialized,
+  SignedERC721OrderStruct,
+  SignedERC721OrderStructSerialized,
   SignedNftOrderV4,
   SigningOptionsV4,
   SwappableAssetV4,
@@ -274,6 +279,70 @@ class NftSwapV4 implements INftSwapV4 {
     }
     console.log('unsupported order', orderType);
     throw new Error('unsupport order');
+  };
+
+  batchBuyNfts = (
+    signedOrders: Array<SignedNftOrderV4>,
+    revertIfIncomplete: boolean = false,
+    transacitonOverrides?: PayableOverrides
+  ) => {
+    const allSellOrders = signedOrders.every((signedOrder) => {
+      if (signedOrder.direction === 0) {
+        return true;
+      }
+      return false;
+    });
+    invariant(
+      allSellOrders,
+      `batchBuyNfts: All orders must be of type sell order (order direction == 0)`
+    );
+
+    const allErc721 = signedOrders.every((signedOrder) => {
+      if ('erc721Token' in signedOrder) {
+        return true;
+      }
+      return false;
+    });
+
+    const allErc1155 = signedOrders.every((signedOrder) => {
+      if ('erc1155Token' in signedOrder) {
+        return true;
+      }
+      return false;
+    });
+
+    if (!allErc721 && !allErc1155) {
+      invariant(`Batch buy is only available for tokens of the same ERC type.`);
+    }
+
+    if (allErc721) {
+      const erc721SignedOrders: SignedERC721OrderStruct[] =
+        signedOrders as SignedERC721OrderStruct[];
+      return this.exchangeProxy.batchBuyERC721s(
+        erc721SignedOrders,
+        erc721SignedOrders.map((so) => so.signature),
+        [],
+        revertIfIncomplete,
+        {
+          ...transacitonOverrides,
+        }
+      );
+    } else if (allErc1155) {
+      const erc1155SignedOrders: SignedERC1155OrderStruct[] =
+        signedOrders as SignedERC1155OrderStruct[];
+      return this.exchangeProxy.batchBuyERC1155s(
+        erc1155SignedOrders,
+        erc1155SignedOrders.map((so) => so.signature),
+        erc1155SignedOrders.map((so) => so.erc1155TokenAmount),
+        [],
+        revertIfIncomplete,
+        {
+          ...transacitonOverrides,
+        }
+      );
+    } else {
+      throw Error('batchBuyNfts: Incompatible state');
+    }
   };
 
   /**
