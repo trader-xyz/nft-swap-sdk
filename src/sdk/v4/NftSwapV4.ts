@@ -68,6 +68,7 @@ import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
+import { arrayify } from '@ethersproject/bytes';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -281,6 +282,16 @@ class NftSwapV4 implements INftSwapV4 {
     throw new Error('unsupport order');
   };
 
+  /**
+   * Batch fill NFT sell orders
+   * Can be used by taker to fill multiple NFT sell orders atomically.
+   * E.g. A taker has a shopping cart full of NFTs to buy, can call this method to fill them all.
+   * Requires a valid signer to execute transaction
+   * @param signedOrders Signed 0x NFT sell orders
+   * @param revertIfIncomplete Revert if we don't fill _all_ orders (defaults to false)
+   * @param transacitonOverrides Ethers transaciton overrides
+   * @returns
+   */
   batchBuyNfts = (
     signedOrders: Array<SignedNftOrderV4>,
     revertIfIncomplete: boolean = false,
@@ -292,6 +303,7 @@ class NftSwapV4 implements INftSwapV4 {
       }
       return false;
     });
+
     invariant(
       allSellOrders,
       `batchBuyNfts: All orders must be of type sell order (order direction == 0)`
@@ -311,9 +323,12 @@ class NftSwapV4 implements INftSwapV4 {
       return false;
     });
 
-    if (!allErc721 && !allErc1155) {
-      invariant(`Batch buy is only available for tokens of the same ERC type.`);
-    }
+    const eitherAllErc721OrErc1155Orders = allErc721 || allErc1155;
+
+    invariant(
+      eitherAllErc721OrErc1155Orders,
+      `Batch buy is only available for tokens of the same ERC type.`
+    );
 
     if (allErc721) {
       const erc721SignedOrders: SignedERC721OrderStruct[] =
@@ -321,7 +336,7 @@ class NftSwapV4 implements INftSwapV4 {
       return this.exchangeProxy.batchBuyERC721s(
         erc721SignedOrders,
         erc721SignedOrders.map((so) => so.signature),
-        [],
+        erc721SignedOrders.map((_) => '0x'),
         revertIfIncomplete,
         {
           ...transacitonOverrides,
@@ -334,7 +349,7 @@ class NftSwapV4 implements INftSwapV4 {
         erc1155SignedOrders,
         erc1155SignedOrders.map((so) => so.signature),
         erc1155SignedOrders.map((so) => so.erc1155TokenAmount),
-        [],
+        erc1155SignedOrders.map((_) => '0x'),
         revertIfIncomplete,
         {
           ...transacitonOverrides,
