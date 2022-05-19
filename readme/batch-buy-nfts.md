@@ -10,7 +10,7 @@ This can be useful if you're building a shopping-cart feature for your users. A 
 
 ### Usage&#x20;
 
-To use the batch fill feature, pass in an array of signed orders you want the taker to fill.&#x20;
+To use the batch fill feature, pass in an array of signed orders the taker would like to fill.&#x20;
 
 ```typescript
 const fillTx = await nftSwap.batchBuyNfts([
@@ -18,6 +18,8 @@ const fillTx = await nftSwap.batchBuyNfts([
   signedOrder_2,
 ])
 ```
+
+That's it!
 
 #### Available batch fill options:
 
