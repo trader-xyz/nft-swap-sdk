@@ -34,10 +34,15 @@ import {
 import type {
   AddressesForChainV4,
   ApprovalOverrides,
+  ERC721OrderStruct,
   FillOrderOverrides,
   NftOrderV4,
   NftOrderV4Serialized,
   OrderStructOptionsCommonStrict,
+  SignedERC1155OrderStruct,
+  SignedERC1155OrderStructSerialized,
+  SignedERC721OrderStruct,
+  SignedERC721OrderStructSerialized,
   SignedNftOrderV4,
   SigningOptionsV4,
   SwappableAssetV4,
@@ -63,6 +68,7 @@ import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
+import { arrayify } from '@ethersproject/bytes';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -274,6 +280,84 @@ class NftSwapV4 implements INftSwapV4 {
     }
     console.log('unsupported order', orderType);
     throw new Error('unsupport order');
+  };
+
+  /**
+   * Batch fill NFT sell orders
+   * Can be used by taker to fill multiple NFT sell orders atomically.
+   * E.g. A taker has a shopping cart full of NFTs to buy, can call this method to fill them all.
+   * Requires a valid signer to execute transaction
+   * @param signedOrders Signed 0x NFT sell orders
+   * @param revertIfIncomplete Revert if we don't fill _all_ orders (defaults to false)
+   * @param transacitonOverrides Ethers transaciton overrides
+   * @returns
+   */
+  batchBuyNfts = (
+    signedOrders: Array<SignedNftOrderV4>,
+    revertIfIncomplete: boolean = false,
+    transacitonOverrides?: PayableOverrides
+  ) => {
+    const allSellOrders = signedOrders.every((signedOrder) => {
+      if (signedOrder.direction === 0) {
+        return true;
+      }
+      return false;
+    });
+
+    invariant(
+      allSellOrders,
+      `batchBuyNfts: All orders must be of type sell order (order direction == 0)`
+    );
+
+    const allErc721 = signedOrders.every((signedOrder) => {
+      if ('erc721Token' in signedOrder) {
+        return true;
+      }
+      return false;
+    });
+
+    const allErc1155 = signedOrders.every((signedOrder) => {
+      if ('erc1155Token' in signedOrder) {
+        return true;
+      }
+      return false;
+    });
+
+    const eitherAllErc721OrErc1155Orders = allErc721 || allErc1155;
+
+    invariant(
+      eitherAllErc721OrErc1155Orders,
+      `Batch buy is only available for tokens of the same ERC type.`
+    );
+
+    if (allErc721) {
+      const erc721SignedOrders: SignedERC721OrderStruct[] =
+        signedOrders as SignedERC721OrderStruct[];
+      return this.exchangeProxy.batchBuyERC721s(
+        erc721SignedOrders,
+        erc721SignedOrders.map((so) => so.signature),
+        erc721SignedOrders.map((_) => '0x'),
+        revertIfIncomplete,
+        {
+          ...transacitonOverrides,
+        }
+      );
+    } else if (allErc1155) {
+      const erc1155SignedOrders: SignedERC1155OrderStruct[] =
+        signedOrders as SignedERC1155OrderStruct[];
+      return this.exchangeProxy.batchBuyERC1155s(
+        erc1155SignedOrders,
+        erc1155SignedOrders.map((so) => so.signature),
+        erc1155SignedOrders.map((so) => so.erc1155TokenAmount),
+        erc1155SignedOrders.map((_) => '0x'),
+        revertIfIncomplete,
+        {
+          ...transacitonOverrides,
+        }
+      );
+    } else {
+      throw Error('batchBuyNfts: Incompatible state');
+    }
   };
 
   /**
