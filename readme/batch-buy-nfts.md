@@ -19,11 +19,11 @@ const fillTx = await nftSwap.batchBuyNfts([
 ])
 ```
 
-Available batch fill options:
+#### Available batch fill options:
 
 `revertIfIncomplete`: (boolean) Revert the transaction if only some (but not all) of the orders are filled. When set to `true` this is the equivalent of a `fillOrKill` type of order. Defaults to false.&#x20;
 
-Example: If only four of five provided orders are filled (the fifth one expired or was filled by someone else previously), this allows you to revert or continue with the transaction.
+* Example: If only four of five provided orders are filled (the fifth one expired or was filled by someone else previously), this allows you to revert or continue with the transaction.
 
 
 
