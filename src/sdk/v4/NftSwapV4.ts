@@ -289,13 +289,13 @@ class NftSwapV4 implements INftSwapV4 {
    * Requires a valid signer to execute transaction
    * @param signedOrders Signed 0x NFT sell orders
    * @param revertIfIncomplete Revert if we don't fill _all_ orders (defaults to false)
-   * @param transacitonOverrides Ethers transaciton overrides
+   * @param transactionOverrides Ethers transaciton overrides
    * @returns
    */
   batchBuyNfts = (
     signedOrders: Array<SignedNftOrderV4>,
     revertIfIncomplete: boolean = false,
-    transacitonOverrides?: PayableOverrides
+    transactionOverrides?: PayableOverrides
   ) => {
     const allSellOrders = signedOrders.every((signedOrder) => {
       if (signedOrder.direction === 0) {
@@ -339,7 +339,7 @@ class NftSwapV4 implements INftSwapV4 {
         erc721SignedOrders.map((_) => '0x'),
         revertIfIncomplete,
         {
-          ...transacitonOverrides,
+          ...transactionOverrides,
         }
       );
     } else if (allErc1155) {
@@ -352,7 +352,7 @@ class NftSwapV4 implements INftSwapV4 {
         erc1155SignedOrders.map((_) => '0x'),
         revertIfIncomplete,
         {
-          ...transacitonOverrides,
+          ...transactionOverrides,
         }
       );
     } else {
