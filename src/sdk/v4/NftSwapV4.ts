@@ -73,6 +73,7 @@ import { arrayify } from '@ethersproject/bytes';
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
   Ropsten = 3,
+  Ubiq = 8,
   Ganache = 1337,
   Polygon = 137,
   PolygonMumbai = 80001,
