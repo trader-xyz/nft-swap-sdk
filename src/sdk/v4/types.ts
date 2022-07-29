@@ -96,7 +96,7 @@ export interface OrderStructOptionsCommon {
   maker: string;
   taker: string;
   appId: string;
-  expiry: Date | number;
+  expiry: Date | number | string;
   nonce: BigNumberish;
   // erc20Token: string;
   // erc20TokenAmount: BigNumberish;
@@ -111,7 +111,7 @@ export interface OrderStructOptionsCommonStrict {
   maker: string;
   appId?: string;
   taker?: string;
-  expiry?: Date | number;
+  expiry?: Date | number | string;
   nonce?: BigNumberish;
   fees?: UserFacingFeeStruct[];
   tokenProperties?: PropertyStruct[];
