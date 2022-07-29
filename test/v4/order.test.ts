@@ -59,6 +59,20 @@ describe('NFTSwapV4', () => {
     expect(v4Erc721SignedOrder.expiry.toString()).toEqual('2420696969');
   });
 
+  it('custom expiry as unix timestamp string works', async () => {
+    const v4Erc721Order = nftSwapperMaker.buildOrder(
+      NFT_ASSET,
+      ERC20_ASSET,
+      MAKER_WALLET_ADDRESS,
+      {
+        expiry: '2420696969',
+      }
+    );
+
+    const v4Erc721SignedOrder = await nftSwapperMaker.signOrder(v4Erc721Order);
+    expect(v4Erc721SignedOrder.expiry.toString()).toEqual('2420696969');
+  });
+
   it('custom expiry as Date object works', async () => {
     const v4Erc721Order = nftSwapperMaker.buildOrder(
       NFT_ASSET,

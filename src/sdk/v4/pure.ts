@@ -295,8 +295,11 @@ export const generateErc721Order = (
 ): ERC721OrderStructSerialized => {
   let expiry = INFINITE_EXPIRATION_TIMESTAMP_SEC.toString();
   if (orderData.expiry) {
-    // If number is provided, assume given as unix timestamp
-    if (typeof orderData.expiry === 'number') {
+    // If number or string is provided, assume given as unix timestamp
+    if (
+      typeof orderData.expiry === 'number' ||
+      typeof orderData.expiry === 'string'
+    ) {
       expiry = orderData.expiry.toString();
     } else {
       // If date is provided, convert to unix timestamp
@@ -341,8 +344,11 @@ export const generateErc1155Order = (
 ): ERC1155OrderStructSerialized => {
   let expiry = INFINITE_EXPIRATION_TIMESTAMP_SEC.toString();
   if (orderData.expiry) {
-    // If number is provided, assume given as unix timestamp
-    if (typeof orderData.expiry === 'number') {
+    // If number or string is provided, assume given as unix timestamp
+    if (
+      typeof orderData.expiry === 'number' ||
+      typeof orderData.expiry === 'string'
+    ) {
       expiry = orderData.expiry.toString();
     } else {
       // If date is provided, convert to unix timestamp
