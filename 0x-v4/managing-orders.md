@@ -97,7 +97,9 @@ console.log('Filled order! 🎉', txReceipt.transactionHash);
 To cancel an order, call the `cancelOrder` function on the Swap SDK and pass it the order:
 
 ```typescript
-await nftSwapSdk.cancelOrder(signedOrder);
+await nftSwapSdk.cancelOrder(nonce, orderType); 
+// Where `orderType` is either 'ERC721' | 'ERC1155'
+// And `nonce` is from the order object
 ```
 
 #### Advanced Cancellations
