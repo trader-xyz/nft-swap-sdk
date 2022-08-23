@@ -1,7 +1,7 @@
 import type { JsonRpcSigner } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import { createContext, ReactNode, useEffect, useState } from 'react';
-import { NftSwapV4 } from '../sdk';
+import { NftSwapV4 } from '../../sdk';
 
 declare global {
   interface Window {

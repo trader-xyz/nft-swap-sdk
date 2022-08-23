@@ -1,7 +1,10 @@
 import { useContext } from 'react';
 
+import {
+  SignedNftOrderV4,
+  UserFacingERC20AssetDataSerializedV4,
+} from '../../sdk';
 import { SwapSdkContext } from '../providers/swapSdkProvider';
-import { SignedNftOrderV4, UserFacingERC20AssetDataSerializedV4 } from '../sdk';
 
 export interface NftCollection {
   tokenAddress: string;

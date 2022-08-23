@@ -1,13 +1,13 @@
-import { BigNumberish, ContractReceipt } from 'ethers'
-import { useContext } from 'react'
+import { BigNumberish, ContractReceipt } from 'ethers';
+import { useContext } from 'react';
 
-import { SwapSdkContext } from '../providers/swapSdkProvider'
+import { SwapSdkContext } from '../providers/swapSdkProvider';
 
 /**
  * Get a function to cancel an order by nonce and type
  */
 export function useCancelOrder() {
-  const { nftSwap } = useContext(SwapSdkContext)
+  const { nftSwap } = useContext(SwapSdkContext);
 
   /**
    * Cancel an order by nonce and type
@@ -19,17 +19,17 @@ export function useCancelOrder() {
     nonce: BigNumberish,
     orderType: 'ERC721' | 'ERC1155'
   ): Promise<ContractReceipt | undefined> => {
-    if (!nftSwap) return
+    if (!nftSwap) return;
 
     try {
-      const cancelTx = await nftSwap.cancelOrder(nonce, orderType)
-      const cancelTxReceipt = await cancelTx.wait()
-      return cancelTxReceipt
+      const cancelTx = await nftSwap.cancelOrder(nonce, orderType);
+      const cancelTxReceipt = await cancelTx.wait();
+      return cancelTxReceipt;
     } catch (error) {
-      console.error(error)
-      return undefined
+      console.error(error);
+      return undefined;
     }
-  }
+  };
 
-  return cancelOrder
+  return cancelOrder;
 }

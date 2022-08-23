@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 
-import { SwapSdkContext } from '../providers/swapSdkProvider';
 import {
   PostOrderResponsePayload,
   SearchOrdersParams,
-} from '../sdk/v4/orderbook';
+} from '../../sdk/v4/orderbook';
+import { SwapSdkContext } from '../providers/swapSdkProvider';
 
 /**
  * Get orders from the Trader.xyz Open NFT Orderbook

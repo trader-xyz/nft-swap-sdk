@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import { SwapSdkContext } from '../providers/swapSdkProvider'
+import { useContext } from 'react';
+import { SwapSdkContext } from '../providers/swapSdkProvider';
 
 export const useWallet = () => {
   const {
@@ -11,7 +11,7 @@ export const useWallet = () => {
     balance,
     connectWallet,
     disconnectWallet,
-  } = useContext(SwapSdkContext)
+  } = useContext(SwapSdkContext);
 
   return {
     provider,
@@ -22,5 +22,5 @@ export const useWallet = () => {
     balance,
     connectWallet,
     disconnectWallet,
-  }
-}
+  };
+};
