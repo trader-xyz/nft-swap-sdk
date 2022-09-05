@@ -18,6 +18,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from '../../common';
 
 export interface StaticCallProxyInterface extends utils.Interface {
@@ -32,7 +33,12 @@ export interface StaticCallProxyInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: 'transferFrom',
-    values: [BytesLike, string, string, BigNumberish]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'getProxyId',
@@ -76,10 +82,10 @@ export interface StaticCallProxy extends BaseContract {
 
   functions: {
     transferFrom(
-      assetData: BytesLike,
-      from: string,
-      to: string,
-      amount: BigNumberish,
+      assetData: PromiseOrValue<BytesLike>,
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[void]>;
 
@@ -87,10 +93,10 @@ export interface StaticCallProxy extends BaseContract {
   };
 
   transferFrom(
-    assetData: BytesLike,
-    from: string,
-    to: string,
-    amount: BigNumberish,
+    assetData: PromiseOrValue<BytesLike>,
+    from: PromiseOrValue<string>,
+    to: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<void>;
 
@@ -98,10 +104,10 @@ export interface StaticCallProxy extends BaseContract {
 
   callStatic: {
     transferFrom(
-      assetData: BytesLike,
-      from: string,
-      to: string,
-      amount: BigNumberish,
+      assetData: PromiseOrValue<BytesLike>,
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -112,10 +118,10 @@ export interface StaticCallProxy extends BaseContract {
 
   estimateGas: {
     transferFrom(
-      assetData: BytesLike,
-      from: string,
-      to: string,
-      amount: BigNumberish,
+      assetData: PromiseOrValue<BytesLike>,
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -124,10 +130,10 @@ export interface StaticCallProxy extends BaseContract {
 
   populateTransaction: {
     transferFrom(
-      assetData: BytesLike,
-      from: string,
-      to: string,
-      amount: BigNumberish,
+      assetData: PromiseOrValue<BytesLike>,
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

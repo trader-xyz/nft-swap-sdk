@@ -25,24 +25,25 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from '../../common';
 
 export declare namespace LibOrder {
   export type OrderStruct = {
-    makerAddress: string;
-    takerAddress: string;
-    feeRecipientAddress: string;
-    senderAddress: string;
-    makerAssetAmount: BigNumberish;
-    takerAssetAmount: BigNumberish;
-    makerFee: BigNumberish;
-    takerFee: BigNumberish;
-    expirationTimeSeconds: BigNumberish;
-    salt: BigNumberish;
-    makerAssetData: BytesLike;
-    takerAssetData: BytesLike;
-    makerFeeAssetData: BytesLike;
-    takerFeeAssetData: BytesLike;
+    makerAddress: PromiseOrValue<string>;
+    takerAddress: PromiseOrValue<string>;
+    feeRecipientAddress: PromiseOrValue<string>;
+    senderAddress: PromiseOrValue<string>;
+    makerAssetAmount: PromiseOrValue<BigNumberish>;
+    takerAssetAmount: PromiseOrValue<BigNumberish>;
+    makerFee: PromiseOrValue<BigNumberish>;
+    takerFee: PromiseOrValue<BigNumberish>;
+    expirationTimeSeconds: PromiseOrValue<BigNumberish>;
+    salt: PromiseOrValue<BigNumberish>;
+    makerAssetData: PromiseOrValue<BytesLike>;
+    takerAssetData: PromiseOrValue<BytesLike>;
+    makerFeeAssetData: PromiseOrValue<BytesLike>;
+    takerFeeAssetData: PromiseOrValue<BytesLike>;
   };
 
   export type OrderStructOutput = [
@@ -78,9 +79,9 @@ export declare namespace LibOrder {
   };
 
   export type OrderInfoStruct = {
-    orderStatus: BigNumberish;
-    orderHash: BytesLike;
-    orderTakerAssetFilledAmount: BigNumberish;
+    orderStatus: PromiseOrValue<BigNumberish>;
+    orderHash: PromiseOrValue<BytesLike>;
+    orderTakerAssetFilledAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type OrderInfoStructOutput = [number, string, BigNumber] & {
@@ -92,11 +93,11 @@ export declare namespace LibOrder {
 
 export declare namespace LibZeroExTransaction {
   export type ZeroExTransactionStruct = {
-    salt: BigNumberish;
-    expirationTimeSeconds: BigNumberish;
-    gasPrice: BigNumberish;
-    signerAddress: string;
-    data: BytesLike;
+    salt: PromiseOrValue<BigNumberish>;
+    expirationTimeSeconds: PromiseOrValue<BigNumberish>;
+    gasPrice: PromiseOrValue<BigNumberish>;
+    signerAddress: PromiseOrValue<string>;
+    data: PromiseOrValue<BytesLike>;
   };
 
   export type ZeroExTransactionStructOutput = [
@@ -116,11 +117,11 @@ export declare namespace LibZeroExTransaction {
 
 export declare namespace LibFillResults {
   export type FillResultsStruct = {
-    makerAssetFilledAmount: BigNumberish;
-    takerAssetFilledAmount: BigNumberish;
-    makerFeePaid: BigNumberish;
-    takerFeePaid: BigNumberish;
-    protocolFeePaid: BigNumberish;
+    makerAssetFilledAmount: PromiseOrValue<BigNumberish>;
+    takerAssetFilledAmount: PromiseOrValue<BigNumberish>;
+    makerFeePaid: PromiseOrValue<BigNumberish>;
+    takerFeePaid: PromiseOrValue<BigNumberish>;
+    protocolFeePaid: PromiseOrValue<BigNumberish>;
   };
 
   export type FillResultsStructOutput = [
@@ -140,8 +141,8 @@ export declare namespace LibFillResults {
   export type BatchMatchedFillResultsStruct = {
     left: LibFillResults.FillResultsStruct[];
     right: LibFillResults.FillResultsStruct[];
-    profitInLeftMakerAsset: BigNumberish;
-    profitInRightMakerAsset: BigNumberish;
+    profitInLeftMakerAsset: PromiseOrValue<BigNumberish>;
+    profitInRightMakerAsset: PromiseOrValue<BigNumberish>;
   };
 
   export type BatchMatchedFillResultsStructOutput = [
@@ -159,8 +160,8 @@ export declare namespace LibFillResults {
   export type MatchedFillResultsStruct = {
     left: LibFillResults.FillResultsStruct;
     right: LibFillResults.FillResultsStruct;
-    profitInLeftMakerAsset: BigNumberish;
-    profitInRightMakerAsset: BigNumberish;
+    profitInLeftMakerAsset: PromiseOrValue<BigNumberish>;
+    profitInRightMakerAsset: PromiseOrValue<BigNumberish>;
   };
 
   export type MatchedFillResultsStructOutput = [
@@ -280,7 +281,7 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'allowedValidators',
-    values: [string, string]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelOrders',
@@ -288,27 +289,42 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'batchExecuteTransactions',
-    values: [LibZeroExTransaction.ZeroExTransactionStruct[], BytesLike[]]
+    values: [
+      LibZeroExTransaction.ZeroExTransactionStruct[],
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrKillOrders',
-    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrders',
-    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchFillOrdersNoThrow',
-    values: [LibOrder.OrderStruct[], BigNumberish[], BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchMatchOrders',
     values: [
       LibOrder.OrderStruct[],
       LibOrder.OrderStruct[],
-      BytesLike[],
-      BytesLike[]
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BytesLike>[]
     ]
   ): string;
   encodeFunctionData(
@@ -316,8 +332,8 @@ export interface ExchangeContractInterface extends utils.Interface {
     values: [
       LibOrder.OrderStruct[],
       LibOrder.OrderStruct[],
-      BytesLike[],
-      BytesLike[]
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BytesLike>[]
     ]
   ): string;
   encodeFunctionData(
@@ -326,11 +342,11 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelOrdersUpTo',
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelled',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'currentContextAddress',
@@ -342,20 +358,34 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'executeTransaction',
-    values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
+    values: [
+      LibZeroExTransaction.ZeroExTransactionStruct,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'fillOrKillOrder',
-    values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
+    values: [
+      LibOrder.OrderStruct,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'fillOrder',
-    values: [LibOrder.OrderStruct, BigNumberish, BytesLike]
+    values: [
+      LibOrder.OrderStruct,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
-  encodeFunctionData(functionFragment: 'filled', values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: 'filled',
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
   encodeFunctionData(
     functionFragment: 'getAssetProxy',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getOrderInfo',
@@ -363,49 +393,85 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidHashSignature',
-    values: [BytesLike, string, BytesLike]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidOrderSignature',
-    values: [LibOrder.OrderStruct, BytesLike]
+    values: [LibOrder.OrderStruct, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidTransactionSignature',
-    values: [LibZeroExTransaction.ZeroExTransactionStruct, BytesLike]
+    values: [
+      LibZeroExTransaction.ZeroExTransactionStruct,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersFillOrKill',
-    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersNoThrow',
-    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersFillOrKill',
-    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersNoThrow',
-    values: [LibOrder.OrderStruct[], BigNumberish, BytesLike[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'matchOrders',
-    values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
+    values: [
+      LibOrder.OrderStruct,
+      LibOrder.OrderStruct,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'matchOrdersWithMaximalFill',
-    values: [LibOrder.OrderStruct, LibOrder.OrderStruct, BytesLike, BytesLike]
+    values: [
+      LibOrder.OrderStruct,
+      LibOrder.OrderStruct,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'orderEpoch',
-    values: [string, string]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'preSign', values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: 'preSign',
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
   encodeFunctionData(
     functionFragment: 'preSigned',
-    values: [BytesLike, string]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'protocolFeeCollector',
@@ -417,31 +483,36 @@ export interface ExchangeContractInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'registerAssetProxy',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'setProtocolFeeCollectorAddress',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'setProtocolFeeMultiplier',
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'setSignatureValidatorApproval',
-    values: [string, boolean]
+    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
     functionFragment: 'simulateDispatchTransferFromCalls',
-    values: [BytesLike[], string[], string[], BigNumberish[]]
+    values: [
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'transactionsExecuted',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'transferOwnership',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -790,101 +861,107 @@ export interface ExchangeContract extends BaseContract {
     EIP712_EXCHANGE_DOMAIN_HASH(overrides?: CallOverrides): Promise<[string]>;
 
     allowedValidators(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     batchCancelOrders(
       orders: LibOrder.OrderStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchExecuteTransactions(
       transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrKillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchMatchOrders(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchMatchOrdersWithMaximalFill(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelOrder(
       order: LibOrder.OrderStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelOrdersUpTo(
-      targetOrderEpoch: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      targetOrderEpoch: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    cancelled(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+    cancelled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     currentContextAddress(overrides?: CallOverrides): Promise<[string]>;
 
     detachProtocolFeeCollector(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     executeTransaction(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOrKillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
+    filled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -898,84 +975,84 @@ export interface ExchangeContract extends BaseContract {
     >;
 
     isValidHashSignature(
-      hash: BytesLike,
-      signerAddress: string,
-      signature: BytesLike,
+      hash: PromiseOrValue<BytesLike>,
+      signerAddress: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
 
     isValidOrderSignature(
       order: LibOrder.OrderStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
 
     isValidTransactionSignature(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
 
     marketBuyOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketBuyOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketSellOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketSellOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     matchOrders(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     matchOrdersWithMaximalFill(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     orderEpoch(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     preSign(
-      hash: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      hash: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     preSigned(
-      arg0: BytesLike,
-      arg1: string,
+      arg0: PromiseOrValue<BytesLike>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -984,42 +1061,42 @@ export interface ExchangeContract extends BaseContract {
     protocolFeeMultiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setProtocolFeeCollectorAddress(
-      updatedProtocolFeeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeCollector: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setProtocolFeeMultiplier(
-      updatedProtocolFeeMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeMultiplier: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setSignatureValidatorApproval(
-      validatorAddress: string,
-      approval: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      validatorAddress: PromiseOrValue<string>,
+      approval: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     simulateDispatchTransferFromCalls(
-      assetData: BytesLike[],
-      fromAddresses: string[],
-      toAddresses: string[],
-      amounts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>[],
+      fromAddresses: PromiseOrValue<string>[],
+      toAddresses: PromiseOrValue<string>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     transactionsExecuted(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -1028,101 +1105,107 @@ export interface ExchangeContract extends BaseContract {
   EIP712_EXCHANGE_DOMAIN_HASH(overrides?: CallOverrides): Promise<string>;
 
   allowedValidators(
-    arg0: string,
-    arg1: string,
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   batchCancelOrders(
     orders: LibOrder.OrderStruct[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchExecuteTransactions(
     transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrKillOrders(
     orders: LibOrder.OrderStruct[],
-    takerAssetFillAmounts: BigNumberish[],
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrders(
     orders: LibOrder.OrderStruct[],
-    takerAssetFillAmounts: BigNumberish[],
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillOrdersNoThrow(
     orders: LibOrder.OrderStruct[],
-    takerAssetFillAmounts: BigNumberish[],
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchMatchOrders(
     leftOrders: LibOrder.OrderStruct[],
     rightOrders: LibOrder.OrderStruct[],
-    leftSignatures: BytesLike[],
-    rightSignatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    leftSignatures: PromiseOrValue<BytesLike>[],
+    rightSignatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchMatchOrdersWithMaximalFill(
     leftOrders: LibOrder.OrderStruct[],
     rightOrders: LibOrder.OrderStruct[],
-    leftSignatures: BytesLike[],
-    rightSignatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    leftSignatures: PromiseOrValue<BytesLike>[],
+    rightSignatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelOrder(
     order: LibOrder.OrderStruct,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelOrdersUpTo(
-    targetOrderEpoch: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    targetOrderEpoch: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  cancelled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  cancelled(
+    arg0: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   currentContextAddress(overrides?: CallOverrides): Promise<string>;
 
   detachProtocolFeeCollector(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   executeTransaction(
     transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-    signature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOrKillOrder(
     order: LibOrder.OrderStruct,
-    takerAssetFillAmount: BigNumberish,
-    signature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOrder(
     order: LibOrder.OrderStruct,
-    takerAssetFillAmount: BigNumberish,
-    signature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+  filled(
+    arg0: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getAssetProxy(
-    assetProxyId: BytesLike,
+    assetProxyId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -1132,84 +1215,84 @@ export interface ExchangeContract extends BaseContract {
   ): Promise<LibOrder.OrderInfoStructOutput>;
 
   isValidHashSignature(
-    hash: BytesLike,
-    signerAddress: string,
-    signature: BytesLike,
+    hash: PromiseOrValue<BytesLike>,
+    signerAddress: PromiseOrValue<string>,
+    signature: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   isValidOrderSignature(
     order: LibOrder.OrderStruct,
-    signature: BytesLike,
+    signature: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   isValidTransactionSignature(
     transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-    signature: BytesLike,
+    signature: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   marketBuyOrdersFillOrKill(
     orders: LibOrder.OrderStruct[],
-    makerAssetFillAmount: BigNumberish,
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketBuyOrdersNoThrow(
     orders: LibOrder.OrderStruct[],
-    makerAssetFillAmount: BigNumberish,
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketSellOrdersFillOrKill(
     orders: LibOrder.OrderStruct[],
-    takerAssetFillAmount: BigNumberish,
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketSellOrdersNoThrow(
     orders: LibOrder.OrderStruct[],
-    takerAssetFillAmount: BigNumberish,
-    signatures: BytesLike[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   matchOrders(
     leftOrder: LibOrder.OrderStruct,
     rightOrder: LibOrder.OrderStruct,
-    leftSignature: BytesLike,
-    rightSignature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    leftSignature: PromiseOrValue<BytesLike>,
+    rightSignature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   matchOrdersWithMaximalFill(
     leftOrder: LibOrder.OrderStruct,
     rightOrder: LibOrder.OrderStruct,
-    leftSignature: BytesLike,
-    rightSignature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    leftSignature: PromiseOrValue<BytesLike>,
+    rightSignature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   orderEpoch(
-    arg0: string,
-    arg1: string,
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   preSign(
-    hash: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    hash: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   preSigned(
-    arg0: BytesLike,
-    arg1: string,
+    arg0: PromiseOrValue<BytesLike>,
+    arg1: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -1218,42 +1301,42 @@ export interface ExchangeContract extends BaseContract {
   protocolFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
   registerAssetProxy(
-    assetProxy: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    assetProxy: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setProtocolFeeCollectorAddress(
-    updatedProtocolFeeCollector: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    updatedProtocolFeeCollector: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setProtocolFeeMultiplier(
-    updatedProtocolFeeMultiplier: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    updatedProtocolFeeMultiplier: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setSignatureValidatorApproval(
-    validatorAddress: string,
-    approval: boolean,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    validatorAddress: PromiseOrValue<string>,
+    approval: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   simulateDispatchTransferFromCalls(
-    assetData: BytesLike[],
-    fromAddresses: string[],
-    toAddresses: string[],
-    amounts: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    assetData: PromiseOrValue<BytesLike>[],
+    fromAddresses: PromiseOrValue<string>[],
+    toAddresses: PromiseOrValue<string>[],
+    amounts: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   transactionsExecuted(
-    arg0: BytesLike,
+    arg0: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -1262,8 +1345,8 @@ export interface ExchangeContract extends BaseContract {
     EIP712_EXCHANGE_DOMAIN_HASH(overrides?: CallOverrides): Promise<string>;
 
     allowedValidators(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -1274,44 +1357,44 @@ export interface ExchangeContract extends BaseContract {
 
     batchExecuteTransactions(
       transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
-      signatures: BytesLike[],
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<string[]>;
 
     batchFillOrKillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchFillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchFillOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput[]>;
 
     batchMatchOrders(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.BatchMatchedFillResultsStructOutput>;
 
     batchMatchOrdersWithMaximalFill(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.BatchMatchedFillResultsStructOutput>;
 
@@ -1321,11 +1404,14 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<void>;
 
     cancelOrdersUpTo(
-      targetOrderEpoch: BigNumberish,
+      targetOrderEpoch: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    cancelled(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+    cancelled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     currentContextAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -1333,28 +1419,31 @@ export interface ExchangeContract extends BaseContract {
 
     executeTransaction(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     fillOrKillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
     fillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
-    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    filled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -1364,81 +1453,84 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<LibOrder.OrderInfoStructOutput>;
 
     isValidHashSignature(
-      hash: BytesLike,
-      signerAddress: string,
-      signature: BytesLike,
+      hash: PromiseOrValue<BytesLike>,
+      signerAddress: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     isValidOrderSignature(
       order: LibOrder.OrderStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     isValidTransactionSignature(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     marketBuyOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketBuyOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketSellOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
     marketSellOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<LibFillResults.FillResultsStructOutput>;
 
     matchOrders(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<LibFillResults.MatchedFillResultsStructOutput>;
 
     matchOrdersWithMaximalFill(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<LibFillResults.MatchedFillResultsStructOutput>;
 
     orderEpoch(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    preSign(hash: BytesLike, overrides?: CallOverrides): Promise<void>;
+    preSign(
+      hash: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     preSigned(
-      arg0: BytesLike,
-      arg1: string,
+      arg0: PromiseOrValue<BytesLike>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -1447,41 +1539,41 @@ export interface ExchangeContract extends BaseContract {
     protocolFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
     registerAssetProxy(
-      assetProxy: string,
+      assetProxy: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setProtocolFeeCollectorAddress(
-      updatedProtocolFeeCollector: string,
+      updatedProtocolFeeCollector: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setProtocolFeeMultiplier(
-      updatedProtocolFeeMultiplier: BigNumberish,
+      updatedProtocolFeeMultiplier: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setSignatureValidatorApproval(
-      validatorAddress: string,
-      approval: boolean,
+      validatorAddress: PromiseOrValue<string>,
+      approval: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     simulateDispatchTransferFromCalls(
-      assetData: BytesLike[],
-      fromAddresses: string[],
-      toAddresses: string[],
-      amounts: BigNumberish[],
+      assetData: PromiseOrValue<BytesLike>[],
+      fromAddresses: PromiseOrValue<string>[],
+      toAddresses: PromiseOrValue<string>[],
+      amounts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     transactionsExecuted(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     transferOwnership(
-      newOwner: string,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -1497,41 +1589,41 @@ export interface ExchangeContract extends BaseContract {
     ): AssetProxyRegisteredEventFilter;
 
     'Cancel(address,address,bytes,bytes,address,bytes32)'(
-      makerAddress?: string | null,
-      feeRecipientAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      feeRecipientAddress?: PromiseOrValue<string> | null,
       makerAssetData?: null,
       takerAssetData?: null,
       senderAddress?: null,
-      orderHash?: BytesLike | null
+      orderHash?: PromiseOrValue<BytesLike> | null
     ): CancelEventFilter;
     Cancel(
-      makerAddress?: string | null,
-      feeRecipientAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      feeRecipientAddress?: PromiseOrValue<string> | null,
       makerAssetData?: null,
       takerAssetData?: null,
       senderAddress?: null,
-      orderHash?: BytesLike | null
+      orderHash?: PromiseOrValue<BytesLike> | null
     ): CancelEventFilter;
 
     'CancelUpTo(address,address,uint256)'(
-      makerAddress?: string | null,
-      orderSenderAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      orderSenderAddress?: PromiseOrValue<string> | null,
       orderEpoch?: null
     ): CancelUpToEventFilter;
     CancelUpTo(
-      makerAddress?: string | null,
-      orderSenderAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      orderSenderAddress?: PromiseOrValue<string> | null,
       orderEpoch?: null
     ): CancelUpToEventFilter;
 
     'Fill(address,address,bytes,bytes,bytes,bytes,bytes32,address,address,uint256,uint256,uint256,uint256,uint256)'(
-      makerAddress?: string | null,
-      feeRecipientAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      feeRecipientAddress?: PromiseOrValue<string> | null,
       makerAssetData?: null,
       takerAssetData?: null,
       makerFeeAssetData?: null,
       takerFeeAssetData?: null,
-      orderHash?: BytesLike | null,
+      orderHash?: PromiseOrValue<BytesLike> | null,
       takerAddress?: null,
       senderAddress?: null,
       makerAssetFilledAmount?: null,
@@ -1541,13 +1633,13 @@ export interface ExchangeContract extends BaseContract {
       protocolFeePaid?: null
     ): FillEventFilter;
     Fill(
-      makerAddress?: string | null,
-      feeRecipientAddress?: string | null,
+      makerAddress?: PromiseOrValue<string> | null,
+      feeRecipientAddress?: PromiseOrValue<string> | null,
       makerAssetData?: null,
       takerAssetData?: null,
       makerFeeAssetData?: null,
       takerFeeAssetData?: null,
-      orderHash?: BytesLike | null,
+      orderHash?: PromiseOrValue<BytesLike> | null,
       takerAddress?: null,
       senderAddress?: null,
       makerAssetFilledAmount?: null,
@@ -1558,12 +1650,12 @@ export interface ExchangeContract extends BaseContract {
     ): FillEventFilter;
 
     'OwnershipTransferred(address,address)'(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
     'ProtocolFeeCollectorAddress(address,address)'(
@@ -1585,21 +1677,21 @@ export interface ExchangeContract extends BaseContract {
     ): ProtocolFeeMultiplierEventFilter;
 
     'SignatureValidatorApproval(address,address,bool)'(
-      signerAddress?: string | null,
-      validatorAddress?: string | null,
+      signerAddress?: PromiseOrValue<string> | null,
+      validatorAddress?: PromiseOrValue<string> | null,
       isApproved?: null
     ): SignatureValidatorApprovalEventFilter;
     SignatureValidatorApproval(
-      signerAddress?: string | null,
-      validatorAddress?: string | null,
+      signerAddress?: PromiseOrValue<string> | null,
+      validatorAddress?: PromiseOrValue<string> | null,
       isApproved?: null
     ): SignatureValidatorApprovalEventFilter;
 
     'TransactionExecution(bytes32)'(
-      transactionHash?: BytesLike | null
+      transactionHash?: PromiseOrValue<BytesLike> | null
     ): TransactionExecutionEventFilter;
     TransactionExecution(
-      transactionHash?: BytesLike | null
+      transactionHash?: PromiseOrValue<BytesLike> | null
     ): TransactionExecutionEventFilter;
   };
 
@@ -1609,101 +1701,107 @@ export interface ExchangeContract extends BaseContract {
     EIP712_EXCHANGE_DOMAIN_HASH(overrides?: CallOverrides): Promise<BigNumber>;
 
     allowedValidators(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     batchCancelOrders(
       orders: LibOrder.OrderStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchExecuteTransactions(
       transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillOrKillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchMatchOrders(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchMatchOrdersWithMaximalFill(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelOrder(
       order: LibOrder.OrderStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelOrdersUpTo(
-      targetOrderEpoch: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      targetOrderEpoch: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    cancelled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    cancelled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     currentContextAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     detachProtocolFeeCollector(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     executeTransaction(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOrKillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    filled(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    filled(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1713,84 +1811,84 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<BigNumber>;
 
     isValidHashSignature(
-      hash: BytesLike,
-      signerAddress: string,
-      signature: BytesLike,
+      hash: PromiseOrValue<BytesLike>,
+      signerAddress: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     isValidOrderSignature(
       order: LibOrder.OrderStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     isValidTransactionSignature(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     marketBuyOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketBuyOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketSellOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketSellOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     matchOrders(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     matchOrdersWithMaximalFill(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     orderEpoch(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     preSign(
-      hash: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      hash: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     preSigned(
-      arg0: BytesLike,
-      arg1: string,
+      arg0: PromiseOrValue<BytesLike>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1799,42 +1897,42 @@ export interface ExchangeContract extends BaseContract {
     protocolFeeMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setProtocolFeeCollectorAddress(
-      updatedProtocolFeeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeCollector: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setProtocolFeeMultiplier(
-      updatedProtocolFeeMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeMultiplier: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setSignatureValidatorApproval(
-      validatorAddress: string,
-      approval: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      validatorAddress: PromiseOrValue<string>,
+      approval: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     simulateDispatchTransferFromCalls(
-      assetData: BytesLike[],
-      fromAddresses: string[],
-      toAddresses: string[],
-      amounts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>[],
+      fromAddresses: PromiseOrValue<string>[],
+      toAddresses: PromiseOrValue<string>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transactionsExecuted(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -1848,71 +1946,71 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     allowedValidators(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     batchCancelOrders(
       orders: LibOrder.OrderStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchExecuteTransactions(
       transactions: LibZeroExTransaction.ZeroExTransactionStruct[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrKillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrders(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmounts: BigNumberish[],
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmounts: PromiseOrValue<BigNumberish>[],
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchMatchOrders(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchMatchOrdersWithMaximalFill(
       leftOrders: LibOrder.OrderStruct[],
       rightOrders: LibOrder.OrderStruct[],
-      leftSignatures: BytesLike[],
-      rightSignatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignatures: PromiseOrValue<BytesLike>[],
+      rightSignatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelOrder(
       order: LibOrder.OrderStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelOrdersUpTo(
-      targetOrderEpoch: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      targetOrderEpoch: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelled(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1921,36 +2019,36 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     detachProtocolFeeCollector(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     executeTransaction(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrKillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrder(
       order: LibOrder.OrderStruct,
-      takerAssetFillAmount: BigNumberish,
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     filled(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1960,84 +2058,84 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     isValidHashSignature(
-      hash: BytesLike,
-      signerAddress: string,
-      signature: BytesLike,
+      hash: PromiseOrValue<BytesLike>,
+      signerAddress: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     isValidOrderSignature(
       order: LibOrder.OrderStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     isValidTransactionSignature(
       transaction: LibZeroExTransaction.ZeroExTransactionStruct,
-      signature: BytesLike,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      makerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersFillOrKill(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersNoThrow(
       orders: LibOrder.OrderStruct[],
-      takerAssetFillAmount: BigNumberish,
-      signatures: BytesLike[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerAssetFillAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     matchOrders(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     matchOrdersWithMaximalFill(
       leftOrder: LibOrder.OrderStruct,
       rightOrder: LibOrder.OrderStruct,
-      leftSignature: BytesLike,
-      rightSignature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      leftSignature: PromiseOrValue<BytesLike>,
+      rightSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     orderEpoch(
-      arg0: string,
-      arg1: string,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     preSign(
-      hash: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      hash: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     preSigned(
-      arg0: BytesLike,
-      arg1: string,
+      arg0: PromiseOrValue<BytesLike>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2050,42 +2148,42 @@ export interface ExchangeContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setProtocolFeeCollectorAddress(
-      updatedProtocolFeeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeCollector: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setProtocolFeeMultiplier(
-      updatedProtocolFeeMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      updatedProtocolFeeMultiplier: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setSignatureValidatorApproval(
-      validatorAddress: string,
-      approval: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      validatorAddress: PromiseOrValue<string>,
+      approval: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     simulateDispatchTransferFromCalls(
-      assetData: BytesLike[],
-      fromAddresses: string[],
-      toAddresses: string[],
-      amounts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>[],
+      fromAddresses: PromiseOrValue<string>[],
+      toAddresses: PromiseOrValue<string>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transactionsExecuted(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }
