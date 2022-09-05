@@ -24,6 +24,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from '../../common';
 
 export interface MultiAssetProxyInterface extends utils.Interface {
@@ -60,37 +61,40 @@ export interface MultiAssetProxyInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: 'assetProxies',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'addAuthorizedAddress',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'authorities',
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getAssetProxy',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'removeAuthorizedAddress',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'removeAuthorizedAddressAtIndex',
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getProxyId',
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'authorized', values: [string]): string;
+  encodeFunctionData(
+    functionFragment: 'authorized',
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: 'registerAssetProxy',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getAuthorizedAddresses',
@@ -98,7 +102,7 @@ export interface MultiAssetProxyInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'transferOwnership',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -215,158 +219,182 @@ export interface MultiAssetProxy extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    assetProxies(arg0: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+    assetProxies(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     addAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     authorities(
-      arg0: BigNumberish,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
     removeAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     removeAuthorizedAddressAtIndex(
-      target: string,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     getProxyId(overrides?: CallOverrides): Promise<[string]>;
 
-    authorized(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+    authorized(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     getAuthorizedAddresses(overrides?: CallOverrides): Promise<[string[]]>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
-  assetProxies(arg0: BytesLike, overrides?: CallOverrides): Promise<string>;
+  assetProxies(
+    arg0: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   addAuthorizedAddress(
-    target: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    target: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  authorities(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  authorities(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getAssetProxy(
-    assetProxyId: BytesLike,
+    assetProxyId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
 
   removeAuthorizedAddress(
-    target: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    target: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   removeAuthorizedAddressAtIndex(
-    target: string,
-    index: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    target: PromiseOrValue<string>,
+    index: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   getProxyId(overrides?: CallOverrides): Promise<string>;
 
-  authorized(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  authorized(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   registerAssetProxy(
-    assetProxy: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    assetProxy: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   getAuthorizedAddresses(overrides?: CallOverrides): Promise<string[]>;
 
   transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    assetProxies(arg0: BytesLike, overrides?: CallOverrides): Promise<string>;
+    assetProxies(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     addAuthorizedAddress(
-      target: string,
+      target: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    authorities(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    authorities(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     removeAuthorizedAddress(
-      target: string,
+      target: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     removeAuthorizedAddressAtIndex(
-      target: string,
-      index: BigNumberish,
+      target: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     getProxyId(overrides?: CallOverrides): Promise<string>;
 
-    authorized(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+    authorized(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     registerAssetProxy(
-      assetProxy: string,
+      assetProxy: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     getAuthorizedAddresses(overrides?: CallOverrides): Promise<string[]>;
 
     transferOwnership(
-      newOwner: string,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
     'AuthorizedAddressAdded(address,address)'(
-      target?: string | null,
-      caller?: string | null
+      target?: PromiseOrValue<string> | null,
+      caller?: PromiseOrValue<string> | null
     ): AuthorizedAddressAddedEventFilter;
     AuthorizedAddressAdded(
-      target?: string | null,
-      caller?: string | null
+      target?: PromiseOrValue<string> | null,
+      caller?: PromiseOrValue<string> | null
     ): AuthorizedAddressAddedEventFilter;
 
     'AuthorizedAddressRemoved(address,address)'(
-      target?: string | null,
-      caller?: string | null
+      target?: PromiseOrValue<string> | null,
+      caller?: PromiseOrValue<string> | null
     ): AuthorizedAddressRemovedEventFilter;
     AuthorizedAddressRemoved(
-      target?: string | null,
-      caller?: string | null
+      target?: PromiseOrValue<string> | null,
+      caller?: PromiseOrValue<string> | null
     ): AuthorizedAddressRemovedEventFilter;
 
     'AssetProxyRegistered(bytes4,address)'(
@@ -381,99 +409,102 @@ export interface MultiAssetProxy extends BaseContract {
 
   estimateGas: {
     assetProxies(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     addAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     authorities(
-      arg0: BigNumberish,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     removeAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     removeAuthorizedAddressAtIndex(
-      target: string,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     getProxyId(overrides?: CallOverrides): Promise<BigNumber>;
 
-    authorized(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    authorized(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     getAuthorizedAddresses(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     assetProxies(
-      arg0: BytesLike,
+      arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     addAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     authorities(
-      arg0: BigNumberish,
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getAssetProxy(
-      assetProxyId: BytesLike,
+      assetProxyId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     removeAuthorizedAddress(
-      target: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     removeAuthorizedAddressAtIndex(
-      target: string,
-      index: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getProxyId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     authorized(
-      arg0: string,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     registerAssetProxy(
-      assetProxy: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetProxy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getAuthorizedAddresses(
@@ -481,8 +512,8 @@ export interface MultiAssetProxy extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

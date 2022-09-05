@@ -25,24 +25,25 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from '../../common';
 
 export declare namespace LibOrder {
   export type OrderStruct = {
-    makerAddress: string;
-    takerAddress: string;
-    feeRecipientAddress: string;
-    senderAddress: string;
-    makerAssetAmount: BigNumberish;
-    takerAssetAmount: BigNumberish;
-    makerFee: BigNumberish;
-    takerFee: BigNumberish;
-    expirationTimeSeconds: BigNumberish;
-    salt: BigNumberish;
-    makerAssetData: BytesLike;
-    takerAssetData: BytesLike;
-    makerFeeAssetData: BytesLike;
-    takerFeeAssetData: BytesLike;
+    makerAddress: PromiseOrValue<string>;
+    takerAddress: PromiseOrValue<string>;
+    feeRecipientAddress: PromiseOrValue<string>;
+    senderAddress: PromiseOrValue<string>;
+    makerAssetAmount: PromiseOrValue<BigNumberish>;
+    takerAssetAmount: PromiseOrValue<BigNumberish>;
+    makerFee: PromiseOrValue<BigNumberish>;
+    takerFee: PromiseOrValue<BigNumberish>;
+    expirationTimeSeconds: PromiseOrValue<BigNumberish>;
+    salt: PromiseOrValue<BigNumberish>;
+    makerAssetData: PromiseOrValue<BytesLike>;
+    takerAssetData: PromiseOrValue<BytesLike>;
+    makerFeeAssetData: PromiseOrValue<BytesLike>;
+    takerFeeAssetData: PromiseOrValue<BytesLike>;
   };
 
   export type OrderStructOutput = [
@@ -124,48 +125,65 @@ export interface ForwarderInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'approveMakerAssetProxy',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketBuyOrdersWithEth',
     values: [
       LibOrder.OrderStruct[],
-      BigNumberish,
-      BytesLike[],
-      BigNumberish[],
-      string[]
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>[]
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellAmountWithEth',
     values: [
       LibOrder.OrderStruct[],
-      BigNumberish,
-      BytesLike[],
-      BigNumberish[],
-      string[]
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>[]
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'marketSellOrdersWithEth',
-    values: [LibOrder.OrderStruct[], BytesLike[], BigNumberish[], string[]]
+    values: [
+      LibOrder.OrderStruct[],
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'onERC1155BatchReceived',
-    values: [string, string, BigNumberish[], BigNumberish[], BytesLike]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'onERC1155Received',
-    values: [string, string, BigNumberish, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'transferOwnership',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'withdrawAsset',
-    values: [BytesLike, BigNumberish]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
 
   decodeFunctionResult(
@@ -267,65 +285,65 @@ export interface Forwarder extends BaseContract {
     EXCHANGE_V2_ORDER_ID(overrides?: CallOverrides): Promise<[string]>;
 
     approveMakerAssetProxy(
-      assetData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketBuyOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      makerAssetBuyAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetBuyAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketSellAmountWithEth(
       orders: LibOrder.OrderStruct[],
-      ethSellAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      ethSellAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     marketSellOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     onERC1155BatchReceived(
-      operator: string,
-      from: string,
-      ids: BigNumberish[],
-      values: BigNumberish[],
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      ids: PromiseOrValue<BigNumberish>[],
+      values: PromiseOrValue<BigNumberish>[],
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      id: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     withdrawAsset(
-      assetData: BytesLike,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -336,65 +354,65 @@ export interface Forwarder extends BaseContract {
   EXCHANGE_V2_ORDER_ID(overrides?: CallOverrides): Promise<string>;
 
   approveMakerAssetProxy(
-    assetData: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    assetData: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketBuyOrdersWithEth(
     orders: LibOrder.OrderStruct[],
-    makerAssetBuyAmount: BigNumberish,
-    signatures: BytesLike[],
-    ethFeeAmounts: BigNumberish[],
-    feeRecipients: string[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    makerAssetBuyAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+    feeRecipients: PromiseOrValue<string>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketSellAmountWithEth(
     orders: LibOrder.OrderStruct[],
-    ethSellAmount: BigNumberish,
-    signatures: BytesLike[],
-    ethFeeAmounts: BigNumberish[],
-    feeRecipients: string[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ethSellAmount: PromiseOrValue<BigNumberish>,
+    signatures: PromiseOrValue<BytesLike>[],
+    ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+    feeRecipients: PromiseOrValue<string>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   marketSellOrdersWithEth(
     orders: LibOrder.OrderStruct[],
-    signatures: BytesLike[],
-    ethFeeAmounts: BigNumberish[],
-    feeRecipients: string[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    signatures: PromiseOrValue<BytesLike>[],
+    ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+    feeRecipients: PromiseOrValue<string>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   onERC1155BatchReceived(
-    operator: string,
-    from: string,
-    ids: BigNumberish[],
-    values: BigNumberish[],
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    operator: PromiseOrValue<string>,
+    from: PromiseOrValue<string>,
+    ids: PromiseOrValue<BigNumberish>[],
+    values: PromiseOrValue<BigNumberish>[],
+    data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   onERC1155Received(
-    operator: string,
-    from: string,
-    id: BigNumberish,
-    value: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    operator: PromiseOrValue<string>,
+    from: PromiseOrValue<string>,
+    id: PromiseOrValue<BigNumberish>,
+    value: PromiseOrValue<BigNumberish>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   withdrawAsset(
-    assetData: BytesLike,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    assetData: PromiseOrValue<BytesLike>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -405,16 +423,16 @@ export interface Forwarder extends BaseContract {
     EXCHANGE_V2_ORDER_ID(overrides?: CallOverrides): Promise<string>;
 
     approveMakerAssetProxy(
-      assetData: BytesLike,
+      assetData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     marketBuyOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      makerAssetBuyAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
+      makerAssetBuyAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -425,10 +443,10 @@ export interface Forwarder extends BaseContract {
 
     marketSellAmountWithEth(
       orders: LibOrder.OrderStruct[],
-      ethSellAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
+      ethSellAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -439,9 +457,9 @@ export interface Forwarder extends BaseContract {
 
     marketSellOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -451,45 +469,45 @@ export interface Forwarder extends BaseContract {
     >;
 
     onERC1155BatchReceived(
-      operator: string,
-      from: string,
-      ids: BigNumberish[],
-      values: BigNumberish[],
-      data: BytesLike,
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      ids: PromiseOrValue<BigNumberish>[],
+      values: PromiseOrValue<BigNumberish>[],
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      id: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     transferOwnership(
-      newOwner: string,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     withdrawAsset(
-      assetData: BytesLike,
-      amount: BigNumberish,
+      assetData: PromiseOrValue<BytesLike>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
     'OwnershipTransferred(address,address)'(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
   };
 
@@ -501,65 +519,65 @@ export interface Forwarder extends BaseContract {
     EXCHANGE_V2_ORDER_ID(overrides?: CallOverrides): Promise<BigNumber>;
 
     approveMakerAssetProxy(
-      assetData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketBuyOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      makerAssetBuyAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetBuyAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketSellAmountWithEth(
       orders: LibOrder.OrderStruct[],
-      ethSellAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      ethSellAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     marketSellOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     onERC1155BatchReceived(
-      operator: string,
-      from: string,
-      ids: BigNumberish[],
-      values: BigNumberish[],
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      ids: PromiseOrValue<BigNumberish>[],
+      values: PromiseOrValue<BigNumberish>[],
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      id: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     withdrawAsset(
-      assetData: BytesLike,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -575,65 +593,65 @@ export interface Forwarder extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     approveMakerAssetProxy(
-      assetData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketBuyOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      makerAssetBuyAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      makerAssetBuyAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellAmountWithEth(
       orders: LibOrder.OrderStruct[],
-      ethSellAmount: BigNumberish,
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      ethSellAmount: PromiseOrValue<BigNumberish>,
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     marketSellOrdersWithEth(
       orders: LibOrder.OrderStruct[],
-      signatures: BytesLike[],
-      ethFeeAmounts: BigNumberish[],
-      feeRecipients: string[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      signatures: PromiseOrValue<BytesLike>[],
+      ethFeeAmounts: PromiseOrValue<BigNumberish>[],
+      feeRecipients: PromiseOrValue<string>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     onERC1155BatchReceived(
-      operator: string,
-      from: string,
-      ids: BigNumberish[],
-      values: BigNumberish[],
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      ids: PromiseOrValue<BigNumberish>[],
+      values: PromiseOrValue<BigNumberish>[],
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      id: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     withdrawAsset(
-      assetData: BytesLike,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      assetData: PromiseOrValue<BytesLike>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

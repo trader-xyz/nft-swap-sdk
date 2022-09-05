@@ -25,13 +25,14 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from '../../common';
 
 export declare namespace LibNFTOrder {
   export type FeeStruct = {
-    recipient: string;
-    amount: BigNumberish;
-    feeData: BytesLike;
+    recipient: PromiseOrValue<string>;
+    amount: PromiseOrValue<BigNumberish>;
+    feeData: PromiseOrValue<BytesLike>;
   };
 
   export type FeeStructOutput = [string, BigNumber, string] & {
@@ -41,8 +42,8 @@ export declare namespace LibNFTOrder {
   };
 
   export type PropertyStruct = {
-    propertyValidator: string;
-    propertyData: BytesLike;
+    propertyValidator: PromiseOrValue<string>;
+    propertyData: PromiseOrValue<BytesLike>;
   };
 
   export type PropertyStructOutput = [string, string] & {
@@ -51,18 +52,18 @@ export declare namespace LibNFTOrder {
   };
 
   export type ERC1155OrderStruct = {
-    direction: BigNumberish;
-    maker: string;
-    taker: string;
-    expiry: BigNumberish;
-    nonce: BigNumberish;
-    erc20Token: string;
-    erc20TokenAmount: BigNumberish;
+    direction: PromiseOrValue<BigNumberish>;
+    maker: PromiseOrValue<string>;
+    taker: PromiseOrValue<string>;
+    expiry: PromiseOrValue<BigNumberish>;
+    nonce: PromiseOrValue<BigNumberish>;
+    erc20Token: PromiseOrValue<string>;
+    erc20TokenAmount: PromiseOrValue<BigNumberish>;
     fees: LibNFTOrder.FeeStruct[];
-    erc1155Token: string;
-    erc1155TokenId: BigNumberish;
+    erc1155Token: PromiseOrValue<string>;
+    erc1155TokenId: PromiseOrValue<BigNumberish>;
     erc1155TokenProperties: LibNFTOrder.PropertyStruct[];
-    erc1155TokenAmount: BigNumberish;
+    erc1155TokenAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type ERC1155OrderStructOutput = [
@@ -94,16 +95,16 @@ export declare namespace LibNFTOrder {
   };
 
   export type ERC721OrderStruct = {
-    direction: BigNumberish;
-    maker: string;
-    taker: string;
-    expiry: BigNumberish;
-    nonce: BigNumberish;
-    erc20Token: string;
-    erc20TokenAmount: BigNumberish;
+    direction: PromiseOrValue<BigNumberish>;
+    maker: PromiseOrValue<string>;
+    taker: PromiseOrValue<string>;
+    expiry: PromiseOrValue<BigNumberish>;
+    nonce: PromiseOrValue<BigNumberish>;
+    erc20Token: PromiseOrValue<string>;
+    erc20TokenAmount: PromiseOrValue<BigNumberish>;
     fees: LibNFTOrder.FeeStruct[];
-    erc721Token: string;
-    erc721TokenId: BigNumberish;
+    erc721Token: PromiseOrValue<string>;
+    erc721TokenId: PromiseOrValue<BigNumberish>;
     erc721TokenProperties: LibNFTOrder.PropertyStruct[];
   };
 
@@ -134,10 +135,10 @@ export declare namespace LibNFTOrder {
   };
 
   export type OrderInfoStruct = {
-    orderHash: BytesLike;
-    status: BigNumberish;
-    orderAmount: BigNumberish;
-    remainingAmount: BigNumberish;
+    orderHash: PromiseOrValue<BytesLike>;
+    status: PromiseOrValue<BigNumberish>;
+    orderAmount: PromiseOrValue<BigNumberish>;
+    remainingAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type OrderInfoStructOutput = [string, number, BigNumber, BigNumber] & {
@@ -150,18 +151,18 @@ export declare namespace LibNFTOrder {
 
 export declare namespace LibNativeOrder {
   export type LimitOrderStruct = {
-    makerToken: string;
-    takerToken: string;
-    makerAmount: BigNumberish;
-    takerAmount: BigNumberish;
-    takerTokenFeeAmount: BigNumberish;
-    maker: string;
-    taker: string;
-    sender: string;
-    feeRecipient: string;
-    pool: BytesLike;
-    expiry: BigNumberish;
-    salt: BigNumberish;
+    makerToken: PromiseOrValue<string>;
+    takerToken: PromiseOrValue<string>;
+    makerAmount: PromiseOrValue<BigNumberish>;
+    takerAmount: PromiseOrValue<BigNumberish>;
+    takerTokenFeeAmount: PromiseOrValue<BigNumberish>;
+    maker: PromiseOrValue<string>;
+    taker: PromiseOrValue<string>;
+    sender: PromiseOrValue<string>;
+    feeRecipient: PromiseOrValue<string>;
+    pool: PromiseOrValue<BytesLike>;
+    expiry: PromiseOrValue<BigNumberish>;
+    salt: PromiseOrValue<BigNumberish>;
   };
 
   export type LimitOrderStructOutput = [
@@ -193,14 +194,14 @@ export declare namespace LibNativeOrder {
   };
 
   export type OtcOrderStruct = {
-    makerToken: string;
-    takerToken: string;
-    makerAmount: BigNumberish;
-    takerAmount: BigNumberish;
-    maker: string;
-    taker: string;
-    txOrigin: string;
-    expiryAndNonce: BigNumberish;
+    makerToken: PromiseOrValue<string>;
+    takerToken: PromiseOrValue<string>;
+    makerAmount: PromiseOrValue<BigNumberish>;
+    takerAmount: PromiseOrValue<BigNumberish>;
+    maker: PromiseOrValue<string>;
+    taker: PromiseOrValue<string>;
+    txOrigin: PromiseOrValue<string>;
+    expiryAndNonce: PromiseOrValue<BigNumberish>;
   };
 
   export type OtcOrderStructOutput = [
@@ -224,16 +225,16 @@ export declare namespace LibNativeOrder {
   };
 
   export type RfqOrderStruct = {
-    makerToken: string;
-    takerToken: string;
-    makerAmount: BigNumberish;
-    takerAmount: BigNumberish;
-    maker: string;
-    taker: string;
-    txOrigin: string;
-    pool: BytesLike;
-    expiry: BigNumberish;
-    salt: BigNumberish;
+    makerToken: PromiseOrValue<string>;
+    takerToken: PromiseOrValue<string>;
+    makerAmount: PromiseOrValue<BigNumberish>;
+    takerAmount: PromiseOrValue<BigNumberish>;
+    maker: PromiseOrValue<string>;
+    taker: PromiseOrValue<string>;
+    txOrigin: PromiseOrValue<string>;
+    pool: PromiseOrValue<BytesLike>;
+    expiry: PromiseOrValue<BigNumberish>;
+    salt: PromiseOrValue<BigNumberish>;
   };
 
   export type RfqOrderStructOutput = [
@@ -261,9 +262,9 @@ export declare namespace LibNativeOrder {
   };
 
   export type OrderInfoStruct = {
-    orderHash: BytesLike;
-    status: BigNumberish;
-    takerTokenFilledAmount: BigNumberish;
+    orderHash: PromiseOrValue<BytesLike>;
+    status: PromiseOrValue<BigNumberish>;
+    takerTokenFilledAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type OrderInfoStructOutput = [string, number, BigNumber] & {
@@ -273,8 +274,8 @@ export declare namespace LibNativeOrder {
   };
 
   export type OtcOrderInfoStruct = {
-    orderHash: BytesLike;
-    status: BigNumberish;
+    orderHash: PromiseOrValue<BytesLike>;
+    status: PromiseOrValue<BigNumberish>;
   };
 
   export type OtcOrderInfoStructOutput = [string, number] & {
@@ -285,10 +286,10 @@ export declare namespace LibNativeOrder {
 
 export declare namespace LibSignature {
   export type SignatureStruct = {
-    signatureType: BigNumberish;
-    v: BigNumberish;
-    r: BytesLike;
-    s: BytesLike;
+    signatureType: PromiseOrValue<BigNumberish>;
+    v: PromiseOrValue<BigNumberish>;
+    r: PromiseOrValue<BytesLike>;
+    s: PromiseOrValue<BytesLike>;
   };
 
   export type SignatureStructOutput = [number, number, string, string] & {
@@ -301,8 +302,8 @@ export declare namespace LibSignature {
 
 export declare namespace ITransformERC20Feature {
   export type TransformationStruct = {
-    deploymentNonce: BigNumberish;
-    data: BytesLike;
+    deploymentNonce: PromiseOrValue<BigNumberish>;
+    data: PromiseOrValue<BytesLike>;
   };
 
   export type TransformationStructOutput = [number, string] & {
@@ -311,14 +312,14 @@ export declare namespace ITransformERC20Feature {
   };
 
   export type TransformERC20ArgsStruct = {
-    taker: string;
-    inputToken: string;
-    outputToken: string;
-    inputTokenAmount: BigNumberish;
-    minOutputTokenAmount: BigNumberish;
+    taker: PromiseOrValue<string>;
+    inputToken: PromiseOrValue<string>;
+    outputToken: PromiseOrValue<string>;
+    inputTokenAmount: PromiseOrValue<BigNumberish>;
+    minOutputTokenAmount: PromiseOrValue<BigNumberish>;
     transformations: ITransformERC20Feature.TransformationStruct[];
-    useSelfBalance: boolean;
-    recipient: string;
+    useSelfBalance: PromiseOrValue<boolean>;
+    recipient: PromiseOrValue<string>;
   };
 
   export type TransformERC20ArgsStructOutput = [
@@ -344,16 +345,16 @@ export declare namespace ITransformERC20Feature {
 
 export declare namespace IMetaTransactionsFeature {
   export type MetaTransactionDataStruct = {
-    signer: string;
-    sender: string;
-    minGasPrice: BigNumberish;
-    maxGasPrice: BigNumberish;
-    expirationTimeSeconds: BigNumberish;
-    salt: BigNumberish;
-    callData: BytesLike;
-    value: BigNumberish;
-    feeToken: string;
-    feeAmount: BigNumberish;
+    signer: PromiseOrValue<string>;
+    sender: PromiseOrValue<string>;
+    minGasPrice: PromiseOrValue<BigNumberish>;
+    maxGasPrice: PromiseOrValue<BigNumberish>;
+    expirationTimeSeconds: PromiseOrValue<BigNumberish>;
+    salt: PromiseOrValue<BigNumberish>;
+    callData: PromiseOrValue<BytesLike>;
+    value: PromiseOrValue<BigNumberish>;
+    feeToken: PromiseOrValue<string>;
+    feeAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type MetaTransactionDataStructOutput = [
@@ -383,9 +384,9 @@ export declare namespace IMetaTransactionsFeature {
 
 export declare namespace IMultiplexFeature {
   export type BatchSellSubcallStruct = {
-    id: BigNumberish;
-    sellAmount: BigNumberish;
-    data: BytesLike;
+    id: PromiseOrValue<BigNumberish>;
+    sellAmount: PromiseOrValue<BigNumberish>;
+    data: PromiseOrValue<BytesLike>;
   };
 
   export type BatchSellSubcallStructOutput = [number, BigNumber, string] & {
@@ -394,7 +395,10 @@ export declare namespace IMultiplexFeature {
     data: string;
   };
 
-  export type MultiHopSellSubcallStruct = { id: BigNumberish; data: BytesLike };
+  export type MultiHopSellSubcallStruct = {
+    id: PromiseOrValue<BigNumberish>;
+    data: PromiseOrValue<BytesLike>;
+  };
 
   export type MultiHopSellSubcallStructOutput = [number, string] & {
     id: number;
@@ -623,9 +627,9 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      string,
-      string
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
@@ -633,10 +637,10 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      string,
-      boolean,
-      string
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
@@ -644,15 +648,20 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      string,
-      boolean,
-      string
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: '_sellHeldTokenForTokenToUniswapV3',
-    values: [BytesLike, BigNumberish, BigNumberish, string]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: '_transformERC20',
@@ -663,9 +672,9 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC1155OrderStruct[],
       LibSignature.SignatureStruct[],
-      BigNumberish[],
-      BytesLike[],
-      boolean
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -673,17 +682,17 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC721OrderStruct[],
       LibSignature.SignatureStruct[],
-      BytesLike[],
-      boolean
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelERC1155Orders',
-    values: [BigNumberish[]]
+    values: [PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelERC721Orders',
-    values: [BigNumberish[]]
+    values: [PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelLimitOrders',
@@ -691,19 +700,37 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelPairLimitOrders',
-    values: [string[], string[], BigNumberish[]]
+    values: [
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelPairLimitOrdersWithSigner',
-    values: [string, string[], string[], BigNumberish[]]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelPairRfqOrders',
-    values: [string[], string[], BigNumberish[]]
+    values: [
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelPairRfqOrdersWithSigner',
-    values: [string, string[], string[], BigNumberish[]]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>[],
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'batchCancelRfqOrders',
@@ -721,8 +748,8 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.LimitOrderStruct[],
       LibSignature.SignatureStruct[],
-      BigNumberish[],
-      boolean
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -730,8 +757,8 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.RfqOrderStruct[],
       LibSignature.SignatureStruct[],
-      BigNumberish[],
-      boolean
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -740,7 +767,7 @@ export interface IZeroExInterface extends utils.Interface {
       LibNativeOrder.OtcOrderStruct[],
       LibSignature.SignatureStruct[],
       LibSignature.SignatureStruct[],
-      boolean[]
+      PromiseOrValue<boolean>[]
     ]
   ): string;
   encodeFunctionData(
@@ -765,8 +792,8 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC1155OrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      BytesLike
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
@@ -774,16 +801,16 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC721OrderStruct,
       LibSignature.SignatureStruct,
-      BytesLike
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelERC1155Order',
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelERC721Order',
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelLimitOrder',
@@ -791,19 +818,37 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelPairLimitOrders',
-    values: [string, string, BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelPairLimitOrdersWithSigner',
-    values: [string, string, string, BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelPairRfqOrders',
-    values: [string, string, BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelPairRfqOrdersWithSigner',
-    values: [string, string, string, BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'cancelRfqOrder',
@@ -822,14 +867,14 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'extend',
-    values: [BytesLike, string]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'fillLimitOrder',
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -837,7 +882,7 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.LimitOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -845,7 +890,7 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -853,7 +898,7 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -861,7 +906,7 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.OtcOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -873,7 +918,7 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNativeOrder.RfqOrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -910,7 +955,7 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'getERC721OrderStatusBitVector',
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getLimitOrderHash',
@@ -934,7 +979,7 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'getMetaTransactionHashExecutedBlock',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getOtcOrderHash',
@@ -966,11 +1011,11 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'getRollbackEntryAtIndex',
-    values: [BytesLike, BigNumberish]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getRollbackLength',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'getTransformWallet',
@@ -982,11 +1027,11 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'isValidOrderSigner',
-    values: [string, string]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'lastOtcTxOriginNonce',
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'matchERC721Orders',
@@ -999,64 +1044,83 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'migrate',
-    values: [string, BytesLike, string]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexBatchSellEthForToken',
-    values: [string, IMultiplexFeature.BatchSellSubcallStruct[], BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      IMultiplexFeature.BatchSellSubcallStruct[],
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexBatchSellTokenForEth',
     values: [
-      string,
+      PromiseOrValue<string>,
       IMultiplexFeature.BatchSellSubcallStruct[],
-      BigNumberish,
-      BigNumberish
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexBatchSellTokenForToken',
     values: [
-      string,
-      string,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
       IMultiplexFeature.BatchSellSubcallStruct[],
-      BigNumberish,
-      BigNumberish
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexMultiHopSellEthForToken',
     values: [
-      string[],
+      PromiseOrValue<string>[],
       IMultiplexFeature.MultiHopSellSubcallStruct[],
-      BigNumberish
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexMultiHopSellTokenForEth',
     values: [
-      string[],
+      PromiseOrValue<string>[],
       IMultiplexFeature.MultiHopSellSubcallStruct[],
-      BigNumberish,
-      BigNumberish
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'multiplexMultiHopSellTokenForToken',
     values: [
-      string[],
+      PromiseOrValue<string>[],
       IMultiplexFeature.MultiHopSellSubcallStruct[],
-      BigNumberish,
-      BigNumberish
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'onERC1155Received',
-    values: [string, string, BigNumberish, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'onERC721Received',
-    values: [string, string, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
@@ -1069,25 +1133,25 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'registerAllowedOrderSigner',
-    values: [string, boolean]
+    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
     functionFragment: 'registerAllowedRfqOrigins',
-    values: [string[], boolean]
+    values: [PromiseOrValue<string>[], PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
     functionFragment: 'rollback',
-    values: [BytesLike, string]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellERC1155',
     values: [
       LibNFTOrder.ERC1155OrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      BigNumberish,
-      boolean,
-      BytesLike
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
@@ -1095,84 +1159,116 @@ export interface IZeroExInterface extends utils.Interface {
     values: [
       LibNFTOrder.ERC721OrderStruct,
       LibSignature.SignatureStruct,
-      BigNumberish,
-      boolean,
-      BytesLike
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellEthForTokenToUniswapV3',
-    values: [BytesLike, BigNumberish, string]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellToLiquidityProvider',
     values: [
-      string,
-      string,
-      string,
-      string,
-      BigNumberish,
-      BigNumberish,
-      BytesLike
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellToPancakeSwap',
-    values: [string[], BigNumberish, BigNumberish, BigNumberish]
+    values: [
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellToUniswap',
-    values: [string[], BigNumberish, BigNumberish, boolean]
+    values: [
+      PromiseOrValue<string>[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellTokenForEthToUniswapV3',
-    values: [BytesLike, BigNumberish, BigNumberish, string]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'sellTokenForTokenToUniswapV3',
-    values: [BytesLike, BigNumberish, BigNumberish, string]
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'setQuoteSigner',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'setTransformerDeployer',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'supportInterface',
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: 'transferOwnership',
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: 'transferProtocolFeesForPools',
-    values: [BytesLike[]]
+    values: [PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(
     functionFragment: 'transferTrappedTokensTo',
-    values: [string, BigNumberish, string]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'transformERC20',
     values: [
-      string,
-      string,
-      BigNumberish,
-      BigNumberish,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
       ITransformERC20Feature.TransformationStruct[]
     ]
   ): string;
   encodeFunctionData(
     functionFragment: 'uniswapV3SwapCallback',
-    values: [BigNumberish, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: 'validateERC1155OrderProperties',
-    values: [LibNFTOrder.ERC1155OrderStruct, BigNumberish]
+    values: [LibNFTOrder.ERC1155OrderStruct, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'validateERC1155OrderSignature',
@@ -1180,7 +1276,7 @@ export interface IZeroExInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'validateERC721OrderProperties',
-    values: [LibNFTOrder.ERC721OrderStruct, BigNumberish]
+    values: [LibNFTOrder.ERC721OrderStruct, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: 'validateERC721OrderSignature',
@@ -2049,140 +2145,140 @@ export interface IZeroEx extends BaseContract {
     _fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      sender: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      sender: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     _fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     _fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     _sellHeldTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     _transformERC20(
       args: ITransformERC20Feature.TransformERC20ArgsStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchBuyERC1155s(
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      erc1155TokenAmounts: BigNumberish[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155TokenAmounts: PromiseOrValue<BigNumberish>[],
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelERC1155Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelERC721Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelPairLimitOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelPairRfqOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchCancelRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchExecuteMetaTransactions(
       mtxs: IMetaTransactionsFeature.MetaTransactionDataStruct[],
       signatures: LibSignature.SignatureStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchFillTakerSignedOtcOrders(
       orders: LibNativeOrder.OtcOrderStruct[],
       makerSignatures: LibSignature.SignatureStruct[],
       takerSignatures: LibSignature.SignatureStruct[],
-      unwrapWeth: boolean[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      unwrapWeth: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     batchGetLimitOrderRelevantStates(
@@ -2214,150 +2310,150 @@ export interface IZeroEx extends BaseContract {
       buyOrders: LibNFTOrder.ERC721OrderStruct[],
       sellOrderSignatures: LibSignature.SignatureStruct[],
       buyOrderSignatures: LibSignature.SignatureStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     buyERC1155(
       sellOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155BuyAmount: BigNumberish,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155BuyAmount: PromiseOrValue<BigNumberish>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     buyERC721(
       sellOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelERC1155Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelERC721Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelPairLimitOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelPairRfqOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     cancelRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createTransformWallet(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     executeMetaTransaction(
       mtx: IMetaTransactionsFeature.MetaTransactionDataStruct,
       signature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     extend(
-      selector: BytesLike,
-      impl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      impl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOrKillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOrKillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillOtcOrderWithEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillTakerSignedOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     fillTakerSignedOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     getERC1155OrderHash(
@@ -2385,8 +2481,8 @@ export interface IZeroEx extends BaseContract {
     ): Promise<[number] & { status: number }>;
 
     getERC721OrderStatusBitVector(
-      maker: string,
-      nonceRange: BigNumberish,
+      maker: PromiseOrValue<string>,
+      nonceRange: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { bitVector: BigNumber }>;
 
@@ -2427,7 +2523,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<[string] & { mtxHash: string }>;
 
     getMetaTransactionHashExecutedBlock(
-      mtxHash: BytesLike,
+      mtxHash: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { blockNumber: BigNumber }>;
 
@@ -2480,13 +2576,13 @@ export interface IZeroEx extends BaseContract {
     >;
 
     getRollbackEntryAtIndex(
-      selector: BytesLike,
-      idx: BigNumberish,
+      selector: PromiseOrValue<BytesLike>,
+      idx: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string] & { impl: string }>;
 
     getRollbackLength(
-      selector: BytesLike,
+      selector: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { rollbackLength: BigNumber }>;
 
@@ -2499,14 +2595,14 @@ export interface IZeroEx extends BaseContract {
     ): Promise<[string] & { deployer: string }>;
 
     isValidOrderSigner(
-      maker: string,
-      signer: string,
+      maker: PromiseOrValue<string>,
+      signer: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isAllowed: boolean }>;
 
     lastOtcTxOriginNonce(
-      txOrigin: string,
-      nonceBucket: BigNumberish,
+      txOrigin: PromiseOrValue<string>,
+      nonceBucket: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { lastNonce: BigNumber }>;
 
@@ -2515,78 +2611,78 @@ export interface IZeroEx extends BaseContract {
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       sellOrderSignature: LibSignature.SignatureStruct,
       buyOrderSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     migrate(
-      target: string,
-      data: BytesLike,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexBatchSellEthForToken(
-      outputToken: string,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexBatchSellTokenForEth(
-      inputToken: string,
+      inputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexBatchSellTokenForToken(
-      inputToken: string,
-      outputToken: string,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexMultiHopSellEthForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexMultiHopSellTokenForEth(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     multiplexMultiHopSellTokenForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     onERC721Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     owner(
@@ -2595,152 +2691,152 @@ export interface IZeroEx extends BaseContract {
 
     preSignERC1155Order(
       order: LibNFTOrder.ERC1155OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     preSignERC721Order(
       order: LibNFTOrder.ERC721OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     registerAllowedOrderSigner(
-      signer: string,
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      signer: PromiseOrValue<string>,
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     registerAllowedRfqOrigins(
-      origins: string[],
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      origins: PromiseOrValue<string>[],
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     rollback(
-      selector: BytesLike,
-      targetImpl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      targetImpl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellERC1155(
       buyOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155TokenId: BigNumberish,
-      erc1155SellAmount: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
+      erc1155SellAmount: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellERC721(
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc721TokenId: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc721TokenId: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellEthForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellToLiquidityProvider(
-      inputToken: string,
-      outputToken: string,
-      provider: string,
-      recipient: string,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      auxiliaryData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      provider: PromiseOrValue<string>,
+      recipient: PromiseOrValue<string>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      auxiliaryData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellToPancakeSwap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      fork: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      fork: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellToUniswap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      isSushi: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      isSushi: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellTokenForEthToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     sellTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setQuoteSigner(
-      quoteSigner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      quoteSigner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setTransformerDeployer(
-      transformerDeployer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      transformerDeployer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     supportInterface(
-      interfaceId: BytesLike,
+      interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isSupported: boolean }>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     transferProtocolFeesForPools(
-      poolIds: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      poolIds: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     transferTrappedTokensTo(
-      erc20: string,
-      amountOut: BigNumberish,
-      recipientWallet: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc20: PromiseOrValue<string>,
+      amountOut: PromiseOrValue<BigNumberish>,
+      recipientWallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     transformERC20(
-      inputToken: string,
-      outputToken: string,
-      inputTokenAmount: BigNumberish,
-      minOutputTokenAmount: BigNumberish,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      inputTokenAmount: PromiseOrValue<BigNumberish>,
+      minOutputTokenAmount: PromiseOrValue<BigNumberish>,
       transformations: ITransformERC20Feature.TransformationStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     uniswapV3SwapCallback(
-      amount0Delta: BigNumberish,
-      amount1Delta: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      amount0Delta: PromiseOrValue<BigNumberish>,
+      amount1Delta: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     validateERC1155OrderProperties(
       order: LibNFTOrder.ERC1155OrderStruct,
-      erc1155TokenId: BigNumberish,
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[void]>;
 
@@ -2752,7 +2848,7 @@ export interface IZeroEx extends BaseContract {
 
     validateERC721OrderProperties(
       order: LibNFTOrder.ERC721OrderStruct,
-      erc721TokenId: BigNumberish,
+      erc721TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[void]>;
 
@@ -2766,140 +2862,140 @@ export interface IZeroEx extends BaseContract {
   _fillLimitOrder(
     order: LibNativeOrder.LimitOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    taker: string,
-    sender: string,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    taker: PromiseOrValue<string>,
+    sender: PromiseOrValue<string>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   _fillOtcOrder(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    taker: string,
-    useSelfBalance: boolean,
-    recipient: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    taker: PromiseOrValue<string>,
+    useSelfBalance: PromiseOrValue<boolean>,
+    recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   _fillRfqOrder(
     order: LibNativeOrder.RfqOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    taker: string,
-    useSelfBalance: boolean,
-    recipient: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    taker: PromiseOrValue<string>,
+    useSelfBalance: PromiseOrValue<boolean>,
+    recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   _sellHeldTokenForTokenToUniswapV3(
-    encodedPath: BytesLike,
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    recipient: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    encodedPath: PromiseOrValue<BytesLike>,
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   _transformERC20(
     args: ITransformERC20Feature.TransformERC20ArgsStruct,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchBuyERC1155s(
     sellOrders: LibNFTOrder.ERC1155OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
-    erc1155TokenAmounts: BigNumberish[],
-    callbackData: BytesLike[],
-    revertIfIncomplete: boolean,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    erc1155TokenAmounts: PromiseOrValue<BigNumberish>[],
+    callbackData: PromiseOrValue<BytesLike>[],
+    revertIfIncomplete: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchBuyERC721s(
     sellOrders: LibNFTOrder.ERC721OrderStruct[],
     signatures: LibSignature.SignatureStruct[],
-    callbackData: BytesLike[],
-    revertIfIncomplete: boolean,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    callbackData: PromiseOrValue<BytesLike>[],
+    revertIfIncomplete: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelERC1155Orders(
-    orderNonces: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    orderNonces: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelERC721Orders(
-    orderNonces: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    orderNonces: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelLimitOrders(
     orders: LibNativeOrder.LimitOrderStruct[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelPairLimitOrders(
-    makerTokens: string[],
-    takerTokens: string[],
-    minValidSalts: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    makerTokens: PromiseOrValue<string>[],
+    takerTokens: PromiseOrValue<string>[],
+    minValidSalts: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelPairLimitOrdersWithSigner(
-    maker: string,
-    makerTokens: string[],
-    takerTokens: string[],
-    minValidSalts: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    maker: PromiseOrValue<string>,
+    makerTokens: PromiseOrValue<string>[],
+    takerTokens: PromiseOrValue<string>[],
+    minValidSalts: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelPairRfqOrders(
-    makerTokens: string[],
-    takerTokens: string[],
-    minValidSalts: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    makerTokens: PromiseOrValue<string>[],
+    takerTokens: PromiseOrValue<string>[],
+    minValidSalts: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelPairRfqOrdersWithSigner(
-    maker: string,
-    makerTokens: string[],
-    takerTokens: string[],
-    minValidSalts: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    maker: PromiseOrValue<string>,
+    makerTokens: PromiseOrValue<string>[],
+    takerTokens: PromiseOrValue<string>[],
+    minValidSalts: PromiseOrValue<BigNumberish>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchCancelRfqOrders(
     orders: LibNativeOrder.RfqOrderStruct[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchExecuteMetaTransactions(
     mtxs: IMetaTransactionsFeature.MetaTransactionDataStruct[],
     signatures: LibSignature.SignatureStruct[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillLimitOrders(
     orders: LibNativeOrder.LimitOrderStruct[],
     signatures: LibSignature.SignatureStruct[],
-    takerTokenFillAmounts: BigNumberish[],
-    revertIfIncomplete: boolean,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+    revertIfIncomplete: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillRfqOrders(
     orders: LibNativeOrder.RfqOrderStruct[],
     signatures: LibSignature.SignatureStruct[],
-    takerTokenFillAmounts: BigNumberish[],
-    revertIfIncomplete: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+    revertIfIncomplete: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchFillTakerSignedOtcOrders(
     orders: LibNativeOrder.OtcOrderStruct[],
     makerSignatures: LibSignature.SignatureStruct[],
     takerSignatures: LibSignature.SignatureStruct[],
-    unwrapWeth: boolean[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    unwrapWeth: PromiseOrValue<boolean>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   batchGetLimitOrderRelevantStates(
@@ -2931,150 +3027,150 @@ export interface IZeroEx extends BaseContract {
     buyOrders: LibNFTOrder.ERC721OrderStruct[],
     sellOrderSignatures: LibSignature.SignatureStruct[],
     buyOrderSignatures: LibSignature.SignatureStruct[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   buyERC1155(
     sellOrder: LibNFTOrder.ERC1155OrderStruct,
     signature: LibSignature.SignatureStruct,
-    erc1155BuyAmount: BigNumberish,
-    callbackData: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    erc1155BuyAmount: PromiseOrValue<BigNumberish>,
+    callbackData: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   buyERC721(
     sellOrder: LibNFTOrder.ERC721OrderStruct,
     signature: LibSignature.SignatureStruct,
-    callbackData: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    callbackData: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelERC1155Order(
-    orderNonce: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    orderNonce: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelERC721Order(
-    orderNonce: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    orderNonce: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelLimitOrder(
     order: LibNativeOrder.LimitOrderStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelPairLimitOrders(
-    makerToken: string,
-    takerToken: string,
-    minValidSalt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    makerToken: PromiseOrValue<string>,
+    takerToken: PromiseOrValue<string>,
+    minValidSalt: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelPairLimitOrdersWithSigner(
-    maker: string,
-    makerToken: string,
-    takerToken: string,
-    minValidSalt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    maker: PromiseOrValue<string>,
+    makerToken: PromiseOrValue<string>,
+    takerToken: PromiseOrValue<string>,
+    minValidSalt: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelPairRfqOrders(
-    makerToken: string,
-    takerToken: string,
-    minValidSalt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    makerToken: PromiseOrValue<string>,
+    takerToken: PromiseOrValue<string>,
+    minValidSalt: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelPairRfqOrdersWithSigner(
-    maker: string,
-    makerToken: string,
-    takerToken: string,
-    minValidSalt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    maker: PromiseOrValue<string>,
+    makerToken: PromiseOrValue<string>,
+    takerToken: PromiseOrValue<string>,
+    minValidSalt: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   cancelRfqOrder(
     order: LibNativeOrder.RfqOrderStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createTransformWallet(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   executeMetaTransaction(
     mtx: IMetaTransactionsFeature.MetaTransactionDataStruct,
     signature: LibSignature.SignatureStruct,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   extend(
-    selector: BytesLike,
-    impl: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    selector: PromiseOrValue<BytesLike>,
+    impl: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillLimitOrder(
     order: LibNativeOrder.LimitOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOrKillLimitOrder(
     order: LibNativeOrder.LimitOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOrKillRfqOrder(
     order: LibNativeOrder.RfqOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOtcOrder(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOtcOrderForEth(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillOtcOrderWithEth(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillRfqOrder(
     order: LibNativeOrder.RfqOrderStruct,
     signature: LibSignature.SignatureStruct,
-    takerTokenFillAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillTakerSignedOtcOrder(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
     takerSignature: LibSignature.SignatureStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   fillTakerSignedOtcOrderForEth(
     order: LibNativeOrder.OtcOrderStruct,
     makerSignature: LibSignature.SignatureStruct,
     takerSignature: LibSignature.SignatureStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   getERC1155OrderHash(
@@ -3098,8 +3194,8 @@ export interface IZeroEx extends BaseContract {
   ): Promise<number>;
 
   getERC721OrderStatusBitVector(
-    maker: string,
-    nonceRange: BigNumberish,
+    maker: PromiseOrValue<string>,
+    nonceRange: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -3136,7 +3232,7 @@ export interface IZeroEx extends BaseContract {
   ): Promise<string>;
 
   getMetaTransactionHashExecutedBlock(
-    mtxHash: BytesLike,
+    mtxHash: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -3177,13 +3273,13 @@ export interface IZeroEx extends BaseContract {
   >;
 
   getRollbackEntryAtIndex(
-    selector: BytesLike,
-    idx: BigNumberish,
+    selector: PromiseOrValue<BytesLike>,
+    idx: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
   getRollbackLength(
-    selector: BytesLike,
+    selector: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -3192,14 +3288,14 @@ export interface IZeroEx extends BaseContract {
   getTransformerDeployer(overrides?: CallOverrides): Promise<string>;
 
   isValidOrderSigner(
-    maker: string,
-    signer: string,
+    maker: PromiseOrValue<string>,
+    signer: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   lastOtcTxOriginNonce(
-    txOrigin: string,
-    nonceBucket: BigNumberish,
+    txOrigin: PromiseOrValue<string>,
+    nonceBucket: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -3208,230 +3304,230 @@ export interface IZeroEx extends BaseContract {
     buyOrder: LibNFTOrder.ERC721OrderStruct,
     sellOrderSignature: LibSignature.SignatureStruct,
     buyOrderSignature: LibSignature.SignatureStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   migrate(
-    target: string,
-    data: BytesLike,
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    target: PromiseOrValue<string>,
+    data: PromiseOrValue<BytesLike>,
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexBatchSellEthForToken(
-    outputToken: string,
+    outputToken: PromiseOrValue<string>,
     calls: IMultiplexFeature.BatchSellSubcallStruct[],
-    minBuyAmount: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexBatchSellTokenForEth(
-    inputToken: string,
+    inputToken: PromiseOrValue<string>,
     calls: IMultiplexFeature.BatchSellSubcallStruct[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexBatchSellTokenForToken(
-    inputToken: string,
-    outputToken: string,
+    inputToken: PromiseOrValue<string>,
+    outputToken: PromiseOrValue<string>,
     calls: IMultiplexFeature.BatchSellSubcallStruct[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexMultiHopSellEthForToken(
-    tokens: string[],
+    tokens: PromiseOrValue<string>[],
     calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-    minBuyAmount: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexMultiHopSellTokenForEth(
-    tokens: string[],
+    tokens: PromiseOrValue<string>[],
     calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   multiplexMultiHopSellTokenForToken(
-    tokens: string[],
+    tokens: PromiseOrValue<string>[],
     calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   onERC1155Received(
-    operator: string,
-    from: string,
-    tokenId: BigNumberish,
-    value: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    operator: PromiseOrValue<string>,
+    from: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    value: PromiseOrValue<BigNumberish>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   onERC721Received(
-    operator: string,
-    from: string,
-    tokenId: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    operator: PromiseOrValue<string>,
+    from: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   preSignERC1155Order(
     order: LibNFTOrder.ERC1155OrderStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   preSignERC721Order(
     order: LibNFTOrder.ERC721OrderStruct,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   registerAllowedOrderSigner(
-    signer: string,
-    allowed: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    signer: PromiseOrValue<string>,
+    allowed: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   registerAllowedRfqOrigins(
-    origins: string[],
-    allowed: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    origins: PromiseOrValue<string>[],
+    allowed: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   rollback(
-    selector: BytesLike,
-    targetImpl: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    selector: PromiseOrValue<BytesLike>,
+    targetImpl: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellERC1155(
     buyOrder: LibNFTOrder.ERC1155OrderStruct,
     signature: LibSignature.SignatureStruct,
-    erc1155TokenId: BigNumberish,
-    erc1155SellAmount: BigNumberish,
-    unwrapNativeToken: boolean,
-    callbackData: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    erc1155TokenId: PromiseOrValue<BigNumberish>,
+    erc1155SellAmount: PromiseOrValue<BigNumberish>,
+    unwrapNativeToken: PromiseOrValue<boolean>,
+    callbackData: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellERC721(
     buyOrder: LibNFTOrder.ERC721OrderStruct,
     signature: LibSignature.SignatureStruct,
-    erc721TokenId: BigNumberish,
-    unwrapNativeToken: boolean,
-    callbackData: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    erc721TokenId: PromiseOrValue<BigNumberish>,
+    unwrapNativeToken: PromiseOrValue<boolean>,
+    callbackData: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellEthForTokenToUniswapV3(
-    encodedPath: BytesLike,
-    minBuyAmount: BigNumberish,
-    recipient: string,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    encodedPath: PromiseOrValue<BytesLike>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    recipient: PromiseOrValue<string>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellToLiquidityProvider(
-    inputToken: string,
-    outputToken: string,
-    provider: string,
-    recipient: string,
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    auxiliaryData: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    inputToken: PromiseOrValue<string>,
+    outputToken: PromiseOrValue<string>,
+    provider: PromiseOrValue<string>,
+    recipient: PromiseOrValue<string>,
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    auxiliaryData: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellToPancakeSwap(
-    tokens: string[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    fork: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    tokens: PromiseOrValue<string>[],
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    fork: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellToUniswap(
-    tokens: string[],
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    isSushi: boolean,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    tokens: PromiseOrValue<string>[],
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    isSushi: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellTokenForEthToUniswapV3(
-    encodedPath: BytesLike,
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    recipient: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    encodedPath: PromiseOrValue<BytesLike>,
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   sellTokenForTokenToUniswapV3(
-    encodedPath: BytesLike,
-    sellAmount: BigNumberish,
-    minBuyAmount: BigNumberish,
-    recipient: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    encodedPath: PromiseOrValue<BytesLike>,
+    sellAmount: PromiseOrValue<BigNumberish>,
+    minBuyAmount: PromiseOrValue<BigNumberish>,
+    recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setQuoteSigner(
-    quoteSigner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    quoteSigner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setTransformerDeployer(
-    transformerDeployer: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    transformerDeployer: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   supportInterface(
-    interfaceId: BytesLike,
+    interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   transferProtocolFeesForPools(
-    poolIds: BytesLike[],
-    overrides?: Overrides & { from?: string | Promise<string> }
+    poolIds: PromiseOrValue<BytesLike>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   transferTrappedTokensTo(
-    erc20: string,
-    amountOut: BigNumberish,
-    recipientWallet: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    erc20: PromiseOrValue<string>,
+    amountOut: PromiseOrValue<BigNumberish>,
+    recipientWallet: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   transformERC20(
-    inputToken: string,
-    outputToken: string,
-    inputTokenAmount: BigNumberish,
-    minOutputTokenAmount: BigNumberish,
+    inputToken: PromiseOrValue<string>,
+    outputToken: PromiseOrValue<string>,
+    inputTokenAmount: PromiseOrValue<BigNumberish>,
+    minOutputTokenAmount: PromiseOrValue<BigNumberish>,
     transformations: ITransformERC20Feature.TransformationStruct[],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   uniswapV3SwapCallback(
-    amount0Delta: BigNumberish,
-    amount1Delta: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    amount0Delta: PromiseOrValue<BigNumberish>,
+    amount1Delta: PromiseOrValue<BigNumberish>,
+    data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   validateERC1155OrderProperties(
     order: LibNFTOrder.ERC1155OrderStruct,
-    erc1155TokenId: BigNumberish,
+    erc1155TokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<void>;
 
@@ -3443,7 +3539,7 @@ export interface IZeroEx extends BaseContract {
 
   validateERC721OrderProperties(
     order: LibNFTOrder.ERC721OrderStruct,
-    erc721TokenId: BigNumberish,
+    erc721TokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<void>;
 
@@ -3457,9 +3553,9 @@ export interface IZeroEx extends BaseContract {
     _fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      sender: string,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      sender: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3471,10 +3567,10 @@ export interface IZeroEx extends BaseContract {
     _fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3486,10 +3582,10 @@ export interface IZeroEx extends BaseContract {
     _fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3499,10 +3595,10 @@ export interface IZeroEx extends BaseContract {
     >;
 
     _sellHeldTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3514,27 +3610,27 @@ export interface IZeroEx extends BaseContract {
     batchBuyERC1155s(
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      erc1155TokenAmounts: BigNumberish[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
+      erc1155TokenAmounts: PromiseOrValue<BigNumberish>[],
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
 
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<boolean[]>;
 
     batchCancelERC1155Orders(
-      orderNonces: BigNumberish[],
+      orderNonces: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     batchCancelERC721Orders(
-      orderNonces: BigNumberish[],
+      orderNonces: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3544,32 +3640,32 @@ export interface IZeroEx extends BaseContract {
     ): Promise<void>;
 
     batchCancelPairLimitOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     batchCancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     batchCancelPairRfqOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     batchCancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3587,8 +3683,8 @@ export interface IZeroEx extends BaseContract {
     batchFillLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber[], BigNumber[]] & {
@@ -3600,8 +3696,8 @@ export interface IZeroEx extends BaseContract {
     batchFillRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber[], BigNumber[]] & {
@@ -3614,7 +3710,7 @@ export interface IZeroEx extends BaseContract {
       orders: LibNativeOrder.OtcOrderStruct[],
       makerSignatures: LibSignature.SignatureStruct[],
       takerSignatures: LibSignature.SignatureStruct[],
-      unwrapWeth: boolean[],
+      unwrapWeth: PromiseOrValue<boolean>[],
       overrides?: CallOverrides
     ): Promise<boolean[]>;
 
@@ -3655,25 +3751,25 @@ export interface IZeroEx extends BaseContract {
     buyERC1155(
       sellOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155BuyAmount: BigNumberish,
-      callbackData: BytesLike,
+      erc1155BuyAmount: PromiseOrValue<BigNumberish>,
+      callbackData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     buyERC721(
       sellOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      callbackData: BytesLike,
+      callbackData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelERC1155Order(
-      orderNonce: BigNumberish,
+      orderNonce: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelERC721Order(
-      orderNonce: BigNumberish,
+      orderNonce: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3683,32 +3779,32 @@ export interface IZeroEx extends BaseContract {
     ): Promise<void>;
 
     cancelPairLimitOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelPairRfqOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -3726,15 +3822,15 @@ export interface IZeroEx extends BaseContract {
     ): Promise<string>;
 
     extend(
-      selector: BytesLike,
-      impl: string,
+      selector: PromiseOrValue<BytesLike>,
+      impl: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3746,21 +3842,21 @@ export interface IZeroEx extends BaseContract {
     fillOrKillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     fillOrKillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3772,7 +3868,7 @@ export interface IZeroEx extends BaseContract {
     fillOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3795,7 +3891,7 @@ export interface IZeroEx extends BaseContract {
     fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -3839,8 +3935,8 @@ export interface IZeroEx extends BaseContract {
     ): Promise<number>;
 
     getERC721OrderStatusBitVector(
-      maker: string,
-      nonceRange: BigNumberish,
+      maker: PromiseOrValue<string>,
+      nonceRange: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3877,7 +3973,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<string>;
 
     getMetaTransactionHashExecutedBlock(
-      mtxHash: BytesLike,
+      mtxHash: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3918,13 +4014,13 @@ export interface IZeroEx extends BaseContract {
     >;
 
     getRollbackEntryAtIndex(
-      selector: BytesLike,
-      idx: BigNumberish,
+      selector: PromiseOrValue<BytesLike>,
+      idx: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     getRollbackLength(
-      selector: BytesLike,
+      selector: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3933,14 +4029,14 @@ export interface IZeroEx extends BaseContract {
     getTransformerDeployer(overrides?: CallOverrides): Promise<string>;
 
     isValidOrderSigner(
-      maker: string,
-      signer: string,
+      maker: PromiseOrValue<string>,
+      signer: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     lastOtcTxOriginNonce(
-      txOrigin: string,
-      nonceBucket: BigNumberish,
+      txOrigin: PromiseOrValue<string>,
+      nonceBucket: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -3953,73 +4049,73 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     migrate(
-      target: string,
-      data: BytesLike,
-      newOwner: string,
+      target: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     multiplexBatchSellEthForToken(
-      outputToken: string,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     multiplexBatchSellTokenForEth(
-      inputToken: string,
+      inputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     multiplexBatchSellTokenForToken(
-      inputToken: string,
-      outputToken: string,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellEthForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellTokenForEth(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellTokenForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
     onERC721Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -4036,143 +4132,143 @@ export interface IZeroEx extends BaseContract {
     ): Promise<void>;
 
     registerAllowedOrderSigner(
-      signer: string,
-      allowed: boolean,
+      signer: PromiseOrValue<string>,
+      allowed: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     registerAllowedRfqOrigins(
-      origins: string[],
-      allowed: boolean,
+      origins: PromiseOrValue<string>[],
+      allowed: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     rollback(
-      selector: BytesLike,
-      targetImpl: string,
+      selector: PromiseOrValue<BytesLike>,
+      targetImpl: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     sellERC1155(
       buyOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155TokenId: BigNumberish,
-      erc1155SellAmount: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
+      erc1155SellAmount: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     sellERC721(
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc721TokenId: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
+      erc721TokenId: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     sellEthForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      minBuyAmount: BigNumberish,
-      recipient: string,
+      encodedPath: PromiseOrValue<BytesLike>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sellToLiquidityProvider(
-      inputToken: string,
-      outputToken: string,
-      provider: string,
-      recipient: string,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      auxiliaryData: BytesLike,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      provider: PromiseOrValue<string>,
+      recipient: PromiseOrValue<string>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      auxiliaryData: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sellToPancakeSwap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      fork: BigNumberish,
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      fork: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sellToUniswap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      isSushi: boolean,
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      isSushi: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sellTokenForEthToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     sellTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     setQuoteSigner(
-      quoteSigner: string,
+      quoteSigner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setTransformerDeployer(
-      transformerDeployer: string,
+      transformerDeployer: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     supportInterface(
-      interfaceId: BytesLike,
+      interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     transferOwnership(
-      newOwner: string,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     transferProtocolFeesForPools(
-      poolIds: BytesLike[],
+      poolIds: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     transferTrappedTokensTo(
-      erc20: string,
-      amountOut: BigNumberish,
-      recipientWallet: string,
+      erc20: PromiseOrValue<string>,
+      amountOut: PromiseOrValue<BigNumberish>,
+      recipientWallet: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     transformERC20(
-      inputToken: string,
-      outputToken: string,
-      inputTokenAmount: BigNumberish,
-      minOutputTokenAmount: BigNumberish,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      inputTokenAmount: PromiseOrValue<BigNumberish>,
+      minOutputTokenAmount: PromiseOrValue<BigNumberish>,
       transformations: ITransformERC20Feature.TransformationStruct[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     uniswapV3SwapCallback(
-      amount0Delta: BigNumberish,
-      amount1Delta: BigNumberish,
-      data: BytesLike,
+      amount0Delta: PromiseOrValue<BigNumberish>,
+      amount1Delta: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     validateERC1155OrderProperties(
       order: LibNFTOrder.ERC1155OrderStruct,
-      erc1155TokenId: BigNumberish,
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -4184,7 +4280,7 @@ export interface IZeroEx extends BaseContract {
 
     validateERC721OrderProperties(
       order: LibNFTOrder.ERC721OrderStruct,
-      erc721TokenId: BigNumberish,
+      erc721TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -4364,13 +4460,13 @@ export interface IZeroEx extends BaseContract {
 
     'MetaTransactionExecuted(bytes32,bytes4,address,address)'(
       hash?: null,
-      selector?: BytesLike | null,
+      selector?: PromiseOrValue<BytesLike> | null,
       signer?: null,
       sender?: null
     ): MetaTransactionExecutedEventFilter;
     MetaTransactionExecuted(
       hash?: null,
-      selector?: BytesLike | null,
+      selector?: PromiseOrValue<BytesLike> | null,
       signer?: null,
       sender?: null
     ): MetaTransactionExecutedEventFilter;
@@ -4423,12 +4519,12 @@ export interface IZeroEx extends BaseContract {
     ): OtcOrderFilledEventFilter;
 
     'OwnershipTransferred(address,address)'(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
     'PairCancelledLimitOrders(address,address,address,uint256)'(
@@ -4458,12 +4554,12 @@ export interface IZeroEx extends BaseContract {
     ): PairCancelledRfqOrdersEventFilter;
 
     'ProxyFunctionUpdated(bytes4,address,address)'(
-      selector?: BytesLike | null,
+      selector?: PromiseOrValue<BytesLike> | null,
       oldImpl?: null,
       newImpl?: null
     ): ProxyFunctionUpdatedEventFilter;
     ProxyFunctionUpdated(
-      selector?: BytesLike | null,
+      selector?: PromiseOrValue<BytesLike> | null,
       oldImpl?: null,
       newImpl?: null
     ): ProxyFunctionUpdatedEventFilter;
@@ -4506,14 +4602,14 @@ export interface IZeroEx extends BaseContract {
     ): RfqOrderOriginsAllowedEventFilter;
 
     'TransformedERC20(address,address,address,uint256,uint256)'(
-      taker?: string | null,
+      taker?: PromiseOrValue<string> | null,
       inputToken?: null,
       outputToken?: null,
       inputTokenAmount?: null,
       outputTokenAmount?: null
     ): TransformedERC20EventFilter;
     TransformedERC20(
-      taker?: string | null,
+      taker?: PromiseOrValue<string> | null,
       inputToken?: null,
       outputToken?: null,
       inputTokenAmount?: null,
@@ -4532,140 +4628,140 @@ export interface IZeroEx extends BaseContract {
     _fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      sender: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      sender: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     _fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     _fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     _sellHeldTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     _transformERC20(
       args: ITransformERC20Feature.TransformERC20ArgsStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchBuyERC1155s(
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      erc1155TokenAmounts: BigNumberish[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155TokenAmounts: PromiseOrValue<BigNumberish>[],
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelERC1155Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelERC721Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelPairLimitOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelPairRfqOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchCancelRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchExecuteMetaTransactions(
       mtxs: IMetaTransactionsFeature.MetaTransactionDataStruct[],
       signatures: LibSignature.SignatureStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchFillTakerSignedOtcOrders(
       orders: LibNativeOrder.OtcOrderStruct[],
       makerSignatures: LibSignature.SignatureStruct[],
       takerSignatures: LibSignature.SignatureStruct[],
-      unwrapWeth: boolean[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      unwrapWeth: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchGetLimitOrderRelevantStates(
@@ -4685,150 +4781,150 @@ export interface IZeroEx extends BaseContract {
       buyOrders: LibNFTOrder.ERC721OrderStruct[],
       sellOrderSignatures: LibSignature.SignatureStruct[],
       buyOrderSignatures: LibSignature.SignatureStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     buyERC1155(
       sellOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155BuyAmount: BigNumberish,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155BuyAmount: PromiseOrValue<BigNumberish>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     buyERC721(
       sellOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelERC1155Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelERC721Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelPairLimitOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelPairRfqOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     cancelRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createTransformWallet(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     executeMetaTransaction(
       mtx: IMetaTransactionsFeature.MetaTransactionDataStruct,
       signature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     extend(
-      selector: BytesLike,
-      impl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      impl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOrKillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOrKillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillOtcOrderWithEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillTakerSignedOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     fillTakerSignedOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     getERC1155OrderHash(
@@ -4852,8 +4948,8 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     getERC721OrderStatusBitVector(
-      maker: string,
-      nonceRange: BigNumberish,
+      maker: PromiseOrValue<string>,
+      nonceRange: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -4884,7 +4980,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     getMetaTransactionHashExecutedBlock(
-      mtxHash: BytesLike,
+      mtxHash: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -4919,13 +5015,13 @@ export interface IZeroEx extends BaseContract {
     ): Promise<BigNumber>;
 
     getRollbackEntryAtIndex(
-      selector: BytesLike,
-      idx: BigNumberish,
+      selector: PromiseOrValue<BytesLike>,
+      idx: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getRollbackLength(
-      selector: BytesLike,
+      selector: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -4934,14 +5030,14 @@ export interface IZeroEx extends BaseContract {
     getTransformerDeployer(overrides?: CallOverrides): Promise<BigNumber>;
 
     isValidOrderSigner(
-      maker: string,
-      signer: string,
+      maker: PromiseOrValue<string>,
+      signer: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     lastOtcTxOriginNonce(
-      txOrigin: string,
-      nonceBucket: BigNumberish,
+      txOrigin: PromiseOrValue<string>,
+      nonceBucket: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -4950,230 +5046,230 @@ export interface IZeroEx extends BaseContract {
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       sellOrderSignature: LibSignature.SignatureStruct,
       buyOrderSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     migrate(
-      target: string,
-      data: BytesLike,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexBatchSellEthForToken(
-      outputToken: string,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexBatchSellTokenForEth(
-      inputToken: string,
+      inputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexBatchSellTokenForToken(
-      inputToken: string,
-      outputToken: string,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellEthForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellTokenForEth(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     multiplexMultiHopSellTokenForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     onERC721Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     preSignERC1155Order(
       order: LibNFTOrder.ERC1155OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     preSignERC721Order(
       order: LibNFTOrder.ERC721OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     registerAllowedOrderSigner(
-      signer: string,
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      signer: PromiseOrValue<string>,
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     registerAllowedRfqOrigins(
-      origins: string[],
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      origins: PromiseOrValue<string>[],
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     rollback(
-      selector: BytesLike,
-      targetImpl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      targetImpl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellERC1155(
       buyOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155TokenId: BigNumberish,
-      erc1155SellAmount: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
+      erc1155SellAmount: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellERC721(
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc721TokenId: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc721TokenId: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellEthForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellToLiquidityProvider(
-      inputToken: string,
-      outputToken: string,
-      provider: string,
-      recipient: string,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      auxiliaryData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      provider: PromiseOrValue<string>,
+      recipient: PromiseOrValue<string>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      auxiliaryData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellToPancakeSwap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      fork: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      fork: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellToUniswap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      isSushi: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      isSushi: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellTokenForEthToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     sellTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setQuoteSigner(
-      quoteSigner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      quoteSigner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setTransformerDeployer(
-      transformerDeployer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      transformerDeployer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     supportInterface(
-      interfaceId: BytesLike,
+      interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transferProtocolFeesForPools(
-      poolIds: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      poolIds: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transferTrappedTokensTo(
-      erc20: string,
-      amountOut: BigNumberish,
-      recipientWallet: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc20: PromiseOrValue<string>,
+      amountOut: PromiseOrValue<BigNumberish>,
+      recipientWallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transformERC20(
-      inputToken: string,
-      outputToken: string,
-      inputTokenAmount: BigNumberish,
-      minOutputTokenAmount: BigNumberish,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      inputTokenAmount: PromiseOrValue<BigNumberish>,
+      minOutputTokenAmount: PromiseOrValue<BigNumberish>,
       transformations: ITransformERC20Feature.TransformationStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     uniswapV3SwapCallback(
-      amount0Delta: BigNumberish,
-      amount1Delta: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      amount0Delta: PromiseOrValue<BigNumberish>,
+      amount1Delta: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     validateERC1155OrderProperties(
       order: LibNFTOrder.ERC1155OrderStruct,
-      erc1155TokenId: BigNumberish,
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -5185,7 +5281,7 @@ export interface IZeroEx extends BaseContract {
 
     validateERC721OrderProperties(
       order: LibNFTOrder.ERC721OrderStruct,
-      erc721TokenId: BigNumberish,
+      erc721TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -5200,140 +5296,140 @@ export interface IZeroEx extends BaseContract {
     _fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      sender: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      sender: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     _fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     _fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      taker: string,
-      useSelfBalance: boolean,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      taker: PromiseOrValue<string>,
+      useSelfBalance: PromiseOrValue<boolean>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     _sellHeldTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     _transformERC20(
       args: ITransformERC20Feature.TransformERC20ArgsStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchBuyERC1155s(
       sellOrders: LibNFTOrder.ERC1155OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      erc1155TokenAmounts: BigNumberish[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155TokenAmounts: PromiseOrValue<BigNumberish>[],
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchBuyERC721s(
       sellOrders: LibNFTOrder.ERC721OrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      callbackData: BytesLike[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelERC1155Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelERC721Orders(
-      orderNonces: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonces: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelPairLimitOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelPairRfqOrders(
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerTokens: string[],
-      takerTokens: string[],
-      minValidSalts: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerTokens: PromiseOrValue<string>[],
+      takerTokens: PromiseOrValue<string>[],
+      minValidSalts: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchCancelRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchExecuteMetaTransactions(
       mtxs: IMetaTransactionsFeature.MetaTransactionDataStruct[],
       signatures: LibSignature.SignatureStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillLimitOrders(
       orders: LibNativeOrder.LimitOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillRfqOrders(
       orders: LibNativeOrder.RfqOrderStruct[],
       signatures: LibSignature.SignatureStruct[],
-      takerTokenFillAmounts: BigNumberish[],
-      revertIfIncomplete: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmounts: PromiseOrValue<BigNumberish>[],
+      revertIfIncomplete: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchFillTakerSignedOtcOrders(
       orders: LibNativeOrder.OtcOrderStruct[],
       makerSignatures: LibSignature.SignatureStruct[],
       takerSignatures: LibSignature.SignatureStruct[],
-      unwrapWeth: boolean[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      unwrapWeth: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchGetLimitOrderRelevantStates(
@@ -5353,150 +5449,150 @@ export interface IZeroEx extends BaseContract {
       buyOrders: LibNFTOrder.ERC721OrderStruct[],
       sellOrderSignatures: LibSignature.SignatureStruct[],
       buyOrderSignatures: LibSignature.SignatureStruct[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     buyERC1155(
       sellOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155BuyAmount: BigNumberish,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      erc1155BuyAmount: PromiseOrValue<BigNumberish>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     buyERC721(
       sellOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      callbackData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelERC1155Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelERC721Order(
-      orderNonce: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      orderNonce: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelPairLimitOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelPairLimitOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelPairRfqOrders(
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelPairRfqOrdersWithSigner(
-      maker: string,
-      makerToken: string,
-      takerToken: string,
-      minValidSalt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      maker: PromiseOrValue<string>,
+      makerToken: PromiseOrValue<string>,
+      takerToken: PromiseOrValue<string>,
+      minValidSalt: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createTransformWallet(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     executeMetaTransaction(
       mtx: IMetaTransactionsFeature.MetaTransactionDataStruct,
       signature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     extend(
-      selector: BytesLike,
-      impl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      impl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrKillLimitOrder(
       order: LibNativeOrder.LimitOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOrKillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillOtcOrderWithEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillRfqOrder(
       order: LibNativeOrder.RfqOrderStruct,
       signature: LibSignature.SignatureStruct,
-      takerTokenFillAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      takerTokenFillAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillTakerSignedOtcOrder(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     fillTakerSignedOtcOrderForEth(
       order: LibNativeOrder.OtcOrderStruct,
       makerSignature: LibSignature.SignatureStruct,
       takerSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getERC1155OrderHash(
@@ -5520,8 +5616,8 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getERC721OrderStatusBitVector(
-      maker: string,
-      nonceRange: BigNumberish,
+      maker: PromiseOrValue<string>,
+      nonceRange: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -5552,7 +5648,7 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getMetaTransactionHashExecutedBlock(
-      mtxHash: BytesLike,
+      mtxHash: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -5589,13 +5685,13 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getRollbackEntryAtIndex(
-      selector: BytesLike,
-      idx: BigNumberish,
+      selector: PromiseOrValue<BytesLike>,
+      idx: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getRollbackLength(
-      selector: BytesLike,
+      selector: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -5608,14 +5704,14 @@ export interface IZeroEx extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     isValidOrderSigner(
-      maker: string,
-      signer: string,
+      maker: PromiseOrValue<string>,
+      signer: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     lastOtcTxOriginNonce(
-      txOrigin: string,
-      nonceBucket: BigNumberish,
+      txOrigin: PromiseOrValue<string>,
+      nonceBucket: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -5624,230 +5720,230 @@ export interface IZeroEx extends BaseContract {
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       sellOrderSignature: LibSignature.SignatureStruct,
       buyOrderSignature: LibSignature.SignatureStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     migrate(
-      target: string,
-      data: BytesLike,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      target: PromiseOrValue<string>,
+      data: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexBatchSellEthForToken(
-      outputToken: string,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexBatchSellTokenForEth(
-      inputToken: string,
+      inputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexBatchSellTokenForToken(
-      inputToken: string,
-      outputToken: string,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
       calls: IMultiplexFeature.BatchSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexMultiHopSellEthForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      minBuyAmount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexMultiHopSellTokenForEth(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     multiplexMultiHopSellTokenForToken(
-      tokens: string[],
+      tokens: PromiseOrValue<string>[],
       calls: IMultiplexFeature.MultiHopSellSubcallStruct[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     onERC1155Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      value: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      value: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     onERC721Received(
-      operator: string,
-      from: string,
-      tokenId: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      operator: PromiseOrValue<string>,
+      from: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     preSignERC1155Order(
       order: LibNFTOrder.ERC1155OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     preSignERC721Order(
       order: LibNFTOrder.ERC721OrderStruct,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     registerAllowedOrderSigner(
-      signer: string,
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      signer: PromiseOrValue<string>,
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     registerAllowedRfqOrigins(
-      origins: string[],
-      allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      origins: PromiseOrValue<string>[],
+      allowed: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     rollback(
-      selector: BytesLike,
-      targetImpl: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      selector: PromiseOrValue<BytesLike>,
+      targetImpl: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellERC1155(
       buyOrder: LibNFTOrder.ERC1155OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc1155TokenId: BigNumberish,
-      erc1155SellAmount: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
+      erc1155SellAmount: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellERC721(
       buyOrder: LibNFTOrder.ERC721OrderStruct,
       signature: LibSignature.SignatureStruct,
-      erc721TokenId: BigNumberish,
-      unwrapNativeToken: boolean,
-      callbackData: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc721TokenId: PromiseOrValue<BigNumberish>,
+      unwrapNativeToken: PromiseOrValue<boolean>,
+      callbackData: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellEthForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellToLiquidityProvider(
-      inputToken: string,
-      outputToken: string,
-      provider: string,
-      recipient: string,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      auxiliaryData: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      provider: PromiseOrValue<string>,
+      recipient: PromiseOrValue<string>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      auxiliaryData: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellToPancakeSwap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      fork: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      fork: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellToUniswap(
-      tokens: string[],
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      isSushi: boolean,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      tokens: PromiseOrValue<string>[],
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      isSushi: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellTokenForEthToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     sellTokenForTokenToUniswapV3(
-      encodedPath: BytesLike,
-      sellAmount: BigNumberish,
-      minBuyAmount: BigNumberish,
-      recipient: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      encodedPath: PromiseOrValue<BytesLike>,
+      sellAmount: PromiseOrValue<BigNumberish>,
+      minBuyAmount: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setQuoteSigner(
-      quoteSigner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      quoteSigner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setTransformerDeployer(
-      transformerDeployer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      transformerDeployer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     supportInterface(
-      interfaceId: BytesLike,
+      interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transferProtocolFeesForPools(
-      poolIds: BytesLike[],
-      overrides?: Overrides & { from?: string | Promise<string> }
+      poolIds: PromiseOrValue<BytesLike>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transferTrappedTokensTo(
-      erc20: string,
-      amountOut: BigNumberish,
-      recipientWallet: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      erc20: PromiseOrValue<string>,
+      amountOut: PromiseOrValue<BigNumberish>,
+      recipientWallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transformERC20(
-      inputToken: string,
-      outputToken: string,
-      inputTokenAmount: BigNumberish,
-      minOutputTokenAmount: BigNumberish,
+      inputToken: PromiseOrValue<string>,
+      outputToken: PromiseOrValue<string>,
+      inputTokenAmount: PromiseOrValue<BigNumberish>,
+      minOutputTokenAmount: PromiseOrValue<BigNumberish>,
       transformations: ITransformERC20Feature.TransformationStruct[],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     uniswapV3SwapCallback(
-      amount0Delta: BigNumberish,
-      amount1Delta: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      amount0Delta: PromiseOrValue<BigNumberish>,
+      amount1Delta: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     validateERC1155OrderProperties(
       order: LibNFTOrder.ERC1155OrderStruct,
-      erc1155TokenId: BigNumberish,
+      erc1155TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -5859,7 +5955,7 @@ export interface IZeroEx extends BaseContract {
 
     validateERC721OrderProperties(
       order: LibNFTOrder.ERC721OrderStruct,
-      erc721TokenId: BigNumberish,
+      erc721TokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
