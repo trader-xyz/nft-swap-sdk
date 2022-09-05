@@ -73,6 +73,7 @@ import { arrayify } from '@ethersproject/bytes';
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
   Ropsten = 3,
+  Goerli = 5,
   Ubiq = 8,
   Ganache = 1337,
   Polygon = 137,
@@ -86,11 +87,11 @@ export enum SupportedChainIdsV4 {
 }
 
 export const SupportedChainsForV4OrderbookStatusMonitoring = [
-  SupportedChainIdsV4.Ropsten,
   SupportedChainIdsV4.Polygon,
   SupportedChainIdsV4.PolygonMumbai,
   SupportedChainIdsV4.Mainnet,
   SupportedChainIdsV4.Optimism,
+  SupportedChainIdsV4.Goerli,
 ];
 
 export interface INftSwapV4 extends BaseNftSwap {

@@ -11,6 +11,10 @@
     "exchange": "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
     "wrappedNativeToken": "0xc778417e063141139fce010982780140aa0cd5ab"
   },
+  "5": {
+    "exchange": "0xf91bb752490473b8342a3e964e855b9f9a2a668e",
+    "wrappedNativeToken": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6"
+  },
   "8": {
     "exchange": "0x19aaD856cE8c4C7e813233b21d56dA97796cC052",
     "wrappedNativeToken": "0x1FA6A37c64804C0D797bA6bC1955E50068FbF362"
