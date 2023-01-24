@@ -101,10 +101,11 @@ describe('NFTSwapV4', () => {
     // })
 
     // const maybeOrder = maybeOrders.orders[0];
+    // const maybeOrder = { order: signedOrderErc1155 }
 
-    // expect(maybeOrder.order.nonce).toEqual(signedOrder.nonce.toString(10))
+    // // expect(maybeOrder.order.nonce).toEqual(signedOrder.nonce.toString(10))
 
-    // expect(maybeOrder.order.signature.signatureType.toString()).toEqual('2');
+    // // expect(maybeOrder.order.signature.signatureType.toString()).toEqual('2');
 
     // const fillTx = await nftSwapperMaker.fillSignedOrder(maybeOrder.order);
 
@@ -115,6 +116,6 @@ describe('NFTSwapV4', () => {
 
     // expect(txReceipt.transactionHash).toBeTruthy();
 
-    // console.log(`Swapped on Polygon Mumbai (txHAsh: ${txReceipt.transactionIndex})`);
+    // console.log(`Swapped on Polygon Mumbai (txHash: ${txReceipt.transactionHash})`);
   });
 });

@@ -30,7 +30,7 @@ or npm:
 
 `npm install @traderxyz/nft-swap-sdk`
 
-You can check out an example project [here](https://nft-swapping-demo.vercel.app/) 
+You can check out an example project [here](https://nft-swapping-demo.vercel.app/)
 or check out the example repo [here](https://github.com/HaidarEzio/NFTswap/tree/example-project)
 
 ## Configuration

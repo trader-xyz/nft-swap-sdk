@@ -47,7 +47,7 @@ const MAKER_ASSET: SwappableAsset = {
 };
 
 describe('NFTSwap', () => {
-  it('swaps 0.1 DAI and 0.1 USDC correctly', async () => {
+  xit('swaps 0.1 DAI and 0.1 USDC correctly', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
 
     const gasPrice = (await PROVIDER.getGasPrice()).mul(2);

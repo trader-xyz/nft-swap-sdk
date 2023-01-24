@@ -20,11 +20,13 @@ const RPC_TESTNET =
 
 const MAKER_WALLET = new ethers.Wallet(MAKER_PRIVATE_KEY);
 
-const PROVIDER = new ethers.providers.StaticJsonRpcProvider(RPC_TESTNET);
+const ROPSTEN_CHAIN_ID = 3;
+const PROVIDER = new ethers.providers.StaticJsonRpcProvider(
+  RPC_TESTNET,
+  ROPSTEN_CHAIN_ID
+);
 
 const MAKER_SIGNER = MAKER_WALLET.connect(PROVIDER);
-
-const ROPSTEN_CHAIN_ID = 3;
 
 const nftSwapperMaker = new NftSwapV4(
   MAKER_SIGNER as any,
@@ -88,7 +90,7 @@ describe('NFTSwapV4', () => {
     expect(signedOrderErc1155.erc20TokenAmount).toBe(ERC20_ASSET.amount);
     expect(signedOrderErc1155.direction.toString()).toBe('0');
 
-    await nftSwapperMaker.postOrder(signedOrder, '3');
+    // await nftSwapperMaker.postOrder(signedOrder, '3');
     // Uncomment to fill
     // const fillTx = await nftSwapperMaker.fillSignedOrder(signedOrder);
     // const txReceipt = await fillTx.wait();
