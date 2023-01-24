@@ -1,7 +1,7 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { BigNumber } from '@ethersproject/bignumber';
 import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
-import type { BaseProvider } from '@ethersproject/providers';
+import type { BaseProvider, Provider } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import getUnixTime from 'date-fns/getUnixTime';
 import { v4 } from 'uuid';
@@ -98,6 +98,93 @@ export const signOrderWithEoaWallet = async (
 
   warning(!order, 'Unknown order type');
   throw new Error(`Unknown order type`);
+};
+
+export const preSignOrder = async (
+  order: NftOrderV4,
+  signer: TypedDataSigner,
+  chainId: number,
+  exchangeContractAddress: string
+) => {
+  if ((order as ERC1155OrderStruct).erc1155Token) {
+    const domain = {
+      chainId: chainId,
+      verifyingContract: exchangeContractAddress,
+      name: 'ZeroEx',
+      version: '1.0.0',
+    };
+    const types = {
+      [ERC1155ORDER_STRUCT_NAME]: ERC1155ORDER_STRUCT_ABI,
+      Fee: FEE_ABI,
+      Property: PROPERTY_ABI,
+    };
+    const value = order;
+
+    const rawSignatureFromEoaWallet = await signer._signTypedData(
+      domain,
+      types,
+      value
+    );
+
+    return rawSignatureFromEoaWallet;
+  }
+
+  if ((order as ERC721OrderStruct).erc721Token) {
+    const domain = {
+      chainId: chainId,
+      verifyingContract: exchangeContractAddress,
+      name: 'ZeroEx',
+      version: '1.0.0',
+    };
+    const types = {
+      [ERC721ORDER_STRUCT_NAME]: ERC721ORDER_STRUCT_ABI,
+      Fee: FEE_ABI,
+      Property: PROPERTY_ABI,
+    };
+    const value = order;
+
+    const rawSignatureFromEoaWallet = await signer._signTypedData(
+      domain,
+      types,
+      value
+    );
+
+    return rawSignatureFromEoaWallet;
+  }
+
+  warning(!order, 'Unknown order type');
+  throw new Error(`Unknown order type`);
+};
+
+export const checkIfContractWallet = async (
+  provider: Provider,
+  walletAddress: string
+): Promise<boolean> => {
+  let isContractWallet: boolean = false;
+  if (provider.getCode) {
+    let walletCode = await provider.getCode(walletAddress);
+    // Wallet Code returns '0x' if no contract address is associated with
+    // Note: Lazy loaded contract wallets will show 0x initially, so we fall back to feature detection
+    if (walletCode && walletCode !== '0x') {
+      isContractWallet = true;
+    }
+  }
+  let isSequence = !!(provider as any)._isSequenceProvider;
+  if (isSequence) {
+    isContractWallet = true;
+  }
+  // Walletconnect hides the real provider in the provider (yo dawg)
+  let providerToUse = (provider as any).provider;
+  if (providerToUse?.isWalletConnect) {
+    const isSequenceViaWalletConnect = !!(
+      (providerToUse as any).connector?._peerMeta?.description === 'Sequence'
+    );
+    if (isSequenceViaWalletConnect) {
+      isContractWallet = true;
+    }
+  }
+
+  return isContractWallet;
 };
 
 /**

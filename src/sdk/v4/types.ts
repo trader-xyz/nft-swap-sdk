@@ -167,14 +167,14 @@ export type ECSignature = {
 };
 
 export type SignatureStruct = {
-  signatureType: number; // 2 for EIP-712
+  signatureType: number; // 2 for EIP-712, 4 for PRESIGNED
   v: number;
   r: string;
   s: string;
 };
 
 export type SignatureStructSerialized = {
-  signatureType: number; // 2 for EIP-712
+  signatureType: number; // 2 for EIP-712, 4 for PRESIGNED
   v: number;
   r: string;
   s: string;
@@ -207,7 +207,7 @@ export interface BuildOrderAdditionalConfig {
   nonce: BigNumberish;
 }
 
-export type AvailableSignatureTypesV4 = 'eoa'; // No EIP-1271 / preSign yet (soon though)
+export type AvailableSignatureTypesV4 = 'eoa' | 'eip1271';
 
 export interface SigningOptionsV4 {
   signatureType: AvailableSignatureTypesV4; // | 'autodetect' ? and remove autodetectSignatureType maybe?
