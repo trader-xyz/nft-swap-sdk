@@ -23,6 +23,7 @@ import type {
 import { UnexpectedAssetTypeError } from '../error';
 import {
   approveAsset,
+  checkIfContractWallet,
   DEFAULT_APP_ID,
   generateErc1155Order,
   generateErc721Order,
@@ -34,6 +35,7 @@ import {
 import type {
   AddressesForChainV4,
   ApprovalOverrides,
+  AvailableSignatureTypesV4,
   ERC721OrderStruct,
   FillOrderOverrides,
   NftOrderV4,
@@ -97,8 +99,6 @@ export const SupportedChainsForV4OrderbookStatusMonitoring = [
 export interface INftSwapV4 extends BaseNftSwap {
   signOrder: (
     order: NftOrderV4,
-    signerAddress: string,
-    signer: Signer,
     signingOptions?: Partial<SigningOptionsV4>
   ) => Promise<SignedNftOrderV4>;
   buildNftAndErc20Order: (
@@ -601,32 +601,85 @@ class NftSwapV4 implements INftSwapV4 {
    * Once signed, the order becomes fillable (as long as the order is valid)
    * 0x orders require a signature to fill.
    * @param order A 0x v4 order
+   * @param signingOptions Options for signing
    * @returns A signed 0x v4 order
    */
-  signOrder = async (order: NftOrderV4): Promise<SignedNftOrderV4> => {
+  signOrder = async (
+    order: NftOrderV4,
+    signingOptions?: Partial<SigningOptionsV4>
+  ): Promise<SignedNftOrderV4> => {
     if (!this.signer) {
-      throw new Error('Signed not defined');
+      throw new Error('Signer not defined');
     }
 
-    const rawSignature = await signOrderWithEoaWallet(
-      order,
-      this.signer as unknown as TypedDataSigner,
-      this.chainId,
-      this.exchangeProxy.address
-    );
+    let method: AvailableSignatureTypesV4 = 'eoa';
+    // If we have any specific signature type overrides, prefer those
+    if (signingOptions?.signatureType === 'eip1271') {
+      method = 'eip1271';
+    } else if (signingOptions?.signatureType === 'eoa') {
+      method = 'eoa';
+    } else {
+      // Try to detect...
+      if (signingOptions?.autodetectSignatureType === false) {
+        method = 'eoa';
+      } else {
+        // If we made it here, consumer has no preferred signing method,
+        // let's try feature detection to automagically pick a signature type
+        // By default we fallback to EOA signing if we can't figure it out.
 
-    const ecSignature = parseRawSignature(rawSignature);
+        // Let's try to determine if the signer is a contract wallet or not.
+        // If it is, we'll try EIP-1271, otherwise we'll do a normal sign
+        const signerAddress = await this.signer.getAddress();
 
-    const signedOrder = {
-      ...order,
-      signature: {
-        signatureType: 2,
-        r: ecSignature.r,
-        s: ecSignature.s,
-        v: ecSignature.v,
-      },
-    };
-    return signedOrder;
+        const isContractWallet = await checkIfContractWallet(
+          this.provider,
+          signerAddress
+        );
+        if (isContractWallet) {
+          method = 'eip1271';
+        } else {
+          method = 'eoa';
+        }
+      }
+    }
+    switch (method) {
+      case 'eoa': {
+        const rawSignature = await signOrderWithEoaWallet(
+          order,
+          this.signer as unknown as TypedDataSigner,
+          this.chainId,
+          this.exchangeProxy.address
+        );
+
+        const ecSignature = parseRawSignature(rawSignature);
+
+        const signedOrder = {
+          ...order,
+          signature: {
+            signatureType: 2,
+            r: ecSignature.r,
+            s: ecSignature.s,
+            v: ecSignature.v,
+          },
+        };
+        return signedOrder;
+      }
+      case 'eip1271': {
+        await this.preSignOrder(order);
+        const preSignedOrder = {
+          ...order,
+          signature: {
+            signatureType: 4,
+            r: '0',
+            s: '0',
+            v: 0,
+          },
+        };
+        return preSignedOrder;
+      }
+      default:
+        throw new Error(`Unknown signature method chosen: ${method}`);
+    }
   };
 
   /**
@@ -860,6 +913,69 @@ class NftSwapV4 implements INftSwapV4 {
       }
     }
     console.log('unsupported order', signedOrder);
+    throw new Error('unsupport signedOrder type');
+  };
+  /**
+   * Pre-signs and submits an order
+   * @param signedOrder An unsigned 0x v4 order
+   * @param fillOrderOverrides Optional configuration on possible ways to fill the order
+   * @param transactionOverrides Ethers transaction overrides (e.g. gas price)
+   * @returns
+   */
+  preSignOrder = async (
+    order: NftOrderV4,
+    fillOrderOverrides?: Partial<FillOrderOverrides>,
+    transactionOverrides?: Partial<PayableOverrides>
+  ) => {
+    // Only Sell orders can be filled with ETH
+    const canOrderTypeBeFilledWithNativeToken =
+      order.direction === TradeDirection.SellNFT;
+    // Is ERC20 being traded the native token
+    const isNativeToken = this.isErc20NativeToken(order);
+    const needsEthAttached =
+      isNativeToken && canOrderTypeBeFilledWithNativeToken;
+    if (needsEthAttached) {
+      console.log(
+        "can't pre-sign orders that need to be filled with ETH",
+        order
+      );
+      throw new Error("can't pre-sign orders that need to be filled with ETH");
+    }
+    // do fill
+    if ('erc1155Token' in order) {
+      // If maker is selling an NFT, taker wants to 'buy' nft
+      if (
+        order.direction === TradeDirection.BuyNFT &&
+        order.erc1155TokenProperties.length > 0 &&
+        fillOrderOverrides?.tokenIdToSellForCollectionOrder === undefined
+      ) {
+        // property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
+        throw new Error(
+          'Collection order missing NFT tokenId to fill with. Specify in fillOrderOverrides.tokenIdToSellForCollectionOrder'
+        );
+      }
+
+      return this.exchangeProxy.preSignERC1155Order(order, {
+        ...transactionOverrides,
+      });
+    } else if ('erc721Token' in order) {
+      // If maker is selling an NFT, taker wants to 'buy' nft
+      if (
+        order.direction === TradeDirection.BuyNFT &&
+        order.erc721TokenProperties.length > 0 &&
+        fillOrderOverrides?.tokenIdToSellForCollectionOrder === undefined
+      ) {
+        // property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
+        throw new Error(
+          'Collection order missing NFT tokenId to fill with. Specify in fillOrderOverrides.tokenIdToSellForCollectionOrder'
+        );
+      }
+      // Otherwise, taker is selling the nft (and buying an ERC20)
+      return this.exchangeProxy.preSignERC721Order(order, {
+        ...transactionOverrides,
+      });
+    }
+    console.log('unsupported order', order);
     throw new Error('unsupport signedOrder type');
   };
 

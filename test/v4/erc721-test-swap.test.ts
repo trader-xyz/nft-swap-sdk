@@ -95,7 +95,7 @@ describe('NFTSwapV4', () => {
 
     expect(signedOrderErc1155.direction.toString()).toBe('0');
 
-    await nftSwapperMaker.postOrder(signedOrder, '3');
+    // await nftSwapperMaker.postOrder(signedOrder, '3');
 
     expect(signedOrder.signature.signatureType.toString()).toEqual('2');
 

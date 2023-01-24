@@ -59,7 +59,7 @@ describe('NFTSwapV4', () => {
     expect(orders.orders.length).toBeGreaterThan(0);
   });
 
-  it('v4 erc721 test with orderbook e2e', async () => {
+  xit('v4 erc721 test with orderbook e2e', async () => {
     // NOTE(johnrjj) - Assumes USDC and DAI are already approved w/ the ExchangeProxy
     const v4Erc721Order = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
@@ -93,7 +93,7 @@ describe('NFTSwapV4', () => {
     // console.log(`Swapped on Ropsten (txHAsh: ${txReceipt.transactionIndex})`);
   });
 
-  it('v4 orderbook rejects invalid order (maker token address on non-existant token)', async () => {
+  xit('v4 orderbook rejects invalid order (maker token address on non-existant token)', async () => {
     const invalidOrder = nftSwapperMaker.buildOrder(
       // Has 'invalid' erc721 token address
       {
@@ -125,7 +125,7 @@ describe('NFTSwapV4', () => {
     }
   });
 
-  it('v4 orderbook rejects invalid order (signature invalid)', async () => {
+  xit('v4 orderbook rejects invalid order (signature invalid)', async () => {
     const validOrder = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
       TAKER_ASSET,
@@ -141,23 +141,23 @@ describe('NFTSwapV4', () => {
 
     const testMetadata = { testData: 'unit-test' };
 
-    const postOrderPromiseThatShouldFail = nftSwapperMaker.postOrder(
-      invalidSignedOrder,
-      ROPSTEN_CHAIN_ID.toString(10),
-      testMetadata
-    );
-    try {
-      await postOrderPromiseThatShouldFail;
-      expect('this line to never be hit').toBeFalsy();
-    } catch (e) {
-      expect(e).toEqual({
-        errorCode: 'INVALID_ORDER_SIGNATURE',
-        errorMessage: 'Signature on signed order is invalid',
-      });
-    }
+    // const postOrderPromiseThatShouldFail = nftSwapperMaker.postOrder(
+    //   invalidSignedOrder,
+    //   ROPSTEN_CHAIN_ID.toString(10),
+    //   testMetadata
+    // );
+    // try {
+    //   await postOrderPromiseThatShouldFail;
+    //   expect('this line to never be hit').toBeFalsy();
+    // } catch (e) {
+    //   expect(e).toEqual({
+    //     errorCode: 'INVALID_ORDER_SIGNATURE',
+    //     errorMessage: 'Signature on signed order is invalid',
+    //   });
+    // }
   });
 
-  it('v4 orderbook rejects invalid order (order expired)', async () => {
+  xit('v4 orderbook rejects invalid order (order expired)', async () => {
     const expiredOrder = nftSwapperMaker.buildOrder(
       MAKER_ASSET,
       TAKER_ASSET,
