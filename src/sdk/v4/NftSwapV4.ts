@@ -915,8 +915,10 @@ class NftSwapV4 implements INftSwapV4 {
     console.log('unsupported order', signedOrder);
     throw new Error('unsupport signedOrder type');
   };
+
   /**
-   * Pre-signs and submits an order
+   * Pre-signs and submits signed order on chain (use this to sign orders for smart contract wallets)
+   * Presigned on-chain transaction will emit an event that is indexable w/ the full fillable order
    * @param signedOrder An unsigned 0x v4 order
    * @param fillOrderOverrides Optional configuration on possible ways to fill the order
    * @param transactionOverrides Ethers transaction overrides (e.g. gas price)
@@ -927,21 +929,7 @@ class NftSwapV4 implements INftSwapV4 {
     fillOrderOverrides?: Partial<FillOrderOverrides>,
     transactionOverrides?: Partial<PayableOverrides>
   ) => {
-    // Only Sell orders can be filled with ETH
-    const canOrderTypeBeFilledWithNativeToken =
-      order.direction === TradeDirection.SellNFT;
-    // Is ERC20 being traded the native token
-    const isNativeToken = this.isErc20NativeToken(order);
-    const needsEthAttached =
-      isNativeToken && canOrderTypeBeFilledWithNativeToken;
-    if (needsEthAttached) {
-      console.log(
-        "can't pre-sign orders that need to be filled with ETH",
-        order
-      );
-      throw new Error("can't pre-sign orders that need to be filled with ETH");
-    }
-    // do fill
+    // Do pre-sign
     if ('erc1155Token' in order) {
       // If maker is selling an NFT, taker wants to 'buy' nft
       if (
@@ -949,12 +937,11 @@ class NftSwapV4 implements INftSwapV4 {
         order.erc1155TokenProperties.length > 0 &&
         fillOrderOverrides?.tokenIdToSellForCollectionOrder === undefined
       ) {
-        // property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
+        // Property based order, let's make sure they've specifically provided a tokenIdToSellForCollectionOrder
         throw new Error(
           'Collection order missing NFT tokenId to fill with. Specify in fillOrderOverrides.tokenIdToSellForCollectionOrder'
         );
       }
-
       return this.exchangeProxy.preSignERC1155Order(order, {
         ...transactionOverrides,
       });
@@ -975,7 +962,7 @@ class NftSwapV4 implements INftSwapV4 {
         ...transactionOverrides,
       });
     }
-    console.log('unsupported order', order);
+    warning('Unsupported order', order);
     throw new Error('unsupport signedOrder type');
   };
 
