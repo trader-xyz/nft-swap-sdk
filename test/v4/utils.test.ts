@@ -50,7 +50,7 @@ describe('NFTSwapV4', () => {
   it('classifies contract wallet correctly (gnosis multisig)', async () => {
     const isContractWallet = await checkIfContractWallet(
       PROVIDER,
-      '0x618F9C67CE7Bf1a50afa1E7e0238422601b0ff6e' // 0x governor multisig 
+      '0x618F9C67CE7Bf1a50afa1E7e0238422601b0ff6e' // 0x governor multisig
     );
     expect(isContractWallet).toBe(true);
   });
