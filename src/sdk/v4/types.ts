@@ -186,6 +186,7 @@ export interface ApprovalOverrides {
   approvalOnlyTokenIdIfErc721: boolean;
   exchangeContractAddress: string;
   chainId: number;
+  approvalAmount: BigNumberish;
 }
 
 export interface FillOrderOverrides {

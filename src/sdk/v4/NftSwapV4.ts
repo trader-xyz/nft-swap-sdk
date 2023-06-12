@@ -244,12 +244,52 @@ class NftSwapV4 implements INftSwapV4 {
     walletAddress: string,
     approvalOverrides?: Partial<ApprovalOverrides> | undefined
   ): Promise<ApprovalStatus> => {
-    // TODO(johnrjj) - Fix to pass thru more args...
     return getApprovalStatus(
       walletAddress,
       approvalOverrides?.exchangeContractAddress ?? this.exchangeProxy.address,
       asset,
-      this.provider
+      this.provider,
+      approvalOverrides?.approvalAmount
+    );
+  };
+
+  /**
+   * Checks if an asset is approved for trading with 0x v4
+   * If an asset is not approved, call approveTokenOrNftByAsset to approve.
+   * @param asset A tradeable asset (ERC20, ERC721, or ERC1155)
+   * @param walletAddress The wallet address that owns the asset
+   * @param approvalOverrides Optional config options for approving
+   * @returns
+   */
+  loadApprovalStatusForOrder = (
+    order: NftOrderV4,
+    side: 'MAKER' | 'TAKER',
+    approvalOverrides?: Partial<ApprovalOverrides> | undefined
+  ): Promise<ApprovalStatus> => {
+    const checkMaker = side === 'MAKER';
+    const checkTaker = side === 'TAKER';
+
+    // Check the ERC20 balance
+    const checkErc20Balance =
+      (order.direction === TradeDirection.BuyNFT && checkMaker) ||
+      (order.direction === TradeDirection.SellNFT && checkTaker);
+
+    const walletAddressToCheck = checkMaker ? order.maker : order.taker;
+    const assetToCheck = checkMaker
+      ? this.getMakerAsset(order)
+      : this.getTakerAsset(order);
+
+    // If ERC20 selling is involved, let's check the exact amount
+    const maybeApprovalAmountToCheck =
+      approvalOverrides?.approvalAmount ??
+      (checkErc20Balance ? order.erc20TokenAmount : undefined);
+
+    return getApprovalStatus(
+      walletAddressToCheck,
+      approvalOverrides?.exchangeContractAddress ?? this.exchangeProxy.address,
+      assetToCheck,
+      this.provider,
+      maybeApprovalAmountToCheck
     );
   };
 
@@ -1162,9 +1202,9 @@ class NftSwapV4 implements INftSwapV4 {
     takerWalletAddress: string
   ) => {
     const takerAsset = this.getTakerAsset(order);
-    const takerApprovalStatus = await this.loadApprovalStatus(
-      takerAsset,
-      takerWalletAddress
+    const takerApprovalStatus = await this.loadApprovalStatusForOrder(
+      order,
+      'TAKER'
     );
     const takerBalance = await this.fetchBalanceForAsset(
       this.getTakerAsset(order),
@@ -1197,9 +1237,9 @@ class NftSwapV4 implements INftSwapV4 {
   ) => {
     const makerAddress = order.maker;
     const makerAsset = this.getMakerAsset(order);
-    const makerApprovalStatus = await this.loadApprovalStatus(
-      makerAsset,
-      makerAddress
+    const makerApprovalStatus = await this.loadApprovalStatusForOrder(
+      order,
+      'MAKER'
     );
     const makerBalance = await this.fetchBalanceForAsset(
       this.getMakerAsset(order),
