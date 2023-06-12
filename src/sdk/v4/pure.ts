@@ -1,5 +1,5 @@
 import { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { hexDataLength, hexDataSlice } from '@ethersproject/bytes';
 import type { BaseProvider, Provider } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
@@ -43,6 +43,15 @@ import {
   PROPERTY_ABI,
   ETH_ADDRESS_AS_ERC20,
 } from './constants';
+
+// Some arbitrarily high number.
+// TODO(johnrjj) - Support custom ERC20 approval amounts
+export const MAX_APPROVAL = BigNumber.from(2).pow(118);
+
+// Weird issue with BigNumber and approvals...need to look into it, adding buffer.
+const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(MAX_APPROVAL.toString()).sub(
+  '100000000000000000'
+);
 
 export const signOrderWithEoaWallet = async (
   order: NftOrderV4,
@@ -199,7 +208,9 @@ export const getApprovalStatus = async (
   walletAddress: string,
   exchangeProxyAddressForAsset: string,
   asset: SwappableAssetV4,
-  provider: BaseProvider
+  provider: BaseProvider,
+  // ERC20 approval amount manual setting. Not used for ERC721/1155s.
+  approvalAmount: BigNumberish = MAX_APPROVAL_WITH_BUFFER
 ): Promise<ApprovalStatus> => {
   switch (asset.type) {
     case 'ERC20':
@@ -214,15 +225,10 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
-      // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
-      const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
-        MAX_APPROVAL.toString()
-      ).sub('100000000000000000');
-      const approvedForMax = erc20AllowanceBigNumber.gte(
-        MAX_APPROVAL_WITH_BUFFER
-      );
+
+      const hasEnoughApproval = erc20AllowanceBigNumber.gte(approvalAmount);
       return {
-        contractApproved: approvedForMax,
+        contractApproved: hasEnoughApproval,
       };
     case 'ERC721':
       const erc721 = ERC721__factory.connect(asset.tokenAddress, provider);
@@ -259,10 +265,6 @@ export const getApprovalStatus = async (
   }
 };
 
-// Some arbitrarily high number.
-// TODO(johnrjj) - Support custom ERC20 approval amounts
-export const MAX_APPROVAL = BigNumber.from(2).pow(118);
-
 /**
  * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.
  * @param asset
@@ -282,9 +284,10 @@ export const approveAsset = async (
   switch (asset.type) {
     case 'ERC20':
       const erc20 = ERC20__factory.connect(asset.tokenAddress, signer);
+      const approvalAmount = approvalOrderrides?.approvalAmount ?? MAX_APPROVAL;
       const erc20ApprovalTxPromise = erc20.approve(
         exchangeProxyAddressForAsset,
-        approve ? MAX_APPROVAL.toString() : 0,
+        approve ? approvalAmount.toString() : 0,
         {
           ...txOverrides,
         }
