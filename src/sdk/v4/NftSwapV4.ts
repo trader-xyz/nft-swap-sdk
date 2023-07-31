@@ -70,7 +70,6 @@ import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
 import { ETH_ADDRESS_AS_ERC20 } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
-import { arrayify } from '@ethersproject/bytes';
 
 export enum SupportedChainIdsV4 {
   Mainnet = 1,
@@ -85,7 +84,9 @@ export enum SupportedChainIdsV4 {
   Fantom = 250,
   Celo = 42220,
   Avalance = 43114,
-  // Arbitrum = 42161, // soon
+  Arbitrum = 42161,
+  Base = 8453,
+  BaseGoerli = 84531,
 }
 
 export const SupportedChainsForV4OrderbookStatusMonitoring = [
