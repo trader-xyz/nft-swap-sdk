@@ -12,7 +12,7 @@ import {
 } from '@ethersproject/bytes';
 import { verifyTypedData } from '@ethersproject/wallet';
 import { _TypedDataEncoder } from '@ethersproject/hash';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { Interface } from '@ethersproject/abi';
 import type { Signer, TypedDataSigner } from '@ethersproject/abstract-signer';
 import {
@@ -420,7 +420,8 @@ export const getApprovalStatus = async (
   walletAddress: string,
   exchangeProxyAddressForAsset: string,
   asset: InterallySupportedAssetFormat,
-  provider: BaseProvider
+  provider: BaseProvider,
+  approvalAmount: BigNumberish = MAX_APPROVAL_WITH_BUFFER
 ): Promise<ApprovalStatus> => {
   switch (asset.type) {
     case 'ERC20':
@@ -429,15 +430,10 @@ export const getApprovalStatus = async (
         walletAddress,
         exchangeProxyAddressForAsset
       );
-      // Weird issue with BigNumber and approvals...need to look into it, adding buffer.
-      const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(
-        MAX_APPROVAL.toString()
-      ).sub('100000000000000000');
-      const approvedForMax = erc20AllowanceBigNumber.gte(
-        MAX_APPROVAL_WITH_BUFFER
-      );
+
+      const hasEnoughApproval = erc20AllowanceBigNumber.gte(approvalAmount);
       return {
-        contractApproved: approvedForMax,
+        contractApproved: hasEnoughApproval,
       };
     case 'ERC721':
       const erc721 = ERC721__factory.connect(asset.tokenAddress, provider);
@@ -477,6 +473,11 @@ export const getApprovalStatus = async (
 // Some arbitrarily high number.
 // TODO(johnrjj) - Support custom ERC20 approval amounts
 export const MAX_APPROVAL = BigNumber.from(2).pow(118);
+
+// Weird issue with BigNumber and approvals...need to look into it, adding buffer.
+const MAX_APPROVAL_WITH_BUFFER = BigNumber.from(MAX_APPROVAL.toString()).sub(
+  '100000000000000000'
+);
 
 /**
  * @param exchangeProxyAddressForAsset Exchange Proxy address specific to the ERC type (e.g. use the 0x ERC721 Proxy if you're using a 721 asset). This is the address that will need approval & does the spending/swap.

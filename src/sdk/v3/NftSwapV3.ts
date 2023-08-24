@@ -285,7 +285,8 @@ class NftSwapV3 implements INftSwapV3 {
 
   public loadApprovalStatus = async (
     asset: SwappableAsset,
-    walletAddress: string
+    walletAddress: string,
+    approvalOverrides?: Partial<ApprovalOverrides> | undefined
   ) => {
     // TODO(johnrjj) - Fix this...
     const exchangeProxyAddressForAsset = getProxyAddressForErcType(
@@ -297,7 +298,8 @@ class NftSwapV3 implements INftSwapV3 {
       walletAddress,
       exchangeProxyAddressForAsset,
       assetInternalFmt,
-      this.provider
+      this.provider,
+      approvalOverrides?.approvalAmount
     );
   };
 

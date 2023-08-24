@@ -2,6 +2,7 @@ import type { TransactionReceipt } from '@ethersproject/providers';
 import type { ContractTransaction } from '@ethersproject/contracts';
 import type { Signer } from '@ethersproject/abstract-signer';
 import type {
+  BigNumberish,
   Order,
   OrderInfoV3,
   OrderStatusV3,
@@ -119,6 +120,7 @@ export interface ApprovalOverrides {
   exchangeProxyContractAddressForAsset: string;
   chainId: number;
   gasAmountBufferMultiple: number | null;
+  approvalAmount: BigNumberish
 }
 
 export interface FillOrderOverrides {
