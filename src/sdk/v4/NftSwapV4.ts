@@ -68,7 +68,7 @@ import {
 import { getWrappedNativeToken } from '../../utils/addresses';
 import { DIRECTION_MAPPING, OrderStatusV4, TradeDirection } from './enums';
 import { CONTRACT_ORDER_VALIDATOR } from './properties';
-import { ETH_ADDRESS_AS_ERC20 } from './constants';
+import { ETH_ADDRESS_AS_ERC20, PRESIGNED_SIGNATURE } from './constants';
 import { ZERO_AMOUNT } from '../../utils/eth';
 
 export enum SupportedChainIdsV4 {
@@ -322,6 +322,52 @@ class NftSwapV4 implements INftSwapV4 {
       return this.exchangeProxy.cancelERC1155Order(nonce);
     }
     console.log('unsupported order', orderType);
+    throw new Error('unsupport order');
+  };
+
+  /**
+   * Orders can be simultaneously "signed" and listed on-chain using the presignOrder function.
+   * This is an on-chain action and requires gas. Orders can only be signed by the maker address specified in the order.
+   * The pre-sign functions emit the entire order as an event, so that the order is easily indexable by subgraphs and thus easily discoverable without the need for an off-chain database.
+   * If an order has been pre-signed, it can be filled by providing a “null” signature with the PRESIGNED signature type
+   * If you prefer off-chain order signatures, use the regular signOrder function
+   * @param order 0x order that requires a signature
+   * @param txOverrides (optional) Ethers transaction overrides
+   * @returns An on-chain transaction that returns the signed order after awaiting the tx being mined
+   */
+  presignOrder = async (
+    order: NftOrderV4,
+    txOverrides?: TransactionOverrides
+  ): Promise<{ signedOrder: SignedNftOrderV4; tx: ContractTransaction }> => {
+    if ('erc721Token' in order) {
+      const signed: SignedNftOrderV4 = {
+        ...order,
+        signature: PRESIGNED_SIGNATURE,
+      };
+      const presignErc721OrderTx = await this.exchangeProxy.preSignERC721Order(
+        order,
+        {
+          ...txOverrides,
+        }
+      );
+      return {
+        tx: presignErc721OrderTx,
+        signedOrder: signed,
+      };
+    } else if ('erc1155Token' in order) {
+      const signed: SignedNftOrderV4 = {
+        ...order,
+        signature: PRESIGNED_SIGNATURE,
+      };
+      const presignErc1155OrderTx =
+        await this.exchangeProxy.preSignERC1155Order(order, {
+          ...txOverrides,
+        });
+      return {
+        tx: presignErc1155OrderTx,
+        signedOrder: signed,
+      };
+    }
     throw new Error('unsupport order');
   };
 

@@ -48,4 +48,5 @@ export interface TransactionOverrides {
   type?: number;
   accessList?: any;
   customData?: Record<string, any>;
+  ccipReadEnabled?: boolean;
 }

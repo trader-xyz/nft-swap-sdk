@@ -60,3 +60,11 @@ export const ETH_ADDRESS_AS_ERC20 =
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
   '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+// https://github.com/0xProject/protocol/blob/refactor/nft-orders/contracts/zero-ex/contracts/src/features/libs/LibSignature.sol#L42-L61
+export const PRESIGNED_SIGNATURE = {
+  signatureType: 4, // Presigned id
+  v: 0,
+  r: '0',
+  s: '0',
+};
