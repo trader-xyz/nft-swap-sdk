@@ -66,5 +66,9 @@
   "84531": {
     "exchange": "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
     "wrappedNativeToken": "0x4200000000000000000000000000000000000006"
+  },
+  "11155111": {
+    "exchange": "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    "wrappedNativeToken": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14"
   }
 }

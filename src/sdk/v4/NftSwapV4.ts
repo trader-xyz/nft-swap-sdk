@@ -87,6 +87,7 @@ export enum SupportedChainIdsV4 {
   Arbitrum = 42161,
   Base = 8453,
   BaseGoerli = 84531,
+  Sepolia = 11155111,
 }
 
 export const SupportedChainsForV4OrderbookStatusMonitoring = [
